@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'app'),
-  entry: './centerbyweight.moon',
+  entry: './index.moon',
   mode: 'development',
   module: {
     rules: [
