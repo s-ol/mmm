@@ -2,7 +2,7 @@
   "name": "mmm",
   "scripts": {
     "start:dev": "webpack-dev-server -w",
-    "build": "rm -rf dist && NODE_ENV=production webpack --config ./webpack.config.js --mode production --progress --colors"
+    "build": "NODE_ENV=production webpack --config ./webpack.config.js --mode production --progress --colors"
   },
   "devDependencies": {
     "fengari-loader": "^0.0.1",
