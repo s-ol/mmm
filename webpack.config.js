@@ -17,6 +17,6 @@ module.exports = {
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin('MMM: lunar low-gravity scripting playground'),
+    new HtmlWebpackPlugin({ title: 'MMM: lunar low-gravity scripting playground' }),
   ],
 }

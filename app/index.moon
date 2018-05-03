@@ -8,12 +8,15 @@ back_button = ->
   document.body\appendChild p a { '< back', href: '/' }
 
 switch window.location.search
-  when "?twisted" 
+  when '?twisted'
     back_button!
     require './twisted.moon'
-  when "?center-of-mass" then
+  when '?center-of-mass' then
     back_button!
     require './centerofmass.moon'
+  when '?todo' then
+    back_button!
+    require './todo.moon'
   else
     document.body\appendChild h1 'mmm'
     document.body\appendChild p {
@@ -29,7 +32,7 @@ switch window.location.search
       '.'
     }
     document.body\appendChild p 'current demos:'
-    document.body\appendChild ul for name in *{'twisted', 'center-of-mass'}
+    document.body\appendChild ul for name in *{'twisted', 'center-of-mass', 'todo'}
       li a { name, href: "/?#{name}" }
 
 document.body\appendChild p {

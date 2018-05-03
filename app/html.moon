@@ -4,7 +4,7 @@ element = (element) -> (attrs = {}, ...) ->
   if 'table' != type attrs
     attrs = { attrs, ... }
   with e = document\createElement element
-    for k,v in pairs(attrs)
+    for k,v in pairs attrs
       continue unless 'string' == type k
       e[k] = v
     for child in *attrs
