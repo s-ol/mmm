@@ -76,21 +76,25 @@ app = CenterOfMass "What's up", "Times New Roman", 40
 document.body\appendChild app.canvas
 app.canvas.style.backgroundColor = '#eee'
 
-font_input = input type: 'text', value: 'Times New Roman'
-document.body\appendChild div {
-  span 'font: ',
-  font_input,
-  button {
-    onclick: (e) => app.font = font_input.value,
-    'set'
+add = =>
+  document.body\appendChild div {
+    span 'font: ',
+    with @font_input = input!
+      .type = 'text'
+      .value = 'Times New Roman'
+    with button 'set'
+      .onclick = (_, e) -> app.font = @font_input.value
   }
-}
+add {}
 
-size_label = span '40'
-document.body\appendChild div {
-  span 'font: ',
-  input type: 'range', min: 2, max: 120, value: 40, onchange: (e) =>
-    size_label.innerText = e.target.value
-    app.size = e.target.value
-  size_label
-}
+add = =>
+  document.body\appendChild div {
+    span 'font: ',
+    input type: 'range', min: 2, max: 120, value: 40, onchange: (_, e) ->
+      size = e.target.value
+      @size_label.innerText = size
+      app.size = size
+    with @size_label = span '40'
+      ''
+  }
+add {}

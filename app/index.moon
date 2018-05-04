@@ -17,6 +17,9 @@ switch window.location.search
   when '?todo' then
     back_button!
     require './todo.moon'
+  when '?test-component' then
+    back_button!
+    require './test_component.moon'
   else
     document.body\appendChild h1 'mmm'
     document.body\appendChild p {
@@ -32,7 +35,7 @@ switch window.location.search
       '.'
     }
     document.body\appendChild p 'current demos:'
-    document.body\appendChild ul for name in *{'twisted', 'center-of-mass', 'todo'}
+    document.body\appendChild ul for name in *{'twisted', 'center-of-mass', 'todo', 'test-component'}
       li a { name, href: "/?#{name}" }
 
 document.body\appendChild p {

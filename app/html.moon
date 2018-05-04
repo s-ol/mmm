@@ -1,13 +1,25 @@
 document = js.global.document
 
-element = (element) -> (attrs = {}, ...) ->
-  if 'table' != type attrs
-    attrs = { attrs, ... }
+element = (element) -> (...) ->
+  children = { ... }
+
+  -- attributes are last arguments but mustn't be a ReactiveVar
+  attributes = children[#children]
+  if 'table' == (type attributes) and not attributes.node
+    table.remove children
+  else
+    attributes = {}
+
   with e = document\createElement element
-    for k,v in pairs attrs
-      continue unless 'string' == type k
+    for k,v in pairs attributes
       e[k] = v
-    for child in *attrs
+
+    -- if there is only one argument,
+    -- children can be in attributes table too
+    if #children == 0
+      children = attributes
+
+    for child in *children
       if 'string' == type child
         e.innerHTML ..= child
       else
@@ -16,7 +28,7 @@ element = (element) -> (attrs = {}, ...) ->
 elements = {}
 add = (e) -> elements[e] = element e
 
-for e in *{'div', 'span', 'a', 'p', 'button', 'ul', 'li', 'i', 'b', 'u', 'tt'} do add e
+for e in *{'div', 'span', 'a', 'p', 'pre', 'button', 'ul', 'li', 'i', 'b', 'u', 'tt'} do add e
 for e in *{'br', 'img', 'input', 'p'} do add e
 for i=1,8 do add "h" .. i
 
