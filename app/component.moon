@@ -18,6 +18,13 @@ asnode = (val) ->
   else
     error "not a Node: #{val}, #{type val}"
 
+-- shorthand to append elements to body
+-- see #asnode for permitted values
+append = (val) -> document.body\appendChild asnode val
+
+-- shorthand to form a text node from strings
+text = (...) -> document\createTextNode table.concat { ... }, ' '
+
 class ReactiveVar
   @isinstance: (val) -> 'table' == (type val) and val.subscribe
 
@@ -102,15 +109,15 @@ class ReactiveElement
     if 'table' == (type child) and child.destroy
       child\destroy!
 
-text = (...) -> document\createTextNode table.concat { ... }, ' '
-
 with exports = {
     :ReactiveVar,
     :ReactiveElement,
+    :asnode,
+    :append,
     :text,
   }
   add = (e) -> exports[e] = (...) -> ReactiveElement e, ...
 
-  for e in *{'div', 'form', 'span', 'a', 'p', 'button', 'ul', 'li', 'i', 'b', 'u', 'tt'} do add e
+  for e in *{'div', 'form', 'span', 'article', 'a', 'p', 'button', 'ul', 'li', 'i', 'b', 'u', 'tt'} do add e
   for e in *{'br', 'img', 'input', 'p', 'textarea'} do add e
   for i=1,8 do add "h" .. i

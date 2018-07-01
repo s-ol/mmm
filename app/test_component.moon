@@ -21,9 +21,17 @@ run_test "exports ReactiveVar, ReactiveElement", ->
   assert ReactiveVar, "ReactiveVar not exported"
   assert ReactiveElement, "ReactiveElement not exported"
 
+run_test "exports asnode helper", ->
+  import asnode from require './component.moon'
+  assert 'function' == (type asnode), "asnode not exported"
+
+run_test "exports append helper", ->
+  import append from require './component.moon'
+  assert 'function' == (type append), "append not exported"
+
 run_test "exports text helper", ->
   import text from require './component.moon'
-  assert 'function' == (type text), "ReactiveVar not exported"
+  assert 'function' == (type text), "text not exported"
 
   node = text 'a test string'
   assert (js.instanceof node, js.global.Node), "expected text to generate a Node"
