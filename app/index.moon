@@ -5,9 +5,9 @@ import h1, p, a, br, ul, tt, li from require './html.moon'
 
 moon = '\xe2\x98\xbd'
 demos = 
-  twisted: 'canvas animation',
-  todo: 'Todo demo of a simple reactive UI framework',
-  realities: 'SVG graphics for a paper on VR and realities',
+  'twisted': 'canvas animation',
+  'todo': 'Todo demo of a simple reactive UI framework',
+  'realities': 'draft of a paper on virtual and other realities',
   'center-of-mass': 'aligning characters by their centers of mass',
   'test-component': 'Test suite for the UI framework',
 
