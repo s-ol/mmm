@@ -114,7 +114,7 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
     next: 2,
     "physical reality": "layer of reality defined by physical matter and the physical laws acting upon it.
       While the emergent phenomena of micro- and macro physics as well as layers of social existence etc. may be seen
-      as separate layers for the purpose of this paper we will group these together under the term of physical reality."
+      as separate layers, for the purpose of this paper we will group these together under the term of physical reality."
     "mental reality": "layer of reality perceived and processed by the brain of a human agent.",
     "digital reality": "layer of reality created and simulated by a digital system, e.g. a virtual reality game."
     "phys, mind, digi": "abbreviations for physical, mental and digital reality respectively.",
@@ -165,13 +165,13 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
       \finish!
 
   \append p "In both cases, the top of the diagram is fully occupied by the physical layer of reality, colored in green.
-    This is due to the fact that, according to the materialistic theory of mind, human consciousness owes it's existance
+    This is due to the fact that, according to the materialistic theory of mind, human consciousness owes its existance
     to the physical and chemical dynamics of neurons in our brains. Therefore our mental reality must be considered
     fully embedded in the physical reality, and consequently it may only appear underneath it in the diagram."
 
   \append p "During waking life, we concern ourselves mostly with the physical reality surrounding us.
     For this reason the physical reality is placed in the lower right corner of the diagram as the layer holding the
-    external world model relevant to the subject. Information flows in both direction between the physical world model
+    external world model relevant to the subject. Information flows in both directions between the physical world model
     and the subject's mental model, as denoted by the two white arrows: Information about the state of the world model
     enter the subjects mind via the senses (top arrow, pointing leftwards), and choices the subject makes inside of and
     based on his mental model can feed back into the physical layer through movements (lower arrow, pointing rightwards)."
@@ -217,8 +217,8 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
       \phys '', 1.5
       \finish!
 
-  \append p "In both cases we find the physical layer of reality as an intermediate between the mental and 
-    igital layers. Actions taken by the subject have to be acted out physically (corresponding to the
+  \append p "In both cases we find the physical layer of reality as an intermediate between the mental and
+    digital layers. Actions taken by the subject have to be acted out physically (corresponding to the
     information traversing the barrier between mental and physical reality) before they can be again digitized using
     the various tracking and input technologies (which in turn carry the information across the boundary of the physical
     and digital spaces)."
@@ -261,8 +261,8 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
     "While these cables and implanted devices are physical devices, they don't constitute the presence of the 
     physical layer of reality in the information path because while they do transmit information, the information
     remains in either the encoding of the mental model (neural firing patterns) or the encoding of the digital model
-    (e.g. a numeric encoding of a player character's character) and the conversion is made directly between those two -
-    the data never assumes the native encoding of the physical layer (e.g. as a physical motion)."
+    (e.g. a numeric encoding of a player character's movement in digital space) and the conversion is made directly
+    between those two - the data never assumes the native encoding of the physical layer (e.g. as a physical motion)."
 
   \append p "While we are currently far from being able to read arbitrary high-level information from the brain
     or to synthesize sensual input in human perception by bypassing the sensory organs, brain-computer interfaces (BCI)
@@ -274,7 +274,7 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
     bound by the physical layer of reality's laws.", br!,
     "Instead the holy grail of AR is reached with the creation of a god machine that can manipulate the state of the
     physical world according to the user's wishes. In this way the digital and physical realities become unified and
-    full 'augmented'."
+    fully 'augmented'."
 
   \append with figures!
     \append addlabel "'Nexus'", with Diagram!
