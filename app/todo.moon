@@ -1,5 +1,4 @@
-{ :document } = js.global
-import ReactiveVar, text, div, form, span, h3, a, input, textarea, button from require './component.moon'
+import ReactiveVar, append, text, div, form, span, h3, a, input, textarea, button from require './component.moon'
 
 parent = div!
 todoItem = (desc, done) ->
@@ -30,5 +29,5 @@ form = with form {
   \append input type: 'text', value: desc, onchange: (e) => desc\set e.target.value
   \append input type: 'submit', value: 'add'
 
-document.body\appendChild parent.node
-document.body\appendChild form.node
+append parent
+append form

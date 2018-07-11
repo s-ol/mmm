@@ -95,7 +95,7 @@ class ReactiveElement
       table.insert @_subscriptions, child\subscribe (...) -> @append ...
       child = child\get!
       if 'string' == type child
-        print 'WARN: string from ReactiveVar implicitly converted to TextNode, updating may fail'
+        warn 'string from ReactiveVar implicitly converted to TextNode, updating may fail'
 
     child = asnode child
     ok, last = pcall asnode, last
