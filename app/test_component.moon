@@ -78,6 +78,21 @@ run_test "passed old value as well", ->
   reactive\set 3
   assert done, "expected to reach the end"
 
+run_test "provides transform shorthand", ->
+  local done
+
+  reactive = ReactiveVar 1
+  reactive\subscribe coroutine.wrap (next, last) ->
+    assert last == 1, "expected last:1 to be 1"
+    next, last = coroutine.yield!
+    assert last == 2, "expected last:2 to be 2"
+    done = true
+
+  add_one = (a) -> a + 1
+  reactive\transform add_one
+  reactive\transform add_one
+  assert done, "expected to reach the end"
+
 run_test "#subscribe returns function to unsubscribe", ->
   calls = 0
 

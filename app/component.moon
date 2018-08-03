@@ -1,5 +1,7 @@
 { :document } = js.global
 
+warn = warn or -> print
+
 -- convert anything to a DOM Node
 -- val must be one of:
 -- * DOM Node (instanceof window.Node)
@@ -38,6 +40,8 @@ class ReactiveVar
       callback @value, old
 
   get: => @value
+
+  transform: (transform) => @set transform @get!
 
   subscribe: (callback) =>
     with -> @listeners[callback] = nil
