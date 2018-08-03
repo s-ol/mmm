@@ -10,6 +10,7 @@ demos =
   'realities': 'draft of a paper on virtual and other realities',
   'center-of-mass': 'aligning characters by their centers of mass',
   'test-component': 'Test suite for the UI framework',
+  'play-tags': 'Playground for Functional Tags',
 
 back_button = ->
   document.body\appendChild p a { '< back', href: '/' }
@@ -30,6 +31,9 @@ switch window.location.search
   when '?realities' then
     back_button!
     require './realities.moon'
+  when '?play-tags' then
+    back_button!
+    require './play_tags.moon'
   else
     document.body\appendChild h1 'mmm'
     document.body\appendChild p {
