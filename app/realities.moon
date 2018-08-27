@@ -1,7 +1,7 @@
 window = js.global
 { :document, :eval } = window
 
-import asnode, h1, h2, p, i, div, br, span, button, article from require './component.moon'
+import asnode, h1, h2, p, a, i, div, ol, li, br, span, button, article from require './component.moon'
 require 'svg.js'
 
 SVG =
@@ -78,6 +78,11 @@ class Diagram
 
     @width += 1
     w, h = @width * GRID_W, @height * GRID_H
+
+    l = GRID_W / 6.5
+    @svg\add with @svg\line 0, -GRID_H, w, -GRID_H
+      \stroke o width: 2, color: '#ffffff', dasharray: "#{l}, #{l}"
+
     @svg\size w, h
     @svg\viewbox 0, -h, w, h
     @node = @svg.node
@@ -94,16 +99,86 @@ figures = do
     'justify-content': 'space-evenly'
   (...) -> div { :style, ... }
 
+
+sources = do
+  short = (id) => "#{id} #{@year}"
+  long = => @names, " (#{@year}): ", (i @title), ", #{@published}"
+  {
+    Milgram: {
+      title: 'Augmented Reality: A class of displays on the reality-virtuality continuum',
+      published: 'in SPIE Vol. 2351',
+      names: 'P. Milgram, H. Takemura, A. Utsumi, F. Kishino',
+      year: 1994
+      :long, :short,
+    },
+    Marsh: {
+      title: 'Nested Immersion: Describing and Classifying Augmented Virtual Reality',
+      published: 'IEEE Virtual Reality Conference 2015',
+      names: 'W. Marsh, F. Mérienne',
+      year: 2015
+      :long, :short,
+    },
+    Billinghurst: {
+      title: 'The MagicBook: a transitional AR interface',
+      published: 'in Computer & Graphics 25',
+      names: 'M. Billinghurst, H. Kato, I. Poupyrev',
+      year: 2001,
+      :long, :short,
+    },
+    Matrix: {
+       title: 'The Matrix',
+       year: 1999,
+       names: 'L. Wachowski, A. Wachowski',
+       long: => @names, " (#{@year}): ", (i @title)
+       short: => tostring @year
+    },
+    Naam: {
+      title: 'Nexus',
+      published: 'Angry Robot',
+      names: 'R. Naam',
+      year: 2012,
+      :long, :short,
+    }
+  }
+
+ref = do
+  fmt = (id) -> 
+    a { (sources[id]\short id), href: "##{id}" }
+
+  ref = (...) ->
+    refs = { ... }
+    with span "(", fmt refs[1]
+      for i=2, #refs
+        \append ", "
+        \append fmt refs[i]
+      \append ")"
+
+references = ->
+  with ol!
+    for id, src in pairs sources
+      \append li { :id, src\long! }
+
 document.body\append asnode with article style: { margin: 'auto', 'max-width': '750px' }
   \append h1 "Reality Stacks"
 
   \append h2 "Abstract"
-  \append p "In this paper we compare various multi-reality approaches such as VR and AR with each other as well as
-    related idealized technologies from popular culture.", br!,
-    "To this end we propose a new type of diagram that allows visualizing the complex structures encompassing multiple
-    reality laters that are concurrently inhabitated by the subject of such an experience."
 
-  \append h2 "Definitions"
+  \append p "With the development of mixed-reality experiences and the development of the corresponding interface
+    devices multiple frameworks for classification of these experiences have been proposed. However these past
+    attempts have mostly been developed alongside and with the intent of capturing specific projects ",
+    (ref 'Marsh', 'Billinghurst'), " or are nevertheless very focused on existing methods and technologies ",
+    (ref 'Milgram'), ". The existing taxonomies also all assume physical reality as a fixpoint and constant and are
+    thereby not suited to describe many fictional mixed-reality environments and altered states of consciousness.
+    In this paper we describe a new model for describing such experiences and examplify it's use with currently
+    existing as well as idealized  technologies from popular culture."
+
+--  \append p "In this paper we compare various multi-reality approaches such as VR and AR with each other as well as
+--    related idealized technologies from popular culture.", br!,
+--    "To this end we propose a new type of diagram that allows visualizing the complex structures encompassing multiple
+--    reality laters that are concurrently inhabitated by the subject of such an experience."
+
+  \append h2 "Terminology"
+  \append p "We propose the following terms and definitions that will be used extensively for the remainder of the paper:"
   for term, definition in pairs {
     "layer of reality": "a closed system consisting of a world model and a set of rules or dynamics operating on and
       constraining said model.",
@@ -256,8 +331,8 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
     \phys ''
     \finish!
 
-  \append p "In the action movie 'The Matrix', users of the titular VR environment interface with it by plugging cables
-    into implanted sockets that connect the simulation directly to their central nervous system.", br!,
+  \append p "In the action movie 'The Matrix' ", (ref 'Matrix'), ", users of the titular VR environment interface with it
+    by plugging cables into implanted sockets that connect the simulation directly to their central nervous system.", br!,
     "While these cables and implanted devices are physical devices, they don't constitute the presence of the 
     physical layer of reality in the information path because while they do transmit information, the information
     remains in either the encoding of the mental model (neural firing patterns) or the encoding of the digital model
@@ -269,9 +344,9 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
     are a very active area of research with high hopes for comparable achievements in the near future."
 
   \append p "Applying this same step of removing the physical layer of reality from AR, we end up with something similar
-    to the nano-particle drug in ", (i "Nexus"), ". However this does not grant the user a similar amount of control
-    over his experience as the holy grail of VR does, since the user and the physical part of the environment remain
-    bound by the physical layer of reality's laws.", br!,
+    to the nano-particle drug in ", (i "Nexus"), " ", (ref 'Naam'), ".  However this does not grant the user a similar
+    amount of control over his experience as the holy grail of VR does, since the user and the physical part of the
+    environment remain bound by the physical layer of reality's laws.", br!,
     "Instead the holy grail of AR is reached with the creation of a god machine that can manipulate the state of the
     physical world according to the user's wishes. In this way the digital and physical realities become unified and
     fully 'augmented'."
@@ -375,3 +450,6 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
 
       \phys!
       \finish!
+
+  \append h2 'References'
+  \append references!
