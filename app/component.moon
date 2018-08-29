@@ -122,6 +122,7 @@ with exports = {
   }
   add = (e) -> exports[e] = (...) -> ReactiveElement e, ...
 
-  for e in *{'div', 'form', 'span', 'article', 'a', 'p', 'button', 'ul', 'ol', 'li', 'i', 'b', 'u', 'tt'} do add e
+  for e in *{'div', 'form', 'span', 'a', 'p', 'button', 'ul', 'ol', 'li', 'i', 'b', 'u', 'tt'} do add e
+  for e in *{'article', 'section', 'header', 'footer', 'content'} do add e
   for e in *{'br', 'img', 'input', 'p', 'textarea'} do add e
   for i=1,8 do add "h" .. i
