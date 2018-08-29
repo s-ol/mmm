@@ -172,8 +172,8 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
   }
 
   \append with sect "Abstract"
-    \append p "With the development of mixed-reality experiences and the development of the corresponding interface
-      devices multiple frameworks for classification of these experiences have been proposed. However these past
+    \append p "With the development of mixed-reality experiences and the corresponding interface devices
+      multiple frameworks for classification of these experiences have been proposed. However these past
       attempts have mostly been developed alongside and with the intent of capturing specific projects ",
       (ref 'Marsh', 'Billinghurst'), " or are nevertheless very focused on existing methods and technologies ",
       (ref 'Milgram'), ". The existing taxonomies also all assume physical reality as a fixpoint and constant and are
@@ -211,12 +211,13 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
         \append span definition
 
   \append with sect "Introduction"
-    \append p "We identify two different types of relationships between layers in multi-reality environment.
+    \append p "We identify two different types of relationships between layers in multi-reality environments.
       The first is layer nesting. Layer nesting describes how some layers are contained in other layers; i.e. they exist
-      within and can be represented fully by the parent layer's world model while the child layer's rules emerge from the
-      parent layer's dynamics. Layer nesting is visualized on the vertical axis in the following diagrams.
+      within and can be represented fully by the parent layer's world model and the child layer's rules emerge natively from
+      the parent layer's dynamics. Layer nesting is visualized on the vertical axis in the following diagrams.
       For each layer of reality on the bottom of the diagram the nested parent layers can be found by tracing a line upwards
-      to the top of the diagram."
+      to the top of the diagram. Following a materialistic point of view, physical reality therefore must completely encompass
+      the top of each diagram."
 
     \append p "The second type of relationship describes the information flow between a subject and the layers of reality
       the subject is immersed in. In a multi-reality experience the subject has access to multiple layers of reality and
