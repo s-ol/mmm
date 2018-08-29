@@ -129,12 +129,12 @@ sources = do
        title: 'The Matrix',
        year: 1999,
        names: 'L. Wachowski, A. Wachowski',
-       long: => @names, " (#{@year}): ", (i @title)
+       long: => @names, " (#{@year}): ", (i @title), " (movie)"
        short: => tostring @year
     },
     Naam: {
       title: 'Nexus',
-      published: 'Angry Robot',
+      published: 'Angry Robot (novel)',
       names: 'R. Naam',
       year: 2012,
       :long, :short,
@@ -159,10 +159,15 @@ references = ->
       \append li { :id, src\long! }
 
 document.body\append asnode with article style: { margin: 'auto', 'max-width': '750px' }
-  \append h1 "Reality Stacks"
+  \append div 'Sol Bekic', style: 'text-align': 'right'
+
+  \append h1 {
+    style: { 'text-align': 'center', 'font-size': '2em' },
+    "Reality Stacks",
+    div "a Taxonomy for Multi-Reality Experiences", style: 'font-size': '0.6em'
+  }
 
   \append h2 "Abstract"
-
   \append p "With the development of mixed-reality experiences and the development of the corresponding interface
     devices multiple frameworks for classification of these experiences have been proposed. However these past
     attempts have mostly been developed alongside and with the intent of capturing specific projects ",
@@ -171,11 +176,6 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
     thereby not suited to describe many fictional mixed-reality environments and altered states of consciousness.
     In this paper we describe a new model for describing such experiences and examplify it's use with currently
     existing as well as idealized  technologies from popular culture."
-
---  \append p "In this paper we compare various multi-reality approaches such as VR and AR with each other as well as
---    related idealized technologies from popular culture.", br!,
---    "To this end we propose a new type of diagram that allows visualizing the complex structures encompassing multiple
---    reality laters that are concurrently inhabitated by the subject of such an experience."
 
   \append h2 "Terminology"
   \append p "We propose the following terms and definitions that will be used extensively for the remainder of the paper:"
@@ -207,18 +207,36 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
       \append span definition
 
   \append h2 "Introduction"
-  \append p "Reality stack diagrams provide a way to plot two main axes of a given stack against each other:", br!,
-    "On the vertical axis ownership or nesting of layers of realities is shown; from the bottom upwards each block,
-    representing a layer of reality, is contained within the one above; i.e. it exists within and can be represented
-    fully by the parent layer’s world model and its rules emerge from the dynamics of the parent layer.", br!,
-    "The horizontal axis arranges layers of reality based on their appearance with respect to subjects interacting
-    with the model. In the bottom left corner the subject’s internal model and reality provides the origin of
-    the diagram. The world models that the subject is aware of are placed in the opposing right corner."
+  \append p "We identify two different types of relationships between layers in multi-reality environment.
+    The first is layer nesting. Layer nesting describes how some layers are contained in other layers; i.e. they exist
+    within and can be represented fully by the parent layer's world model while the child layer's rules emerge from the
+    parent layer's dynamics. Layer nesting is visualized on the vertical axis in the following diagrams.
+    For each layer of reality on the bottom of the diagram the nested parent layers can be found by tracing a line upwards
+    to the top of the diagram."
 
-  \append p "Information flows, as represented by the white arrows, in two directions;
-    towards the left, corresponding to information received and perceived by the subject, as well as
-    towards the right, corresponding to actions taken in the space of the world model.", br!,
-    "In between the two poles additional layers may be traversed by the information flowing one or both ways."
+  \append p "The second type of relationship describes the information flow between a subject and the layers of reality
+    the subject is immersed in. In a multi-reality experience the subject has access to multiple layers of reality and
+    their corresponding world models simultaneously.", br!,
+    "Depending on the specific experience, different types of and directions for information exchange
+    can exist between these layers and the subject's internal representation of the experience.
+    For the sake of this paper we distinguish only between ", (i "input"), " and ", (i "output"), " data flow (from the
+    perspective of the subject); categorized loosely as information the subject receives from the environment
+    (", (i "input"), ", e.g. visual stimuli) and actions the subject can take to influence the state of the world model
+    (", (i "output"), ", e.g. motor actions) respectively."
+
+  \append p "In the following diagrams, information flow is visualized horizontally, in the region below the dashed line
+    at the bottom of the diagram. The subject's internal mental model and layer of reality are placed on the bottom left
+    side of the diagram.
+    The layers of reality that the subject experiences directly and that mirror it's internal representations are placed
+    on the far right. There may be multiple layers of reality sharing this space, visualized as a vertical stack of
+    layers. Since the subject must necessarily have a complete internal model of the multi-reality experience around
+    him to feel immersed, the subject's mental layer of reality must span the full height of all the layers visible
+    on the right side of the diagram.", br!,
+    "Information flow itself is now visualized concretely using arrows that cross layer boundaries in the lower part of
+    the diagram as described above. Arrows pointing leftwards denote ", (i "input"), " flow, whilst arrows pointing
+    rightwards denote ", (i "output"), "-directed information flow. In some cases information doesn't flow directly
+    between the layers the subject is directly aware of and the subject's internal representation and instead
+    traverses ", (i "intermediate layers"), " first."
 
   \append p "Before we take a look at some reality stacks corresponding to current VR and AR technology,
     we can take a look at waking life as a baseline stack. To illustrate the format of the diagram we will compare it
@@ -292,8 +310,8 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
       \phys '', 1.5
       \finish!
 
-  \append p "In both cases we find the physical layer of reality as an intermediate between the mental and
-    digital layers. Actions taken by the subject have to be acted out physically (corresponding to the
+  \append p "In both cases we find the physical layer of reality as an ", (i "intermediate layer"), " between the mental
+    and digital layers. Actions taken by the subject have to be acted out physically (corresponding to the
     information traversing the barrier between mental and physical reality) before they can be again digitized using
     the various tracking and input technologies (which in turn carry the information across the boundary of the physical
     and digital spaces)."
@@ -305,11 +323,11 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
     directly manipulates state in the physical reality."
 
   \append p "The data conversions necessary at layer boundaries incur at the least losses in quality and accuracy of
-    information for purely technical reasons. However intermediate layers come at a higher cost than just an extra step
-    of conversion: For information to flow through a layer, it must be encodable within that layer’s world model.
-    This means that, akin to the metaphor of the ‘weakest link’, the range of information that can flow between layers
-    of reality, and thereby the upper bound of experiences possible with a given reality stack, depends on the layer
-    least fit to encode a respective piece of information.", br!,
+    information for purely technical reasons. However ", (i "intermediate layers"), " come at a cost larger than just
+    an additional step of conversion:
+    For information to flow through a layer, it must be encodable within that layer’s world model.
+    This means that the 'weakest link' in a given reality stack determines the upper bound of information possible to
+    encode within said stack and thereby limits the overall expressivity of the stack.", br!,
     "As a practical example we can consider creating an hypothetical VR application that allows users to traverse a
     large virtual space by flying. While the human mind is perfectly capable of imagining to fly and control the motion
     appropriately, it is extremely hard to devise and implement a satisfying setup and control scheme because the
@@ -375,15 +393,33 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
       .svg\plain('phys + digi')\attr(o fill: 'white', 'font-size': '14px')\move 6, -2 * GRID_H
       \finish!
 
-  \append h2 "Conclusions"
   \append p "Despite the similarities of VR and AR, the two can be considered polar opposites, as becomes evident when
     we compare their respective utopian implementations: they share the goal of allowing us to experience realities
     different from the one we naturally inhabit, but while VR seeks to accomplish this by creating a new, nested reality
-    inside ours, thus giving us full control over it, AR is instead an attempt to retrofit our specific needs directly
-    into the very reality we exist in."
+    inside ours, thus giving us full control over it.
+    AR, on the other hand, is instead an attempt to retrofit our specific needs directly into the very reality we exist
+    in.", br!,
+    "This is in direct contrast with the popular notion of the 'reality-virtuality continuum' ", (ref 'Milgram'), ":
+    the reality-virtuality continuum places common reality and VR (virtuality) as the two extreme poles, while AR
+    is represented as an intermediate state between the two. Here however we propose to view instead AR and VR as the
+    respective poles and find instead reality at the centerpoint, where the two opposing influences 'cancel out'."
 
-  \append h2 "Relation to Theories of Mind"
-  \append p "This paper starts from a deeply materialistic point of view and borders on microphysicalism.
+  \append h2 "Conclusion and Further Work"
+  \append p "In this paper we have proposed a taxonomy and visualization style for multi-reality experiences, as well
+    as demonstrated it's flexibility by applying them as examples. Through the application of the proposed theory,
+    we have also gained a new and contrasting view on preceding work such as the reality-virtuality-continuum.
+    We have also found that the taxonomy can be used outside the research field of media studies and its use may extend
+    as far as philosophy of consciousness (see Appendix below)."
+
+  \append p "Further research could enhance the proposed theory with better and more concrete definitions.
+    In the future, the proposed taxonomy might be used to create a more extensive and complete classification
+    of reality stacks and to analyse the relationships between them."
+
+  \append h2 'References'
+  \append references!
+
+  \append h2 "Appendix: Relation to Theories of Mind"
+  \append p "This paper starts from a deeply materialistic point of view that borders on microphysicalism.
     However it should be noted that the diagram style introduced above lends itself also to display other
     philosophical theories of mind. As an example, the following graphics show a typical VR stack as interpreted by
     Materialism, Cartesian Dualism and Solipsism respectively:"
@@ -450,6 +486,3 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
 
       \phys!
       \finish!
-
-  \append h2 'References'
-  \append references!
