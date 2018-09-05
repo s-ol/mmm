@@ -1,4 +1,4 @@
-import ReactiveVar, append, text, div, form, span, h3, a, input, textarea, button from require './component.moon'
+import ReactiveVar, append, text, div, form, span, h3, a, input, textarea, button from require 'app.component'
 
 parent = div!
 todoItem = (desc, done) ->

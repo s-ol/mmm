@@ -1,5 +1,5 @@
-import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require './tags.moon'
-import ReactiveVar, append, asnode, text, div, form, span, h3, a, input, textarea, button from require './component.moon'
+import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require 'app.tags'
+import ReactiveVar, append, tohtml, text, div, form, span, h3, a, input, textarea, button from require 'app.component'
 
 clone = (set) ->
   assert set and 'table' == (type set), 'not a set'
@@ -32,7 +32,7 @@ class ReactiveNode extends Node
                 margin: '0 5px',
               }
       }
-    @node = asnode @_node
+    @node = tohtml @_node
 
   has: (tag) => @tags\get![tag]
   add: (tag) => @tags\transform set_append tag

@@ -1,14 +1,12 @@
 { :document } = js.global
 
-warn = warn or -> print
-
 -- convert anything to a DOM Node
 -- val must be one of:
 -- * DOM Node (instanceof window.Node)
 -- * MMMElement (have a .node value that is instanceof window.Node)
 -- * string
--- note that strings won't survive identity comparisons after asnode
-asnode = (val) ->
+-- note that strings won't survive identity comparisons after tohtml
+tohtml = (val) ->
   if 'string' == type val
     return document\createTextNode val
   if 'table' == type val
@@ -20,9 +18,10 @@ asnode = (val) ->
   else
     error "not a Node: #{val}, #{type val}"
 
--- shorthand to append elements to body
--- see #asnode for permitted values
-append = (val) -> document.body\appendChild asnode val
+-- overloaded append
+-- see tohtml for acceptable values
+g_append = append
+append = (value) -> g_append tohtml value
 
 -- shorthand to form a text node from strings
 text = (...) -> document\createTextNode table.concat { ... }, ' '
@@ -98,25 +97,26 @@ class ReactiveElement
     if ReactiveVar.isinstance child
       table.insert @_subscriptions, child\subscribe (...) -> @append ...
       child = child\get!
-      if 'string' == type child
-        warn 'string from ReactiveVar implicitly converted to TextNode, updating may fail'
 
-    child = asnode child
-    ok, last = pcall asnode, last
+    if 'string' == type last
+      error 'cannot replace string node'
+
+    child = tohtml child
+    ok, last = pcall tohtml, last
     if ok
       @node\replaceChild child, last
     else
       @node\appendChild child
 
   remove: (child) =>
-    @node\removeChild asnode child
+    @node\removeChild tohtml child
     if 'table' == (type child) and child.destroy
       child\destroy!
 
 with exports = {
     :ReactiveVar,
     :ReactiveElement,
-    :asnode,
+    :tohtml,
     :append,
     :text,
   }
@@ -124,5 +124,5 @@ with exports = {
 
   for e in *{'div', 'form', 'span', 'a', 'p', 'button', 'ul', 'ol', 'li', 'i', 'b', 'u', 'tt'} do add e
   for e in *{'article', 'section', 'header', 'footer', 'content'} do add e
-  for e in *{'br', 'img', 'input', 'p', 'textarea'} do add e
+  for e in *{'br', 'hr', 'img', 'input', 'p', 'textarea'} do add e
   for i=1,8 do add "h" .. i

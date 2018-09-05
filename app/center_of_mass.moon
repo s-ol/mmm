@@ -1,9 +1,9 @@
 window = js.global
 document = window.document
 
-import CanvasApp from require './canvasapp.moon'
-import rgb from require './color.moon'
-import h1, p, div, span, input, button from require './html.moon'
+import CanvasApp from require 'app.canvasapp'
+import rgb from require 'app.color'
+import h1, p, div, span, input, button from require 'app.html'
 
 fast = true
 center_char = do
@@ -92,15 +92,15 @@ class CenterOfMass extends CanvasApp
       @ctx\fillText char, x + w/2 - cx, y - cy
       x += w
 
-document.body\appendChild h1 'Fonts aligned by Center-of-Mass'
-document.body\appendChild p 'Click below and type away :)'
+append h1 'Fonts aligned by Center-of-Mass'
+append p 'Click below and type away :)'
 
 app = CenterOfMass "What's up", "Times New Roman", 40
-document.body\appendChild app.canvas
+append app.canvas
 app.canvas.style.backgroundColor = '#eee'
 
 add = =>
-  document.body\appendChild div {
+  append div {
     span 'font: ',
     with @font_input = input!
       .type = 'text'
@@ -109,7 +109,7 @@ add = =>
       .onclick = (_, e) -> app.font = @font_input.value
   }
 
-  document.body\appendChild div {
+  append div {
     span 'size: ',
     input type: 'range', min: 2, max: 120, value: 40, onchange: (_, e) ->
       size = e.target.value
@@ -119,7 +119,7 @@ add = =>
       ''
   }
 
-  document.body\appendChild div {
+  append div {
     span 'optimize inner loop: ',
     input type: 'checkbox', checked: fast, onchange: (_, e) ->
       fast = e.target.checked

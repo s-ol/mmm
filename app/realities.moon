@@ -1,91 +1,105 @@
-window = js.global
-{ :document, :eval } = window
+import append, tohtml, h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from require 'app.component'
 
-import asnode, h1, h2, p, a, i, div, ol, li, br, span, button, section, article from require './component.moon'
-require 'svg.js'
-
-SVG =
-  doc: window\eval "(function() { return SVG(document.createElement('svg')); })",
-  G: window\eval "(function() { return new SVG.G(); })",
-setmetatable SVG, __call: => @doc!
-
-o = do
-  mkobj = window\eval "(function () { return {}; })"
-  (tbl) ->
-    with obj = mkobj!
-      for k,v in pairs(tbl)
-        obj[k] = v
-
-print = window.console\log
-
+local Diagram, o
 GRID_W = 50
 GRID_H = 40
+if MODE == 'CLIENT'
+  require 'svg.js'
+  eval = js.global\eval
 
-class Diagram
-  new: =>
-    @svg = SVG!
-    @arrows = SVG.G!
-    @width, @height = 0, 0
-    @y = 0
 
-  txtattr = o {
-    fill: 'white',
-    'font-size': '14px',
-    'text-anchor': 'middle',
-  }
-  block: (color, label, h=1) =>
-    @svg\add with SVG.G!
-      with \rect GRID_W, h * GRID_H
-        \attr o fill: color
-      if label
-        with \plain label
-          \move GRID_W/2, 0
-          \attr txtattr
+  SVG =
+    doc: eval "(function() { return SVG(document.createElement('svg')); })",
+    G: eval "(function() { return new SVG.G(); })",
+  setmetatable SVG, __call: => @doc!
 
-      \move @width * GRID_W, (@y + h) * -GRID_H
-    @y += h
-    if @y > @height
-      @height = @y
+  o = do
+    mkobj = eval "(function () { return {}; })"
+    (tbl) ->
+      with obj = mkobj!
+        for k,v in pairs(tbl)
+          obj[k] = v
 
-  arrattr = o {
-    fill: 'white',
-    'font-size': '18px',
-    'text-anchor': 'middle',
-  }
-  arrow: (char, x, y) =>
-    with @arrows\plain char
-      \attr arrattr
-      \move (x + 1) * GRID_W, (y - 0.5) * -GRID_H - 11
+  class Diagram
+    new: =>
+      @svg = SVG!
+      @arrows = SVG.G!
+      @width, @height = 0, 0
+      @y = 0
 
-  -- inout: (x=@width, y=@y) => @arrow '⇋', x, y      -- U+21CB
-  -- inn:   (x=@width, y=@y) => @arrow '↼', x, y+0.25 -- U+21BC
-  -- out:   (x=@width, y=@y) => @arrow '⇁', x, y-0.25 -- U+21C1
-  inout: (x=@width, y=@y) => @arrow '⇆', x, y      -- U+21C6
-  inn:   (x=@width, y=@y) => @arrow '←', x, y+0.25 -- U+2190
-  out:   (x=@width, y=@y) => @arrow '→', x, y-0.25 -- U+2192
+    txtattr = o {
+      fill: 'white',
+      'font-size': '14px',
+      'text-anchor': 'middle',
+    }
+    block: (color, label, h=1) =>
+      @svg\add with SVG.G!
+        with \rect GRID_W, h * GRID_H
+          \attr o fill: color
+        if label
+          with \plain label
+            \move GRID_W/2, 0
+            \attr txtattr
 
-  mind: (label='mind', ...) => @block '#fac710', label, ...
-  phys: (label='phys', ...) => @block '#8fd13f', label, ...
-  digi: (label='digi', ...) => @block '#9510ac', label, ...
+        \move @width * GRID_W, (@y + h) * -GRID_H
+      @y += h
+      if @y > @height
+        @height = @y
 
-  next: =>
-    @y = 0
-    @width += 1
+    arrattr = o {
+      fill: 'white',
+      'font-size': '18px',
+      'text-anchor': 'middle',
+    }
+    arrow: (char, x, y) =>
+      with @arrows\plain char
+        \attr arrattr
+        \move (x + 1) * GRID_W, (y - 0.5) * -GRID_H - 11
 
-  finish: =>
-    return if @node
-    @svg\add @arrows
+    -- inout: (x=@width, y=@y) => @arrow '⇋', x, y      -- U+21CB
+    -- inn:   (x=@width, y=@y) => @arrow '↼', x, y+0.25 -- U+21BC
+    -- out:   (x=@width, y=@y) => @arrow '⇁', x, y-0.25 -- U+21C1
+    inout: (x=@width, y=@y) => @arrow '⇆', x, y      -- U+21C6
+    inn:   (x=@width, y=@y) => @arrow '←', x, y+0.25 -- U+2190
+    out:   (x=@width, y=@y) => @arrow '→', x, y-0.25 -- U+2192
 
-    @width += 1
-    w, h = @width * GRID_W, @height * GRID_H
+    mind: (label='mind', ...) => @block '#fac710', label, ...
+    phys: (label='phys', ...) => @block '#8fd13f', label, ...
+    digi: (label='digi', ...) => @block '#9510ac', label, ...
 
-    l = GRID_W / 6.5
-    @svg\add with @svg\line 0, -GRID_H, w, -GRID_H
-      \stroke o width: 2, color: '#ffffff', dasharray: "#{l}, #{l}"
+    next: =>
+      @y = 0
+      @width += 1
 
-    @svg\size w, h
-    @svg\viewbox 0, -h, w, h
-    @node = @svg.node
+    finish: =>
+      return if @node
+      @svg\add @arrows
+
+      @width += 1
+      w, h = @width * GRID_W, @height * GRID_H
+
+      l = GRID_W / 6.5
+      @svg\add with @svg\line 0, -GRID_H, w, -GRID_H
+        \stroke o width: 2, color: '#ffffff', dasharray: "#{l}, #{l}"
+
+      @svg\size w, h
+      @svg\viewbox 0, -h, w, h
+      @node = @svg.node
+else
+  class Diagram
+    inout: =>
+    inn: =>
+    out: =>
+    block: =>
+    mind: =>
+    phys: =>
+    digi: =>
+    next: =>
+    finish: =>
+    render: =>
+      rplc = with div style: { display: 'inline-block', width: 200, height: 60 }
+        \append '(diagram goes here)'
+      rplc\render!
 
 addlabel = (label, diagram) ->
   with div style: { display: 'inline-block', margin: '20px', 'text-align': 'center' }
@@ -142,7 +156,7 @@ sources = do
   }
 
 ref = do
-  fmt = (id) -> 
+  fmt = (id) ->
     a { (sources[id]\short id), href: "##{id}" }
 
   ref = (...) ->
@@ -162,7 +176,7 @@ sect = (label) ->
   with section style: 'page-break-inside': 'avoid'
     \append h2 label
 
-document.body\append asnode with article style: { margin: 'auto', 'max-width': '750px' }
+append with article style: { margin: 'auto', 'max-width': '750px' }
   \append div 'Sol Bekic', style: 'text-align': 'right'
 
   \append h1 {
@@ -199,7 +213,7 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
       "phys, mind, digi": "abbreviations for physical, mental and digital reality respectively.",
     }
       if 'number' == type definition
-        \append document\createElement 'hr'
+        \append hr!
         continue
       \append with div style: { 'margin-left': '2rem' }
         \append span term, style: {
@@ -395,7 +409,8 @@ document.body\append asnode with article style: { margin: 'auto', 'max-width': '
 
         \next!
         \block col, '', 2
-        .svg\plain('phys + digi')\attr(o fill: 'white', 'font-size': '14px')\move 6, -2 * GRID_H
+        if MODE == 'CLIENT'
+          .svg\plain('phys + digi')\attr(o fill: 'white', 'font-size': '14px')\move 6, -2 * GRID_H
         \finish!
 
     \append p "Despite the similarities of VR and AR, the two can be considered polar opposites, as becomes evident when

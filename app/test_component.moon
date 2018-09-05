@@ -1,36 +1,42 @@
-{ :document, Node } = js.global
+import div, h1, ul, li, pre from require 'app.html'
 
-import div, h1, ul, li, pre from require './html.moon'
-
+last = nil
 test_group = (name) ->
-  list = ul!
-  root = div (h1 name), list
-  root, (name, test) ->
+  if last
+    append div (h1 name), ul last
+
+  last = {}
+  (name, test) ->
     ok, err = pcall test
-    list\appendChild li if ok
+    table.insert last, li if ok
       "passed '#{name}'"
     else
       "failed '#{name}'", pre err
 
-node, run_test = test_group 'component.moon'
-document.body\appendChild node
+expect = (expected, note, ...) ->
+  ok, msg = pcall ...
+  print ok, msg\find expected
+  if ok or not msg\find expected
+    error note
+
+run_test = test_group 'component.moon'
 
 local ReactiveVar, ReactiveElement
 run_test "exports ReactiveVar, ReactiveElement", ->
-  import ReactiveVar, ReactiveElement from require './component.moon'
+  import ReactiveVar, ReactiveElement from require 'app.component'
   assert ReactiveVar, "ReactiveVar not exported"
   assert ReactiveElement, "ReactiveElement not exported"
 
-run_test "exports asnode helper", ->
-  import asnode from require './component.moon'
-  assert 'function' == (type asnode), "asnode not exported"
+run_test "exports tohtml helper", ->
+  import tohtml from require 'app.component'
+  assert 'function' == (type tohtml), "tohtml not exported"
 
 run_test "exports append helper", ->
-  import append from require './component.moon'
+  import append from require 'app.component'
   assert 'function' == (type append), "append not exported"
 
 run_test "exports text helper", ->
-  import text from require './component.moon'
+  import text from require 'app.component'
   assert 'function' == (type text), "text not exported"
 
   node = text 'a test string'
@@ -38,13 +44,12 @@ run_test "exports text helper", ->
   assert node.data == 'a test string', "expected text to store the string"
 
 run_test "text joins multiple arguments", ->
-  import text from require './component.moon'
+  import text from require 'app.component'
 
   node = text 'a', 'test', 'string'
   assert node.data == 'a test string', "expected text to join arguments with spaces"
 
-node, run_test = test_group 'ReactiveVar'
-document.body\appendChild node
+run_test = test_group 'ReactiveVar'
 
 run_test "stores a value", ->
   reactive = ReactiveVar 'test'
@@ -137,8 +142,7 @@ run_test "tracks multiple subscriptions at once", ->
   reactive\set 'test'
   assert done, "expected to reach the end"
 
-node, run_test = test_group 'ReactiveElement'
-document.body\appendChild node
+run_test = test_group 'ReactiveElement'
 
 run_test "creates a HTML element", ->
   elem = ReactiveElement 'span'
@@ -190,21 +194,12 @@ run_test "can unwrap and track children from ReactiveVars", ->
   assert elem.node.childElementCount == 2, "expected node to have two children"
 
 run_test "warns when appending a string from a ReactiveVar", ->
-  import text from require './component.moon'
-  export print
-  _print = print
-
-  calls = 0
-  print = (msg) -> calls += 1 if 'WARN: string' == msg\sub 1, 12
+  import text from require 'app.component'
 
   str = ReactiveVar 'test'
   elem = ReactiveElement 'div', str
-  assert calls == 1, "expected to print warning"
+  expect 'cannot replace string node', 'expected error', str\set, 'string too'
+  elem\destroy!
 
-  str\set 'string too'
-  assert calls == 2, "expected to print warning again"
-
-  str\set text 'this is text'
-  assert calls == 2, "expected not to print warning with text node"
-
-  print = _print
+  elem = ReactiveElement 'div', str\map text
+  str\set 'this is text'
