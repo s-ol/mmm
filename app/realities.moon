@@ -7,7 +7,6 @@ if MODE == 'CLIENT'
   require 'svg.js'
   eval = js.global\eval
 
-
   SVG =
     doc: eval "(function() { return SVG(document.createElement('svg')); })",
     G: eval "(function() { return new SVG.G(); })",
@@ -21,11 +20,13 @@ if MODE == 'CLIENT'
           obj[k] = v
 
   class Diagram
-    new: =>
+    new: (f) =>
       @svg = SVG!
       @arrows = SVG.G!
       @width, @height = 0, 0
       @y = 0
+
+      f @
 
     txtattr = o {
       fill: 'white',
@@ -87,15 +88,6 @@ if MODE == 'CLIENT'
       @node = @svg.node
 else
   class Diagram
-    inout: =>
-    inn: =>
-    out: =>
-    block: =>
-    mind: =>
-    phys: =>
-    digi: =>
-    next: =>
-    finish: =>
     render: =>
       rplc = with div style: { display: 'inline-block', width: 200, height: 60 }
         \append '(diagram goes here)'
@@ -262,19 +254,19 @@ append with article style: { margin: 'auto', 'max-width': '750px' }
       to the stack corresponding to a dreaming state:"
 
     \append with figures!
-      \append addlabel "Waking Life", with Diagram!
-        \mind!
-        \inout!
-        \phys!
+      \append addlabel "Waking Life", Diagram =>
+        @mind!
+        @inout!
+        @phys!
 
-        \next!
-        \phys '', 2
-        \finish!
+        @next!
+        @phys '', 2
+        @finish!
 
-      \append addlabel "Dreaming", with Diagram!
-        \mind!
-        \phys!
-        \finish!
+      \append addlabel "Dreaming", Diagram =>
+        @mind!
+        @phys!
+        @finish!
 
     \append p "In both cases, the top of the diagram is fully occupied by the physical layer of reality, colored in green.
       This is due to the fact that, according to the materialistic theory of mind, human consciousness owes its existance
@@ -299,35 +291,35 @@ append with article style: { margin: 'auto', 'max-width': '750px' }
       In the following section we will take a look at the respective stacks of both experience types:"
 
     \append with figures!
-      \append addlabel "VR", with Diagram!
-        \mind!
-        \phys!
-        \inout nil, 1
+      \append addlabel "VR", Diagram =>
+        @mind!
+        @phys!
+        @inout nil, 1
 
-        \next!
-        \phys '', 2
-        \inout nil, 1
+        @next!
+        @phys '', 2
+        @inout nil, 1
 
-        \next!
-        \digi!
-        \phys ''
-        \finish!
+        @next!
+        @digi!
+        @phys ''
+        @finish!
 
 
-      \append addlabel "AR", with Diagram!
-        \mind!
-        \inout nil, 1.25
-        \inn nil, 0.5
-        \phys!
+      \append addlabel "AR", Diagram =>
+        @mind!
+        @inout nil, 1.25
+        @inn nil, 0.5
+        @phys!
 
-        \next!
-        \phys '', 2
-        \inn nil, .5
+        @next!
+        @phys '', 2
+        @inn nil, .5
 
-        \next!
-        \digi nil, .5
-        \phys '', 1.5
-        \finish!
+        @next!
+        @digi nil, .5
+        @phys '', 1.5
+        @finish!
 
     \append p "In both cases we find the physical layer of reality as an ", (i "intermediate layer"), " between the mental
       and digital layers. Actions taken by the subject have to be acted out physically (corresponding to the
@@ -358,15 +350,15 @@ append with article style: { margin: 'auto', 'max-width': '750px' }
       VR and AR stacks limits the experience as a whole. It follows that the removal of that indirection should be
       an obvious goal for future developments:"
 
-    \append figures addlabel "holy grail of VR: 'The Matrix'", with Diagram!
-      \mind!
-      \inout!
-      \phys!
+    \append figures addlabel "holy grail of VR: 'The Matrix'", Diagram =>
+      @mind!
+      @inout!
+      @phys!
 
-      \next!
-      \digi!
-      \phys ''
-      \finish!
+      @next!
+      @digi!
+      @phys ''
+      @finish!
 
     \append p "In the action movie 'The Matrix' ", (ref 'Matrix'), ", users of the titular VR environment interface with it
       by plugging cables into implanted sockets that connect the simulation directly to their central nervous system.", br!,
@@ -389,29 +381,28 @@ append with article style: { margin: 'auto', 'max-width': '750px' }
       fully 'augmented'."
 
     \append with figures!
-      \append addlabel "'Nexus'", with Diagram!
-        \mind!
-        \inout nil, 0.75
-        \inout nil, 1.25
-        \phys!
+      \append addlabel "'Nexus'", Diagram =>
+        @mind!
+        @inout nil, 0.75
+        @inout nil, 1.25
+        @phys!
 
-        \next!
-        \digi nil, .5
-        \phys '', 1.5
-        \finish!
+        @next!
+        @digi nil, .5
+        @phys '', 1.5
+        @finish!
 
-      \append addlabel "holy grail of AR: 'Deus Machina'", with Diagram!
+      \append addlabel "holy grail of AR: 'Deus Machina'", Diagram =>
         col = '#92807c'
 
-        \mind!
-        \inout!
-        \block col, ''
+        @mind!
+        @inout!
+        @block col, ''
 
-        \next!
-        \block col, '', 2
-        if MODE == 'CLIENT'
-          .svg\plain('phys + digi')\attr(o fill: 'white', 'font-size': '14px')\move 6, -2 * GRID_H
-        \finish!
+        @next!
+        @block col, '', 2
+        @svg\plain('phys + digi')\attr(o fill: 'white', 'font-size': '14px')\move 6, -2 * GRID_H
+        @finish!
 
     \append p "Despite the similarities of VR and AR, the two can be considered polar opposites, as becomes evident when
       we compare their respective utopian implementations: they share the goal of allowing us to experience realities
@@ -445,64 +436,64 @@ append with article style: { margin: 'auto', 'max-width': '750px' }
       Materialism, Cartesian Dualism and Solipsism respectively:"
 
     \append with figures!
-      \append addlabel "VR in Materialism", with Diagram!
-        \mind!
-        \inout nil, 1
-        \phys!
+      \append addlabel "VR in Materialism", Diagram =>
+        @mind!
+        @inout nil, 1
+        @phys!
 
-        \next!
-        \phys '', 2
-        \inout nil, 1
+        @next!
+        @phys '', 2
+        @inout nil, 1
 
-        \next!
-        \digi!
-        \phys ''
+        @next!
+        @digi!
+        @phys ''
 
-        \finish!
+        @finish!
 
-      \append addlabel "VR in Solipsism", with Diagram!
-        \mind nil, 2
-        \inout nil, 1
+      \append addlabel "VR in Solipsism", Diagram =>
+        @mind nil, 2
+        @inout nil, 1
 
-        \next!
-        \digi!
-        \mind ''
-        \finish!
+        @next!
+        @digi!
+        @mind ''
+        @finish!
 
-      \append addlabel "VR in Cartesian Dualism", with Diagram!
-        \mind nil, 2
-        \inout nil, 1
-        \next!
+      \append addlabel "VR in Cartesian Dualism", Diagram =>
+        @mind nil, 2
+        @inout nil, 1
+        @next!
 
-        \phys nil, 2
-        \inout nil, 1
-        \next!
+        @phys nil, 2
+        @inout nil, 1
+        @next!
 
-        \digi!
-        \phys ''
-        \finish!
+        @digi!
+        @phys ''
+        @finish!
 
     \append p "However these philosophical theories of minds also constitute reality stacks by themselves and as such can
       be compared directly:"
 
     \append with figures!
-      \append addlabel "Materialism", with Diagram!
-        \mind!
-        \inout!
-        \phys!
+      \append addlabel "Materialism", Diagram =>
+        @mind!
+        @inout!
+        @phys!
 
-        \next!
-        \phys '', 2
-        \finish!
+        @next!
+        @phys '', 2
+        @finish!
 
-      \append addlabel "Solipsism", with Diagram!
-        \mind!
-        \finish!
+      \append addlabel "Solipsism", Diagram =>
+        @mind!
+        @finish!
 
-      \append addlabel "Cartesian Dualism", with Diagram!
-        \mind!
-        \inout!
-        \next!
+      \append addlabel "Cartesian Dualism", Diagram =>
+        @mind!
+        @inout!
+        @next!
 
-        \phys!
-        \finish!
+        @phys!
+        @finish!
