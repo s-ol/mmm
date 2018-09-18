@@ -1,8 +1,5 @@
 package.moonpath = './?.server.moon;' .. package.moonpath
 
-import insert_loader from require 'duct_tape'
-insert_loader!
-
 export MODE, warn, append
 MODE = 'SERVER'
 warn = (...) ->
@@ -16,6 +13,9 @@ append = (val) ->
 flush = ->
   with x = buffer
     buffer = ''
+
+import insert_loader from require 'duct_tape'
+insert_loader!
 
 error "please specify the module to build as an argumnet" unless arg[1]
 
