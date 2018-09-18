@@ -1,8 +1,11 @@
-import append, tohtml, h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from require 'app.component'
+import append, h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from require 'app.component'
 
 local Diagram, o
 GRID_W = 50
 GRID_H = 40
+
+-- script https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js
+
 if MODE == 'CLIENT'
   require 'svg.js'
   eval = js.global\eval
@@ -189,32 +192,33 @@ append with article style: { margin: 'auto', 'max-width': '750px' }
 
   \append with sect "Terminology"
     \append p "We propose the following terms and definitions that will be used extensively for the remainder of the paper:"
-    for term, definition in pairs {
-      "layer of reality": "a closed system consisting of a world model and a set of rules or dynamics operating on and
-        constraining said model.",
-      "world model": "describes a world state containing objects, agents and/or concepts on an arbitrary abstraction level.",
-      break: 1,
-      "reality stack": "structure consisting of all layers of reality encoding an agent's interaction with his environment
-        in their world model at a given moment, as well as all layers supporting these respectively."
-      next: 2,
-      "physical reality": "layer of reality defined by physical matter and the physical laws acting upon it.
+    for definition in *{
+      { "layer of reality": "a closed system consisting of a world model and a set of rules or dynamics operating on and
+        constraining said model." },
+      { "world model": "describes a world state containing objects, agents and/or concepts on an arbitrary abstraction level." },
+      '------',
+      { "reality stack": "structure consisting of all layers of reality encoding an agent's interaction with his environment
+        in their world model at a given moment, as well as all layers supporting these respectively." },
+      '------',
+      { "physical reality": "layer of reality defined by physical matter and the physical laws acting upon it.
         While the emergent phenomena of micro- and macro physics as well as layers of social existence etc. may be seen
-        as separate layers, for the purpose of this paper we will group these together under the term of physical reality."
-      "mental reality": "layer of reality perceived and processed by the brain of a human agent.",
-      "digital reality": "layer of reality created and simulated by a digital system, e.g. a virtual reality game."
-      "phys, mind, digi": "abbreviations for physical, mental and digital reality respectively.",
+        as separate layers, for the purpose of this paper we will group these together under the term of physical reality." },
+      { "mental reality": "layer of reality perceived and processed by the brain of a human agent." },
+      { "digital reality": "layer of reality created and simulated by a digital system, e.g. a virtual reality game." },
+      { "phys, mind, digi": "abbreviations for physical, mental and digital reality respectively." },
     }
-      if 'number' == type definition
+      if 'string' == type definition
         \append hr!
         continue
       \append with div style: { 'margin-left': '2rem' }
+        term = next definition
         \append span term, style: {
           display: 'inline-block',
           'margin-left': '-2rem',
           'font-weight': 'bold',
           'min-width': '140px'
         }
-        \append span definition
+        \append span definition[term]
 
   \append with sect "Introduction"
     \append p "We identify two different types of relationships between layers in multi-reality environments.

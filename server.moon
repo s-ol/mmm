@@ -1,5 +1,8 @@
 package.moonpath = './?.server.moon;' .. package.moonpath
 
+import insert_loader from require 'duct_tape'
+insert_loader!
+
 export MODE, warn, append
 MODE = 'SERVER'
 warn = (...) ->
