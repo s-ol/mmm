@@ -6,6 +6,7 @@ import rgb from require 'app.color'
 import h1, p, div, span, input, button from require 'app.html'
 
 fast = true
+center = true
 center_char = do
   canvas = document\createElement 'canvas'
   ctx = canvas\getContext '2d'
@@ -64,15 +65,50 @@ center_char = do
     xx, yy, width
 
 class CenterOfMass extends CanvasApp
-  width: window.innerWidth - 8
-  height: window.innerHeight * 0.6
-  new: (@text, @font, @size) => super!
+  width: window.innerWidth - 20
+  height: 300
+  new: (text, @font, @size) =>
+    super!
+    @text = {}
+    for i = 1,#text
+      @add text\sub i, i
+
+  add: (char) =>
+    rcx, rcy, w = center_char char, @font, @size
+    cx, cy = w/2, @size/2
+    vx, vy = 0, 0
+    table.insert @text, {
+      :char, :rcx, :rcy, :w
+      :cx, :cy, :vx, :vy
+    }
+
+  refresh: =>
+    for char in *@text
+      char.rcx, char.rcy, char.w = center_char char.char, @font, @size
 
   keydown: (key) =>
     if key == "Backspace" or key == "Delete"
-      @text = @text\sub 1, #@text - 1
+      table.remove @text
     elseif string.len(key) == 1
-      @text ..= key
+      @add key
+
+  update: (dt) =>
+    super dt
+
+    ACCEL = 4 * dt
+    DAMPING = 8 * dt
+
+    for char in *@text
+      { :rcx, :rcy, :cx, :cy, :w } = char
+      if not center
+        rcx, rcy = w/2, @size/2
+      dx, dy = rcx - cx, rcy - cy
+      char.vx += dx * ACCEL
+      char.vy += dy * ACCEL
+      char.cx += char.vx
+      char.cy += char.vy
+      char.vx *= DAMPING
+      char.vy *= DAMPING
 
   draw: =>
     @ctx\clearRect 0, 0, @width, @height
@@ -80,11 +116,8 @@ class CenterOfMass extends CanvasApp
     @ctx.font = "#{@size}px #{@font}"
     @ctx.textBaseline = 'top'
 
-    x, y = 0, @size/2
-    for i=1, #@text
-      char = @text\sub i, i
-      cx, cy, w = center_char char, @font, @size
-
+    x, y = @size * .1, @size
+    for { :char, :cx, :cy, :w } in *@text
       if x + w > @width
         x = 0
         y += @size * 1.2
@@ -93,9 +126,7 @@ class CenterOfMass extends CanvasApp
       x += w
 
 append h1 'Fonts aligned by Center-of-Mass'
-append p 'Click below and type away :)'
-
-app = CenterOfMass "What's up", "Times New Roman", 40
+app = CenterOfMass "Click here and type Away!", "Times New Roman", 40
 append app.canvas
 app.canvas.style.backgroundColor = '#eee'
 
@@ -106,7 +137,9 @@ add = =>
       .type = 'text'
       .value = 'Times New Roman'
     with button 'set'
-      .onclick = (_, e) -> app.font = @font_input.value
+      .onclick = (_, e) ->
+        app.font = @font_input.value
+        app\refresh!
   }
 
   append div {
@@ -115,8 +148,15 @@ add = =>
       size = e.target.value
       @size_label.innerText = size
       app.size = size
+      app\refresh!
     with @size_label = span '40'
       ''
+  }
+
+  append div {
+    span 'center characters by weight: ',
+    input type: 'checkbox', checked: center, onchange: (_, e) ->
+      center = e.target.checked
   }
 
   append div {
