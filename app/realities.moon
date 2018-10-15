@@ -1,10 +1,26 @@
 import append, h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from require 'app.component'
+import compile from require 'duct_tape'
 
 local Diagram, o
 GRID_W = 50
 GRID_H = 40
 
+on_client = (fn, ...) ->
+  switch MODE
+    when 'SERVER'
+      code = compile fn
+      warn code
+      append "<script type=\"application/lua\">
+        local fn = #{code}
+        fn(#{table.concat { ... }, ', '})
+      </script>"
+    when 'CLIENT'
+      fn ...
+
 -- script https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js
+
+on_client ->
+  js.global\alert 'hello world!'
 
 if MODE == 'CLIENT'
   require 'svg.js'

@@ -71,9 +71,13 @@ to_lua = (text, options={}) ->
   if not tree
     return nil, err
 
+  p tree
+
   err = transform_extracts tree
   if err
     return nil, err
+
+  p tree
 
   code, ltable, pos = compile.tree tree, options
   if not code
@@ -110,6 +114,10 @@ loadstring = (...) ->
     return nil, ltable_or_err
 
   line_tables[chunk_name] = ltable_or_err if chunk_name
+
+  print "#{chunk_name} compiled to:"
+  print code
+
   -- the unpack prevents us from passing nil
   (lua.loadstring or lua.load) code, chunk_name, unpack { mode, env }
 
