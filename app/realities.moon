@@ -1,27 +1,58 @@
 import append, h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from require 'app.component'
 
-local Diagram, o
-GRID_W = 50
-GRID_H = 40
-
 on_client = switch MODE
   when 'SERVER'
     import compile from require 'duct_tape'
     (fn, ...) ->
-      code = compile fn
       -- warn code
       append "<script type=\"application/lua\">
-        local fn = #{code}
+        MODE = 'HYBRID'
+        local fn = #{compile fn}
         fn(#{table.concat { ... }, ', '})
       </script>"
   when 'CLIENT'
     (fn, ...) -> fn ...
 
--- script https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js
-
 if MODE == 'CLIENT'
   require 'svg.js'
+else
+  import compile from require 'duct_tape'
+
+  append '<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>'
+
+  export ^
+  class Diagram
+    style = {
+      display: 'inline-block',
+      width: '150px',
+      height: '80px',
+      'line-height': '80px',
+      color: '#fff',
+      background: '#666',
+    }
+
+    @id = 1
+    new: (@func) =>
+      @id = "diagram-#{@@id}"
+      @@id += 1
+
+    render: =>
+      rplc = with div id: @id, :style
+        \append '(diagram goes here)'
+        \append "<script type=\"application/lua\">
+          local rplc = js.global.document:getElementById('#{@id}');
+          local fn = #{compile @func}
+          diag = js.global.Diagram(fn)
+          rplc.parentNode:replaceChild(diag.node, rplc)
+        </script>"
+      rplc\render!
+
+on_client ->
+  export ^
+  export o
   eval = js.global\eval
+  GRID_W = 50
+  GRID_H = 40
 
   SVG =
     doc: eval "(function() { return SVG(document.createElement('svg')); })",
@@ -102,12 +133,9 @@ if MODE == 'CLIENT'
       @svg\size w, h
       @svg\viewbox 0, -h, w, h
       @node = @svg.node
-else
-  class Diagram
-    render: =>
-      rplc = with div style: { display: 'inline-block', width: 200, height: 60 }
-        \append '(diagram goes here)'
-      rplc\render!
+
+  if MODE == 'HYBRID'
+    js.global.Diagram = Diagram
 
 addlabel = (label, diagram) ->
   with div style: { display: 'inline-block', margin: '20px', 'text-align': 'center' }
