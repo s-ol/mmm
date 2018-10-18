@@ -20,47 +20,47 @@ import p from require 'moon'
 
 local *
 
-clone = (a) -> { k,v for k,v in pairs a }
-transform_extract = (node) ->
-  fndef = clone node
+escape_str = (str) ->
+  (str\gsub('\\', '\\\\')\gsub '"', '\\"'), nil
 
-  -- if #fndef.whitelist > 1
-  --   return "cannot COMPILE function with whitelist!"
+deep_clone = (value) ->
+  if 'table' == type value
+    { deep_clone(k), deep_clone(v) for k,v in pairs value }
+  else -- number, string, boolean, etc
+    value
 
+transform_fndef = (fndef, parent, i) ->
   -- compile the function to Lua separately
-  code, ltable, pos = compile.tree { clone fndef }
+  code, ltable, pos = compile.tree { deep_clone fndef }
   if not code
     return compile.format_error(ltable, pos, text)
 
-  -- mutate the node in-place
-  node[1] = 'do'
-  for i=2,5
-    node[i] = nil
+  code = "(function() #{code} end)()"
 
   -- assign the lua code to __FNDEF_NOOM_CACHE[function] so it can be retrieved by `compile`
-  fn = { 'ref', 'fn' }
-  reference = build.chain {
+  fn = -> { 'ref', 'fn' }
+  cache = build.chain {
     base: '__FNDEF_NOOM_CACHE',
-    { 'index', fn }
+    { 'index', fn! }
   }
 
-  node[2] = {
+  parent[i] = build.do {
     { 'declare_with_shadows', { 'fn' } }
-    build.assign_one fn, fndef
-    build.assign_one reference, { 'string', '[[', code }
-    fn
+    build.assign_one fn!, fndef
+    build.assign_one cache, { 'string', '"', escape_str code }
+    -- build.assign_one cache, { 'string', '[[', code }
+    fn!
   }
 
   nil
 
-transform_extracts = (node) ->
+find_fndefs = (node, p, i) ->
   if node[1] == "fndef"
-    transform_extract node
+    transform_fndef node, p, i
   else
-    err = nil
-    for v in *node
-      err or= transform_extracts v if 'table' == type v
-    err
+    for i = 1,#node
+      v = node[i]
+      find_fndefs v, node, i if 'table' == type v
 
 to_lua = (text, options={}) ->
   if "string" != type text
@@ -71,13 +71,7 @@ to_lua = (text, options={}) ->
   if not tree
     return nil, err
 
-  p tree
-
-  err = transform_extracts tree
-  if err
-    return nil, err
-
-  p tree
+  find_fndefs tree
 
   code, ltable, pos = compile.tree tree, options
   if not code
@@ -115,8 +109,8 @@ loadstring = (...) ->
 
   line_tables[chunk_name] = ltable_or_err if chunk_name
 
-  print "#{chunk_name} compiled to:"
-  print code
+  warn "#{chunk_name} compiled to:"
+  warn code
 
   -- the unpack prevents us from passing nil
   (lua.loadstring or lua.load) code, chunk_name, unpack { mode, env }

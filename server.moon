@@ -24,6 +24,7 @@ require "app.#{arg[1]}"
 print "<!DOCTYPE html>
 <html>
   <head>
+    <script src=\"fengari-web.js\"></script>
     <title>MMM: lunar low-gravity scripting playground</title>
   </head>
   <body>
