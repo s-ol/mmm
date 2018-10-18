@@ -1,5 +1,3 @@
-document = js.global.document
-
 element = (element) -> (...) ->
   children = { ... }
 
@@ -10,26 +8,29 @@ element = (element) -> (...) ->
   else
     attributes = {}
 
-  with e = document\createElement element
-    for k,v in pairs attributes
-      e[k] = v
+  b = "<#{element}"
+  for k,v in pairs attributes
+    if 'table' == type v
+      tmp = ''
+      for kk, vv in pairs v
+        tmp ..= "#{kk}: #{vv}; "
+      v = tmp
+    b ..= " #{k}=\"#{v}\""
 
-    -- if there is only one argument,
-    -- children can be in attributes table too
-    if #children == 0
-      children = attributes
+  -- if there is only one argument,
+  -- children can be in attributes table too
+  if #children == 0
+    children = attributes
 
-    for child in *children
-      if 'string' == type child
-        e.innerHTML ..= child
-      else
-        e\appendChild child
+  b ..= ">" ..  table.concat children, ''
+  b ..= "</#{element}>"
+  b
 
 elements = {}
 add = (e) -> elements[e] = element e
 
 for e in *{'div', 'form', 'span', 'a', 'p', 'button', 'ul', 'ol', 'li', 'i', 'b', 'u', 'tt'} do add e
-for e in *{'article', 'section', 'header', 'footer', 'content'} do add e
+for e in *{'article', 'section', 'header', 'footer', 'content', 'pre'} do add e
 for e in *{'br', 'hr', 'img', 'input', 'p', 'textarea'} do add e
 for i=1,8 do add "h" .. i
 

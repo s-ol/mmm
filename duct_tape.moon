@@ -1,4 +1,3 @@
--- package.noompath = './?.noom;./?/init.noom'
 package.noompath = './?.moon;./?/init.moon'
 
 export __FNDEF_NOOM_CACHE
@@ -77,7 +76,7 @@ to_lua = (text, options={}) ->
 
   code, ltable
 
-noom_loader = (name) ->
+noom_loader = (name, ...) ->
   name_path = name\gsub "%.", dirsep
 
   local file, file_path

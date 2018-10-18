@@ -1,5 +1,6 @@
-import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require 'app.tags'
-import ReactiveVar, append, tohtml, text, div, form, span, h3, a, input, textarea, button from require 'app.component'
+require = relative ...
+import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require '.tags'
+import ReactiveVar, append, tohtml, text, div, form, span, h3, a, input, textarea, button from require 'lib.component'
 
 clone = (set) ->
   assert set and 'table' == (type set), 'not a set'

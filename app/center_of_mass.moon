@@ -1,9 +1,9 @@
 window = js.global
 document = window.document
 
-import CanvasApp from require 'app.canvasapp'
-import rgb from require 'app.color'
-import h1, p, div, span, input, button from require 'app.html'
+import CanvasApp from require 'lib.canvasapp'
+import rgb from require 'lib.color'
+import h1, p, div, span, input, button from require 'lib.html'
 
 fast = true
 center = true

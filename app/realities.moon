@@ -1,17 +1,4 @@
-import append, h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from require 'app.component'
-
-on_client = switch MODE
-  when 'SERVER'
-    import compile from require 'duct_tape'
-    (fn, ...) ->
-      -- warn code
-      append "<script type=\"application/lua\">
-        MODE = 'HYBRID'
-        local fn = #{compile fn}
-        fn(#{table.concat { ... }, ', '})
-      </script>"
-  when 'CLIENT'
-    (fn, ...) -> fn ...
+import append, h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from require 'lib.component'
 
 if MODE == 'CLIENT'
   require 'svg.js'

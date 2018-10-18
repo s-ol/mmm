@@ -1,4 +1,4 @@
-import div, h1, ul, li, pre from require 'app.html'
+import div, h1, ul, li, pre from require 'lib.html'
 
 last = nil
 test_group = (name) ->

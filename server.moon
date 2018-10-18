@@ -1,33 +1,41 @@
-package.moonpath = './?.server.moon;' .. package.moonpath
+package.moonpath = './?.shared.moon;./?.server.moon;' .. package.moonpath
 
-export MODE, warn, append
+export MODE, warn, relative, append, on_client
 MODE = 'SERVER'
+
+-- warning messages
 warn = (...) ->
   io.stderr\write table.concat { ... }, '\t'
   io.stderr\write '\n'
+
+-- relative imports
+relative = (...) ->
+  _require = require
+  path = ...
+
+  (name) ->
+    name = path .. name if '.' == name\sub 1, 1
+    require name
 
 -- shorthand to append elements to body
 buffer = ''
 append = (val) ->
   buffer ..= val
-flush = ->
-  with x = buffer
-    buffer = ''
 
-import insert_loader from require 'duct_tape'
+import compile, insert_loader from require 'duct_tape'
 insert_loader!
 
-error "please specify the module to build as an argumnet" unless arg[1]
+on_client = (fn, ...) ->
+  -- warn code
+  append "<script type=\"application/lua\">
+    MODE = 'HYBRID'
+    local fn = #{compile fn}
+    fn(#{table.concat { ... }, ', '})
+  </script>"
 
-require "app.#{arg[1]}"
-
-print "<!DOCTYPE html>
-<html>
-  <head>
-    <script src=\"fengari-web.js\"></script>
-    <title>MMM: lunar low-gravity scripting playground</title>
-  </head>
-  <body>
-    #{flush!}
-  </body>
-</html>"
+{
+  -- access / flush the appended data
+  flush: ->
+    with x = buffer
+      buffer = ''
+}

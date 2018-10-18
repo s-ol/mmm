@@ -3,8 +3,8 @@ document = window.document
 
 Math = window.Math
 
-import CanvasApp from require 'app.canvasapp'
-import hsl from require 'app.color'
+import CanvasApp from require 'lib.canvasapp'
+import hsl from require 'lib.color'
 
 class TwistedDemo extends CanvasApp
   width: 500
