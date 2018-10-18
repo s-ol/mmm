@@ -122,38 +122,43 @@ figures = do
   (...) -> div { :style, ... }
 
 sources = do
-  short = (id) => "#{id} #{@year}"
+  short = => "#{@id} #{@year}"
   long = => @names, " (#{@year}): ", (i @title), ", #{@published}"
   {
-    Milgram: {
+    {
+      id: 'Milgram',
       title: 'Augmented Reality: A class of displays on the reality-virtuality continuum',
       published: 'in SPIE Vol. 2351',
       names: 'P. Milgram, H. Takemura, A. Utsumi, F. Kishino',
       year: 1994
       :long, :short,
     },
-    Marsh: {
+    {
+      id: 'Marsh',
       title: 'Nested Immersion: Describing and Classifying Augmented Virtual Reality',
       published: 'IEEE Virtual Reality Conference 2015',
       names: 'W. Marsh, F. Mérienne',
       year: 2015
       :long, :short,
     },
-    Billinghurst: {
+    {
+      id: 'Billinghurst',
       title: 'The MagicBook: a transitional AR interface',
       published: 'in Computer & Graphics 25',
       names: 'M. Billinghurst, H. Kato, I. Poupyrev',
       year: 2001,
       :long, :short,
     },
-    Matrix: {
+    {
+      id: 'Matrix',
        title: 'The Matrix',
        year: 1999,
        names: 'L. Wachowski, A. Wachowski',
        long: => @names, " (#{@year}): ", (i @title), " (movie)"
        short: => tostring @year
     },
-    Naam: {
+    {
+      id: 'Naam',
       title: 'Nexus',
       published: 'Angry Robot (novel)',
       names: 'R. Naam',
@@ -164,7 +169,17 @@ sources = do
 
 ref = do
   fmt = (id) ->
-    a { (sources[id]\short id), href: "##{id}" }
+
+    local src
+    for _src in *sources
+      if _src.id == id
+        src = _src
+        break
+
+    if src
+      a { src\short!, href: "##{src.id}" }
+    else
+      span id
 
   ref = (...) ->
     refs = { ... }
@@ -176,8 +191,8 @@ ref = do
 
 references = ->
   with ol!
-    for id, src in pairs sources
-      \append li { :id, src\long! }
+    for src in *sources
+      \append li { id: src.id, src\long! }
 
 sect = (label) ->
   with section style: 'page-break-inside': 'avoid'
