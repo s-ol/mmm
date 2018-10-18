@@ -14,6 +14,9 @@ flush = ->
   with x = buffer
     buffer = ''
 
+import insert_loader from require 'duct_tape'
+insert_loader!
+
 error "please specify the module to build as an argumnet" unless arg[1]
 
 require "app.#{arg[1]}"
@@ -21,6 +24,7 @@ require "app.#{arg[1]}"
 print "<!DOCTYPE html>
 <html>
   <head>
+    <script src=\"fengari-web.js\"></script>
     <title>MMM: lunar low-gravity scripting playground</title>
   </head>
   <body>
