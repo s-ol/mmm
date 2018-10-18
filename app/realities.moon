@@ -42,7 +42,7 @@ else
         \append "<script type=\"application/lua\">
           local rplc = js.global.document:getElementById('#{@id}');
           local fn = #{compile @func}
-          diag = js.global.Diagram(fn)
+          diag = Diagram(fn)
           rplc.parentNode:replaceChild(diag.node, rplc)
         </script>"
       rplc\render!
@@ -133,9 +133,6 @@ on_client ->
       @svg\size w, h
       @svg\viewbox 0, -h, w, h
       @node = @svg.node
-
-  if MODE == 'HYBRID'
-    js.global.Diagram = Diagram
 
 addlabel = (label, diagram) ->
   with div style: { display: 'inline-block', margin: '20px', 'text-align': 'center' }
