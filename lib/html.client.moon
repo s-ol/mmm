@@ -1,5 +1,3 @@
-document = js.global.document
-
 element = (element) -> (...) ->
   children = { ... }
 
@@ -12,7 +10,8 @@ element = (element) -> (...) ->
 
   with e = document\createElement element
     for k,v in pairs attributes
-      e[k] = v
+      if 'string' == type k
+        e[k] = v
 
     -- if there is only one argument,
     -- children can be in attributes table too

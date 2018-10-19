@@ -26,11 +26,12 @@ import compile, insert_loader from require 'duct_tape'
 insert_loader!
 
 on_client = (fn, ...) ->
+  args = {...}
   -- warn code
   append "<script type=\"application/lua\">
     MODE = 'HYBRID'
     local fn = #{compile fn}
-    fn(#{table.concat { ... }, ', '})
+    fn(#{table.concat [string.format '%q', v for v in *args ], ', '})
   </script>"
 
 {

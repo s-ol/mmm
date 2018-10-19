@@ -10,6 +10,7 @@ element = (element) -> (...) ->
 
   b = "<#{element}"
   for k,v in pairs attributes
+    continue unless 'string' == type k
     if 'table' == type v
       tmp = ''
       for kk, vv in pairs v

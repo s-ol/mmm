@@ -13,6 +13,7 @@ load_file = (name) ->
 print "<!DOCTYPE html>
 <html>
   <head>
+    <meta charset=\"UTF-8\">
     <title>MMM: lunar low-gravity scripting playground</title>
   </head>
   <body>

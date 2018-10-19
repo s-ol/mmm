@@ -8,10 +8,9 @@ MODE = 'CLIENT'
 print = window.console\log
 warn = window.console\warn
 
-print 'path is'
+-- package.path = './?.shared.lua;./?.client.lua;' .. package.path
 print package.path
-
-package.path = './?.shared.lua;./?.client.lua;' .. package.path
+package.path = './?.shared.moon.lua;./?.client.moon.lua;./?.moon.lua;./?/init.moon.lua;./?.lua;./?/init.lua'
 
 -- relative imports
 relative = (...) ->

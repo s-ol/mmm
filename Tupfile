@@ -1,4 +1,25 @@
 .gitignore
 
-: foreach app/* |> moon render.moon %B > %o |> dist/%B.html
-: foreach lib/*.client.moon lib/*.shared.moon |> moonc -o %o %f |> dist/lib/%B.lua
+!download = |> ^ DOWNLOAD %o^ curl -L https://github.com/fengari-lua/fengari-web/releases/download/@(FENGARI_VERSION)/`basename %o` > %o |>
+!moonc = |> ^ CC %o^ moonc -o %o %f |> dist/%f.lua
+!render = |> ^ RNDR %o^ moon render.moon %B > %o |> dist/%B.html
+
+preload app app/tags lib
+
+CLIENT += app/*.moon
+CLIENT += app/tags/*.moon
+CLIENT += lib/*.client.moon
+CLIENT += lib/*.shared.moon
+
+PAGES += app/*
+PAGES += app/tags
+
+# download fengari dependencies
+: |> !download |> dist/fengari-web.js
+: |> !download |> dist/fengari-web.js.map
+
+# compile client imports
+: foreach $(CLIENT) |> !moonc |>
+
+# render static content
+: foreach $(PAGES) |> !render |>
