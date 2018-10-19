@@ -2,11 +2,11 @@ export MODE, print, warn, relative, append, on_client
 export window, document
 
 window = js.global
-document = window.document
+{ :document, :console } = window
 
 MODE = 'CLIENT'
-print = window.console\log
-warn = window.console\warn
+print = console\log
+warn = console\warn
 
 -- package.path = './?.shared.lua;./?.client.lua;' .. package.path
 package.path = './?.shared.moon.lua;./?.client.moon.lua;./?.moon.lua;./?/init.moon.lua;./?.lua;./?/init.lua'
