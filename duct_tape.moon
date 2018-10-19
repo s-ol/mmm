@@ -1,7 +1,7 @@
 package.noompath = './?.moon;./?/init.moon'
 
 export __FNDEF_NOOM_CACHE
-__FNDEF_NOOM_CACHE = {}
+__FNDEF_NOOM_CACHE = setmetatable {}, __mode: 'k'
 
 assert MODE == 'SERVER', "duct_tape only works on the server"
 
