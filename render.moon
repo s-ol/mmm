@@ -1,6 +1,4 @@
 package.moonpath = './?.shared.moon;./?.server.moon;' .. package.moonpath
-
-import to_lua from require 'moonscript.base'
 import flush from require 'lib.init'
 
 error "please specify the module to build as an argumnet" unless arg[1]
@@ -17,10 +15,11 @@ print "<!DOCTYPE html>
   <head>
     <meta charset=\"UTF-8\">
     <title>MMM: lunar low-gravity scripting playground</title>
+    <link rel=\"stylesheet\" type=\"text/css\" href=\"main.css\" />
   </head>
   <body>
     <script src=\"fengari-web.js\"></script>
-    <script src=\"lib/init.client.lua\"></script>
+    <script type=\"application/lua\" src=\"lib/init.client.moon.lua\"></script>
     #{flush!}
   </body>
 </html>"
