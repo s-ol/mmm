@@ -1,7 +1,6 @@
 export MODE, print, warn, relative, append, on_client
 export window, document
 
-
 window = js.global
 document = window.document
 

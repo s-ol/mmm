@@ -1,4 +1,4 @@
 .gitignore
 
-: foreach app/index.moon app/realities.moon |> moon render.moon %B > %o |> dist/%B.html
+: foreach app/* |> moon render.moon %B > %o |> dist/%B.html
 : foreach lib/*.client.moon lib/*.shared.moon |> moonc -o %o %f |> dist/lib/%B.lua

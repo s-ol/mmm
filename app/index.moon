@@ -1,5 +1,3 @@
-require = relative ...
-
 on_client ->
   import h1, p, a, br, ul, tt, li from require 'lib.html'
 
@@ -8,22 +6,21 @@ on_client ->
     'twisted': 'canvas animation',
     'todo': 'Todo demo of a simple reactive UI framework',
     'realities': 'draft of a paper on virtual and other realities',
-    'center-of-mass': 'aligning characters by their centers of mass',
-    'test-component': 'Test suite for the UI framework',
-    'play-tags': 'Playground for Functional Tags',
+    'center_of_mass': 'aligning characters by their centers of mass',
+    'test_component': 'Test suite for the UI framework',
+    'tags': 'Playground for Functional Tags',
+
+  redirs =
+    'center-of-mass': 'center_of_mass',
+    'test-component': 'test_component',
+    'play-tags': 'tags',
 
   back_button = ->
     append p a { '< back', href: '/' }
 
   if window.location.search and #window.location.search > 1
     name = window.location.search\sub 2
-    if demos[name]
-      back_button!
-      filename = name\gsub '-', '_'
-      require "app.#{filename}"
-    else
-      append h1 'are you lost?'
-      append p a { '(go home)', href: '/' }
+    window.location.href = "#{redirs[name] or name}.html"
   else
     append h1 'mmm'
     append p {
@@ -40,7 +37,7 @@ on_client ->
     }
     append p 'current demos:'
     append ul for name, desc in pairs demos
-      li (a name, href: "/?#{name}"), ': ', desc
+      li (a name, href: "/#{name}.html"), ': ', desc
 
   append p {
     "made with #{moon} by "
