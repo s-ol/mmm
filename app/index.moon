@@ -1,4 +1,5 @@
 import h1, p, a, br, ul, tt, li from require 'lib.html'
+import opairs from require 'lib.ordered'
 
 moon = '\xe2\x98\xbd'
 demos =
@@ -34,7 +35,7 @@ append p {
   '.'
 }
 append p 'current demos:'
-append ul for name, desc in pairs demos
+append ul for name, desc in opairs demos
   li (a name, href: "/#{name}.html"), ': ', desc
 
 append p {

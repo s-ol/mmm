@@ -1,5 +1,3 @@
-package.moonpath = './?.shared.moon;./?.server.moon;' .. package.moonpath
-
 export MODE, warn, relative, append, on_client
 MODE = 'SERVER'
 

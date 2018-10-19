@@ -1,3 +1,5 @@
+import opairs from require 'lib.ordered'
+
 -- convert anything to HTML string
 -- val must be one of:
 -- * MMMElement (have a .render method that returns a string)
@@ -69,7 +71,7 @@ class ReactiveElement
 
   set: (attr, value) =>
     if attr == 'style' and 'table' == type value
-      for k,v in pairs value
+      for k,v in opairs value
         @attrs.style[k] = v
       return
 
@@ -88,10 +90,10 @@ class ReactiveElement
 
   render: =>
     b = "<#{@element}"
-    for k,v in pairs @attrs
+    for k,v in opairs @attrs
       if 'table' == type v
         tmp = ''
-        for kk, vv in pairs v
+        for kk, vv in opairs v
           tmp ..= "#{kk}: #{vv}; "
         v = tmp
       b ..= " #{k}=\"#{v}\""

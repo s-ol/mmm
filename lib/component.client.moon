@@ -1,5 +1,3 @@
-{ :document } = js.global
-
 -- convert anything to a DOM Node
 -- val must be one of:
 -- * DOM Node (instanceof window.Node)

@@ -1,3 +1,5 @@
+import opairs from require 'lib.ordered'
+
 element = (element) -> (...) ->
   children = { ... }
 
@@ -9,11 +11,10 @@ element = (element) -> (...) ->
     attributes = {}
 
   b = "<#{element}"
-  for k,v in pairs attributes
-    continue unless 'string' == type k
+  for k,v in opairs attributes
     if 'table' == type v
       tmp = ''
-      for kk, vv in pairs v
+      for kk, vv in opairs v
         tmp ..= "#{kk}: #{vv}; "
       v = tmp
     b ..= " #{k}=\"#{v}\""
