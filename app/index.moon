@@ -19,7 +19,7 @@ on_client ->
   { :location } = window
   if location.search and #location.search > 1
     name = location.search\sub 2
-    location.href = "#{redirs[name] or name}.html"
+    location.href = redirs[name] or name
 
 append h1 'mmm'
 append p {
@@ -36,7 +36,7 @@ append p {
 }
 append p 'current demos:'
 append ul for name, desc in opairs demos
-  li (a name, href: "/#{name}.html"), ': ', desc
+  li (a name, href: name), ': ', desc
 
 append p {
   "made with #{moon} by "

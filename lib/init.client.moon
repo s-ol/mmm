@@ -9,7 +9,7 @@ print = console\log
 warn = console\warn
 
 -- package.path = './?.shared.lua;./?.client.lua;' .. package.path
-package.path = './?.shared.moon.lua;./?.client.moon.lua;./?.moon.lua;./?/init.moon.lua;./?.lua;./?/init.lua'
+package.path = '/?.shared.moon.lua;/?.client.moon.lua;/?.moon.lua;/?/init.moon.lua;/?.lua;/?/init.lua'
 
 -- relative imports
 relative = (...) ->

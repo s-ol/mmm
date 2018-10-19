@@ -1,8 +1,6 @@
 .gitignore
 
 !download = |> ^ DOWNLOAD %O^ curl -L https://github.com/fengari-lua/fengari-web/releases/download/@(FENGARI_VERSION)/`basename %o` > %o |>
-# !render   = |> ^ HTML %b^ moon render.moon > %o %B |>
-!render   = |> ^ HTML %b^ moon render.moon > %o %B |> dist/%B.html
 !moonc    = |> ^ MOON %b^ moonc           -o %o %f |> dist/%f.lua
 !sassc    = |> ^ SCSS %b^ sassc -mauto       %f %o |> | %o.map
 
@@ -26,6 +24,5 @@ PAGES += app/tags
 # render stylesheet
 : scss/main.scss |> !sassc |> dist/main.css
 
-# # render static content
-: foreach $(PAGES) |> !render |>
-# run moon find.moon
+# render static content
+run moon tup.moon
