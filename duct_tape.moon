@@ -17,8 +17,7 @@ lua = :loadstring, :load
 
 local *
 
-escape_str = (str) ->
-  (str\gsub('\\', '\\\\')\gsub '"', '\\"'), nil
+escape_str = (str) -> (str\gsub('\\', '\\\\')\gsub '"', '\\"'), nil
 
 deep_clone = (value) ->
   if 'table' == type value

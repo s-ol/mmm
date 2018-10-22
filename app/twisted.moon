@@ -37,3 +37,4 @@ on_client ->
 
   twisted = TwistedDemo!
   document.body\appendChild twisted.canvas
+  twisted\start!
