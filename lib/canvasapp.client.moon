@@ -1,12 +1,14 @@
 window = js.global
 js = require 'js'
 
+import a, canvas, div, button, script from require 'lib.html'
+
 class CanvasApp
   width: 500
   height: 400
-  new: =>
-    @canvas = window.document\createElement 'canvas'
-    @canvas.width, @canvas.height = @width, @height
+  new: (show_menu = false) =>
+    @canvas = canvas width: @width, height: @height
+
     @ctx = @canvas\getContext '2d'
     @time = 0
 
@@ -27,41 +29,54 @@ class CanvasApp
       lastMillis = millis
     window\requestAnimationFrame animationFrame
 
+    @node = if show_menu
+      div {
+        className: 'canvas_app'
+        @canvas
+        div {
+          className: 'overlay',
+          button 'render 30fps', onclick: -> @\render 30
+          button 'render 60fps', onclick: -> @\render 60
+        }
+      }
+    else
+      @canvas
+
+
   update: (dt) =>
     @time += dt
 
-  render: (fps=15) =>
+  render: (fps=60) =>
     assert @length, 'cannot render CanvasApp without length set'
     @paused = true
 
-    script = window.document\createElement 'script'
-    script.src = "https://github.com/thenickdude/webm-writer-js/releases/download/0.2.0/webm-writer-0.2.0.js"
-    script.onload = ->
-      writer = js.new window.WebMWriter, with js.new window.Object
-        .quality = .9
-        .frameRate = fps
+    actual_render = ->
+      writer = js.new window.Whammy.Video, fps
 
       doFrame = ->
         @update 1/fps
         @ctx\resetTransform!
         @draw!
 
-        writer\addFrame @canvas
-        print 'added a frame'
+        writer\add @canvas
 
         if @time >= @length
-          promise = writer\complete!
-          promise['then'] promise, (blob) =>
-            document.body\appendChild with document\createElement 'a'
-              .href = window.URL\createObjectURL blob
-              .download = 'rendered.webm'
-              .innerHTML = 'download'
+          blob = writer\compile!
+          name = "#{@@__name}_#{fps}fps.webm"
+          @node.lastChild\appendChild a name, download: name, href: window.URL\createObjectURL blob
         else
           window\setTimeout doFrame
 
+      @time = 0
       doFrame!
 
-    document.body\append script
+    if window.Whammy
+      actual_render!
+    else
+      window.global = window.global or window
+      document.body\appendChild script
+        onload: actual_render
+        src: 'https://cdn.jsdelivr.net/npm/whammy@0.0.1/whammy.min.js'
 
 {
   :CanvasApp

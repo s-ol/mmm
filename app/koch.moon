@@ -4,13 +4,13 @@ on_client ->
   import CanvasApp from require 'lib.canvasapp'
   import hsl from require 'lib.color'
 
-  class TwistedDemo extends CanvasApp
+  class KochDemo extends CanvasApp
     width: 600
     height: 600
     length: math.pi * 2
 
     new: (@iterations=3, @scale=.5) =>
-      super!
+      super true
       hue = Math.random!
       @background = {1 - hue, .3, .3}
 
@@ -61,11 +61,4 @@ on_client ->
       @ctx\rotate a_sixth/2
       draw @iterations, 3
 
-  twisted = TwistedDemo!
-  document.body\appendChild twisted.canvas
-  -- window\setTimeout twisted\start, 500
-
-  { :location } = window
-  if location.search and location.search\find 'render'
-    twisted\render!
-
+  append KochDemo!.node

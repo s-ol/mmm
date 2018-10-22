@@ -33,9 +33,9 @@ experiments =
     desc: 'Playground for Functional Tags'
     render: -> require '.tags'
   },
-  quasihilbert: {
+  koch: {
     desc: "lil' fractal thing",
-    render: -> require '.quasihilbert'
+    render: -> require '.koch'
   },
 
 destify = (name, route) ->

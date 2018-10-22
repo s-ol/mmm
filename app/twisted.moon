@@ -9,7 +9,7 @@ on_client ->
     height: 400
     length: math.pi * 4
     new: =>
-      super!
+      super true
       @background = {Math.random!, Math.random!/3+.2, Math.random!/4}
       hue = Math.random!
       @shades = setmetatable {}, __index: (key) =>
@@ -35,6 +35,4 @@ on_client ->
         draw i
       draw 1
 
-  twisted = TwistedDemo!
-  document.body\appendChild twisted.canvas
-  twisted\start!
+  document.body\appendChild TwistedDemo!.node
