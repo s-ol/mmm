@@ -46,6 +46,10 @@ class CanvasApp
   update: (dt) =>
     @time += dt
 
+    if @length and @time > @length
+      @time -= @length
+      true
+
   render: (fps=60) =>
     assert @length, 'cannot render CanvasApp without length set'
     @paused = true
@@ -54,13 +58,13 @@ class CanvasApp
       writer = js.new window.Whammy.Video, fps
 
       doFrame = ->
-        @update 1/fps
+        done = @update 1/fps
         @ctx\resetTransform!
         @draw!
 
         writer\add @canvas
 
-        if @time >= @length
+        if done or @time >= @length
           blob = writer\compile!
           name = "#{@@__name}_#{fps}fps.webm"
           @node.lastChild\appendChild a name, download: name, href: window.URL\createObjectURL blob
