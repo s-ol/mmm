@@ -11,9 +11,6 @@ CLIENT += app/tags/*.moon
 CLIENT += lib/*.client.moon
 CLIENT += lib/*.shared.moon
 
-PAGES += app/*
-PAGES += app/tags
-
 # download fengari dependencies
 : |> !download |> dist/fengari-web.js
 : |> !download |> dist/fengari-web.js.map

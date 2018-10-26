@@ -1,53 +1,4 @@
 require = relative ...
-import opairs from require 'lib.ordered'
-
-merge = (tables) ->
-  first = table.remove tables, 1
-  for tbl in *tables
-    for k,v in pairs tbl
-      first[k] = v
-  first
-
-experiments =
-  twisted: {
-    desc: 'canvas animation'
-    render: -> require '.twisted'
-  },
-  todo: {
-    desc: 'Todo demo of a simple reactive UI framework'
-    render: -> require '.todo'
-  },
-  realities: {
-    desc: 'draft of a paper on virtual and other realities'
-    render: -> require '.realities'
-  },
-  center_of_mass: {
-    desc: 'aligning characters by their centers of mass'
-    render: -> require '.center_of_mass'
-  },
-  test_component: {
-    desc: 'Test suite for the UI framework'
-    render: -> require '.test_component'
-  },
-  tags: {
-    desc: 'Playground for Functional Tags'
-    render: -> require '.tags'
-  },
-  tablefs: {
-    desc: 'A system bigger than filesystems'
-    render: -> require '.tablefs'
-  },
-  koch: {
-    desc: "lil' fractal thing",
-    render: -> require '.koch'
-  },
-
-destify = (name, route) ->
-  name, with route
-    .route = name
-    .dest = "#{name}/index.html"
-
-routes = { destify k,v for k,v in pairs experiments }
 
 patch_redirs = ->
   redirs =
@@ -60,7 +11,45 @@ patch_redirs = ->
     name = location.search\sub 2
     location.href = redirs[name] or name
 
-routes.index = {
+experiments = {
+  {
+    name: 'twisted',
+    desc: 'pseudo 3d animation'
+  },
+  {
+    name: 'koch',
+    desc: "lil' fractal thing",
+  },
+  {
+    name: 'realities',
+    desc: 'a paper on virtual and other realities'
+  },
+  {
+    name: 'center_of_mass',
+    desc: 'aligning characters by their centers of mass'
+  },
+  {
+    name: 'todo',
+    desc: 'Todo MVC with the mmm UI framework'
+  },
+  {
+    name: 'test_component',
+    desc: 'test suite for the mmm reactive UI framework'
+  },
+  {
+    name: 'tags',
+    desc: 'organizing files with Functional Tags'
+  },
+  {
+    name: 'tablefs',
+    desc: 'a (file)system to live in'
+  },
+}
+
+routes = [x for x in *experiments]
+
+table.insert routes, {
+  name: 'index'
   route: ''
   dest: 'index.html'
   render: =>
@@ -87,7 +76,7 @@ routes.index = {
       '.'
     }
     append p 'current demos:'
-    append ul for name, { :desc, :route } in opairs experiments
+    append ul for { :name, :desc, :route } in *experiments
       li (a name, href: route), ': ', desc
 
     append p {
@@ -96,7 +85,14 @@ routes.index = {
     }
 }
 
+destify = (route) -> with route
+  .route or= .name
+  .dest or= "#{.route}/index.html"
+  .render or= -> require '.' .. .name
+
+routes = [ destify route for route in *routes ]
 {
   :routes,
+  indexed: { r.name, r for r in *routes }
   render: (name) -> require ".#{name}"
 }
