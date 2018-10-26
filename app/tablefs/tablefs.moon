@@ -18,10 +18,10 @@ Fileder {
 
       footnote, ->
         args = for i, note in ipairs notes
-          li (span i, id: id i), ': ', note
+          li (span (tostring i), id: id i), ': ', note
         notes = {}
         table.insert args, style: { 'list-style': 'none', 'font-size': '0.8em' }
-        ol unpack args
+        ol table.unpack args
 
     append h1 'Tablefs', style: { 'margin-bottom': 0 }
     append p "(it's a terrible name, isn't it)", style: { 'margin-top': 0, 'margin-bottom': '1em' }
@@ -107,5 +107,6 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 
 and some bold **text** and `code tags` with me.",
     'preview: moon -> text/markdown': => @get 'text/markdown' -- redirect to main content of same type, if exists
+    'preview: text/html': '<p>on the client I\'m a HTML string.<br/> poor, <i>I know&hellip;</i></p>'
   }
 }
