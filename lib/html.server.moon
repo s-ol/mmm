@@ -28,12 +28,6 @@ element = (element) -> (...) ->
   b ..= "</#{element}>"
   b
 
-elements = {}
-add = (e) -> elements[e] = element e
-
-for e in *{'div', 'form', 'span', 'a', 'p', 'button', 'ul', 'ol', 'li', 'i', 'b', 'u', 'tt'} do add e
-for e in *{'article', 'section', 'header', 'footer', 'content', 'pre'} do add e
-for e in *{'br', 'hr', 'img', 'input', 'p', 'canvas', 'textarea', 'script'} do add e
-for i=1,8 do add "h" .. i
-
-elements
+setmetatable {}, __index: (name) =>
+  with val = element name
+    @[name] = val

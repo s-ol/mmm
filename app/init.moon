@@ -33,6 +33,10 @@ experiments =
     desc: 'Playground for Functional Tags'
     render: -> require '.tags'
   },
+  tablefs: {
+    desc: 'A system bigger than filesystems'
+    render: -> require '.tablefs'
+  },
   koch: {
     desc: "lil' fractal thing",
     render: -> require '.koch'
