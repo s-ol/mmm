@@ -1,5 +1,5 @@
-{
-  'moon -> text/html': () =>
+Fileder {
+  'moon -> mmm/dom': () =>
     import article, h1, h3, p, div, a, sup, ol, li, span, code, br from require 'lib.html'
 
     content = {}
@@ -57,13 +57,12 @@
       if child[key]
         child[key] child
 
-
     title = (text) -> h3 text, style: { margin: 0 }
 
-    append div for child in *@
+    append div for child in *@children
       div {
-        title child['title: text/plain'],
-        mb_render child, 'preview: moon -> text/html',
+        title child\gett 'title', 'text/plain',
+        (child\get 'preview', 'mmm/dom') or span '(no renderable content)', style: { color: 'red' }
         style: {
           display: 'inline-block',
           width: '300px',
@@ -79,21 +78,27 @@
 
     article content
 
-  'text/markdown': "this is a markdown version or something. I don't really know how this would work, how do you share stuff and shit?"
+  'text/markdown': "this is a markdown version or something.
 
-  {
+There's no content here so switch back to the real one!
+(Assuming there is a switching UI by the time you are reading this, which I am presupposing since you are reading this at all.
+If you are reading this in the source, then c'mon, just scroll past and give me a break.)"
+
+  Fileder {
     'title: text/plain': "Hey I'm an ad-hoc child with no content for shit",
   }
 
-  {
+  Fileder {
     'title: text/plain': "Hey I'm like a link to picture or smth",
-    'http -> png': 'https://picsum.photos/200?random',
-    'preview: moon -> text/html': =>
+    'http -> image/png': 'https://picsum.photos/200?random',
+    'preview: moon -> mmm/dom': =>
       import img from require 'lib.html'
-      img src: @['http -> png']
+      img src: @gett nil,                -- look for: main content
+                    'image/png',        -- w/ image type, and
+                    http: (...) => ...  -- override http interp to get URL
   }
 
-  {
+  Fileder {
     'title: text/plain': "I'm not even five lines of markdown but i render myself!",
     'text/markdown': "See I have like
 
@@ -101,8 +106,6 @@
 - (two things)
 
 and some bold **text** and `code tags` with me.",
-    'preview: moon -> text/html': =>
-      compile = require 'discount'
-      compile @['text/markdown']
+    'preview: moon -> text/markdown': => @get 'text/markdown' -- redirect to main content of same type, if exists
   }
 }

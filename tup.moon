@@ -3,4 +3,4 @@ require 'lib.init'
 import routes from require 'app'
 
 for { :name, :dest } in *routes
-  print ": |> ^ HTML #{name}^ moon render.moon #{name} > %o |> dist/#{dest}"
+  print ": |> ^ HTML #{name}^ moon render.moon #{name} %o |> dist/#{dest}"

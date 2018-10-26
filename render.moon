@@ -4,10 +4,12 @@ import flush from require 'lib.init'
 import indexed from require 'app'
 
 route_name = assert arg[1], "please specify the route name to build as an argument"
+output_name = assert arg[2], "please specify the output filename as an argument"
 route = assert indexed[route_name], "route not found: '#{route_name}'"
 route\render!
 
-print "<!DOCTYPE html>
+with io.open output_name, 'w'
+  \write "<!DOCTYPE html>
 <html>
   <head>
     <meta charset=\"UTF-8\">
@@ -20,3 +22,4 @@ print "<!DOCTYPE html>
     #{flush!}
   </body>
 </html>"
+  \close!
