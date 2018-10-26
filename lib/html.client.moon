@@ -10,7 +10,10 @@ element = (element) -> (...) ->
 
   with e = document\createElement element
     for k,v in pairs attributes
-      if 'string' == type k
+      if k == 'style' and 'table' == type v
+        for kk,vv in pairs v
+          e.style[kk] = vv
+      elseif 'string' == type k
         e[k] = v
 
     -- if there is only one argument,

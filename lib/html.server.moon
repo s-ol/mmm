@@ -12,7 +12,7 @@ element = (element) -> (...) ->
 
   b = "<#{element}"
   for k,v in opairs attributes
-    if 'table' == type v
+    if k == 'style' and 'table' == type v
       tmp = ''
       for kk, vv in opairs v
         tmp ..= "#{kk}: #{vv}; "
