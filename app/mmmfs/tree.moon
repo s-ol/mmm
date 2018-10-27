@@ -35,7 +35,7 @@ Fileder {
           ol table.unpack args
 
       append h1 'mmmfs', style: { 'margin-bottom': 0 }
-      append p "a file-, operating, and living system", style: { 'margin-top': 0, 'margin-bottom': '1em' }
+      append p "a file and operating system to live in", style: { 'margin-top': 0, 'margin-bottom': '1em' }
 
       append p do
         fileder = footnote "fileder: file + folder. 'node', 'table' etc. are too general to be used all over."

@@ -1,5 +1,15 @@
 require = relative ...
 
+union = (...) -> with res = {}
+  c = 1
+  for i = 1, select '#', ...
+    tbl = select i, ...
+    for val in *tbl
+      res[c] = val
+      c += 1
+
+map = (f, list) -> [f val for val in *list]
+
 patch_redirs = ->
   redirs =
     'center-of-mass': 'center_of_mass',
@@ -17,7 +27,19 @@ client_goto = ->
     document.body.innerHTML = ''
     require "app.#{module}"
 
-experiments = {
+articles = {
+  {
+    name: 'realities'
+    desc: 'exploring the nesting relationships of virtual and other realities'
+  },
+  {
+    name: 'mmmfs'
+    desc: 'a file and operating system to live in (wip)'
+    render: 'client'
+  },
+}
+
+animations = {
   {
     name: 'twisted'
     desc: 'pseudo 3d animation'
@@ -26,14 +48,20 @@ experiments = {
     name: 'koch'
     desc: "lil' fractal thing"
   },
-  {
-    name: 'realities'
-    desc: 'a paper on virtual and other realities'
-  },
+}
+
+experiments = {
   {
     name: 'center_of_mass'
     desc: 'aligning characters by their centers of mass'
   },
+  {
+    name: 'tags'
+    desc: 'organizing files with Functional Tags'
+  },
+}
+
+meta = {
   {
     name: 'todo'
     desc: 'Todo MVC with the mmm UI framework'
@@ -42,25 +70,21 @@ experiments = {
     name: 'test_component'
     desc: 'test suite for the mmm reactive UI framework'
   },
-  {
-    name: 'tags'
-    desc: 'organizing files with Functional Tags'
-  },
-  {
-    name: 'mmmfs'
-    desc: 'an operating, file- and living system'
-    render: 'client'
-  },
 }
 
-routes = [x for x in *experiments]
+content = {
+  { 'articles', articles }
+  { 'animations', animations }
+  { 'experiments', experiments }
+  { 'meta', meta }
+}
 
-table.insert routes, {
+index = {
   name: 'index'
   route: ''
   dest: 'index.html'
   render: =>
-    import h1, p, a, br, ul, tt, li, img from require 'lib.html'
+    import h1, h3, b, p, a, br, ul, tt, li, img from require 'lib.html'
     import opairs from require 'lib.ordered'
 
     moon = '\xe2\x98\xbd'
@@ -99,9 +123,11 @@ table.insert routes, {
       a { 'here', href: 'https://github.com/s-ol/mmm' }
       '.'
     }
-    append p 'current demos:'
-    append ul for { :name, :desc, :route } in *experiments
-      li (a name, href: route), ': ', desc
+
+    for { category, routes } in *content
+      append h3 category, style: { 'margin-bottom': '-.5em' }
+      append ul for { :name, :desc, :route } in *routes
+        li (a name, href: route), ': ', desc
 
     append p {
       "made with #{moon} by "
@@ -121,7 +147,7 @@ destify = (route) -> with route
     .render = -> on_client load, .name
   .render or= -> require '.' .. .name
 
-routes = [ destify route for route in *routes ]
+routes = map destify, union articles, animations, experiments, meta, { index }
 {
   :routes,
   indexed: { r.name, r for r in *routes }
