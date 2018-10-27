@@ -60,7 +60,7 @@ table.insert routes, {
   route: ''
   dest: 'index.html'
   render: =>
-    import h1, p, a, br, ul, tt, li from require 'lib.html'
+    import h1, p, a, br, ul, tt, li, img from require 'lib.html'
     import opairs from require 'lib.ordered'
 
     moon = '\xe2\x98\xbd'
@@ -69,7 +69,21 @@ table.insert routes, {
     on_client patch_redirs
 
     -- menu
-    append h1 'mmm'
+    append h1 {
+      style: { position: 'relative' },
+      'mmm',
+      a {
+        style: {
+          position: 'absolute',
+          top: '2px',
+          right: '0',
+        },
+        href: 'https://webring.xxiivv.com/#random',
+        target: '_blank',
+        img src: 'https://webring.xxiivv.com/icon.black.svg', alt: 'webring', style: { height: '1em' }
+      }
+    }
+
     append p {
       tt 'mmm'
       ' is not the '
