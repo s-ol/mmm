@@ -1,4 +1,5 @@
-import append, h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from require 'lib.component'
+import append, elements from require 'lib.component'
+import h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from elements
 
 if MODE == 'CLIENT'
   require 'svg.js'

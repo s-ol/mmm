@@ -1,5 +1,6 @@
 on_client ->
-  import ReactiveVar, append, text, div, form, span, h3, a, input, textarea, button from require 'lib.component'
+  import ReactiveVar, append, text, elements from require 'lib.component'
+  import div, form, span, h3, a, input, textarea, button from elements
 
   parent = div!
   todoItem = (desc, done) ->

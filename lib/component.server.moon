@@ -101,17 +101,16 @@ class ReactiveElement
     b ..= "</#{@element}>"
     b
 
-with exports = {
-    :ReactiveVar,
-    :ReactiveElement,
-    :tohtml,
-    :flush,
-    :append,
-    :text,
-  }
-  add = (e) -> exports[e] = (...) -> ReactiveElement e, ...
+elements = setmetatable {}, __index: (name) =>
+  with val = (...) -> ReactiveElement name, ...
+    @[name] = val
 
-  for e in *{'div', 'form', 'span', 'a', 'p', 'button', 'ul', 'ol', 'li', 'i', 'b', 'u', 'tt'} do add e
-  for e in *{'article', 'section', 'header', 'footer', 'content'} do add e
-  for e in *{'br', 'hr', 'img', 'input', 'p', 'textarea'} do add e
-  for i=1,8 do add "h" .. i
+{
+  :ReactiveVar,
+  :ReactiveElement,
+  :tohtml,
+  :flush,
+  :append,
+  :text,
+  :elements,
+}

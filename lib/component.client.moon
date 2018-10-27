@@ -48,6 +48,19 @@ class ReactiveVar
     with ReactiveVar transform @value
       .upstream = @subscribe (...) -> \set transform ...
 
+-- join = do
+--   update = (k, new) -> (old) ->
+--     with copy = { k, v for k,v in pairs old }
+--       copy[k] = new
+-- 
+--   (inputs) ->
+--     values = {}
+--     with ReactiveVar values
+--       for k, input in pairs inputs
+--         input = inputs[k]
+--         values[i] = input\get!
+--         input\subscribe (new) -> \transform update k, new
+
 class ReactiveElement
   @isinstance: (val) -> 'table' == (type val) and val.node
 
@@ -99,6 +112,11 @@ class ReactiveElement
     if 'string' == type last
       error 'cannot replace string node'
 
+    if child == nil
+      if last
+        @remove last
+      return
+
     child = tohtml child
     ok, last = pcall tohtml, last
     if ok
@@ -111,16 +129,16 @@ class ReactiveElement
     if 'table' == (type child) and child.destroy
       child\destroy!
 
-with exports = {
-    :ReactiveVar,
-    :ReactiveElement,
-    :tohtml,
-    :append,
-    :text,
-  }
-  add = (e) -> exports[e] = (...) -> ReactiveElement e, ...
+elements = setmetatable {}, __index: (name) =>
+  with val = (...) -> ReactiveElement name, ...
+    @[name] = val
 
-  for e in *{'div', 'form', 'span', 'a', 'p', 'button', 'ul', 'ol', 'li', 'i', 'b', 'u', 'tt'} do add e
-  for e in *{'article', 'section', 'header', 'footer', 'content'} do add e
-  for e in *{'br', 'hr', 'img', 'input', 'p', 'textarea'} do add e
-  for i=1,8 do add "h" .. i
+{
+  :ReactiveVar,
+  :ReactiveElement,
+--  :join,
+  :tohtml,
+  :append,
+  :text,
+  :elements,
+}

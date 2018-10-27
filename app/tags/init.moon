@@ -1,7 +1,8 @@
 on_client ((...) ->
   require = relative ...
   import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require '.tags'
-  import ReactiveVar, append, tohtml, text, div, form, span, h3, a, input, textarea, button from require 'lib.component'
+  import ReactiveVar, append, tohtml, text, elements from require 'lib.component'
+  import div, form, span, h3, a, input, textarea, button from elements
 
   clone = (set) ->
     assert set and 'table' == (type set), 'not a set'

@@ -50,6 +50,12 @@ on_client ->
     node = text 'a', 'test', 'string'
     assert node.data == 'a test string', "expected text to join arguments with spaces"
 
+  run_test "exports elements table", ->
+    import elements from require 'lib.component'
+
+    assert (type elements.div!) == 'table', "expected to build element with elements.div!"
+    assert (type elements.madeup!) == 'table', "expected to build element with elements.madeup!"
+
   run_test = test_group 'ReactiveVar'
 
   run_test "stores a value", ->
