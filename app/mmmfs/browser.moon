@@ -1,10 +1,7 @@
 import ReactiveVar, text, elements from require 'lib.component'
 import div, span, a, select, option from elements
 
-append = (list, val) ->
-  list = [x for x in *list]
-  table.insert list, val
-  list
+limit = (list, num) -> [v for i,v in ipairs list when i <= num]
 
 class Browser
   new: (@root) =>
@@ -53,13 +50,12 @@ class Browser
           \append a 'root', href: '#', onclick: (_, e) ->
             e\preventDefault!
             @navigate {}
-          link = {}
-          for name in *path
-            link = append link, name
+
+          for i,name in ipairs path
             \append '/'
             \append a name, href: '#', onclick: (_, e) ->
               e\preventDefault!
-              @navigate link
+              @navigate limit path, i
 
         span 'view property: ', @active\map (fileder) ->
           onchange = (_, e) ->
@@ -80,10 +76,16 @@ class Browser
         },
         @prop\map (prop) ->
           active = @active\get!
-          val, key = active\get prop.name, prop.type
 
-          res = CONVERT 'mmm/dom', val, key
-          res or span "cannot display!", style: { color: '#f00' }
+          ok, res = pcall ->
+            val, key = active\get prop.name, prop.type
+            CONVERT 'mmm/dom', val, key
+
+          if ok and res
+            res
+          else
+            warn "error: ", res unless ok
+            span "cannot display!", style: { color: '#f00' }
       }
     }
 
