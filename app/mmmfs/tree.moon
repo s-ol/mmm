@@ -241,6 +241,8 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 and some bold **text** and `code tags` with me.",
   }
 
-  -- if we are on client (mmm.s-ol.nu/?client=mmmfs), throw in twisted as a child
+  require '.gallery',
+
+  -- if we are on client, throw in twisted as a child
   if MODE == 'CLIENT' then require '.twisted'
 }
