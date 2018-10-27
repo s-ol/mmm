@@ -7,7 +7,7 @@ class Browser
   new: (@root) =>
     @path = ReactiveVar {}
     @path\subscribe (path) -> window.location.hash = '/' .. table.concat path, '/'
-    @prop = ReactiveVar next @root.props
+    @prop = ReactiveVar (@root\find 'mmm/dom') or next @root.props
     @active = @path\map (path) ->
       fileder = @root
       for name in *path
@@ -24,7 +24,7 @@ class Browser
 
       fileder
 
-    @active\subscribe (fileder) -> @prop\set next fileder.props
+    @active\subscribe (fileder) -> @prop\set (fileder\find 'mmm/dom') or next fileder.props
 
     @tree = div {
       style: {
