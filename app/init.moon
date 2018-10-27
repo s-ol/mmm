@@ -7,42 +7,48 @@ patch_redirs = ->
     'play-tags': 'tags',
 
   { :location } = window
-  if location.search and #location.search > 1
+  if (not location.search\find '=') and #location.search > 1
     name = location.search\sub 2
     location.href = redirs[name] or name
 
+client_goto = ->
+  { :location } = window
+  if module = location.search\match 'client=([%w_]+)'
+    document.body.innerHTML = ''
+    require 'app.' .. module
+
 experiments = {
   {
-    name: 'twisted',
+    name: 'twisted'
     desc: 'pseudo 3d animation'
   },
   {
-    name: 'koch',
-    desc: "lil' fractal thing",
+    name: 'koch'
+    desc: "lil' fractal thing"
   },
   {
-    name: 'realities',
+    name: 'realities'
     desc: 'a paper on virtual and other realities'
   },
   {
-    name: 'center_of_mass',
+    name: 'center_of_mass'
     desc: 'aligning characters by their centers of mass'
   },
   {
-    name: 'todo',
+    name: 'todo'
     desc: 'Todo MVC with the mmm UI framework'
   },
   {
-    name: 'test_component',
+    name: 'test_component'
     desc: 'test suite for the mmm reactive UI framework'
   },
   {
-    name: 'tags',
+    name: 'tags'
     desc: 'organizing files with Functional Tags'
   },
   {
-    name: 'tablefs',
-    desc: 'a (file)system to live in'
+    name: 'mmmfs'
+    desc: 'an operating, file- and living system'
   },
 }
 
@@ -83,6 +89,8 @@ table.insert routes, {
       "made with #{moon} by "
       a { 's-ol', href: 'https://twitter.com/S0lll0s' }
     }
+
+    on_client client_goto
 }
 
 destify = (route) -> with route

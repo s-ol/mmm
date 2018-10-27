@@ -1,3 +1,5 @@
+require = relative ..., 1
+
 Fileder {
   'moon -> mmm/dom': () =>
     html = require 'lib.html'
@@ -32,7 +34,7 @@ Fileder {
           table.insert args, style: { 'list-style': 'none', 'font-size': '0.8em' }
           ol table.unpack args
 
-      append h1 'Tablefs', style: { 'margin-bottom': 0 }
+      append h1 'mmmfs', style: { 'margin-bottom': 0 }
       append p "(it's a terrible name, isn't it)", style: { 'margin-top': 0, 'margin-bottom': '1em' }
 
       append p do
@@ -42,7 +44,7 @@ Fileder {
           types/keys associated, but these have unspecified schemas and don't nest. In addition it can have many
           children, which are fileders themselves and can nest, but they are not labelled."
 
-        "in Tablefs, directories are files and files are directories, or something like that.
+        "in mmmfs, directories are files and files are directories, or something like that.
         Listen, I don't really know yet either. The idea is that every node knows how to render it's contents;
         so for example your 'Pictures' fileder", fileder, " contains a script within itself that renders
         all the picture files you put into it at the children level", child, "."
@@ -153,7 +155,7 @@ table.insert converts, {
         rendered just using ", (code "append root\\get 'mmm/dom'"), " as well."
 
       append h2 "interp overloading"
-      append p "The example with the image is curious as well. In tablefs, you might want to save a link to an image,
+      append p "The example with the image is curious as well. In mmmfs, you might want to save a link to an image,
         without ever saving the actual image on your hard drive (or wherever the data may ever be stored - it is
         quite transient currently). The image Fileder below has it's main (unnamed) value tagged as ",
         (code 'URL -> image/png'), " - a png image, encoded as an URL. When accessed as ", (code 'image/png'), "
@@ -204,5 +206,10 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 - (two things)
 
 and some bold **text** and `code tags` with me.",
+  }
+
+  if MODE == 'CLIENT' then Fileder {
+    'title: text/plain': "canvas animation that doesn't quite fit",
+    'preview: moon -> mmm/component': => require '.twisted'
   }
 }

@@ -8,16 +8,21 @@ MODE = 'CLIENT'
 print = console\log
 warn = console\warn
 
--- package.path = './?.shared.lua;./?.client.lua;' .. package.path
 package.path = '/?.shared.moon.lua;/?.client.moon.lua;/?.moon.lua;/?/init.moon.lua;/?.lua;/?/init.lua'
 
 -- relative imports
-relative = (...) ->
-  path = ...
+relative = do
+  _require = require
 
-  (name) ->
-    name = path .. name if '.' == name\sub 1, 1
-    require name
+  (base, sub) ->
+    sub = 0 unless 'number' == type sub
+
+    for i=1, sub
+      base = base\match '^(.*)%.%w+$'
+
+    (name, x) ->
+      name = base .. name if '.' == name\sub 1, 1
+      _require name
 
 append = document.body\appendChild
 on_client = (f, ...) -> f ...

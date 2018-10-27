@@ -144,6 +144,6 @@ class Fileder
     nil, "node doesn't have value for #{name}:#{type}"
 
 require = relative ...
-root = require '.tablefs'
+root = require '.tree'
 
 append root\gett 'mmm/dom'

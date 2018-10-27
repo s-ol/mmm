@@ -7,13 +7,18 @@ warn = (...) ->
   io.stderr\write '\n'
 
 -- relative imports
-relative = (...) ->
+relative = do
   _require = require
-  path = ...
 
-  (name) ->
-    name = path .. name if '.' == name\sub 1, 1
-    require name
+  (base, sub) ->
+    sub = 0 unless 'number' == type sub
+
+    for i=1, sub
+      base = base\match '^(.*)%.%w+$'
+
+    (name, x) ->
+      name = base .. name if '.' == name\sub 1, 1
+      _require name
 
 -- shorthand to append elements to body
 buffer = ''
@@ -27,7 +32,6 @@ on_client = (fn, ...) ->
   args = {...}
   -- warn code
   append "<script type=\"application/lua\">
-    MODE = 'HYBRID'
     local fn = #{compile fn}
     fn(#{table.concat [string.format '%q', v for v in *args ], ', '})
   </script>"

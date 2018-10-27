@@ -8,7 +8,7 @@ preload app app/tags lib
 
 CLIENT += app/*.moon
 CLIENT += app/tags/*.moon
-CLIENT += app/tablefs/*.moon
+CLIENT += app/mmmfs/*.moon
 CLIENT += lib/*.client.moon
 CLIENT += lib/*.shared.moon
 
