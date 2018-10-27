@@ -6,7 +6,7 @@ import a, canvas, div, button, script from require 'lib.html'
 class CanvasApp
   width: 500
   height: 400
-  new: (show_menu = false) =>
+  new: (show_menu=false, @paused) =>
     @canvas = canvas width: @width, height: @height
 
     @ctx = @canvas\getContext '2d'

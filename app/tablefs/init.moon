@@ -6,10 +6,6 @@ on_client ((...) ->
       name: 'moon',
       transform: (method) => method @
     },
-    {
-      name: 'http',
-      transform: (...) -> ... -- @TODO
-    },
   }
 
   split = (str, delim='->') ->
@@ -49,7 +45,7 @@ on_client ((...) ->
 
       error "interp not found: '#{_name}'"
 
-  transforms = {
+  converts = {
     {
       inp: 'mmm/dom',
       out: 'text/html',
@@ -74,7 +70,7 @@ on_client ((...) ->
     },
   }
 
-  table.insert transforms, {
+  table.insert converts, {
     inp: 'text/html',
     out: 'mmm/dom',
     transform: if MODE == 'SERVER'
@@ -87,21 +83,31 @@ on_client ((...) ->
     }
 
   do
-    success, discount = pcall require, 'discount'
-    if success
-      table.insert transforms, {
+    local markdown
+    if MODE == 'SERVER'
+      success, discount = pcall require, 'discount'
+      markdown = discount if success
+    else
+      markdown = window and window\marked
+
+    if markdown
+      table.insert converts, {
         inp: 'text/markdown',
         out: 'text/html',
-        transform: discount,
+        transform: markdown,
       }
 
-      if MODE == 'SERVER'
-        -- @TODO chained w above
-        table.insert transforms, {
-         inp: 'text/markdown',
-          out: 'mmm/dom',
-          transform: discount,
-        }
+      -- @TODO chained w above
+      table.insert converts, {
+       inp: 'text/markdown',
+        out: 'mmm/dom',
+        transform: if MODE == 'SERVER'
+          (md) -> markdown md
+        else
+          (md) ->
+            with document\createElement 'div'
+              .innerHTML = markdown md
+      }
 
   class Fileder
     new: (props, @children) =>
@@ -127,13 +133,13 @@ on_client ((...) ->
         return interp @, value
 
       if not overrides
-        -- second pass, interps + transforms
+        -- second pass, interps + converts
         for key, value in pairs @props
           continue unless key.name == name
 
           interp = key\get_interp!
 
-          for { :inp, :out, :transform } in *transforms
+          for { :inp, :out, :transform } in *converts
             return transform interp @, value if inp == key.type and out == type
 
       nil, "node doesn't have value for #{name}:#{type}"

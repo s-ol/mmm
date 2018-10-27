@@ -1,68 +1,73 @@
 Fileder {
   'moon -> mmm/dom': () =>
-    import article, h1, h3, p, div, a, sup, ol, li, span, code, br from require 'lib.html'
+    html = require 'lib.html'
+    import article, h1, h2, h3, p, div, a, sup, ol, li, span, code, pre, br from html
 
-    content = {}
-    append = (stuff) -> table.insert content, stuff
+    code = do
+      _code = code
+      (str) -> _code str\match '^ *(..-) *$'
 
-    footnote, getnotes = do
-      local *
-      notes = {}
+    article with  _this = {}
+      append = (a) -> table.insert _this, a
 
-      id = (i) -> "footnote-#{i}"
-
-      footnote = (stuff) ->
-        i = #notes + 1
-        notes[i] = stuff
-        sup a "[#{i}]", style: { 'text-decoration': 'none' }, href: '#' .. id i
-
-      footnote, ->
-        args = for i, note in ipairs notes
-          li (span (tostring i), id: id i), ': ', note
+      footnote, getnotes = do
+        local *
         notes = {}
-        table.insert args, style: { 'list-style': 'none', 'font-size': '0.8em' }
-        ol table.unpack args
 
-    append h1 'Tablefs', style: { 'margin-bottom': 0 }
-    append p "(it's a terrible name, isn't it)", style: { 'margin-top': 0, 'margin-bottom': '1em' }
+        id = (i) -> "footnote-#{i}"
 
-    append p do
-      fileder = footnote "fileder: file + folder. 'node', 'table' etc. are too general to be used all over."
-      child = footnote "fileders can have multiple values, like the mentioned script, but these are not considered
-        children of the fileder, as they are not fileders themselves. One fileder can have many values of different
-        types/keys associated, but these have unspecified schemas and don't nest. In addition it can have many
-        children, which are fileders themselves and can nest, but they are not labelled."
+        footnote = (stuff) ->
+          i = #notes + 1
+          notes[i] = stuff
+          sup a "[#{i}]", style: { 'text-decoration': 'none' }, href: '#' .. id i
 
-      "in Tablefs, directories are files and files are directories, or something like that.
-      Listen, I don't really know yet either. The idea is that every node knows how to render it's contents;
-      so for example your 'Pictures' fileder", fileder, " contains a script within itself that renders
-      all the picture files you put into it at the children level", child, "."
+        footnote, ->
+          args = for i, note in ipairs notes
+            li (span (tostring i), id: id i), ': ', note
+          notes = {}
+          table.insert args, style: { 'list-style': 'none', 'font-size': '0.8em' }
+          ol table.unpack args
 
-    append p "What you are viewing right now is a fileder that has a value set at the ", (code 'moon -> text/html'), " key;
-      That value is the Lua/Moonscript function that is generating this text.", br!,
-      "The function is passed the fileder itself (as a Lua table) and potentially also receives some other
-      helpers for accessing it's environment (parent fileders, functions for querying the tree etc) or info
-      specific to the function key/type, but I haven't built or thought about any of that yet. Sorry."
+      append h1 'Tablefs', style: { 'margin-bottom': 0 }
+      append p "(it's a terrible name, isn't it)", style: { 'margin-top': 0, 'margin-bottom': '1em' }
 
-    append do
-      github = footnote a 's-ol/mmm', href: 'https://github.com/s-ol/mmm'
-      p "Anyway, this node is set up as some sort of wiki/index thing and just lists its children-fileders' ", (code 'title: text/plain'),
-        " values and ", (code 'preview: moon -> text/html'), " previews (if set). Oh and also everything is on github and stuff", github,
-        " if you care about that."
+      append p do
+        fileder = footnote "fileder: file + folder. 'node', 'table' etc. are too general to be used all over."
+        child = footnote "fileders can have multiple values, like the mentioned script, but these are not considered
+          children of the fileder, as they are not fileders themselves. One fileder can have many values of different
+          types/keys associated, but these have unspecified schemas and don't nest. In addition it can have many
+          children, which are fileders themselves and can nest, but they are not labelled."
 
+        "in Tablefs, directories are files and files are directories, or something like that.
+        Listen, I don't really know yet either. The idea is that every node knows how to render it's contents;
+        so for example your 'Pictures' fileder", fileder, " contains a script within itself that renders
+        all the picture files you put into it at the children level", child, "."
 
-    append p "Here's the Children:"
+      append do
+        mmmdom = code ('mmm/dom'), footnote span (code 'mmm/dom'), " is a polymorphic content type;
+          on the server it is just an HTML string (like ", (code 'text/html'), "),
+          but on the client it is a JS DOM Element instance."
+        fengari = a 'fengari.io', href: 'https://fengari.io'
+        p "What you are viewing right now is a fileder that has a Lua/Moonscript function as a value which
+          is rendering all this text. It returns a value whose type interface is known as ", mmmdom, ", which is
+          basically an HTML subtree. The function can be run, and the results generated, statically on the server
+          (resulting in an HTML file), or dynamically on the client (via ", fengari, ").", br!,
+          "The function is passed the fileder itself (as a Lua table) and potentially also receives some other
+          helpers for accessing it's environment (parent fileders, functions for querying the tree etc) or info
+          specific to the function key/type, but I haven't built or thought about any of that yet. Sorry."
 
-    mb_render = (child, key) ->
-      if child[key]
-        child[key] child
+      append do
+        github = footnote a 's-ol/mmm', href: 'https://github.com/s-ol/mmm'
+        p "Anyway, this node is set up as some sort of wiki/index thing and just lists its children-fileders' ", (code 'title: text/plain'),
+          " values and ", (code 'preview: mmm/dom'), " previews (if set). Oh and also everything is on github and stuff", github,
+          " if you care about that."
 
-    title = (text) -> h3 text, style: { margin: 0 }
+      append p "Here's the Children:"
 
-    append div for child in *@children
-      div {
-        title child\gett 'title', 'text/plain',
-        (child\get 'preview', 'mmm/dom') or span '(no renderable content)', style: { color: 'red' }
+      -- render a preview block
+      preview = (title, content) -> div {
+        h3 title, style: { margin: 0 },
+        content or span '(no renderable content)', style: { color: 'red' },
         style: {
           display: 'inline-block',
           width: '300px',
@@ -74,9 +79,98 @@ Fileder {
         },
       }
 
-    append getnotes!
+      append div for child in *@children
+        title = child\gett 'title', 'text/plain'  -- get 'title' as 'text/plain' (error if no value or conversion possible)
+        content = child\get 'preview', 'mmm/dom'  -- get 'preview' as a DOM description (nil if no value or conversion possible)
+        preview title, content
 
-    article content
+      append h2 "converts"
+      append p "Well actually it's a bit more complex. You see, the code that renders these previews ", (html.i "asks"), " for those
+        name/type pairs (", (code 'title: text/plain'), ' ', (code 'preview: mmm/dom'), "), but the values don't actually have to
+        be ", (html.i "defined"), " as these types."
+
+      append pre code [[
+-- render a preview block
+preview = (title, content) -> div {
+  h3 title, style: { ... },
+  content or span '(no renderable content)', style: { ... },
+  style: { ... }
+}
+
+append div for child in *@children
+  title = child\gett 'title', 'text/plain'  -- get 'title' as 'text/plain' (error if no value or conversion possible)
+  content = child\get 'preview', 'mmm/dom'  -- get 'preview' as a DOM description (nil if no value or conversion possible)
+  preview title, content
+      ]]
+
+      append p "For example, the markdown child below only provides ", (code 'preview'), " as ", (code 'text/markdown'), ":"
+
+      append pre code [[
+Fileder {
+  'title: text/plain': "I'm not even five lines of markdown but i render myself!",
+  'preview: text/markdown': "See I have like
+
+- a list of things
+- (two things)
+
+and some bold **text** and `code tags` with me.",
+}
+      ]]
+
+      append p "Then, globally, there are some conversion paths specified; such as one that maps from ",
+        (code 'text/markdown'), " to ", (code 'mmm/dom'), ":"
+
+      append pre code [[
+table.insert converts, {
+  inp: 'text/markdown',
+  out: 'mmm/dom',
+  transform: (md) ->
+    -- polymorphic client/serverside implementation here,
+    -- uses lua-discount on the server, marked.js on the client
+}
+      ]]
+
+      append h2 "interps"
+      append p "In addition, a property can be encoded using ", (code 'interps'), ". For example the root node you are viewing
+        currently is defined as ", (code 'moon -> mmm/dom'), ", meaning it is to be interpreted by the ", (code 'moon'),
+        " interp before being treated as a regular ", (code 'mmm/dom'), " value."
+
+      append p "The ", (code 'moon'), " interp takes a function value and calls it, passing the Fileder it is processing as ",
+        (code 'self'), ":"
+
+      append pre code [[
+{
+  name: 'moon',
+  transform: (method) => method @
+}
+      ]]
+
+      append p "Both interps and converts are resolved automatically when asking for values, so this page is being
+        rendered just using ", (code "append root\\get 'mmm/dom'"), " as well."
+
+      append h2 "interp overloading"
+      append p "The example with the image is curious as well. In tablefs, you might want to save a link to an image,
+        without ever saving the actual image on your hard drive (or wherever the data may ever be stored - it is
+        quite transient currently). The image Fileder below has it's main (unnamed) value tagged as ",
+        (code 'URL -> image/png'), " - a png image, encoded as an URL. When accessed as ", (code 'image/png'), "
+        the URL should be resolved, and the binary data provided in it's place (yeah right - I haven't build that yet).
+        However, if a script is aware of URLs and knows a better way to handle them, then it can overload the URL
+        interp for it's fetch, to get at the raw data and use that URL instead. This is what the image demo does in
+        order to pass the URL to an ", (code 'img'), " tag's ", (code 'src'), " attribute:"
+
+      append pre code [[
+Fileder {
+  'title: text/plain': "Hey I'm like a link to picture or smth",
+  'URL -> image/png': 'https://picsum.photos/200?random',
+  'preview: moon -> mmm/dom': =>
+    import img from require 'lib.html'
+    img src: @gett nil,               -- look for: main content
+                   'image/png',       -- with image type, and
+                   URL: (url) => url  -- override URL interp to get raw URL
+}
+      ]]
+
+      append getnotes!
 
   'text/markdown': "this is a markdown version or something.
 
@@ -90,23 +184,21 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 
   Fileder {
     'title: text/plain': "Hey I'm like a link to picture or smth",
-    'http -> image/png': 'https://picsum.photos/200?random',
+    'URL -> image/png': 'https://picsum.photos/200?random',
     'preview: moon -> mmm/dom': =>
       import img from require 'lib.html'
-      img src: @gett nil,                -- look for: main content
-                    'image/png',        -- w/ image type, and
-                    http: (...) => ...  -- override http interp to get URL
+      img src: @gett nil,               -- look for: main content
+                     'image/png',       -- with image type, and
+                     URL: (url) => url  -- override URL interp to get raw URL
   }
 
   Fileder {
     'title: text/plain': "I'm not even five lines of markdown but i render myself!",
-    'text/markdown': "See I have like
+    'preview: text/markdown': "See I have like
 
 - a list of things
 - (two things)
 
 and some bold **text** and `code tags` with me.",
-    'preview: moon -> text/markdown': => @get 'text/markdown' -- redirect to main content of same type, if exists
-    'preview: text/html': '<p>on the client I\'m a HTML string.<br/> poor, <i>I know&hellip;</i></p>'
   }
 }
