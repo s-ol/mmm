@@ -39,7 +39,7 @@ Fileder {
           ol table.unpack args
 
       append h1 'mmmfs', style: { 'margin-bottom': 0 }
-      append p "(it's a terrible name, isn't it)", style: { 'margin-top': 0, 'margin-bottom': '1em' }
+      append p "a file-, operating, and living system", style: { 'margin-top': 0, 'margin-bottom': '1em' }
 
       append p do
         fileder = footnote "fileder: file + folder. 'node', 'table' etc. are too general to be used all over."
@@ -49,10 +49,21 @@ Fileder {
           children, which are fileders themselves and can nest, but they are not labelled."
 
         "in mmmfs, directories are files and files are directories, or something like that.
-        Listen, I don't really know yet either. The idea is that every node knows how to render it's contents;
+        Listen, I don't really know yet either. The idea is that every node knows how to display it's contents;
         so for example your 'Pictures' fileder", fileder, " contains a script within itself that renders
         all the picture files you put into it at the children level", child, "."
 
+      append p "a fileder should also be responsible for how it's children are sorted, filtered and interacted with.
+        For example you should be able to create a fileder that is essentially a 'word document' equivalent: it could
+        contain images, websites, links and of course text as children and let you reorder, layout and edit them in
+        it's own edit interface."
+
+      append p "a picture fileder could have an alternate slideshow view, or one that shows your geotagged images on a
+        world map, if you really want that. Maybe you could build a music folder that contains links to youtube videos,
+        spotify tracks and just plain mp3 files, and the folder knows how to play them all.", br!,
+        "Sounds cool, no?"
+
+      append h2 "details"
       append do
         mmmdom = code ('mmm/dom'), footnote span (code 'mmm/dom'), " is a polymorphic content type;
           on the server it is just an HTML string (like ", (code 'text/html'), "),
@@ -98,7 +109,7 @@ Fileder {
 
         preview title, content
 
-      append h2 "converts"
+      append h3 "converts"
       append p "Well actually it's a bit more complex. You see, the code that renders these previews ", (html.i "asks"), " for those
         name/type pairs (", (code 'title: text/plain'), ', ', (code 'preview: mmm/dom'), "), but the values don't actually have to
         be ", (html.i "defined"), " as these types."
@@ -148,7 +159,7 @@ table.insert converts, {
 }
       ]]
 
-      append h2 "interps"
+      append h3 "interps"
       append p "In addition, a property can be encoded using ", (code 'interps'), ". For example the root node you are viewing
         currently is defined as ", (code 'moon -> mmm/dom'), ", meaning it is to be interpreted by the ", (code 'moon'),
         " interp before being treated as a regular ", (code 'mmm/dom'), " value."
@@ -166,7 +177,7 @@ table.insert converts, {
       append p "Both interps and converts are resolved automatically when asking for values, so this page is being
         rendered just using ", (code "append root\\get 'mmm/dom'"), " as well."
 
-      append h2 "interp overloading"
+      append h3 "interp overloading"
       append p "The example with the image is curious as well. In mmmfs, you might want to save a link to an image,
         without ever saving the actual image on your hard drive (or wherever the data may ever be stored - it is
         quite transient currently). The image Fileder below has it's main (unnamed) value tagged as ",
