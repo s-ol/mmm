@@ -54,32 +54,12 @@ Fileder {
         contain images, websites, links and of course text as children and let you reorder, layout and edit them in
         it's own edit interface."
 
-      append p "a picture fileder could have an alternate slideshow view, or one that shows your geotagged images on a
-        world map, if you really want that. Maybe you could build a music folder that contains links to youtube videos,
-        spotify tracks and just plain mp3 files, and the folder knows how to play them all.", br!,
-        "Sounds cool, no?"
+      append p "a picture fileder could have an alternate slideshow view (whoops - built that. Click on the 'gallery'
+        example below), or one that shows your geotagged images on a world map, if you really want that.
+        Maybe you could build a music folder that contains links to youtube videos, spotify tracks and just plain mp3
+        files, and the folder knows how to play them all."
 
-      append h2 "details"
-      append do
-        mmmdom = code ('mmm/dom'), footnote span (code 'mmm/dom'), " is a polymorphic content type;
-          on the server it is just an HTML string (like ", (code 'text/html'), "),
-          but on the client it is a JS DOM Element instance."
-        fengari = a 'fengari.io', href: 'https://fengari.io'
-        p "What you are viewing right now is a fileder that has a Lua/Moonscript function as a value which
-          is rendering all this text. It returns a value whose type interface is known as ", mmmdom, ", which is
-          basically an HTML subtree. The function can be run, and the results generated, statically on the server
-          (resulting in an HTML file), or dynamically on the client (via ", fengari, ").", br!,
-          "The function is passed the fileder itself (as a Lua table) and potentially also receives some other
-          helpers for accessing it's environment (parent fileders, functions for querying the tree etc) or info
-          specific to the function key/type, but I haven't built or thought about any of that yet. Sorry."
-
-      append do
-        github = footnote a 's-ol/mmm', href: 'https://github.com/s-ol/mmm/tree/master/app/mmmfs'
-        p "Anyway, this node is set up as some sort of wiki/index thing and just lists its children-fileders' ", (code 'title: text/plain'),
-          " values and ", (code 'preview: mmm/dom'), " previews (if set). Oh and also everything is on github and stuff", github,
-          " if you care about that."
-
-      append p "Here's the Children:"
+      append p "Sounds cool, no? Here's some examples of things a fileder can be or embed:"
 
       -- render a preview block
       preview = (title, content, name) -> div {
@@ -107,6 +87,27 @@ Fileder {
         name = child\gett 'name', 'alpha'
 
         preview title, content, name
+
+
+      append h2 "details"
+      append do
+        mmmdom = code ('mmm/dom'), footnote span (code 'mmm/dom'), " is a polymorphic content type;
+          on the server it is just an HTML string (like ", (code 'text/html'), "),
+          but on the client it is a JS DOM Element instance."
+        fengari = a 'fengari.io', href: 'https://fengari.io'
+        p "What you are viewing right now is a fileder that has a Lua/Moonscript function as a value which
+          is rendering all this text. It returns a value whose type interface is known as ", mmmdom, ", which is
+          basically an HTML subtree. The function can be run, and the results generated, statically on the server
+          (resulting in an HTML file), or dynamically on the client (via ", fengari, ").", br!,
+          "The function is passed the fileder itself (as a Lua table) and potentially also receives some other
+          helpers for accessing it's environment (parent fileders, functions for querying the tree etc) or info
+          specific to the function key/type, but I haven't built or thought about any of that yet. Sorry."
+
+      append do
+        github = footnote a 's-ol/mmm', href: 'https://github.com/s-ol/mmm/tree/master/app/mmmfs'
+        p "Anyway, this node is set up as some sort of wiki/index thing and just lists its children-fileders' ", (code 'title: text/plain'),
+          " values and ", (code 'preview: mmm/dom'), " previews (if set). Oh and also everything is on github and stuff", github,
+          " if you care about that."
 
       append h3 "converts"
       append p "Well actually it's a bit more complex. You see, the code that renders these previews ", (html.i "asks"), " for those

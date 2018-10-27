@@ -44,7 +44,7 @@ props = {
         index\map (i) -> text " image ##{i} "
         e.a 'next', href: '#', onclick: -> index\transform next
       },
-      index\map (i) -> img src: @children[i]\gett nil, 'image/png', LURL
+      index\map (i) -> img src: @children[i]\gett nil, 'image/png', :URL
     }
 }
 
