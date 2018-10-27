@@ -13,11 +13,7 @@ Fileder {
       _code = code
       (str) -> _code str\match '^ *(..-) *$'
 
-    center = (contents) ->
-      contents.style = { margin: 'auto', 'max-width': '750px' }
-      article contents
-
-    center with  _this = {}
+    article with  _this = {}
       append = (a) -> table.insert _this, a
 
       footnote, getnotes = do
@@ -78,7 +74,7 @@ Fileder {
           specific to the function key/type, but I haven't built or thought about any of that yet. Sorry."
 
       append do
-        github = footnote a 's-ol/mmm', href: 'https://github.com/s-ol/mmm'
+        github = footnote a 's-ol/mmm', href: 'https://github.com/s-ol/mmm/tree/master/app/mmmfs'
         p "Anyway, this node is set up as some sort of wiki/index thing and just lists its children-fileders' ", (code 'title: text/plain'),
           " values and ", (code 'preview: mmm/dom'), " previews (if set). Oh and also everything is on github and stuff", github,
           " if you care about that."
@@ -86,8 +82,8 @@ Fileder {
       append p "Here's the Children:"
 
       -- render a preview block
-      preview = (title, content) -> div {
-        h3 title, style: { margin: 0 },
+      preview = (title, content, name) -> div {
+        h3 title, style: { margin: 0, cursor: 'pointer' }, onclick: -> BROWSER\navigate { name }
         content or span '(no renderable content)', style: { color: 'red' },
         style: {
           display: 'inline-block',
@@ -107,7 +103,10 @@ Fileder {
         -- get 'preview' as a DOM description (nil if no value or conversion possible)
         content = child\get 'preview', 'mmm/dom'
 
-        preview title, content
+        -- get 'preview' as a DOM description (nil if no value or conversion possible)
+        name = child\gett 'name', 'alpha'
+
+        preview title, content, name
 
       append h3 "converts"
       append p "Well actually it's a bit more complex. You see, the code that renders these previews ", (html.i "asks"), " for those
@@ -204,14 +203,18 @@ Fileder {
   'text/markdown': "this is a markdown version or something.
 
 There's no content here so switch back to the real one!
-(Assuming there is a switching UI by the time you are reading this, which I am presupposing since you are reading this at all.
-If you are reading this in the source, then c'mon, just scroll past and give me a break.)"
+(Assuming there is a switching UI by the time you are reading this, which I assume since you are reading this at all.
+If you are reading this in the source, then c'mon, just scroll past and give me a break.)
+
+(the switching UI has now been built.)"
 
   Fileder {
+    'name: alpha': 'empty',
     'title: text/plain': "Hey I'm an ad-hoc child with no content for shit",
   }
 
   Fileder {
+    'name: alpha': 'image',
     'title: text/plain': "Hey I'm like a link to picture or smth",
 
     -- main content is image/png, to be interpreted by URL to access
@@ -226,6 +229,7 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
   }
 
   Fileder {
+    'name: alpha': 'markdown',
     'title: text/plain': "I'm not even five lines of markdown but i render myself!",
 
     -- preview can be rendered using global convert
@@ -239,6 +243,7 @@ and some bold **text** and `code tags` with me.",
 
   -- if we are on client (mmm.s-ol.nu/?client=mmmfs), throw in twisted as a child
   if MODE == 'CLIENT' then Fileder {
+    'name: alpha': 'twisted',
     'title: text/plain': "canvas animation that doesn't quite fit",
     'preview: moon -> mmm/component': => require '.twisted'
   }

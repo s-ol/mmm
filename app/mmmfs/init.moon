@@ -48,12 +48,38 @@ class Key
 
     assert overrides[_name] or interps[_name], "interp not found: '#{_name}'"
 
+  -- format as a string (see constructor)
+  tostring: =>
+    list = { table.unpack @interps }
+    table.insert list, @type
+
+    type = table.concat list, ' -> '
+
+    if @name == ''
+      type
+    else
+      "#{@name}: #{type}"
+
+
+import text, code from require 'lib.html'
+import tohtml from require 'lib.component'
+
 -- list of converts
 -- converts each have
 -- * inp - input type
 -- * out - output type
 -- * transform - function (inp) -> out
 converts = {
+  {
+    inp: 'text/plain',
+    out: 'mmm/dom',
+    transform: text
+  },
+  {
+    inp: 'alpha',
+    out: 'mmm/dom',
+    transform: code
+  },
   {
     inp: 'mmm/dom',
     out: 'text/html',
@@ -62,17 +88,13 @@ converts = {
   {
     inp: 'mmm/component',
     out: 'mmm/dom',
-    transform: (...) ->
-      import tohtml from require 'lib.component'
-      tohtml ...
+    transform: tohtml
   },
   {
     -- @TODO this chained rule *should* be inferred, but that's way too hot rn
     inp: 'mmm/component',
     out: 'text/html',
     transform: (node) ->
-      import tohtml from require 'lib.component'
-
       node = tohtml node
       if MODE == 'SERVER' then node else node.outerHTML
   },
@@ -133,11 +155,11 @@ class Fileder
 
     @props = { (Key k), v for k, v in pairs props }
 
-  -- get property according to criteria, crash if no value or conversion path
+  -- find property key according to criteria, nil if no value or conversion path
   -- * name - property name (optional: defaults to main content)
   -- * type - wanted result type
-  -- * overrides - map of interp overrides (optional)
-  get: (name='', type, overrides) =>
+  -- * convert - allow conversion (optional: default true)
+  find: (name='', type, convert=true) =>
     if not type
       type = name
       name = ''
@@ -146,26 +168,59 @@ class Fileder
     for key, value in pairs @props
       continue unless key.name == name and key.type == type
 
-      interp = key\get_interp overrides
+      return key
 
-      return interp @, value
-
-    if not overrides
+    if convert
       -- second pass, interps + converts
       for key, value in pairs @props
         continue unless key.name == name
 
-        interp = key\get_interp!
-
         for { :inp, :out, :transform } in *converts
-          return transform interp @, value if inp == key.type and out == type
+          return key if inp == key.type and out == type
 
-    nil, "node doesn't have value for #{name}:#{type}"
+  -- get property according to criteria, nil if no value or conversion path
+  -- * name - property name (optional: defaults to main content)
+  -- * type - wanted result type
+  -- * overrides - map of interp overrides (optional)
+  get: (name='', type, overrides) =>
+    if not type
+      type = name
+      name = ''
+
+    key = @find name, type, not overrides
+
+    if key
+      interp = key\get_interp overrides
+
+      return (interp @, @props[key]), key if key.type == type
+
+      for { :inp, :out, :transform } in *converts
+        return (transform interp @, @props[key]), key if inp == key.type and out == type
+
+    nil, nil
 
   -- like get, throw if no value or conversion path
-  gett: (...) => assert @get ...
+  gett: (name='', type, overrides) =>
+    if not type
+      type = name
+      name = ''
+
+    val, key = @get name, type, overrides
+    assert val, "node doesn't have value for #{name}:#{type}"
+    val, key
+
+CONVERT = (type, val, key) ->
+  return unless val and key
+
+  if key.type == type
+    val
+  else
+    for { :inp, :out, :transform } in *converts
+      return transform val if inp == key.type and out == type
 
 require = relative ...
+import Browser from require '.browser'
 root = require '.tree'
 
-append root\gett 'mmm/dom'
+BROWSER = Browser root
+append BROWSER.node
