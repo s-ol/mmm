@@ -7,8 +7,12 @@ class TwistedDemo extends CanvasApp
   width: 500
   height: 400
   length: math.pi * 4
-  new: =>
-    super true
+  new: (preview) =>
+    if preview
+      @width, @height = 120, 120
+      super false, true
+    else
+      super true
     @background = {Math.random!, Math.random!/3+.2, Math.random!/4}
     hue = Math.random!
     @shades = setmetatable {}, __index: (key) =>
@@ -35,3 +39,10 @@ class TwistedDemo extends CanvasApp
     draw 1
 
 TwistedDemo!
+
+Fileder {
+  'name: alpha': 'twisted',
+  'title: text/plain': "canvas animation with static preview",
+  'preview: moon -> mmm/component': => TwistedDemo true
+  'moon -> mmm/component': => TwistedDemo!
+}

@@ -242,9 +242,5 @@ and some bold **text** and `code tags` with me.",
   }
 
   -- if we are on client (mmm.s-ol.nu/?client=mmmfs), throw in twisted as a child
-  if MODE == 'CLIENT' then Fileder {
-    'name: alpha': 'twisted',
-    'title: text/plain': "canvas animation that doesn't quite fit",
-    'preview: moon -> mmm/component': => require '.twisted'
-  }
+  if MODE == 'CLIENT' then require '.twisted'
 }

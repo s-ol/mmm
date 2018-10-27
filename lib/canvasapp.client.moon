@@ -19,14 +19,15 @@ class CanvasApp
     lastMillis = window.performance\now!
 
     animationFrame = (_, millis) ->
+      @update (millis - lastMillis) / 1000
+      @ctx\resetTransform!
+      @draw!
+      lastMillis = millis
+
       if not @paused
-        @update (millis - lastMillis) / 1000
-        @ctx\resetTransform!
-        @draw!
         window\setTimeout (->
           window\requestAnimationFrame animationFrame
         ), 0
-      lastMillis = millis
     window\requestAnimationFrame animationFrame
 
     @node = if show_menu
