@@ -70,7 +70,10 @@ table.insert routes, {
 
     -- menu
     append h1 {
-      style: { position: 'relative' },
+      style: {
+        position: 'relative',
+        'border-bottom': '1px solid #000'
+      },
       'mmm',
       a {
         style: {
