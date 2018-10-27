@@ -15,7 +15,7 @@ client_goto = ->
   { :location } = window
   if module = location.search\match 'client=([%w_]+)'
     document.body.innerHTML = ''
-    require 'app.' .. module
+    require "app.#{module}"
 
 experiments = {
   {
@@ -49,6 +49,7 @@ experiments = {
   {
     name: 'mmmfs'
     desc: 'an operating, file- and living system'
+    render: 'client'
   },
 }
 
@@ -93,9 +94,14 @@ table.insert routes, {
     on_client client_goto
 }
 
+load = (module) -> require "app.#{module}"
+
 destify = (route) -> with route
   .route or= .name
   .dest or= "#{.route}/index.html"
+
+  if .render == 'client'
+    .render = -> on_client load, .name
   .render or= -> require '.' .. .name
 
 routes = [ destify route for route in *routes ]
