@@ -1,6 +1,10 @@
 require = relative ..., 1
 
 Fileder {
+  -- main content
+  -- doesn't have a name prefix (e.g. preview: moon -> mmm/dom)
+  -- uses the 'moon' interp to execute the lua/moonscript function on get
+  -- resolves to a value of type mmm/dom
   'moon -> mmm/dom': () =>
     html = require 'lib.html'
     import article, h1, h2, h3, p, div, a, sup, ol, li, span, code, pre, br from html
@@ -86,13 +90,17 @@ Fileder {
       }
 
       append div for child in *@children
-        title = child\gett 'title', 'text/plain'  -- get 'title' as 'text/plain' (error if no value or conversion possible)
-        content = child\get 'preview', 'mmm/dom'  -- get 'preview' as a DOM description (nil if no value or conversion possible)
+        -- get 'title' as 'text/plain' (error if no value or conversion possible)
+        title = child\gett 'title', 'text/plain'
+
+        -- get 'preview' as a DOM description (nil if no value or conversion possible)
+        content = child\get 'preview', 'mmm/dom'
+
         preview title, content
 
       append h2 "converts"
       append p "Well actually it's a bit more complex. You see, the code that renders these previews ", (html.i "asks"), " for those
-        name/type pairs (", (code 'title: text/plain'), ' ', (code 'preview: mmm/dom'), "), but the values don't actually have to
+        name/type pairs (", (code 'title: text/plain'), ', ', (code 'preview: mmm/dom'), "), but the values don't actually have to
         be ", (html.i "defined"), " as these types."
 
       append pre code [[
@@ -104,8 +112,12 @@ preview = (title, content) -> div {
 }
 
 append div for child in *@children
-  title = child\gett 'title', 'text/plain'  -- get 'title' as 'text/plain' (error if no value or conversion possible)
-  content = child\get 'preview', 'mmm/dom'  -- get 'preview' as a DOM description (nil if no value or conversion possible)
+  -- get 'title' as 'text/plain' (error if no value or conversion possible)
+  title = child\gett 'title', 'text/plain'
+
+  -- get 'preview' as a DOM description (nil if no value or conversion possible)
+  content = child\get 'preview', 'mmm/dom'
+
   preview title, content
       ]]
 
@@ -190,7 +202,11 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 
   Fileder {
     'title: text/plain': "Hey I'm like a link to picture or smth",
+
+    -- main content is image/png, to be interpreted by URL to access
     'URL -> image/png': 'https://picsum.photos/200?random',
+
+    -- preview is a lua/moonscript function that neturns an mmm/dom value
     'preview: moon -> mmm/dom': =>
       import img from require 'lib.html'
       img src: @gett nil,               -- look for: main content
@@ -200,6 +216,8 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 
   Fileder {
     'title: text/plain': "I'm not even five lines of markdown but i render myself!",
+
+    -- preview can be rendered using global convert
     'preview: text/markdown': "See I have like
 
 - a list of things
@@ -208,6 +226,7 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 and some bold **text** and `code tags` with me.",
   }
 
+  -- if we are on client (mmm.s-ol.nu/?client=mmmfs), throw in twisted as a child
   if MODE == 'CLIENT' then Fileder {
     'title: text/plain': "canvas animation that doesn't quite fit",
     'preview: moon -> mmm/component': => require '.twisted'

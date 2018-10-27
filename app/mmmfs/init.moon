@@ -1,10 +1,9 @@
 export ^
 
+-- list of interps
+-- interp signature is (fileder, value) -> value
 interps = {
-  {
-    name: 'moon',
-    transform: (method) => method @
-  },
+ moon: (method) => method @
 }
 
 split = (str, delim='->') ->
@@ -14,7 +13,14 @@ split = (str, delim='->') ->
   interp, rest = str\match ' *(%w+) *-> *(.*)'
   { interp }, rest
 
+-- Key of a Fileder Property
+-- contains:
+-- * @name - key name or '' for main content
+-- * @type - final type after interps
+-- * @interps - array describing interp chain
 class Key
+  -- instantiate from table w/ keys described above
+  -- or string like 'name: interp -> interp -> type' (name + interps optional)
   new: (opts) =>
     if 'string' == type opts
       @name, rest = opts\match '(%w+): *(.+)'
@@ -29,8 +35,10 @@ class Key
     else
       error 'wrong argument type'
 
-  -- get a function that interpretes thi type according to @interps
-  get_interp: (overrides) =>
+  -- get a function that interpretes a raw value according to @interps
+  -- and returns a value of @type
+  -- overrides is a map of interp overrides
+  get_interp: (overrides={}) =>
     return ((val) => val) if #@interps == 0
 
     assert #@interps == 1, 'not supported rn' -- @TODO
@@ -38,12 +46,13 @@ class Key
 
     return overrides[_name] if overrides and overrides[_name]
 
-    for { :name, :transform } in *interps
-      if name == _name
-        return transform
+    assert overrides[_name] or interps[_name], "interp not found: '#{_name}'"
 
-    error "interp not found: '#{_name}'"
-
+-- list of converts
+-- converts each have
+-- * inp - input type
+-- * out - output type
+-- * transform - function (inp) -> out
 converts = {
   {
     inp: 'mmm/dom',
@@ -108,7 +117,14 @@ do
             .innerHTML = markdown md
     }
 
+-- Fileder itself
+-- contains:
+-- * @props - Property Map (Key to Value)
+-- * @children - Children Array
 class Fileder
+  -- instantiate from props and children tables
+  -- or mix in one table (numeric keys are children, remainder props)
+  -- prop-keys are passed to Key constructor
   new: (props, @children) =>
     if not @children
       @children = for i, child in ipairs props
@@ -117,7 +133,10 @@ class Fileder
 
     @props = { (Key k), v for k, v in pairs props }
 
-  gett: (...) => assert @get ...
+  -- get property according to criteria, crash if no value or conversion path
+  -- * name - property name (optional: defaults to main content)
+  -- * type - wanted result type
+  -- * overrides - map of interp overrides (optional)
   get: (name='', type, overrides) =>
     if not type
       type = name
@@ -142,6 +161,9 @@ class Fileder
           return transform interp @, value if inp == key.type and out == type
 
     nil, "node doesn't have value for #{name}:#{type}"
+
+  -- like get, throw if no value or conversion path
+  gett: (...) => assert @get ...
 
 require = relative ...
 root = require '.tree'
