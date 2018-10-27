@@ -7,7 +7,11 @@ Fileder {
       _code = code
       (str) -> _code str\match '^ *(..-) *$'
 
-    article with  _this = {}
+    center = (contents) ->
+      contents.style = { margin: 'auto', 'max-width': '750px' }
+      article contents
+
+    center with  _this = {}
       append = (a) -> table.insert _this, a
 
       footnote, getnotes = do
