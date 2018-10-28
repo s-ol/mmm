@@ -84,13 +84,20 @@ index = {
   route: ''
   dest: 'index.html'
   render: =>
-    import h1, h3, b, p, a, br, ul, tt, li, img from require 'lib.html'
+    import h1, h3, div, b, p, a, br, ul, tt, li, img from require 'lib.html'
     import opairs from require 'lib.ordered'
 
     moon = '\xe2\x98\xbd'
 
     -- redirects for old-style URIs
     on_client patch_redirs
+
+    iconlink = (href, src, alt, style) -> a {
+      class: 'iconlink',
+      :href,
+      target: '_blank',
+      img :src, :alt, :style
+    }
 
     -- menu
     append h1 {
@@ -99,15 +106,12 @@ index = {
         'border-bottom': '1px solid #000'
       },
       'mmm',
-      a {
-        style: {
-          position: 'absolute',
-          top: '2px',
-          right: '0',
-        },
-        href: 'https://webring.xxiivv.com/#random',
-        target: '_blank',
-        img src: 'https://webring.xxiivv.com/icon.black.svg', alt: 'webring', style: { height: '1em' }
+      div {
+        class: 'icons',
+        iconlink 'https://github.com/s-ol/mmm', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg',
+        iconlink 'https://twitter.com/S0lll0s', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/twitter.svg',
+        iconlink 'https://webring.xxiivv.com/#random', 'https://webring.xxiivv.com/icon.black.svg', 'webring',
+          { height: '0.9em', 'margin-left': '.04em' }
       }
     }
 

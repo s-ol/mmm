@@ -47,3 +47,14 @@ pre {
   white-space: pre-wrap;
   margin: 0 2em;
 }
+
+h1 .icons {
+  display: inline-flex;
+  float: right;
+
+  .iconlink > img {
+    height: 0.7em;
+    margin-left: 0.2em;
+    vertical-align: middle;
+  }
+}
