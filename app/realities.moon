@@ -4,7 +4,7 @@ import h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from
 if MODE == 'CLIENT'
   require 'svg.js'
 else
-  import compile from require 'duct_tape'
+  import compile from require 'lib.duct_tape'
 
   append '<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>'
 

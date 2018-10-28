@@ -25,7 +25,7 @@ buffer = ''
 append = (val) ->
   buffer ..= val
 
-import compile, insert_loader from require 'duct_tape'
+import compile, insert_loader from require 'lib.duct_tape'
 insert_loader!
 
 on_client = (fn, ...) ->
