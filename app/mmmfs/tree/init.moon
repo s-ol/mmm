@@ -6,7 +6,7 @@ Fileder {
   -- uses the 'moon' interp to execute the lua/moonscript function on get
   -- resolves to a value of type mmm/dom
   'moon -> mmm/dom': () =>
-    html = require 'lib.html'
+    html = require 'lib.dom'
     import article, h1, h2, h3, p, div, a, sup, ol, li, span, code, pre, br from html
 
     code = do
@@ -192,7 +192,7 @@ Fileder {
   'title: text/plain': "Hey I'm like a link to picture or smth",
   'URL -> image/png': 'https://picsum.photos/200?random',
   'preview: moon -> mmm/dom': =>
-    import img from require 'lib.html'
+    import img from require 'lib.dom'
     img src: @gett nil,               -- look for: main content
                    'image/png',       -- with image type, and
                    URL: (url) => url  -- override URL interp to get raw URL
@@ -223,7 +223,7 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 
     -- preview is a lua/moonscript function that neturns an mmm/dom value
     'preview: moon -> mmm/dom': =>
-      import img from require 'lib.html'
+      import img from require 'lib.dom'
       img src: @gett nil, 'URL -> image/png' -- look for main content with 'URL to png' type
   }
 

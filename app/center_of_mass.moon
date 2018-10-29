@@ -1,7 +1,7 @@
 on_client ->
   import CanvasApp from require 'lib.canvasapp'
   import rgb from require 'lib.color'
-  import h1, p, div, span, input, button from require 'lib.html'
+  import h1, p, div, span, input, button from require 'lib.dom'
 
   fast = true
   center = true

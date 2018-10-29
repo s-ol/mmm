@@ -1,7 +1,7 @@
 window = js.global
 js = require 'js'
 
-import a, canvas, div, button, script from require 'lib.html'
+import a, canvas, div, button, script from require 'lib.dom'
 
 class CanvasApp
   width: 500

@@ -84,7 +84,7 @@ index = {
   route: ''
   dest: 'index.html'
   render: =>
-    import h1, h3, div, b, p, a, br, ul, tt, li, img from require 'lib.html'
+    import h1, h3, div, b, p, a, br, ul, tt, li, img from require 'lib.dom'
     import opairs from require 'lib.ordered'
 
     moon = '\xe2\x98\xbd'

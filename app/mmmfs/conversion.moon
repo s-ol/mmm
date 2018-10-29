@@ -1,4 +1,4 @@
-import text, code from require 'lib.html'
+import text, code from require 'lib.dom'
 import tohtml from require 'lib.component'
 
 -- limit function to one argument

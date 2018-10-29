@@ -1,4 +1,4 @@
-import div, h1, a, img, br from require 'lib.html'
+import div, h1, a, img, br from require 'lib.dom'
 
 children = for i=1,100
   id = math.floor math.random! * 200

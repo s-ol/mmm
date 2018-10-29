@@ -1,5 +1,5 @@
 on_client ->
-  import div, h1, ul, li, pre from require 'lib.html'
+  import div, h1, ul, li, pre from require 'lib.dom'
 
   last = nil
   test_group = (name) ->
