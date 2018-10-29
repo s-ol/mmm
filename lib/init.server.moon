@@ -1,9 +1,27 @@
-export MODE, warn, relative, append, on_client
+export MODE, print, warn, relative, append, on_client
 MODE = 'SERVER'
+
+deep_tostring = (tbl, space='') ->
+  buf = space .. tostring tbl
+
+  return buf unless 'table' == type tbl
+
+  buf = buf .. ' {\n'
+  for k,v in pairs tbl
+    buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  '}\n"
+  buf = buf .. "#{space}}"
+  buf
+
+print = do
+  _print = print
+  (...) ->
+    contents = [deep_tostring v for v in *{ ... } ]
+    _print table.unpack contents
 
 -- warning messages
 warn = (...) ->
-  io.stderr\write table.concat { ... }, '\t'
+  contents = [deep_tostring v for v in *{ ... } ]
+  io.stderr\write table.concat contents, '\t'
   io.stderr\write '\n'
 
 -- relative imports

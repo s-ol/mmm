@@ -1,4 +1,4 @@
-require = relative ..., 1
+require = relative ...
 
 Fileder {
   -- main content
@@ -224,9 +224,7 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
     -- preview is a lua/moonscript function that neturns an mmm/dom value
     'preview: moon -> mmm/dom': =>
       import img from require 'lib.html'
-      img src: @gett nil,               -- look for: main content
-                     'image/png',       -- with image type, and
-                     URL: (url) => url  -- override URL interp to get raw URL
+      img src: @gett nil, 'URL -> image/png' -- look for main content with 'URL to png' type
   }
 
   Fileder {

@@ -78,8 +78,9 @@ class Browser
           active = @active\get!
 
           ok, res = pcall ->
-            val, key = active\get prop.name, prop.type
-            CONVERT 'mmm/dom', val, key
+            -- val, key = active\get prop.name, prop.type
+            -- CONVERT 'mmm/dom', val, key
+            active\get prop.name, 'mmm/dom'
 
           if ok and res
             res

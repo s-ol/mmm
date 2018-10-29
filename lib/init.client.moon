@@ -5,8 +5,25 @@ window = js.global
 { :document, :console } = window
 
 MODE = 'CLIENT'
-print = console\log
-warn = console\warn
+
+deep_tostring = (tbl, space='') ->
+  buf = space .. tostring tbl
+
+  return buf unless 'table' == type tbl
+
+  buf = buf .. ' {\n'
+  for k,v in pairs tbl
+    buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  '}\n"
+  buf = buf .. "#{space}}"
+  buf
+
+print = (...) ->
+  contents = [deep_tostring v for v in *{ ... } ]
+  console\log table.unpack contents
+
+warn = (...) ->
+  contents = [deep_tostring v for v in *{ ... } ]
+  console\warn table.unpack contents
 
 package.path = '/?.shared.moon.lua;/?.client.moon.lua;/?.moon.lua;/?/init.moon.lua;/?.lua;/?/init.lua'
 

@@ -1,7 +1,5 @@
 import div, h1, a, img, br from require 'lib.html'
 
-URL = (url) => url
-
 children = for i=1,100
   id = math.floor math.random! * 200
   Fileder {
@@ -16,13 +14,13 @@ props = {
   'preview: moon -> mmm/dom': => div {
     'the first pic as a little taste:',
     br!,
-    img src: @children[1]\get 'preview', 'image/png', :URL
+    img src: @children[1]\get 'preview', 'URL -> image/png'
   }
   'moon -> mmm/dom': =>
     link = (child) -> a {
       href: '#',
       onclick: -> BROWSER\navigate { 'gallery', (child\get 'name', 'alpha'), nil },
-      img src: child\gett 'preview', 'image/png', :URL
+      img src: child\gett 'preview', 'URL -> image/png'
     }
 
     content = [link child for child in *@children]
@@ -44,7 +42,7 @@ props = {
         index\map (i) -> text " image ##{i} "
         e.a 'next', href: '#', onclick: -> index\transform next
       },
-      index\map (i) -> img src: @children[i]\gett nil, 'image/png', :URL
+      index\map (i) -> img src: @children[i]\gett nil, 'URL -> image/png'
     }
 }
 

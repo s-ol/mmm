@@ -102,6 +102,7 @@ class ReactiveElement
         @node.style[k] = v
       return
 
+    print "setting attr #{attr}"
     @node[attr] = value
 
   append: (child, last) =>
