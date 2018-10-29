@@ -3,7 +3,7 @@ require = relative ...
 Fileder {
   -- main content
   -- doesn't have a name prefix (e.g. preview: moon -> mmm/dom)
-  -- uses the 'moon' interp to execute the lua/moonscript function on get
+  -- uses the 'moon ->' conversion to execute the lua/moonscript function on get
   -- resolves to a value of type mmm/dom
   'moon -> mmm/dom': () =>
     html = require 'lib.dom'
@@ -150,7 +150,7 @@ and some bold **text** and `code tags` with me.",
         (code 'text/markdown'), " to ", (code 'mmm/dom'), ":"
 
       append pre code [[
-table.insert converts, {
+{
   inp: 'text/markdown',
   out: 'mmm/dom',
   transform: (md) ->
@@ -159,33 +159,32 @@ table.insert converts, {
 }
       ]]
 
-      append h3 "interps"
-      append p "In addition, a property can be encoded using ", (code 'interps'), ". For example the root node you are viewing
-        currently is defined as ", (code 'moon -> mmm/dom'), ", meaning it is to be interpreted by the ", (code 'moon'),
-        " interp before being treated as a regular ", (code 'mmm/dom'), " value."
+      append h3 "type chains"
+      append p "In addition, a property type can be encoded using multiple types in a ", (code 'type chain'), ".
+        For example the root node you are viewing currently is defined as ", (code 'moon -> mmm/dom'), ",
+        meaning it's value is a moonscript function returing a regular ", (code 'mmm/dom'), " value."
 
-      append p "The ", (code 'moon'), " interp takes a function value and calls it, passing the Fileder it is processing as ",
-        (code 'self'), ":"
+      append p "Both value chains and 'sideways' converts are resolved using the same mechanism,
+        so this page is being rendered just using ", (code "append root\\get 'mmm/dom'"), " as well.
+        The convert that resolves the moon type is defined as follows:"
 
       append pre code [[
 {
-  name: 'moon',
-  transform: (method) => method @
+  inp: 'moon -> (.+)',
+  out: '%1',
+  transform: (val, fileder) -> val fileder
 }
       ]]
 
-      append p "Both interps and converts are resolved automatically when asking for values, so this page is being
-        rendered just using ", (code "append root\\get 'mmm/dom'"), " as well."
-
-      append h3 "interp overloading"
       append p "The example with the image is curious as well. In mmmfs, you might want to save a link to an image,
         without ever saving the actual image on your hard drive (or wherever the data may ever be stored - it is
         quite transient currently). The image Fileder below has it's main (unnamed) value tagged as ",
         (code 'URL -> image/png'), " - a png image, encoded as an URL. When accessed as ", (code 'image/png'), "
-        the URL should be resolved, and the binary data provided in it's place (yeah right - I haven't build that yet).
-        However, if a script is aware of URLs and knows a better way to handle them, then it can overload the URL
-        interp for it's fetch, to get at the raw data and use that URL instead. This is what the image demo does in
-        order to pass the URL to an ", (code 'img'), " tag's ", (code 'src'), " attribute:"
+        the URL should be resolved, and the binary data provided in it's place (yeah right - I haven't build that yet)."
+
+      append p "However, if a script is aware of URLs and knows a better way to handle them, then it can ask for and
+        use the URL directly instead.
+        This is what the image demo does in order to pass the URL to an ", (code 'img'), " tag's ", (code 'src'), " attribute:"
 
       append pre code [[
 Fileder {
@@ -193,9 +192,7 @@ Fileder {
   'URL -> image/png': 'https://picsum.photos/200?random',
   'preview: moon -> mmm/dom': =>
     import img from require 'lib.dom'
-    img src: @gett nil,               -- look for: main content
-                   'image/png',       -- with image type, and
-                   URL: (url) => url  -- override URL interp to get raw URL
+    img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type
 }
       ]]
 
@@ -224,7 +221,7 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
     -- preview is a lua/moonscript function that neturns an mmm/dom value
     'preview: moon -> mmm/dom': =>
       import img from require 'lib.dom'
-      img src: @gett nil, 'URL -> image/png' -- look for main content with 'URL to png' type
+      img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type
   }
 
   Fileder {

@@ -9,7 +9,7 @@ export ^
 -- * @type - type string (type -> type -> type)
 class Key
   -- instantiate from table w/ keys described above
-  -- or string like 'name: interp -> interp -> type' (name + interps optional)
+  -- or string like '@name: @type' (name optional)
   new: (opts, second) =>
     if 'string' == type second
       @name, @type = (opts or ''), second
