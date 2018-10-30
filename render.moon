@@ -15,6 +15,9 @@ with io.open output_name, 'w'
     <meta charset=\"UTF-8\">
     <title>MMM: lunar low-gravity scripting playground</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"/main.css\" />
+    <link rel=\"preload\" as=\"script\" href=\"/fengari-web.js\" />
+    <link rel=\"preload\" as=\"script\" href=\"/lib/dom.lua\" />
+    <link rel=\"preload\" as=\"script\" href=\"/lib/component.lua\" />
   </head>
   <body>
     <script src=\"/fengari-web.js\"></script>
