@@ -19,7 +19,7 @@ with io.open output_name, 'w'
   <body>
     <script src=\"/fengari-web.js\"></script>
     <script src=\"//cdn.jsdelivr.net/npm/marked/marked.min.js\"></script>
-    <script type=\"application/lua\" src=\"/lib/init.client.moon.lua\"></script>
+    <script type=\"application/lua\" src=\"/lib/init.lua\"></script>
 
     #{flush!}
   </body>

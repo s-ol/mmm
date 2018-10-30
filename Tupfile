@@ -1,26 +1,20 @@
 .gitignore
 
 !download = |> ^ DOWNLOAD %O^ curl -L https://github.com/fengari-lua/fengari-web/releases/download/@(FENGARI_VERSION)/`basename %o` > %o |>
-!moonc    = |> ^ MOON %b^ moonc           -o %o %f |> dist/%f.lua
 !sassc    = |> ^ SCSS %b^ sassc -mauto       %f %o |> | %o.map
-
-preload app app/tags lib
-
-CLIENT += app/*.moon
-CLIENT += app/tags/*.moon
-CLIENT += app/mmmfs/*.moon
-CLIENT += lib/*.moon
-CLIENT += lib/mmmfs/*.moon
 
 # download fengari dependencies
 : |> !download |> dist/fengari-web.js
 : |> !download |> dist/fengari-web.js.map
 
-# compile client imports
-: foreach $(CLIENT) |> !moonc |>
-
 # render stylesheet
 : scss/main.scss |> !sassc |> dist/main.css
 
-# render static content
+preload app
+preload app/tags
+preload app/mmmfs
+preload lib
+preload lib/mmmfs
+
+# render static content and compile sources
 run moon tup.moon

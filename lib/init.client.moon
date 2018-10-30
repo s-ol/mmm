@@ -25,7 +25,8 @@ warn = (...) ->
   contents = [deep_tostring v for v in *{ ... } ]
   console\warn table.unpack contents
 
-package.path = '/?.client.moon.lua;/?.moon.lua;/?/init.moon.lua;/?.lua;/?/init.lua'
+-- package.path = '/?.client.moon.lua;/?.moon.lua;/?/init.moon.lua;/?.lua;/?/init.lua'
+package.path = '/?.lua;/?/init.lua'
 
 -- relative imports
 relative = do
