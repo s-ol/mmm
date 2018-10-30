@@ -64,11 +64,12 @@ class Browser
           onchange = (_, e) ->
             @prop\set Key e.target.value
 
+          current = @prop\get!\tostring!
           with select :onchange
             if fileder
               for key, _ in pairs fileder.props
                 value = key\tostring!
-                \append option value, :value
+                \append option value, :value, selected: value == current
       }
 
       div {
