@@ -6,11 +6,16 @@ vim-hybrid theme by w0ng (https://github.com/w0ng/vim-hybrid)
 
 /*background color*/
 .hljs {
+  background: #1d1f21;
+  border-radius: 6px;
+  padding: 0.2em 0.5em;
+  white-space: nowrap;
+}
+
+pre > .hljs {
   display: block;
   overflow-x: auto;
   padding: 1em;
-  background: #1d1f21;
-  border-radius: 10px;
   white-space: pre-wrap;
   margin: 0 2em;
 }

@@ -10,6 +10,7 @@ element = (element) -> (...) ->
 
   with e = document\createElement element
     for k,v in pairs attributes
+      k = 'className' if k == 'class'
       if k == 'style' and 'table' == type v
         for kk,vv in pairs v
           e.style[kk] = vv

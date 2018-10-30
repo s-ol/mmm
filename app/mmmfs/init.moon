@@ -5,24 +5,16 @@ import Fileder from require 'lib.mmmfs'
 root = Fileder {
   -- main content
   -- doesn't have a name prefix (e.g. preview: moon -> mmm/dom)
-  -- uses the 'moon ->' conversion to execute the lua/moonscript function on get
+  -- uses the 'moon ->' conversion to execute the lua/pre moon function on get
   -- resolves to a value of type mmm/dom
   'moon -> mmm/dom': () =>
     html = require 'lib.dom'
     import article, h1, h2, h3, p, div, a, sup, ol, li, span, code, pre, br from html
 
-    moonscript = do
-      highlight = (id) ->
-        d_o = -> window.hljs\highlightBlock document\getElementById id
-        window\setTimeout d_o, 0
-
-      i = 0
-      (str) ->
-        id = "__code_#{i}"
-        i += 1
-        str = str\match '^ *(..-) *$'
-        on_client highlight, id
-        pre (code str), :id, class: 'lang-moonscript'
+    moon = (str) ->
+      result = window.hljs\highlight 'moonscript', (str\match '^ *(..-) *$'), true
+      with code class: 'hljs'
+        .innerHTML = result.value
 
     article with  _this = {}
       append = (a) -> table.insert _this, a
@@ -124,7 +116,7 @@ root = Fileder {
         p "Fileders are made up of two main parts. The first is the list of ", (html.i 'properties'), ",
         which are values identified by a ", name, " and ", type, ". These values are queried using strings like ",
         (code 'title: text/plain'), " or ", (code 'mmm/dom'), ", which describe both the ", name,
-        " of a property (", (code '"title"'), " and ", (code '""'), ", the unnamed/main property) and the ", type,
+        " of a property (", (moon '"title"'), " and ", (moon '""'), ", the unnamed/main property) and the ", type,
         " of a property. Property types can be something resembling a MIME-type or a more complex structure
         (see ", (html.i "type chains"), " below). A fileder can have multiple properties of different types
         set that share a ", name, ". In this case the overlapping properties are considered equivalent and the one
@@ -158,7 +150,7 @@ root = Fileder {
         type conversion. This means that you generally ask for content in whichever format suits your application,
         and rely on the type resolution mechanism to make that happen."
 
-      append moonscript [[
+      append pre moon [[
 -- render a preview block
 preview = (title, content) -> div {
   h3 title, style: { ... },
@@ -181,7 +173,7 @@ append div for child in *@children
         be ", (html.i "defined"), " as these types.
         For example, the markdown child below only provides ", (code 'preview'), " as ", (code 'text/markdown'), ":"
 
-      append moonscript [[
+      append pre moon [[
 Fileder {
   'title: text/plain': "I'm not even five lines of markdown but i render myself!",
   'preview: text/markdown': "See I have like
@@ -196,7 +188,7 @@ and some bold **text** and `code tags` with me.",
       append p "Then, globally, there are some conversion paths specified; such as one that maps from ",
         (code 'text/markdown'), " to ", (code 'mmm/dom'), ":"
 
-      append moonscript [[
+      append pre moon [[
 {
   inp: 'text/markdown',
   out: 'mmm/dom',
@@ -209,13 +201,13 @@ and some bold **text** and `code tags` with me.",
       append h3 "type chains"
       append p "In addition, a property type can be encoded using multiple types in a ", (code 'type chain'), ".
         For example the root node you are viewing currently is actually defined as ", (code 'moon -> mmm/dom'), ",
-        meaning it's value is a moonscript function returing a regular ", (code 'mmm/dom'), " value."
+        meaning it's value is a pre moon function returing a regular ", (code 'mmm/dom'), " value."
 
       append p "Both value chains and 'sideways' converts are resolved using the same mechanism,
-        so this page is being rendered just using ", (code "append root\\get 'mmm/dom'"), " as well.
+        so this page is being rendered just using ", (moon "append root\\get 'mmm/dom'"), " as well.
         The convert that resolves the moon type is defined as follows:"
 
-      append moonscript [[
+      append pre moon [[
 {
   inp: 'moon -> (.+)',
   out: '%1',
@@ -233,7 +225,7 @@ and some bold **text** and `code tags` with me.",
         use the URL directly instead.
         This is what the image demo does in order to pass the URL to an ", (code 'img'), " tag's ", (code 'src'), " attribute:"
 
-      append moonscript [[
+      append pre moon [[
 Fileder {
   'title: text/plain': "Hey I'm like a link to picture or smth",
   'URL -> image/png': 'https://picsum.photos/200?random',
@@ -265,7 +257,7 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
     -- main content is image/png, to be interpreted by URL to access
     'URL -> image/png': 'https://picsum.photos/200?random',
 
-    -- preview is a lua/moonscript function that neturns an mmm/dom value
+    -- preview is a lua/pre moon function that neturns an mmm/dom value
     'preview: moon -> mmm/dom': =>
       import img from require 'lib.dom'
       img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type

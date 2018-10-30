@@ -93,6 +93,7 @@ class ReactiveElement
     for unsub in *@_subscriptions do unsub!
 
   set: (attr, value) =>
+    attr = 'className' if attr == 'class'
     if 'table' == (type value) and ReactiveVar.isinstance value
       table.insert @_subscriptions, value\subscribe (...) -> @set attr, ...
       value = value\get!
