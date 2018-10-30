@@ -1,3 +1,4 @@
+import Fileder from require 'lib.mmmfs'
 import div, h1, a, img, br from require 'lib.dom'
 
 children = for i=1,100

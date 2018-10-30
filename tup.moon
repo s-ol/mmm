@@ -1,4 +1,4 @@
-package.moonpath = './?.shared.moon;./?.server.moon;' .. package.moonpath
+package.moonpath = './?.server.moon;' .. package.moonpath
 require 'lib.init'
 import routes from require 'app'
 

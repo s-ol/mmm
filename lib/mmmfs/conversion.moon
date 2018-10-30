@@ -68,10 +68,7 @@ do
     table.insert converts, {
       inp: 'text/markdown',
       out: 'text/html',
-      transform: (val) ->
-        html = markdown val
-        warn html
-        html
+      transform: single markdown
     }
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''

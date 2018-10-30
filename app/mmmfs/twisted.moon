@@ -1,7 +1,8 @@
-Math = window.Math
-
+import Fileder from require 'lib.mmmfs'
 import CanvasApp from require 'lib.canvasapp'
 import hsl from require 'lib.color'
+
+Math = window.Math
 
 class TwistedDemo extends CanvasApp
   width: 500

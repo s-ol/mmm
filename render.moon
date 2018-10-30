@@ -1,4 +1,4 @@
-package.moonpath = './?.shared.moon;./?.server.moon;' .. package.moonpath
+package.moonpath = './?.server.moon;' .. package.moonpath
 import flush from require 'lib.init'
 
 import indexed from require 'app'
