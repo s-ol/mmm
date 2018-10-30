@@ -1,3 +1,6 @@
+require = relative ..., 1
+import Key from require '.fileder'
+import get_conversions from require '.conversion'
 import ReactiveVar, text, elements from require 'lib.component'
 import div, span, a, select, option from elements
 
@@ -78,9 +81,14 @@ class Browser
           active = @active\get!
 
           ok, res = pcall ->
-            -- val, key = active\get prop.name, prop.type
-            -- CONVERT 'mmm/dom', val, key
-            active\get prop.name, 'mmm/dom'
+            conversions = assert (get_conversions 'mmm/dom', prop.type), "no conversion path"
+            value = assert (active\get prop), "value went missing?"
+
+            for i=#conversions,1,-1
+              { :inp, :out, :transform } = conversions[i]
+              value = transform value, active
+
+            value
 
           if ok and res
             res
