@@ -35,7 +35,6 @@ articles = {
   {
     name: 'mmmfs'
     desc: 'a file and operating system to live in (wip)'
-    render: 'client'
   },
 }
 

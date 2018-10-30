@@ -1,15 +1,15 @@
 require = relative ..., 1
 import Key from require '.fileder'
 import get_conversions from require '.conversion'
-import ReactiveVar, text, elements from require 'lib.component'
+import ReactiveVar, ReactiveElement, text, elements from require 'lib.component'
 import div, span, a, select, option from elements
 
 limit = (list, num) -> [v for i,v in ipairs list when i <= num]
 
 class Browser
-  new: (@root) =>
-    @path = ReactiveVar {}
-    @path\subscribe (path) -> window.location.hash = '/' .. table.concat path, '/'
+  new: (@root, @path={}, rehydrate=false) =>
+    @path = ReactiveVar @path
+    -- @path\subscribe (path) -> window.location.hash = '/' .. table.concat path, '/'
     @prop = ReactiveVar (@root\find 'mmm/dom') or next @root.props
     @active = @path\map (path) ->
       fileder = @root
@@ -29,7 +29,11 @@ class Browser
 
     @active\subscribe (fileder) -> @prop\set (fileder\find 'mmm/dom') or next fileder.props
 
-    @tree = div {
+    -- retrieve or create the root
+    root = 'div'
+    root = document\getElementById 'browser-root' if rehydrate
+    @dom = ReactiveElement root, {
+      id: 'browser-root'
       style: {
         position: 'absolute',
         top: 0,
@@ -40,8 +44,12 @@ class Browser
         overflow: 'hidden',
         'flex-direction': 'column',
         'justify-content': 'space-between',
-      },
-      div {
+      }
+    }
+
+    -- add or prepend the navbar
+    if MODE == 'CLIENT'
+      @dom\prepend div {
         style: {
           padding: '1em',
           flex: '0 0 auto',
@@ -72,34 +80,47 @@ class Browser
                 \append option value, :value, selected: value == current
       }
 
-      div {
-        style: {
-          flex: '1 0 0',
-          overflow: 'auto',
-          padding: '1em 2em',
-        },
-        @prop\map (prop) ->
-          active = @active\get!
-
-          ok, res = pcall ->
-            conversions = assert (get_conversions 'mmm/dom', prop.type), "no conversion path"
-            value = assert (active\get prop), "value went missing?"
-
-            for i=#conversions,1,-1
-              { :inp, :out, :transform } = conversions[i]
-              value = transform value, active
-
-            value
-
-          if ok and res
-            res
-          else
-            warn "error: ", res unless ok
-            span "cannot display!", style: { color: '#f00' }
-      }
+    -- append or patch #browser-content
+    node = 'div'
+    node = document\getElementById 'browser-content' if rehydrate
+    @dom\append ReactiveElement node, {
+      id: 'browser-content',
+      style: {
+        flex: '1 0 0',
+        overflow: 'auto',
+        padding: '1em 2em',
+      },
+      @get_content rehydrate and node
     }
 
-    @node = @tree.node
+    @node = @dom.node
+    @render = @dom\render
+
+  get_content: (wrapper) =>
+    var = @prop\map (prop) ->
+      active = @active\get!
+
+      ok, res = pcall ->
+        conversions = assert (get_conversions 'mmm/dom', prop.type), "no conversion path"
+        value = assert (active\get prop), "value went missing?"
+
+        for i=#conversions,1,-1
+          { :inp, :out, :transform } = conversions[i]
+          value = transform value, active
+
+        value
+
+      if ok and res
+        res
+      else
+        warn "error: ", res unless ok
+        span "cannot display!", style: { color: '#f00' }
+
+    -- wrapper was built already so take over the old value
+    if wrapper
+      var\set wrapper.lastElementChild
+
+    var
 
   navigate: (new) => @path\set new
 

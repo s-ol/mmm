@@ -65,7 +65,10 @@ class ReactiveElement
   @isinstance: (val) -> 'table' == (type val) and val.node
 
   new: (element, ...) =>
-    @node = document\createElement element
+    if 'userdata' == type element
+      @node = element
+    else
+      @node = document\createElement element
     @_subscriptions = {}
 
     children = { ... }
@@ -105,7 +108,8 @@ class ReactiveElement
 
     @node[attr] = value
 
-  append: (child, last) =>
+  prepend: (child, last) => @append child, last, 'prepend'
+  append: (child, last, mode='append') =>
     if ReactiveVar.isinstance child
       table.insert @_subscriptions, child\subscribe (...) -> @append ...
       child = child\get!
@@ -123,7 +127,9 @@ class ReactiveElement
     if ok
       @node\replaceChild child, last
     else
-      @node\appendChild child
+      switch mode
+        when 'append' then @node\appendChild child
+        when 'prepend' then @node\insertBefore child, @node.firstChild
 
   remove: (child) =>
     @node\removeChild tohtml child

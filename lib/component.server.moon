@@ -32,7 +32,7 @@ class ReactiveVar
   get: => @value
 
   subscribe: (callback) =>
-    error "attempting to subscribe to ReactiveVar serverside"
+    warn "attempting to subscribe to ReactiveVar serverside"
 
   map: (transform) =>
     ReactiveVar transform @value
