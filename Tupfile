@@ -6,6 +6,7 @@
 # download fengari dependencies
 : |> !download |> dist/fengari-web.js
 : |> !download |> dist/fengari-web.js.map
+: static/* |> cp %f dist/ |> dist/%b
 
 # render stylesheet
 : scss/main.scss |> !sassc |> dist/main.css

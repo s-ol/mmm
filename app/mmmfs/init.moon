@@ -11,9 +11,18 @@ root = Fileder {
     html = require 'lib.dom'
     import article, h1, h2, h3, p, div, a, sup, ol, li, span, code, pre, br from html
 
-    code = do
-      _code = code
-      (str) -> _code str\match '^ *(..-) *$'
+    moonscript = do
+      highlight = (id) ->
+        d_o = -> window.hljs\highlightBlock document\getElementById id
+        window\setTimeout d_o, 0
+
+      i = 0
+      (str) ->
+        id = "__code_#{i}"
+        i += 1
+        str = str\match '^ *(..-) *$'
+        on_client highlight, id
+        pre (code str), :id, class: 'lang-moonscript'
 
     article with  _this = {}
       append = (a) -> table.insert _this, a
@@ -116,7 +125,7 @@ root = Fileder {
         name/type pairs (", (code 'title: text/plain'), ', ', (code 'preview: mmm/dom'), "), but the values don't actually have to
         be ", (html.i "defined"), " as these types."
 
-      append pre code [[
+      append moonscript [[
 -- render a preview block
 preview = (title, content) -> div {
   h3 title, style: { ... },
@@ -136,7 +145,7 @@ append div for child in *@children
 
       append p "For example, the markdown child below only provides ", (code 'preview'), " as ", (code 'text/markdown'), ":"
 
-      append pre code [[
+      append moonscript [[
 Fileder {
   'title: text/plain': "I'm not even five lines of markdown but i render myself!",
   'preview: text/markdown': "See I have like
@@ -151,7 +160,7 @@ and some bold **text** and `code tags` with me.",
       append p "Then, globally, there are some conversion paths specified; such as one that maps from ",
         (code 'text/markdown'), " to ", (code 'mmm/dom'), ":"
 
-      append pre code [[
+      append moonscript [[
 {
   inp: 'text/markdown',
   out: 'mmm/dom',
@@ -170,7 +179,7 @@ and some bold **text** and `code tags` with me.",
         so this page is being rendered just using ", (code "append root\\get 'mmm/dom'"), " as well.
         The convert that resolves the moon type is defined as follows:"
 
-      append pre code [[
+      append moonscript [[
 {
   inp: 'moon -> (.+)',
   out: '%1',
@@ -188,7 +197,7 @@ and some bold **text** and `code tags` with me.",
         use the URL directly instead.
         This is what the image demo does in order to pass the URL to an ", (code 'img'), " tag's ", (code 'src'), " attribute:"
 
-      append pre code [[
+      append moonscript [[
 Fileder {
   'title: text/plain': "Hey I'm like a link to picture or smth",
   'URL -> image/png': 'https://picsum.photos/200?random',
