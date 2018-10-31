@@ -1,4 +1,4 @@
-export MODE, print, warn, relative, append, on_client
+export MODE, print, warn, relative, on_client
 export window, document
 
 window = js.global
@@ -7,8 +7,9 @@ window = js.global
 MODE = 'CLIENT'
 
 deep_tostring = (tbl, space='') ->
-  buf = space .. tostring tbl
+  return tbl if 'userdata' == type tbl
 
+  buf = space .. tostring tbl
   return buf unless 'table' == type tbl
 
   buf = buf .. ' {\n'
@@ -42,5 +43,4 @@ relative = do
       name = base .. name if '.' == name\sub 1, 1
       _require name
 
-append = document.body\appendChild
 on_client = (f, ...) -> f ...

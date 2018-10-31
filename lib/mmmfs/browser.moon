@@ -6,28 +6,47 @@ import div, span, a, select, option from elements
 
 limit = (list, num) -> [v for i,v in ipairs list when i <= num]
 
+path2tbl = (path) ->
+  switch type path
+    when 'string'
+      path
+    when 'table'
+      str = table.concat path, '/'
+      if '/' != str\sub 1, 1
+        str = '/' .. str
+      str
+    else
+      error "path is of wrong type: #{type path}"
+
 class Browser
-  new: (@root, @path={}, rehydrate=false) =>
-    @path = ReactiveVar @path
+  new: (@root, path={}, rehydrate=false) =>
+    @path = ReactiveVar path2tbl path
+
+    assert @root, 'root fileder is nil'
+
     -- @path\subscribe (path) -> window.location.hash = '/' .. table.concat path, '/'
-    @prop = ReactiveVar (@root\find 'mmm/dom') or next @root.props
-    @active = @path\map (path) ->
-      fileder = @root
-      for name in *path
-        local next
-        for child in *fileder.children
-          if name == child\get 'name', 'alpha'
-            next = child
-            break
+    @active = @path\map (path) -> @root\walk path
 
-        if not next
-          return
+--      fileder = @root
+--
+--      for name in *path
+--        local next
+--        for child in *fileder.children
+--          if name == child\get 'name', 'alpha'
+--            next = child
+--            break
+--
+--        if not next
+--          warn "couldn't find node '#{name}'"
+--          return
+--
+--        fileder = next
+--
+--      fileder
 
-        fileder = next
-
-      fileder
-
-    @active\subscribe (fileder) -> @prop\set (fileder\find 'mmm/dom') or next fileder.props
+    @prop = @active\map (fileder) ->
+      return unless fileder
+      (fileder\find 'mmm/dom') or next fileder.props
 
     -- retrieve or create the root
     root = 'div'
@@ -72,8 +91,9 @@ class Browser
           onchange = (_, e) ->
             @prop\set Key e.target.value
 
-          current = @prop\get!\tostring!
-          with select :onchange
+          current = @prop\get!
+          current = current and current\tostring!
+          with select :onchange, disabled: not fileder
             if fileder
               for key, _ in pairs fileder.props
                 value = key\tostring!
@@ -83,26 +103,39 @@ class Browser
     -- append or patch #browser-content
     node = 'div'
     node = document\getElementById 'browser-content' if rehydrate
-    @dom\append ReactiveElement node, {
-      id: 'browser-content',
-      style: {
-        flex: '1 0 0',
-        overflow: 'auto',
-        padding: '1em 2em',
-      },
-      @get_content rehydrate and node
-    }
+    @dom\append with ReactiveElement node, {
+        id: 'browser-content',
+        style: {
+          flex: '1 0 0',
+          overflow: 'auto',
+          padding: '1em 2em',
+        },
+      }
+      \append @get_content rehydrate and node
+
+    if rehydrate
+      -- force one update to update onclick handlers etc
+      @prop\set @prop\get!
 
     @node = @dom.node
     @render = @dom\render
 
   get_content: (wrapper) =>
+    disp_error = (msg) -> span msg, style: { color: '#f00' }
     var = @prop\map (prop) ->
       active = @active\get!
 
+      if not active
+        return disp_error "fileder not found!"
+
+      if not prop
+        return disp_error "property not found!"
+
       ok, res = pcall ->
-        conversions = assert (get_conversions 'mmm/dom', prop.type), "no conversion path"
+        conversions = get_conversions 'mmm/dom', prop.type
         value = assert (active\get prop), "value went missing?"
+
+        return unless conversions
 
         for i=#conversions,1,-1
           { :inp, :out, :transform } = conversions[i]
@@ -110,19 +143,19 @@ class Browser
 
         value
 
-      if ok and res
-        res
+      if ok
+        res or disp_error "[no conversion path to mmm/dom]"
       else
         warn "error: ", res unless ok
-        span "cannot display!", style: { color: '#f00' }
+        disp_error "[unknown error displaying]"
 
     -- wrapper was built already so take over the old value
     if wrapper
-      var\set wrapper.lastElementChild
+      return var, wrapper.lastChild -- var\set wrapper.lastElementChild
 
     var
 
-  navigate: (new) => @path\set new
+  navigate: (new) => @path\set path2tbl new
 
 {
   :Browser,
