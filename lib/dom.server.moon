@@ -1,5 +1,8 @@
 import opairs from require 'lib.ordered'
 
+void_tags = { 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' }
+void_tags = { t,t for t in *void_tags }
+
 element = (element) -> (...) ->
   children = { ... }
 
@@ -24,9 +27,13 @@ element = (element) -> (...) ->
   if #children == 0
     children = attributes
 
-  b ..= ">" ..  table.concat children, ''
-  b ..= "</#{element}>"
-  b
+  if void_tags[element]
+    assert #children == 0, "void tag #{element} cannot have children!"
+    b .. ">"
+  else
+    b ..= ">" ..  table.concat children, ''
+    b ..= "</#{element}>"
+    b
 
 setmetatable {}, __index: (name) =>
   with val = element name

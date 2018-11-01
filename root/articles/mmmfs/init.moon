@@ -1,8 +1,11 @@
-require = relative ..., 1
-
-import Fileder from require 'lib.mmmfs'
+import define_fileders from require 'lib.mmmfs'
+Fileder = define_fileders ...
+require = relative ...
 
 Fileder {
+  'name: alpha': 'mmmfs',
+  'description: text/plain': 'a file, operating and content-management system to live in (powers this site)',
+
   -- main content
   -- doesn't have a name prefix (e.g. preview: moon -> mmm/dom)
   -- uses the 'moon ->' conversion to execute the lua/pre moon function on get
@@ -82,31 +85,30 @@ Fileder {
       append p "Sounds cool, no? Here's some examples of things a fileder can be or embed:"
 
       -- render a preview block
-      preview = (title, content, name) -> div {
-        h3 title, style: { margin: 0, cursor: 'pointer' }, onclick: -> BROWSER\navigate { name }
-        content or span '(no renderable content)', style: { color: 'red' },
-        style: {
-          display: 'inline-block',
-          width: '300px',
-          height: '200px',
-          padding: '4px',
-          margin: '8px',
-          border: '4px solid #eeeeee',
-          overflow: 'hidden',
-        },
-      }
-
-      append div for child in *@children
+      preview = (child) ->
         -- get 'title' as 'text/plain' (error if no value or conversion possible)
         title = child\gett 'title', 'text/plain'
 
         -- get 'preview' as a DOM description (nil if no value or conversion possible)
         content = child\get 'preview', 'mmm/dom'
 
-        -- get 'name' as a DOM description (nil if no value or conversion possible)
-        name = child\gett 'name', 'alpha'
+        div {
+          h3 title, style: { margin: 0, cursor: 'pointer' }, onclick: -> BROWSER\navigate child.path
+          content or span '(no renderable content)', style: { color: 'red' },
+          style: {
+            display: 'inline-block',
+            width: '300px',
+            height: '200px',
+            padding: '4px',
+            margin: '8px',
+            border: '4px solid #eeeeee',
+            overflow: 'hidden',
+          },
+        }
 
-        preview title, content, name
+
+      append div for child in *@children
+        preview child
 
       append h2 "details"
       -- @TODO s/parts: dimensions, aspects?
@@ -280,7 +282,4 @@ and some bold **text** and `code tags` with me.",
   }
 
   require '.gallery',
-
-  -- if we are on client, throw in twisted as a child
-  if MODE == 'CLIENT' then require '.twisted'
 }

@@ -1,4 +1,4 @@
-export MODE, print, warn, relative, append, on_client
+export MODE, print, warn, relative, on_client
 MODE = 'SERVER'
 
 deep_tostring = (tbl, space='') ->
@@ -38,18 +38,13 @@ relative = do
       name = base .. name if '.' == name\sub 1, 1
       _require name
 
--- shorthand to append elements to body
-buffer = ''
-append = (val) ->
-  buffer ..= val
-
 import compile, insert_loader from require 'lib.duct_tape'
 insert_loader!
 
 on_client = (fn, ...) ->
   args = {...}
   -- warn code
-  append "<script type=\"application/lua\">
+  "<script type=\"application/lua\">
     local fn = #{compile fn}
     fn(#{table.concat [string.format '%q', v for v in *args ], ', '})
   </script>"

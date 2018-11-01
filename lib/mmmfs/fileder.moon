@@ -37,17 +37,75 @@ class Fileder
   -- instantiate from props and children tables
   -- or mix in one table (numeric keys are children, remainder props)
   -- prop-keys are passed to Key constructor
-  new: (props, @children) =>
-    if not @children
-      @children = for i, child in ipairs props
+  new: (props, children) =>
+    if not children
+      children = for i, child in ipairs props
         props[i] = nil
         child
 
-    @props = { (Key k), v for k, v in pairs props }
+    -- automatically mount children on insert
+    @children = setmetatable {}, __newindex: (t, k, child) ->
+      rawset t, k, child
+      if @path == '/'
+        child\mount '/'
+      elseif @path
+        child\mount @path .. '/'
+
+    -- copy children
+    for i, child in ipairs children
+      @children[i] = child
+
+    -- automatically reify string keys on insert
+    @props = setmetatable {}, __newindex: (t, key, v) ->
+      rawset t, key, nil -- fix for fengari.io
+      rawset t, (Key key), v
+
+    -- copy props
+    for k, v in pairs props
+      @props[k] = v
+
+  -- recursively walk to and return the fileder with @path == path
+  -- * path - the path to walk to
+  walk: (path) =>
+    -- early-out if we are outside of the path already
+    return unless path\match '^' .. @path
+
+    -- gotcha
+    return @ if path == @path
+
+    for child in *@children
+      result = child\walk path
+      return result if result
+
+  -- recursively mount fileder and children at path
+  -- * path - the path to mount at (default: '/')
+  -- * mount_as - dont append own name to path
+  mount: (path='/', mount_as=false) =>
+    assert not @path, "mounted twice: #{@path} and now #{path}"
+
+    if mount_as
+      @path = path
+    else
+      @path = path .. @gett 'name: alpha'
+
+    if @path == '/'
+      for child in *@children
+        child\mount '/'
+    else
+      for child in *@children
+        child\mount @path .. '/'
+
+  -- recursively iterate all children (coroutine)
+  -- * depth - depth to stop after; 1 = yield only self (default: infinite)
+  iterate: (depth=0) =>
+    coroutine.yield @
+    return if depth == 1
+
+    for child in *@children
+      child\iterate depth - 1
 
   -- find property key according to criteria, nil if no value or conversion path
-  -- * name - property name (optional: defaults to main content)
-  -- * type - wanted result type
+  -- * ... - arguments like Key
   find: (...) =>
     want = Key ...
 
@@ -66,8 +124,7 @@ class Fileder
       error "couldn't find key after resolution?"
 
   -- get property according to criteria, nil if no value or conversion path
-  -- * name - property name (optional: defaults to main content)
-  -- * type - wanted result type
+  -- * ... - arguments like Key
   get: (...) =>
     want = Key ...
 
@@ -89,7 +146,7 @@ class Fileder
     want = Key ...
 
     value, key = @get want
-    assert value, "node doesn't have value for #{want\tostring!}"
+    assert value, "node doesn't have value for '#{want\tostring!}'"
     value, key
 
 {

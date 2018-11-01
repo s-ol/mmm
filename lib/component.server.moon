@@ -1,5 +1,8 @@
 import opairs from require 'lib.ordered'
 
+void_tags = { 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' }
+void_tags = { t,t for t in *void_tags }
+
 -- convert anything to HTML string
 -- val must be one of:
 -- * MMMElement (have a .render method that returns a string)
@@ -97,17 +100,28 @@ class ReactiveElement
           tmp ..= "#{kk}: #{vv}; "
         v = tmp
       b ..= " #{k}=\"#{v}\""
-    b ..= ">" ..  table.concat @children, ''
-    b ..= "</#{@element}>"
-    b
+
+    if void_tags[@element]
+      assert #@children == 0, "void tag #{element} cannot have children!"
+      b .. ">"
+    else
+      b .. ">"
+      b ..= ">" ..  table.concat @children, ''
+      b ..= "</#{@element}>"
+      b
 
 elements = setmetatable {}, __index: (name) =>
   with val = (...) -> ReactiveElement name, ...
     @[name] = val
 
+get_or_create = (elem, id, ...) ->
+  with ReactiveElement elem, ...
+    \set 'id', id
+
 {
   :ReactiveVar,
   :ReactiveElement,
+  :get_or_create,
   :tohtml,
   :flush,
   :append,

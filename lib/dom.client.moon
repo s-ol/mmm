@@ -24,9 +24,9 @@ element = (element) -> (...) ->
 
     for child in *children
       if 'string' == type child
-        e.innerHTML ..= child
-      else
-        e\appendChild child
+        child = document\createTextNode child
+
+      e\appendChild child
 
 setmetatable {}, __index: (name) =>
   with val = element name
