@@ -2,8 +2,8 @@ import define_fileders from require 'lib.mmmfs'
 Fileder = define_fileders ...
 
 with Fileder {
-    'name: alpha': 'center_of_mass',
-    'description: text/plain': "Fonts sorted by Center-of-Mass",
+  'name: alpha': 'center_of_mass',
+  'description: text/plain': "Fonts aligned by Center-of-Mass",
 }
 
   if MODE == 'CLIENT'

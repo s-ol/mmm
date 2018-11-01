@@ -36,7 +36,8 @@ with io.open output_name, 'w'
     <link rel=\"preload\" as=\"fetch\" href=\"/lib/mmmfs/browser.lua\" />
     <script src=\"/fengari-web.js\"></script>
     <script src=\"/highlight.pack.js\"></script>
-    <script src=\"//cdn.jsdelivr.net/npm/marked/marked.min.js\"></script>
+    <script src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
+    <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
   </head>
   <body>
     <script type=\"application/lua\" src=\"/lib/init.lua\"></script>

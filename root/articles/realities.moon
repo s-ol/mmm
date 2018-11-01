@@ -12,10 +12,6 @@ Fileder {
     append = _content\append
 
     if MODE == 'SERVER'
-      -- import compile from require 'lib.duct_tape'
-
-      -- append '<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>'
-
       export ^
       class Diagram
         style = {
