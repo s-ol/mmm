@@ -31,17 +31,19 @@ with io.open output_name, 'w'
     <meta charset=\"UTF-8\">
     <title>MMM: lunar low-gravity scripting playground</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"/main.css\" />
+    <!--
     <link rel=\"preload\" as=\"fetch\" href=\"/lib/dom.lua\" />
     <link rel=\"preload\" as=\"fetch\" href=\"/lib/mmmfs/init.lua\" />
     <link rel=\"preload\" as=\"fetch\" href=\"/lib/mmmfs/fileder.lua\" />
     <link rel=\"preload\" as=\"fetch\" href=\"/lib/mmmfs/browser.lua\" />
-    <script src=\"/fengari-web.js\"></script>
-    <script src=\"/highlight.pack.js\"></script>
-    <script type=\"application/lua\" src=\"/lib/init.lua\"></script>
+    -->
   </head>
   <body>
     #{content}
 
+    <script src=\"/fengari-web.js\"></script>
+    <script src=\"/highlight.pack.js\"></script>
+    <script type=\"application/lua\" src=\"/lib/init.lua\"></script>
     <script src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
     <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
 
