@@ -1,58 +1,47 @@
 require = relative ..., 1
 import Key from require '.fileder'
 import get_conversions from require '.conversion'
-import ReactiveVar, ReactiveElement, text, elements from require 'lib.component'
+import ReactiveVar, get_or_create, text, elements from require 'lib.component'
 import div, span, a, select, option from elements
 
-limit = (list, num) -> [v for i,v in ipairs list when i <= num]
-
-path2tbl = (path) ->
-  switch type path
-    when 'string'
-      path
-    when 'table'
-      str = table.concat path, '/'
-      if '/' != str\sub 1, 1
-        str = '/' .. str
-      str
-    else
-      error "path is of wrong type: #{type path}"
-
 class Browser
-  new: (@root, path={}, rehydrate=false) =>
-    @path = ReactiveVar path2tbl path
-
+  new: (@root, path='/', rehydrate=false) =>
+    -- root fileder
     assert @root, 'root fileder is nil'
 
-    @path\subscribe (path) ->
-      path ..= '/' unless path\match '/$'
-      window.history\pushState nil, '', path
+    -- active path
+    @path = ReactiveVar path
 
+    if MODE == 'CLIENT'
+      -- update URL bar
+      @path\subscribe (path) ->
+        path ..= '/' unless path\match '/$'
+        window.history\pushState nil, '', path
+
+    -- active fileder
+    -- (re)set every time @path changes
     @active = @path\map @root\walk
 
+    -- currently active property
+    -- (re)set to default every time @active changes
     @prop = @active\map (fileder) ->
       return unless fileder
       (fileder\find 'mmm/dom') or next fileder.props
 
     -- retrieve or create the root
-    root = 'div'
-    root = document\getElementById 'browser-root' if rehydrate
-    @dom = ReactiveElement root, {
-      id: 'browser-root'
-      style: {
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        display: 'flex',
-        overflow: 'hidden',
-        'flex-direction': 'column',
-        'justify-content': 'space-between',
-      }
+    @dom = get_or_create 'div', 'browser-root', style: {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      display: 'flex',
+      overflow: 'hidden',
+      'flex-direction': 'column',
+      'justify-content': 'space-between',
     }
 
-    -- add or prepend the navbar
+    -- prepend the navbar
     if MODE == 'CLIENT'
       @dom\prepend div {
         style: {
@@ -98,28 +87,25 @@ class Browser
       }
 
     -- append or patch #browser-content
-    node = 'div'
-    node = document\getElementById 'browser-content' if rehydrate
-    @dom\append with ReactiveElement node, {
-        id: 'browser-content',
-        style: {
-          flex: '1 0 0',
-          overflow: 'auto',
-          padding: '1em 2em',
-        },
+    @dom\append with get_or_create 'div', 'browser-content', style: {
+        flex: '1 0 0',
+        overflow: 'auto',
+        padding: '1em 2em',
       }
-      \append @get_content rehydrate and node
+      \append @get_content!, (rehydrate and .node.lastChild)
 
     if rehydrate
-      -- force one update to update onclick handlers etc
+      -- force one rerender to set onclick handlers etc
       @prop\set @prop\get!
 
+    -- export mmm/component interface
     @node = @dom.node
     @render = @dom\render
 
-  get_content: (wrapper) =>
+  -- render #browser-content
+  get_content: () =>
     disp_error = (msg) -> span msg, style: { color: '#f00' }
-    var = @prop\map (prop) ->
+    @prop\map (prop) ->
       active = @active\get!
 
       if not active
@@ -151,14 +137,8 @@ class Browser
         warn "error: ", res unless ok
         disp_error "[unknown error displaying]"
 
-    -- wrapper was built already so take over the old value
-    if wrapper
-      return var, wrapper.lastChild -- var\set wrapper.lastElementChild
-
-    var
-
-  navigate: (new) => @path\set path2tbl new
+  navigate: (new) => @path\set new
 
 {
-  :Browser,
+  :Browser
 }

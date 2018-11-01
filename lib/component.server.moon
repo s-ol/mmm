@@ -105,9 +105,14 @@ elements = setmetatable {}, __index: (name) =>
   with val = (...) -> ReactiveElement name, ...
     @[name] = val
 
+get_or_create = (elem, id, ...) ->
+  with ReactiveElement elem, ...
+    \set 'id', id
+
 {
   :ReactiveVar,
   :ReactiveElement,
+  :get_or_create,
   :tohtml,
   :flush,
   :append,

@@ -136,6 +136,12 @@ class ReactiveElement
     if 'table' == (type child) and child.destroy
       child\destroy!
 
+get_or_create = (elem, id, ...) ->
+  elem = (document\getElementById id) or elem
+
+  with ReactiveElement elem, ...
+    \set 'id', id
+
 elements = setmetatable {}, __index: (name) =>
   with val = (...) -> ReactiveElement name, ...
     @[name] = val
@@ -143,6 +149,7 @@ elements = setmetatable {}, __index: (name) =>
 {
   :ReactiveVar,
   :ReactiveElement,
+  :get_or_create,
 --  :join,
   :tohtml,
   :append,
