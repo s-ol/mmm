@@ -46,7 +46,10 @@ on_client = (fn, ...) ->
   -- warn code
   "<script type=\"application/lua\">
     local fn = #{compile fn}
-    fn(#{table.concat [string.format '%q', v for v in *args ], ', '})
+    on_load = on_load or {}
+    table.insert(on_load, function()
+      fn(#{table.concat [string.format '%q', v for v in *args ], ', '})
+    end)
   </script>"
 
 {

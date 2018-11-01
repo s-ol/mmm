@@ -41,11 +41,11 @@ with io.open output_name, 'w'
   <body>
     #{content}
 
-    <script src=\"/fengari-web.js\"></script>
-    <script src=\"/highlight.pack.js\"></script>
-    <script type=\"application/lua\" src=\"/lib/init.lua\"></script>
-    <script src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
-    <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
+    <script defer src=\"/fengari-web.js\"></script>
+    <script defer src=\"/highlight.pack.js\"></script>
+    <script defer src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
+    <script defer src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
+    <script defer type=\"application/lua\" src=\"/lib/init.lua\"></script>
 
     #{rehydrate}
   </body>

@@ -44,3 +44,6 @@ relative = do
       _require name
 
 on_client = (f, ...) -> f ...
+
+if on_load
+  for f in *on_load do f!
