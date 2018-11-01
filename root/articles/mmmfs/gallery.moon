@@ -14,7 +14,7 @@ with Fileder {
       'moon -> mmm/dom': =>
         link = (child) -> a {
           href: '#',
-          onclick: -> BROWSER\navigate { 'gallery', (child\get 'name', 'alpha'), nil },
+          onclick: -> BROWSER\navigate child.path
           img src: child\gett 'preview', 'URL -> image/png'
         }
 

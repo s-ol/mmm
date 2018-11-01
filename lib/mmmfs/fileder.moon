@@ -65,17 +65,17 @@ class Fileder
       @props[k] = v
 
   -- recursively walk to and return the fileder with @path == path
+  -- * path - the path to walk to
   walk: (path) =>
     -- early-out if we are outside of the path already
-    return unless @path\match '^' .. path
+    return unless path\match '^' .. @path
 
     -- gotcha
     return @ if path == @path
 
-    -- @TODO: obviously there is better ways
     for child in *@children
       result = child\walk path
-      return if result
+      return result if result
 
   -- recursively mount fileder and children at path
   -- * path - the path to mount at (default: '/')

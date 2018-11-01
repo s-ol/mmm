@@ -16,7 +16,7 @@ Fileder {
             href: child.path,
             onclick: (e) =>
               e\preventDefault!
-              BROWSER\navigate "animations | #{name}",
+              BROWSER\navigate child.path
           },
           ': ', desc
         }

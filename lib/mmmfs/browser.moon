@@ -24,25 +24,11 @@ class Browser
 
     assert @root, 'root fileder is nil'
 
-    -- @path\subscribe (path) -> window.location.hash = '/' .. table.concat path, '/'
-    @active = @path\map (path) -> @root\walk path
+    @path\subscribe (path) ->
+      path ..= '/' unless path\match '/$'
+      window.history\pushState nil, '', path
 
---      fileder = @root
---
---      for name in *path
---        local next
---        for child in *fileder.children
---          if name == child\get 'name', 'alpha'
---            next = child
---            break
---
---        if not next
---          warn "couldn't find node '#{name}'"
---          return
---
---        fileder = next
---
---      fileder
+    @active = @path\map @root\walk
 
     @prop = @active\map (fileder) ->
       return unless fileder
@@ -77,15 +63,26 @@ class Browser
           background: '#eeeeee',
         },
         span 'path: ', @path\map (path) -> with div style: { display: 'inline-block' }
-          \append a 'root', href: '#', onclick: (_, e) ->
-            e\preventDefault!
-            @navigate {}
-
-          for i,name in ipairs path
-            \append '/'
-            \append a name, href: '#', onclick: (_, e) ->
+          path_segment = (name, href) ->
+            a name, :href, onclick: (_, e) ->
               e\preventDefault!
-              @navigate limit path, i
+              @navigate href
+
+          path = path\match '^/(.*)'
+          href = ''
+
+          \append path_segment 'root', '/'
+
+          while path
+            name, rest = path\match '^(%w+)/(.*)' -- or rest
+            if not name
+              name = path
+
+            path = rest
+            href = "#{href}/#{name}"
+
+            \append '/'
+            \append path_segment name, href
 
         span 'view property: ', @active\map (fileder) ->
           onchange = (_, e) ->
@@ -131,7 +128,7 @@ class Browser
       if not prop
         return disp_error "property not found!"
 
-      ok, res = pcall ->
+      convert = ->
         conversions = get_conversions 'mmm/dom', prop.type
         value = assert (active\get prop), "value went missing?"
 
@@ -142,6 +139,11 @@ class Browser
           value = transform value, active
 
         value
+
+      ok, res = if MODE == 'CLIENT'
+        pcall convert
+      else
+        true, convert!
 
       if ok
         res or disp_error "[no conversion path to mmm/dom]"

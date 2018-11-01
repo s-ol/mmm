@@ -14,11 +14,9 @@ Fileder {
         li {
           a name, {
             href: child.path,
-            onclick: (_, e, ...) ->
-              print 'ASD', e, ...
-              window\alert 'YO WADDAFUQ'
+            onclick: (e) =>
               e\preventDefault!
-              BROWSER\navigate "animations | #{name}",
+              BROWSER\navigate child.path
           },
           ': ', desc
         }
