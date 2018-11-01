@@ -4,7 +4,7 @@ require = relative ...
 
 Fileder {
   'name: alpha': 'mmmfs',
-  'description: text/plain': 'a file and operating system to live in',
+  'description: text/plain': 'a file, operating and content-management system to live in (powers this site)',
 
   -- main content
   -- doesn't have a name prefix (e.g. preview: moon -> mmm/dom)
