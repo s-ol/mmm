@@ -29,41 +29,26 @@ class Browser
       (fileder\find 'mmm/dom') or next fileder.props
 
     -- retrieve or create the root
-    @dom = get_or_create 'div', 'browser-root', style: {
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      display: 'flex',
-      overflow: 'hidden',
-      'flex-direction': 'column',
-      'justify-content': 'space-between',
-    }
+    @dom = get_or_create 'div', 'browser-root'
 
     -- prepend the navbar
-    if MODE == 'CLIENT'
-      @dom\prepend div {
-        style: {
-          padding: '1em',
-          flex: '0 0 auto',
-          display: 'flex',
-          'justify-content': 'space-between',
-          background: '#eeeeee',
-        },
+    if MODE == 'SERVER'
+      @dom\append div id: 'browser-navbar'
+    else
+      @dom\prepend get_or_create 'div', 'browser-navbar', {
         span 'path: ', @path\map (path) -> with div style: { display: 'inline-block' }
           path_segment = (name, href) ->
             a name, :href, onclick: (_, e) ->
               e\preventDefault!
               @navigate href
 
-          path = path\match '^/(.*)'
           href = ''
+          path = path\match '^/(.*)'
 
           \append path_segment 'root', '/'
 
           while path
-            name, rest = path\match '^(%w+)/(.*)' -- or rest
+            name, rest = path\match '^(%w+)/(.*)'
             if not name
               name = path
 
@@ -87,11 +72,7 @@ class Browser
       }
 
     -- append or patch #browser-content
-    @dom\append with get_or_create 'div', 'browser-content', style: {
-        flex: '1 0 0',
-        overflow: 'auto',
-        padding: '1em 2em',
-      }
+    @dom\append with get_or_create 'div', 'browser-content'
       \append @get_content!, (rehydrate and .node.lastChild)
 
     if rehydrate
@@ -108,11 +89,8 @@ class Browser
     @prop\map (prop) ->
       active = @active\get!
 
-      if not active
-        return disp_error "fileder not found!"
-
-      if not prop
-        return disp_error "property not found!"
+      return disp_error "fileder not found!" unless active
+      return disp_error "property not found!" unless prop
 
       convert = ->
         conversions = get_conversions 'mmm/dom', prop.type
