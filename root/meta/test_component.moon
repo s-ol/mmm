@@ -13,9 +13,9 @@ Fileder {
     last = nil
     test_group = (name) ->
       if last
-        append div (h1 name), ul last
+        append div (h1 last.name), ul last
 
-      last = {}
+      last = { :name }
       (name, test) ->
         ok, err = pcall test
         table.insert last, li if ok
@@ -25,7 +25,6 @@ Fileder {
 
     expect = (expected, note, ...) ->
       ok, msg = pcall ...
-      print ok, msg\find expected
       if ok or not msg\find expected
         error note
 
@@ -48,14 +47,22 @@ Fileder {
       assert 'function' == (type text), "text not exported"
 
       node = text 'a test string'
-      assert (js.instanceof node, js.global.Node), "expected text to generate a Node"
-      assert node.data == 'a test string', "expected text to store the string"
+
+      data = if MODE == 'CLIENT'
+        assert (js.instanceof node, js.global.Node), "expected text to generate a Node"
+        node.data
+      else
+        node
+
+      assert data == 'a test string', "expected text to store the string"
 
     run_test "text joins multiple arguments", ->
       import text from require 'mmm.component'
 
       node = text 'a', 'test', 'string'
-      assert node.data == 'a test string', "expected text to join arguments with spaces"
+
+      data = if MODE == 'CLIENT' then node.data else node
+      assert data == 'a test string', "expected text to join arguments with spaces"
 
     run_test "exports elements table", ->
       import elements from require 'mmm.component'
@@ -83,7 +90,7 @@ Fileder {
       reactive\set 'cheese'
       assert done, "expected to reach the end"
 
-    run_test "passed old value as well", ->
+    run_test "passes old value as well", ->
       local done
 
       reactive = ReactiveVar 1
@@ -166,7 +173,7 @@ Fileder {
 
     run_test "sets attributes from a table arg", ->
       elem = ReactiveElement 'span', class: 'never'
-      assert elem.node.class == 'never', "expected class to be 'never'"
+      assert elem.node.className == 'never', "expected class to be 'never'"
 
     run_test "appends Nodes from arguments", ->
       e_div, e_pre = div!, pre!
@@ -184,21 +191,21 @@ Fileder {
       e_div = div!
       elem = ReactiveElement 'div', e_div, class: 'test'
       assert elem.node.firstElementChild == e_div, "expected div to be the first child of elem"
-      assert elem.node.class == 'test', "expected class to be 'test'"
+      assert elem.node.className == 'test', "expected class to be 'test'"
 
     run_test "allows mixing attributes and children in a single table", ->
       e_div, e_pre = div!, pre!
       elem = ReactiveElement 'div', { class: 'test', e_div, e_pre }
       assert elem.node.firstElementChild == e_div, "expected div to be the first child of elem"
       assert elem.node.lastElementChild == e_pre, "expected pre to be the last child of elem"
-      assert elem.node.class == 'test', "expected class to be 'test'"
+      assert elem.node.className == 'test', "expected class to be 'test'"
 
     run_test "can unwrap and track attributes from ReactiveVars", ->
       klass = ReactiveVar 'test'
       elem = ReactiveElement 'div', class: klass
-      assert elem.node.class == 'test', "expected class to be 'test'"
+      assert elem.node.className == 'test', "expected class to be 'test'"
       klass\set 'toast'
-      assert elem.node.class == 'toast', "expected class to be 'toast'"
+      assert elem.node.className == 'toast', "expected class to be 'toast'"
 
     run_test "can unwrap and track children from ReactiveVars", ->
       child = ReactiveVar h1 'test'
@@ -219,6 +226,8 @@ Fileder {
 
       elem = ReactiveElement 'div', str\map text
       str\set 'this is text'
+
+    test_group!
 
     article _content
 }

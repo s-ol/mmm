@@ -33,10 +33,11 @@ class Browser
 
     -- prepend the navbar
     if MODE == 'SERVER'
-      @dom\append div id: 'browser-navbar'
+      @dom\append div 'please stand by... interactivity loading :)', id: 'browser-navbar'
     else
-      @dom\prepend get_or_create 'div', 'browser-navbar', {
-        span 'path: ', @path\map (path) -> with div style: { display: 'inline-block' }
+      @dom\prepend with get_or_create 'div', 'browser-navbar'
+        .node.innerHTML = ''
+        \append span 'path: ', @path\map (path) -> with div style: { display: 'inline-block' }
           path_segment = (name, href) ->
             a name, :href, onclick: (_, e) ->
               e\preventDefault!
@@ -58,7 +59,7 @@ class Browser
             \append '/'
             \append path_segment name, href
 
-        span 'view property: ', @active\map (fileder) ->
+        \append span 'view property: ', @active\map (fileder) ->
           onchange = (_, e) ->
             @prop\set Key e.target.value
 
@@ -69,7 +70,6 @@ class Browser
               for key, _ in pairs fileder.props
                 value = key\tostring!
                 \append option value, :value, selected: value == current
-      }
 
     -- append or patch #browser-content
     @dom\append with get_or_create 'div', 'browser-content'
