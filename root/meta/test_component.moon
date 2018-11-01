@@ -76,92 +76,113 @@ Fileder {
       reactive = ReactiveVar 'test'
       assert 'test' == reactive\get!, "expected x to be 'test'"
 
-    run_test "propagates updates", ->
+    run_test "provides #map shorthand", ->
       local done
 
-      reactive = ReactiveVar 'test'
-      reactive\subscribe coroutine.wrap (next) ->
-        assert next == 'toast', "expected next to be 'toast'"
-        assert coroutine.yield! == 'cheese', "expected next to be 'cheese'"
+      original = ReactiveVar 1
+      mapped = original\map (a) -> a + 10
+
+      assert mapped\get! == 11, "expected mapped to be 11"
+      return if MODE == 'SERVER'
+
+      original\set 4
+      assert mapped\get! == 14, "expected mapped to update"
+
+      mapped\subscribe coroutine.wrap (next, last) ->
+        assert next == 26, "expected next to be 26"
+        assert last == 14, "expected last to be 14"
         done = true
 
-      reactive\set 'toast'
-      assert 'toast' == reactive\get!, "expected #get to return 'toast'"
-      reactive\set 'cheese'
+      original\set 16
       assert done, "expected to reach the end"
 
-    run_test "passes old value as well", ->
-      local done
+    if MODE == 'CLIENT'
+      run_test "propagates updates", ->
+        local done
 
-      reactive = ReactiveVar 1
-      reactive\subscribe coroutine.wrap (next, last) ->
-        assert last == 1, "expected last:1 to be 1"
-        next, last = coroutine.yield!
-        assert last == 2, "expected last:2 to be 2"
-        done = true
+        reactive = ReactiveVar 'test'
+        reactive\subscribe coroutine.wrap (next) ->
+          assert next == 'toast', "expected next to be 'toast'"
+          assert coroutine.yield! == 'cheese', "expected next to be 'cheese'"
+          done = true
 
-      reactive\set 2
-      reactive\set 3
-      assert done, "expected to reach the end"
+        reactive\set 'toast'
+        assert 'toast' == reactive\get!, "expected #get to return 'toast'"
+        reactive\set 'cheese'
+        assert done, "expected to reach the end"
 
-    run_test "provides transform shorthand", ->
-      local done
+      run_test "passes old value as well", ->
+        local done
 
-      reactive = ReactiveVar 1
-      reactive\subscribe coroutine.wrap (next, last) ->
-        assert last == 1, "expected last:1 to be 1"
-        next, last = coroutine.yield!
-        assert last == 2, "expected last:2 to be 2"
-        done = true
+        reactive = ReactiveVar 1
+        reactive\subscribe coroutine.wrap (next, last) ->
+          assert last == 1, "expected last:1 to be 1"
+          next, last = coroutine.yield!
+          assert last == 2, "expected last:2 to be 2"
+          done = true
 
-      add_one = (a) -> a + 1
-      reactive\transform add_one
-      reactive\transform add_one
-      assert done, "expected to reach the end"
+        reactive\set 2
+        reactive\set 3
+        assert done, "expected to reach the end"
 
-    run_test "#subscribe returns function to unsubscribe", ->
-      calls = 0
+      run_test "provides #transform shorthand", ->
+        local done
 
-      reactive = ReactiveVar 1
-      unsub = reactive\subscribe coroutine.wrap () ->
-        calls += 1
-        coroutine.yield!
-        calls += 1
-        coroutine.yield!
-        calls += 1
+        reactive = ReactiveVar 1
+        reactive\subscribe coroutine.wrap (next, last) ->
+          assert last == 1, "expected last:1 to be 1"
+          next, last = coroutine.yield!
+          assert last == 2, "expected last:2 to be 2"
+          done = true
 
-      assert 'function' == (type unsub), "expected to receive a function"
+        add_one = (a) -> a + 1
+        reactive\transform add_one
+        reactive\transform add_one
+        assert done, "expected to reach the end"
 
-      reactive\set 2
-      reactive\set 3
-      assert calls == 2, "wat"
+      run_test "#subscribe returns function to unsubscribe", ->
+        calls = 0
 
-      unsub!
-      reactive\set 4
-      assert calls == 2, "expected to stop receiving updates"
+        reactive = ReactiveVar 1
+        unsub = reactive\subscribe coroutine.wrap () ->
+          calls += 1
+          coroutine.yield!
+          calls += 1
+          coroutine.yield!
+          calls += 1
 
-    run_test "tracks multiple subscriptions at once", ->
-      reactive = ReactiveVar 'test'
-      unsub = reactive\subscribe coroutine.wrap (next) ->
-        assert next == 'toast', "expected next to be toast"
-        next = coroutine.yield!
-        assert next == 'cheese', "expected next to be cheese"
-        coroutine.yield!
-        error "expected not to get here"
+        assert 'function' == (type unsub), "expected to receive a function"
 
-      reactive\set 'toast'
+        reactive\set 2
+        reactive\set 3
+        assert calls == 2, "wat"
 
-      local done
-      reactive\subscribe coroutine.wrap (next) ->
-        assert next == 'cheese', "expected next to be cheese"
-        next = coroutine.yield!
-        assert next == 'test', "expected next to be test"
-        done = true
+        unsub!
+        reactive\set 4
+        assert calls == 2, "expected to stop receiving updates"
 
-      reactive\set 'cheese'
-      unsub!
-      reactive\set 'test'
-      assert done, "expected to reach the end"
+      run_test "tracks multiple subscriptions at once", ->
+        reactive = ReactiveVar 'test'
+        unsub = reactive\subscribe coroutine.wrap (next) ->
+          assert next == 'toast', "expected next to be toast"
+          next = coroutine.yield!
+          assert next == 'cheese', "expected next to be cheese"
+          coroutine.yield!
+          error "expected not to get here"
+
+        reactive\set 'toast'
+
+        local done
+        reactive\subscribe coroutine.wrap (next) ->
+          assert next == 'cheese', "expected next to be cheese"
+          next = coroutine.yield!
+          assert next == 'test', "expected next to be test"
+          done = true
+
+        reactive\set 'cheese'
+        unsub!
+        reactive\set 'test'
+        assert done, "expected to reach the end"
 
     run_test = test_group 'ReactiveElement'
 

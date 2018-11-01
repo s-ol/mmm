@@ -1,4 +1,4 @@
-export MODE, print, warn, relative, on_client
+export MODE, print, warn, relative, on_load
 export window, document
 
 window = js.global
@@ -43,7 +43,9 @@ relative = do
       name = base .. name if '.' == name\sub 1, 1
       _require name
 
-on_client = (f, ...) -> f ...
-
 if on_load
   for f in *on_load do f!
+
+on_load = setmetatable {}, __newindex: (t, k, v) ->
+  rawset t, k, v
+  v!
