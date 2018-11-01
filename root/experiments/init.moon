@@ -23,4 +23,5 @@ Fileder {
     }
 
   require '.center_of_mass'
+  require '.tags'
 }

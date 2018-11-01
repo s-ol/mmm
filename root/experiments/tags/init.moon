@@ -1,89 +1,99 @@
-on_client ((...) ->
-  require = relative ...
-  import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require '.tags'
-  import ReactiveVar, append, tohtml, text, elements from require 'lib.component'
-  import div, form, span, h3, a, input, textarea, button from elements
+import div, h3, ul, li, a from require 'lib.dom'
+import define_fileders from require 'lib.mmmfs'
+Fileder = define_fileders ...
+require = relative ...
 
-  clone = (set) ->
-    assert set and 'table' == (type set), 'not a set'
-    { k,v for k,v in pairs set }
-  set_append = (val) -> (set) ->
-    with copy = clone set
-      copy[val] = val
-  set_remove = (val) -> (set) ->
-    with copy = clone set
-      copy[val] = nil
-  set_join = (tbl, sep=' ') ->
-    ret = ''
-    for tag in pairs tbl
-      ret ..= (tostring tag) .. sep
-    ret
+Fileder {
+  'name: alpha': 'tags',
+  'description: text/plain': 'defining toggles, categories etc. with only tags and functional hooks',
+  'moon -> mmm/component': if MODE == 'CLIENT' then =>
+    import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require '.tags'
+    import ReactiveVar, tohtml, text, elements from require 'lib.component'
+    import article, div, form, span, h3, a, input, textarea, button from elements
 
-  entries = div!
-  append entries
+    clone = (set) ->
+      assert set and 'table' == (type set), 'not a set'
+      { k,v for k,v in pairs set }
 
-  class ReactiveNode extends Node
-    new: (...) =>
-      super ...
-      @tags = ReactiveVar @tags
-      @_node = div {
-          span @name, style: { 'font-weight': 'bold' },
-          @tags\map (tags) -> with div!
-              for tag,_ in pairs tags
-                \append a (text tag), href: '#', style: {
-                  display: 'inline-block',
-                  margin: '0 5px',
-                }
-        }
-      @node = tohtml @_node
+    set_append = (val) -> (set) ->
+      with copy = clone set
+        copy[val] = val
 
-    has: (tag) => @tags\get![tag]
-    add: (tag) => @tags\transform set_append tag
-    rmv: (tag) => @tags\transform set_remove tag
+    set_remove = (val) -> (set) ->
+      with copy = clone set
+        copy[val] = nil
 
-  rules = {
-    Hierarchy 'home', 'sol'
-    Hierarchy 'sol', 'desktop'
-    Hierarchy 'desktop', 'vacation'
-    Hierarchy 'desktop', 'documents'
-    NamespacedToggle 'documents', 'work', 'personal'
-    -- Toggle 'work', 'personal'
-    -- Hierarchy 'documents', 'work'
-    -- Hierarchy 'documents', 'personal'
-  }
+    set_join = (tbl, sep=' ') ->
+      ret = ''
+      for tag in pairs tbl
+        ret ..= (tostring tag) .. sep
+      ret
 
-  pictures = for i=1,10
-    with node = ReactiveNode "picture#{i}.jpg"
-      entries\append node
-      add_tag node, 'vacation'
+    entries = div!
 
-  pers = ReactiveNode 'mypersonalfile.doc'
-  entries\append pers
+    class ReactiveNode extends Node
+      new: (...) =>
+        super ...
+        @tags = ReactiveVar @tags
+        @_node = div {
+            span @name, style: { 'font-weight': 'bold' },
+            @tags\map (tags) -> with div!
+                for tag,_ in pairs tags
+                  \append a (text tag), href: '#', style: {
+                    display: 'inline-block',
+                    margin: '0 5px',
+                  }
+          }
 
-  append div do
-    yield = coroutine.yield
-    step = coroutine.wrap ->
-      yield "mark document"
-      add_tag pers, 'documents'
+        @node = tohtml @_node
 
-      yield "mark personal"
-      add_tag pers, 'personal'
+      has: (tag) => @tags\get![tag]
+      add: (tag) => @tags\transform set_append tag
+      rmv: (tag) => @tags\transform set_remove tag
 
-      yield "mark work"
-      add_tag pers, 'work'
+    rules = {
+      Hierarchy 'home', 'sol'
+      Hierarchy 'sol', 'desktop'
+      Hierarchy 'desktop', 'vacation'
+      Hierarchy 'desktop', 'documents'
+      NamespacedToggle 'documents', 'work', 'personal'
+      -- Toggle 'work', 'personal'
+      -- Hierarchy 'documents', 'work'
+      -- Hierarchy 'documents', 'personal'
+    }
 
-      yield "unmark work"
-      rmv_tag pers, 'work'
+    pictures = for i=1,10
+      with node = ReactiveNode "picture#{i}.jpg"
+        entries\append node
+        add_tag node, 'vacation'
 
-      yield "remove from documents"
-      rmv_tag pers, 'documents'
+    pers = ReactiveNode 'mypersonalfile.doc'
+    entries\append pers
 
-      yield false
+    article entries, div do
+      yield = coroutine.yield
+      step = coroutine.wrap ->
+        yield "mark document"
+        add_tag pers, 'documents'
 
-    next_step = ReactiveVar step!
-    next_step\map (desc) ->
-      if desc
-        button (text desc), onclick: (e) => next_step\set step!
-      else
-        text ''
-), ...
+        yield "mark personal"
+        add_tag pers, 'personal'
+
+        yield "mark work"
+        add_tag pers, 'work'
+
+        yield "unmark work"
+        rmv_tag pers, 'work'
+
+        yield "remove from documents"
+        rmv_tag pers, 'documents'
+
+        yield false
+
+      next_step = ReactiveVar step!
+      next_step\map (desc) ->
+        if desc
+          button (text desc), onclick: (e) => next_step\set step!
+        else
+          text ''
+}
