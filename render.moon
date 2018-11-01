@@ -21,7 +21,8 @@ else
   with require 'root'
     \mount!
 
-content = assert (render root, path), "no content"
+content, rehydrate = render root, path
+assert content, "no content"
 
 with io.open output_name, 'w'
   \write "<!DOCTYPE html>
@@ -36,13 +37,15 @@ with io.open output_name, 'w'
     <link rel=\"preload\" as=\"fetch\" href=\"/lib/mmmfs/browser.lua\" />
     <script src=\"/fengari-web.js\"></script>
     <script src=\"/highlight.pack.js\"></script>
-    <script src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
-    <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
+    <script type=\"application/lua\" src=\"/lib/init.lua\"></script>
   </head>
   <body>
-    <script type=\"application/lua\" src=\"/lib/init.lua\"></script>
-
     #{content}
+
+    <script src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
+    <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
+
+    #{rehydrate}
   </body>
 </html>"
   \close!

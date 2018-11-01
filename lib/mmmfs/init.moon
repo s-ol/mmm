@@ -22,9 +22,8 @@ render = (root, path) ->
   export BROWSER
   BROWSER = Browser root, path
 
-  str = tohtml BROWSER
-  str ..= on_client rehydrate, path
-  str
+  content = tohtml BROWSER
+  content, on_client rehydrate, path
 
 {
   :Key
