@@ -1,4 +1,4 @@
-import opairs from require 'lib.ordered'
+import opairs from require 'mmm.ordered'
 
 void_tags = { 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' }
 void_tags = { t,t for t in *void_tags }

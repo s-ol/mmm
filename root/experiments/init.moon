@@ -1,5 +1,5 @@
-import div, h3, ul, li, a from require 'lib.dom'
-import define_fileders from require 'lib.mmmfs'
+import div, h3, ul, li, a from require 'mmm.dom'
+import define_fileders from require 'mmm.mmmfs'
 Fileder = define_fileders ...
 require = relative ...
 

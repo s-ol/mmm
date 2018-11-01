@@ -4,8 +4,8 @@ Fileder = define_fileders ...
 require = relative ...
 
 Fileder {
-  'name: alpha': 'articles',
-  'title: text/plain': 'articles and papers',
+  'name: alpha': 'meta',
+  'title: text/plain': 'about mmm',
   'moon -> mmm/dom': (path) => div {
       h3 @gett 'title: text/plain', style: { 'margin-bottom': '-.5em' },
       ul for child in *@children
@@ -22,6 +22,6 @@ Fileder {
         }
     }
 
-  require '.mmmfs'
-  require '.realities'
+  require '.todo'
+  require '.test_component'
 }

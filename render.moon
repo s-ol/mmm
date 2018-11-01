@@ -1,13 +1,11 @@
-package.moonpath = './?.server.moon;' .. package.moonpath
-import flush from require 'lib.init'
-import render from require 'lib.mmmfs'
+package.moonpath = './?.server.moon;./?/init.server.moon;' .. package.moonpath
+import flush from require 'mmm.init'
+import render from require 'mmm.mmmfs'
 
 -- usage:
 -- moon render.moon <output> <fileder_path> [<prefix module> <prefix path>]
-
 { output_name, path, prefix_mod, prefix_path } = arg
--- output_name = assert arg[1], "please specify the output filename as an argument"
--- path = assert arg[2], "please specify the path name to build as an argument"
+
 assert output_name, "please specify the output filename as an argument"
 assert path, "please specify the path name to build as an argument"
 
@@ -32,10 +30,11 @@ with io.open output_name, 'w'
     <title>MMM: lunar low-gravity scripting playground</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"/main.css\" />
     <!--
-    <link rel=\"preload\" as=\"fetch\" href=\"/lib/dom.lua\" />
-    <link rel=\"preload\" as=\"fetch\" href=\"/lib/mmmfs/init.lua\" />
-    <link rel=\"preload\" as=\"fetch\" href=\"/lib/mmmfs/fileder.lua\" />
-    <link rel=\"preload\" as=\"fetch\" href=\"/lib/mmmfs/browser.lua\" />
+    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/dom/init.lua\" />
+    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/component/init.lua\" />
+    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/mmmfs/init.lua\" />
+    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/mmmfs/fileder.lua\" />
+    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/mmmfs/browser.lua\" />
     -->
   </head>
   <body>
@@ -45,7 +44,7 @@ with io.open output_name, 'w'
     <script defer src=\"/highlight.pack.js\"></script>
     <script defer src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
     <script defer src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
-    <script defer type=\"application/lua\" src=\"/lib/init.lua\"></script>
+    <script defer type=\"application/lua\" src=\"/mmm/init.lua\"></script>
 
     #{rehydrate}
   </body>

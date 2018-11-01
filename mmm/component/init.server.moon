@@ -1,4 +1,4 @@
-import opairs from require 'lib.ordered'
+import opairs from require 'mmm.ordered'
 
 void_tags = { 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr' }
 void_tags = { t,t for t in *void_tags }
@@ -15,11 +15,6 @@ tohtml = (val) ->
     val
   else
     error "not a Node: #{val}, #{type val}"
-
--- overloaded append
--- see tohtml for acceptable values
-g_append = append
-append = (value) -> g_append tohtml value
 
 -- shorthand to form a text node from strings
 text = (...) -> table.concat { ... }, ' '
@@ -123,8 +118,6 @@ get_or_create = (elem, id, ...) ->
   :ReactiveElement,
   :get_or_create,
   :tohtml,
-  :flush,
-  :append,
   :text,
   :elements,
 }

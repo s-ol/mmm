@@ -38,20 +38,6 @@ relative = do
       name = base .. name if '.' == name\sub 1, 1
       _require name
 
-import compile, insert_loader from require 'lib.duct_tape'
-insert_loader!
-
-on_client = (fn, ...) ->
-  args = {...}
-  -- warn code
-  "<script type=\"application/lua\">
-    local fn = #{compile fn}
-    on_load = on_load or {}
-    table.insert(on_load, function()
-      fn(#{table.concat [string.format '%q', v for v in *args ], ', '})
-    end)
-  </script>"
-
 {
   -- access / flush the appended data
   flush: ->

@@ -1,4 +1,4 @@
-import define_fileders from require 'lib.mmmfs'
+import define_fileders from require 'mmm.mmmfs'
 Fileder = define_fileders ...
 
 with Fileder {
@@ -9,8 +9,8 @@ with Fileder {
   if MODE == 'CLIENT'
     Math = window.Math
 
-    import CanvasApp from require 'lib.canvasapp'
-    import hsl from require 'lib.color'
+    import CanvasApp from require 'mmm.canvasapp'
+    import hsl from require 'mmm.color'
 
     class KochDemo extends CanvasApp
       width: 600

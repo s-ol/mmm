@@ -1,6 +1,6 @@
-package.moonpath = './?.server.moon;' .. package.moonpath
+package.moonpath = './?.server.moon;./?/init.server.moon;' .. package.moonpath
 require 'lfs'
-require 'lib.init'
+require 'mmm.init'
 
 -- enumerate moonscript source files
 enum_dir = do
@@ -19,18 +19,21 @@ enum_dir = do
 
     coroutine.wrap -> yieldtree dir
 
+-- COMPILE MOONSCRIPT
+-- mmmfs tree
 for file in enum_dir 'root'
   basename = assert file\match '(.*)%.moon$'
   print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua"
 
-for file in enum_dir 'lib'
+-- mmm
+for file in enum_dir 'mmm'
   continue if file\match '%.server%.moon$'
   basename = assert file\match '(.*)%.moon$'
   basename = (file\match '(.*)%.client') or basename
   print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua"
 
--- add rules for each fileder
-import module_roots from require 'lib.mmmfs'
+-- PRE-RENDER MMMFS
+import module_roots from require 'mmm.mmmfs'
 
 root = require 'root'
 root\mount!

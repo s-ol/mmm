@@ -11,14 +11,20 @@
 # render stylesheet
 : scss/main.scss |> !sassc |> dist/main.css
 
-preload lib
-preload lib/mmmfs
+# preload full mmmfs tree
 preload root
 preload root/animations
 preload root/articles
 preload root/articles/mmmfs
 preload root/experiments
 preload root/experiments/tags
+preload root/meta
+
+# preload all of mmm
+preload mmm
+preload mmm/dom
+preload mmm/mmmfs
+preload mmm/component
 
 # render static content and compile sources
 run moon tup.moon

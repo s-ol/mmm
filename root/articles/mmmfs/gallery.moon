@@ -1,5 +1,5 @@
-import define_fileders from require 'lib.mmmfs'
-import div, h1, a, img, br from require 'lib.dom'
+import define_fileders from require 'mmm.mmmfs'
+import div, h1, a, img, br from require 'mmm.dom'
 
 Fileder = define_fileders ...
 
@@ -23,7 +23,7 @@ with Fileder {
         div content
 
       'slideshow: moon -> mmm/dom': =>
-        import ReactiveVar, text, elements from require 'lib.component'
+        import ReactiveVar, text, elements from require 'mmm.component'
 
         index = ReactiveVar 1
 

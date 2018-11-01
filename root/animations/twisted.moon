@@ -1,4 +1,4 @@
-import define_fileders from require 'lib.mmmfs'
+import define_fileders from require 'mmm.mmmfs'
 Fileder = define_fileders ...
 
 with Fileder {
@@ -7,8 +7,8 @@ with Fileder {
   }
 
   if MODE == 'CLIENT'
-    import CanvasApp from require 'lib.canvasapp'
-    import hsl from require 'lib.color'
+    import CanvasApp from require 'mmm.canvasapp'
+    import hsl from require 'mmm.color'
 
     Math = window.Math
 

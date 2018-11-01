@@ -1,7 +1,7 @@
 require = relative ...
 import Key, Fileder from require '.fileder'
 import Browser from require '.browser'
-import tohtml from require 'lib.component'
+import tohtml from require 'mmm.component'
 
 define_fileders = (...) ->
   source_module = ...
@@ -10,24 +10,30 @@ define_fileders = (...) ->
     with fileder = Fileder ...
       .source_module = source_module
 
-rehydrate = (path) ->
-  import Browser from require 'lib.mmmfs.browser'
-  root = require 'root'
-  root\mount!
-
-  export BROWSER
-  BROWSER = Browser root, path, true
-
 render = (root, path) ->
   export BROWSER
   BROWSER = Browser root, path
 
   content = tohtml BROWSER
-  content, on_client rehydrate, path
+
+  rehydrate = "
+<script type=\"application/lua\">
+  on_load = on_load or {}
+  table.insert(on_load, function()
+    local path = #{string.format '%q', path}
+    local browser = require 'mmm.mmmfs.browser'
+    local root = require 'root'
+    root:mount()
+
+    BROWSER = browser.Browser(root, path, true)
+  end)
+</script>"
+  content, rehydrate
 
 {
   :Key
   :Fileder
+  :Browser
   :render
   :define_fileders
   :module_roots

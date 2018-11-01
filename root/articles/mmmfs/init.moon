@@ -1,4 +1,4 @@
-import define_fileders from require 'lib.mmmfs'
+import define_fileders from require 'mmm.mmmfs'
 Fileder = define_fileders ...
 require = relative ...
 
@@ -11,7 +11,7 @@ Fileder {
   -- uses the 'moon ->' conversion to execute the lua/pre moon function on get
   -- resolves to a value of type mmm/dom
   'moon -> mmm/dom': () =>
-    html = require 'lib.dom'
+    html = require 'mmm.dom'
     import article, h1, h2, h3, p, div, a, sup, ol, li, span, code, pre, br from html
 
     moon = if MODE == 'SERVER'
@@ -235,7 +235,7 @@ Fileder {
   'title: text/plain': "Hey I'm like a link to picture or smth",
   'URL -> image/png': 'https://picsum.photos/200?random',
   'preview: moon -> mmm/dom': =>
-    import img from require 'lib.dom'
+    import img from require 'mmm.dom'
     img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type
 }
       ]]
@@ -264,7 +264,7 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
 
     -- preview is a lua/pre moon function that neturns an mmm/dom value
     'preview: moon -> mmm/dom': =>
-      import img from require 'lib.dom'
+      import img from require 'mmm.dom'
       img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type
   }
 

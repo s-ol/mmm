@@ -1,4 +1,4 @@
-import define_fileders from require 'lib.mmmfs'
+import define_fileders from require 'mmm.mmmfs'
 Fileder = define_fileders ...
 
 with Fileder {
@@ -7,9 +7,9 @@ with Fileder {
 }
 
   if MODE == 'CLIENT'
-    import CanvasApp from require 'lib.canvasapp'
-    import rgb from require 'lib.color'
-    import article, h1, p, div, span, input, button from require 'lib.dom'
+    import CanvasApp from require 'mmm.canvasapp'
+    import rgb from require 'mmm.color'
+    import article, h1, p, div, span, input, button from require 'mmm.dom'
 
     fast = true
     center = true

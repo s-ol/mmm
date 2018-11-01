@@ -1,5 +1,5 @@
-import text, code from require 'lib.dom'
-import tohtml from require 'lib.component'
+import text, code from require 'mmm.dom'
+import tohtml from require 'mmm.component'
 
 -- limit function to one argument
 single = (func) -> (val) -> func val

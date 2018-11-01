@@ -1,12 +1,12 @@
-import define_fileders from require 'lib.mmmfs'
+import define_fileders from require 'mmm.mmmfs'
 Fileder = define_fileders ...
 require = relative ...
 
 Fileder {
   'name: alpha': '',
   'moon -> mmm/dom': =>
-    import article, h1, h3, div, b, p, a, br, ul, tt, li, img from require 'lib.dom'
-    import opairs from require 'lib.ordered'
+    import article, h1, h3, div, b, p, a, br, ul, tt, li, img from require 'mmm.dom'
+    import opairs from require 'mmm.ordered'
 
     append, finish = do
       content = {}
@@ -65,4 +65,5 @@ Fileder {
   require '.articles'
   require '.animations'
   require '.experiments'
+  require '.meta'
 }

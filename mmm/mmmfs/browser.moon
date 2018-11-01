@@ -1,7 +1,7 @@
 require = relative ..., 1
 import Key from require '.fileder'
 import get_conversions from require '.conversion'
-import ReactiveVar, get_or_create, text, elements from require 'lib.component'
+import ReactiveVar, get_or_create, text, elements from require 'mmm.component'
 import div, span, a, select, option from elements
 
 class Browser

@@ -1,5 +1,5 @@
-import div, h3, ul, li, a from require 'lib.dom'
-import define_fileders from require 'lib.mmmfs'
+import div, h3, ul, li, a from require 'mmm.dom'
+import define_fileders from require 'mmm.mmmfs'
 Fileder = define_fileders ...
 require = relative ...
 
@@ -8,7 +8,7 @@ Fileder {
   'description: text/plain': 'defining toggles, categories etc. with only tags and functional hooks',
   'moon -> mmm/component': if MODE == 'CLIENT' then =>
     import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require '.tags'
-    import ReactiveVar, tohtml, text, elements from require 'lib.component'
+    import ReactiveVar, tohtml, text, elements from require 'mmm.component'
     import article, div, form, span, h3, a, input, textarea, button from elements
 
     clone = (set) ->

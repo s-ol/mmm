@@ -16,11 +16,6 @@ tohtml = (val) ->
   else
     error "not a Node: #{val}, #{type val}"
 
--- overloaded append
--- see tohtml for acceptable values
-g_append = append
-append = (value) -> g_append tohtml value
-
 -- shorthand to form a text node from strings
 text = (...) -> document\createTextNode table.concat { ... }, ' '
 
@@ -152,7 +147,6 @@ elements = setmetatable {}, __index: (name) =>
   :get_or_create,
 --  :join,
   :tohtml,
-  :append,
   :text,
   :elements,
 }
