@@ -23,14 +23,18 @@ enum_dir = do
 -- mmmfs tree
 for file in enum_dir 'root'
   basename = assert file\match '(.*)%.moon$'
-  print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua"
+  print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {root_src}"
 
 -- mmm
 for file in enum_dir 'mmm'
   continue if file\match '%.server%.moon$'
   basename = assert file\match '(.*)%.moon$'
   basename = (file\match '(.*)%.client') or basename
-  print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua"
+  print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {mmm_src}"
+
+-- GENERATE BUNDLES
+print ": {root_src} |> ^ BUNDLE root^ moon bundle.moon %o %f |> dist/root.bundle.lua"
+print ": {mmm_src} |> ^ BUNDLE mmm^ moon bundle.moon %o %f |> dist/mmm.bundle.lua"
 
 -- PRE-RENDER MMMFS
 import module_roots from require 'mmm.mmmfs'

@@ -40,10 +40,12 @@ with io.open output_name, 'w'
   <body>
     #{content}
 
-    <script defer src=\"/fengari-web.js\"></script>
-    <script defer src=\"/highlight.pack.js\"></script>
-    <script defer src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
-    <script defer src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
+    <script src=\"/highlight.pack.js\"></script>
+    <script src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
+    <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
+    <script src=\"/fengari-web.js\"></script>
+    <script type=\"application/lua\" src=\"/mmm.bundle.lua\"></script>
+    <script type=\"application/lua\" src=\"/root.bundle.lua\"></script>
     <script defer type=\"application/lua\" src=\"/mmm/init.lua\"></script>
 
     #{rehydrate}
