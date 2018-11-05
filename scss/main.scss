@@ -53,3 +53,46 @@ h1 .icons {
     vertical-align: middle;
   }
 }
+
+@mixin left-border($w: 0.6rem) {
+  border-style: solid;
+  border-width: 0 0 0 $w;
+  border-radius: 0 6px 6px 0;
+}
+
+@mixin right-border($w: 0.6rem) {
+  border-style: solid;
+  border-width: 0 $w 0 0;
+  border-radius: 6px 0 0 6px;
+}
+
+pre > code.hljs {
+  @include left-border;
+  border-color: #303336;
+}
+
+pre.dual-code {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+
+  > code.hljs {
+    @include right-border(0.3rem);
+
+    flex: 1;
+    margin: 0;
+  }
+
+  > code.hljs + code.hljs {
+    @include left-border(0.3rem);
+  }
+}
+
+.example {
+  @include left-border;
+
+  margin: 0 2rem;
+  padding: 1rem;
+  background: #eeeeee;
+  border-color: #b9bdc1;
+}
