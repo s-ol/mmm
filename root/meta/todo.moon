@@ -6,7 +6,7 @@ Fileder {
   'description: text/plain': 'TodoMVC using mmm.component'
   'moon -> mmm/component': =>
     import ReactiveVar, text, elements from require 'mmm.component'
-    import article, div, form, span, h3, a, input, textarea, button from elements
+    import article, div, form, span, h3, a, input from elements
 
     parent = div!
     todoItem = (desc, done) ->
