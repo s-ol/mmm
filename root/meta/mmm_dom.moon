@@ -26,10 +26,10 @@ source = do
 
 Fileder {
   'name: alpha': 'mmm.dom'
-  'description: mmm/dom': span mmmdom!, ' documentation'
+  'description: mmm/dom': 'a lightweight DSL for creating HTML documents',
   'mmm/dom': article {
     h1 mmmdom!
-    p mmmdom!, " is a DSL for creating HTML documents in Lua and Moonscript."
+    p mmmdom!, " is a lightweight DSL for creating HTML documents in Lua and Moonscript."
 
     p do
       fengari = a "fengari.io", href: '//fengari.io'

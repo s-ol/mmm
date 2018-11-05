@@ -2,7 +2,7 @@ import define_fileders from require 'mmm.mmmfs'
 Fileder = define_fileders ...
 
 Fileder {
-  'name: alpha': 'mmm.component_test'
+  'name: alpha': 'test_mmm.component'
   'description: text/plain': 'Tests for mmm.component'
   'moon -> mmm/dom': =>
     import article, div, h1, ul, li, pre from require 'mmm.dom'
