@@ -10,7 +10,7 @@ Fileder {
       h3 @gett 'title: text/plain', style: { 'margin-bottom': '-.5em' },
       ul for child in *@children
         name = child\gett 'name: alpha'
-        desc = child\gett 'description: text/plain'
+        desc = child\gett 'description: mmm/dom'
         li {
           a name, {
             href: child.path,
@@ -22,6 +22,7 @@ Fileder {
         }
     }
 
+  require '.mmm_dom'
   require '.todo'
   require '.test_component'
 }
