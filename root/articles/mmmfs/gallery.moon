@@ -6,12 +6,12 @@ Fileder = define_fileders ...
 with Fileder {
       'name: alpha': 'gallery',
       'title: text/plain': "A Gallery of 25 random pictures, come in!",
-      'preview: moon -> mmm/dom': => div {
+      'preview: fn -> mmm/dom': => div {
         'the first pic as a little taste:',
         br!,
         img src: @children[1]\get 'preview', 'URL -> image/png'
       }
-      'moon -> mmm/dom': =>
+      'fn -> mmm/dom': =>
         link = (child) -> a {
           href: '#',
           onclick: -> BROWSER\navigate child.path
@@ -22,7 +22,7 @@ with Fileder {
         table.insert content, 1, h1 'gallery index'
         div content
 
-      'slideshow: moon -> mmm/dom': =>
+      'slideshow: fn -> mmm/dom': =>
         import ReactiveVar, text, elements from require 'mmm.component'
 
         index = ReactiveVar 1

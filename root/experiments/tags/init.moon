@@ -6,7 +6,7 @@ require = relative ...
 Fileder {
   'name: alpha': 'tags',
   'description: text/plain': 'defining toggles, categories etc. with only tags and functional hooks',
-  'moon -> mmm/component': if MODE == 'CLIENT' then =>
+  'fn -> mmm/component': if MODE == 'CLIENT' then =>
     import add_tag, rmv_tag, Node, Hierarchy, Toggle, NamespacedToggle from require '.tags'
     import ReactiveVar, tohtml, text, elements from require 'mmm.component'
     import article, div, form, span, h3, a, input, textarea, button from elements

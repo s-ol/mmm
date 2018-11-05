@@ -6,7 +6,7 @@ require = relative ...
 Fileder {
   'name: alpha': 'meta',
   'title: text/plain': 'about mmm',
-  'moon -> mmm/dom': (path) => div {
+  'fn -> mmm/dom': (path) => div {
       style: { 'max-width': '700px' },
       h3 @gett 'title: text/plain', style: { 'margin-bottom': '-.5em' },
       p "mmm is a collection of Lua/Moonscript modules for web development.",

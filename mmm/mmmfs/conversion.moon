@@ -11,7 +11,7 @@ single = (func) -> (val) -> func val
 -- * transform - function (val: inp, fileder) -> val: out
 converts = {
   {
-    inp: 'moon -> (.+)',
+    inp: 'fn -> (.+)',
     out: '%1',
     transform: (val, fileder) -> val fileder
   },

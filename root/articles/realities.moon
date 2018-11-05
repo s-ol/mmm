@@ -4,7 +4,7 @@ Fileder = define_fileders ...
 Fileder {
   'name: alpha': 'realities'
   'description: text/plain': 'exploring the nesting relationships of virtual and other realities'
-  'moon -> mmm/component': =>
+  'fn -> mmm/component': =>
     import elements from require 'mmm.component'
     import h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from elements
 

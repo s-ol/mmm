@@ -47,5 +47,5 @@ with Fileder {
           draw i
         draw 1
 
-    .props['preview: moon -> mmm/component'] = => TwistedDemo true
-    .props['moon -> mmm/component'] = => TwistedDemo!
+    .props['preview: fn -> mmm/component'] = => TwistedDemo true
+    .props['fn -> mmm/component'] = => TwistedDemo!

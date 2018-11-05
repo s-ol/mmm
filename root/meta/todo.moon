@@ -4,7 +4,7 @@ Fileder = define_fileders ...
 Fileder {
   'name: alpha': 'todo'
   'description: text/plain': 'TodoMVC using mmm.component'
-  'moon -> mmm/component': =>
+  'fn -> mmm/component': =>
     import ReactiveVar, text, elements from require 'mmm.component'
     import article, div, form, span, h3, a, input from elements
 

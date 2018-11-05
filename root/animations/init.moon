@@ -6,7 +6,7 @@ require = relative ...
 Fileder {
   'name: alpha': 'animations',
   'title: text/plain': 'canvas animations',
-  'moon -> mmm/dom': (path) => div {
+  'fn -> mmm/dom': (path) => div {
       h3 @gett 'title: text/plain', style: { 'margin-bottom': '-.5em' },
       ul for child in *@children
         name = child\gett 'name: alpha'

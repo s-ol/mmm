@@ -4,7 +4,7 @@ Fileder = define_fileders ...
 Fileder {
   'name: alpha': 'test_mmm.component'
   'description: text/plain': 'Tests for mmm.component'
-  'moon -> mmm/dom': =>
+  'fn -> mmm/dom': =>
     import article, div, h1, ul, li, pre from require 'mmm.dom'
 
     _content = {}

@@ -131,7 +131,7 @@ with Fileder {
           @ctx\fillText char, x + w/2 - cx, y - cy
           x += w
 
-    .props['moon -> mmm/dom'] = ->
+    .props['fn -> mmm/dom'] = ->
       _content = {}
       append = (x) -> table.insert _content, x
 

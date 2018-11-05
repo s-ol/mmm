@@ -109,5 +109,4 @@ with Fileder {
 
         @ctx\restore!
 
-    -- .props['preview: moon -> mmm/component'] = => TwistedDemo true
-    .props['moon -> mmm/component'] = => KochDemo!
+    .props['fn -> mmm/component'] = => KochDemo!

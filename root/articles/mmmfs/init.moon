@@ -7,10 +7,10 @@ Fileder {
   'description: text/plain': 'a file, operating and content-management system to live in (powers this site)',
 
   -- main content
-  -- doesn't have a name prefix (e.g. preview: moon -> mmm/dom)
-  -- uses the 'moon ->' conversion to execute the lua/pre moon function on get
+  -- doesn't have a name prefix (e.g. preview: fn -> mmm/dom)
+  -- uses the 'fn ->' conversion to execute the lua function on @get
   -- resolves to a value of type mmm/dom
-  'moon -> mmm/dom': () =>
+  'fn -> mmm/dom': () =>
     html = require 'mmm.dom'
     import article, h1, h2, h3, p, div, a, sup, ol, li, span, code, pre, br from html
 
@@ -205,7 +205,7 @@ and some bold **text** and `code tags` with me.",
 
       append h3 "type chains"
       append p "In addition, a property type can be encoded using multiple types in a ", (code 'type chain'), ".
-        For example the root node you are viewing currently is actually defined as ", (code 'moon -> mmm/dom'), ",
+        For example the root node you are viewing currently is actually defined as ", (code 'fn -> mmm/dom'), ",
         meaning it's value is a pre moon function returing a regular ", (code 'mmm/dom'), " value."
 
       append p "Both value chains and 'sideways' converts are resolved using the same mechanism,
@@ -214,7 +214,7 @@ and some bold **text** and `code tags` with me.",
 
       append pre moon [[
 {
-  inp: 'moon -> (.+)',
+  inp: 'fn -> (.+)',
   out: '%1',
   transform: (val, fileder) -> val fileder
 }
@@ -234,7 +234,7 @@ and some bold **text** and `code tags` with me.",
 Fileder {
   'title: text/plain': "Hey I'm like a link to picture or smth",
   'URL -> image/png': 'https://picsum.photos/200?random',
-  'preview: moon -> mmm/dom': =>
+  'preview: fn -> mmm/dom': =>
     import img from require 'mmm.dom'
     img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type
 }
@@ -262,8 +262,8 @@ If you are reading this in the source, then c'mon, just scroll past and give me 
     -- main content is image/png, to be interpreted by URL to access
     'URL -> image/png': 'https://picsum.photos/200?random',
 
-    -- preview is a lua/pre moon function that neturns an mmm/dom value
-    'preview: moon -> mmm/dom': =>
+    -- preview is a lua/moonscript function that neturns an mmm/dom value
+    'preview: fn -> mmm/dom': =>
       import img from require 'mmm.dom'
       img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type
   }
