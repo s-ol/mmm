@@ -42,7 +42,7 @@ with io.open output_name, 'w'
     <script type=\"application/lua\" src=\"/root.bundle.lua\"></script>
     <script defer type=\"application/lua\" src=\"/mmm/init.lua\"></script>
 
-    #{'' or rehydrate}
+    #{rehydrate}
   </body>
 </html>"
   \close!

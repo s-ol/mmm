@@ -20,12 +20,6 @@ enum_dir = do
     coroutine.wrap -> yieldtree dir
 
 -- COMPILE MOONSCRIPT
--- mmmfs tree
--- for file in enum_dir 'root'
---   basename = assert file\match '(.*)%.moon$'
---   print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {root_src}"
-
--- mmm
 for file in enum_dir 'mmm'
   continue if file\match '%.server%.moon$'
   basename = assert file\match '(.*)%.moon$'
@@ -33,10 +27,12 @@ for file in enum_dir 'mmm'
   print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {mmm_src}"
 
 -- GENERATE BUNDLES
--- print ": {root_src} |> ^ BUNDLE root^ moon bundle.moon %o %f |> dist/root.bundle.lua"
 print ": {mmm_src} |> ^ BUNDLE mmm^ moon bundle.moon %o %f |> dist/mmm.bundle.lua"
 
--- PRE-RENDER MMMFS
+-- COMPILE AND DUMP TREE
+print ": |> ^ DUMP root^ moon dump_tree.moon %o |> dist/root.lua"
+
+-- PRE-RENDER TREE
 import load_fileder from require 'mmm.mmmfs.fs'
 
 root = load_fileder!
@@ -45,9 +41,6 @@ root\mount!
 for fileder in coroutine.wrap root\iterate
   name = fileder\gett 'name: alpha'
   { :path, :source_module } = fileder
-
-  -- module_roots[source_module] or= fileder.path
-  -- prefix_path = module_roots[source_module]
 
   path = '/' if path == ''
 
