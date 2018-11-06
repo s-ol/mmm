@@ -14,7 +14,6 @@ tohtml = (val) ->
     assert (js.instanceof val, js.global.Node), "userdata is not a Node"
     val
   else
-    warn "NOT A NODE: #{val}, ", debug.traceback!
     error "not a Node: #{val}, #{type val}"
 
 -- shorthand to form a text node from strings

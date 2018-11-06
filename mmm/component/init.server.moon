@@ -9,9 +9,7 @@ void_tags = { t,t for t in *void_tags }
 -- * string
 tohtml = (val) ->
   if 'table' == type val
-    if not val.render
-      warn val
-      assert val.render, "Table doesn't have .render"
+    assert val.render, "Table doesn't have .render"
     val = val\render!
   if 'string' == type val
     val
@@ -42,7 +40,7 @@ class ReactiveElement
 
   new: (element, ...) =>
     @element = element
-    @attrs = { style: {} }
+    @attrs = {}
     @children = {}
 
     children = { ... }
@@ -73,11 +71,6 @@ class ReactiveElement
     if 'table' == (type value) and ReactiveVar.isinstance value
       value = value\get!
 
-    if attr == 'style' and 'table' == type value
-      for k,v in opairs value
-        @attrs.style[k] = v
-      return
-
     @attrs[attr] = value
 
   append: (child, last) =>
@@ -85,8 +78,9 @@ class ReactiveElement
     if ReactiveVar.isinstance child
       child = child\get!
 
-    child = tohtml child
-    table.insert @children, child
+    if child
+      child = tohtml child
+      table.insert @children, child
 
   remove: (child) =>
     error "remove called serverside"

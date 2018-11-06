@@ -1,24 +1,47 @@
-#browser-root {
+.browser {
   position: absolute;
+  display: flex;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 
-  #browser-navbar {
+  .view {
     display: flex;
-    flex: 0 0 1.2em;
-    padding: 1em;
-    justify-content: space-between;
-    background: #eeeeee;
-  }
+    flex-direction: column;
 
-  #browser-content {
-    flex: 1 0 0;
-    overflow: auto;
-    padding: 1em 2em;
+    flex: 1 1 0;
+    min-width: 0;
+
+    &.inspector {
+      border-left: 8px solid #eeeeee;
+    }
+
+    nav {
+      display: flex;
+      flex: 0 0 3.2em;
+      justify-content: space-between;
+      background: #eeeeee;
+
+      /*
+      > * {
+        flex: 0 0 auto;
+      }
+      */
+
+      > span:first-of-type {
+        flex: 1 0 auto;
+      }
+
+      > * {
+        margin: 1em;
+      }
+    }
+
+    .content {
+      flex: 1 1 auto;
+      overflow: auto;
+      padding: 1em 2em;
+    }
   }
 }

@@ -1,5 +1,5 @@
 require = relative ..., 1
-import get_conversions from require '.conversion'
+import get_conversions, apply_conversions from require '.conversion'
 
 -- Key of a Fileder Property
 -- contains:
@@ -143,13 +143,7 @@ class Fileder
     key, conversions = @find want
 
     if key
-      value = @props[key]
-
-      -- apply conversions (in reverse order)
-      for i=#conversions,1,-1
-        { :inp, :out, :transform } = conversions[i]
-        value = transform value, @, key
-
+      value = apply_conversions conversions, @props[key], @, key
       value, key
 
   -- like @get, throw if no value or conversion path
@@ -157,7 +151,7 @@ class Fileder
     want = Key ...
 
     value, key = @get want
-    assert value, "#{@} doesn't have value for '#{want\tostring!}'"
+    assert value, "#{@} doesn't have value for '#{want}'"
     value, key
 
   __tostring: => "Fileder:#{@path}"

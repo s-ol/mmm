@@ -105,7 +105,7 @@ escape_inp = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
 -- * want - stop type string
 -- * limit - limit conversion amount
 -- returns a list of conversion steps
-get_conversions = (want, have, limit=3) ->
+get_conversions = (want, have, _converts=converts, limit=3) ->
   assert have, 'need starting type(s)'
 
   if 'string' == type have
@@ -122,7 +122,7 @@ get_conversions = (want, have, limit=3) ->
       if want == rest
         return conversions, start
       else
-        for convert in *converts
+        for convert in *_converts
           inp = escape_inp convert.inp
           matches = { rest\match inp }
           continue unless #matches > 0
@@ -138,7 +138,20 @@ get_conversions = (want, have, limit=3) ->
     have = next_have
     return unless #have > 0
 
+-- apply transforms for conversion path sequentially
+-- * conversions - conversions from get_conversions
+-- * value - value
+-- * ... - other transform parameters (fileder, key)
+-- returns converted value
+apply_conversions = (conversions, value, ...) ->
+  for i=#conversions,1,-1
+    { :inp, :out, :transform } = conversions[i]
+    value = transform value, ...
+
+  value
+
 {
   :converts
   :get_conversions
+  :apply_conversions
 }
