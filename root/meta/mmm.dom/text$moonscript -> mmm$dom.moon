@@ -1,24 +1,15 @@
 import article, h1, h2, p, a, span, div, pre, code from require 'mmm.dom'
+import lua, moonscript from (require 'mmm.highlighting').languages
 
 mmmdom = -> code 'mmm.dom'
 
 source = do
-  build = (lang) -> if MODE == 'SERVER'
-    (str) -> code (str\match '^ *(..-) *$'), class: "hljs lang-#{lang}"
-  else
-    (str) ->
-      result = window.hljs\highlight lang, (str\match '^ *(..-) *$'), true
-      with code class: 'hljs'
-        .innerHTML = result.value
-
-  mklua, mkmoon = (build 'lua'), build 'moonscript'
-
-  (moon, lua, demo=true) ->
-    the_code = pre (mkmoon moon), (mklua lua), class: 'dual-code'
+  (moon_src, lua_src, demo=true) ->
+    the_code = pre (moonscript moon_src), (lua lua_src), class: 'dual-code'
 
     return the_code unless demo
 
-    example = assert load lua
+    example = assert load lua_src
     div the_code, div example!, class: 'example'
 
 article {

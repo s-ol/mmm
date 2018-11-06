@@ -2,12 +2,14 @@ require = relative ..., 1
 import Key from require '.fileder'
 import converts, get_conversions, apply_conversions from require '.conversion'
 import ReactiveVar, get_or_create, text, elements from require 'mmm.component'
-import pre, code, div, nav, span, button, a, select, option from elements
+import pre, div, nav, span, button, a, select, option from elements
+import languages from require 'mmm.highlighting'
 
-code_cast = (lang) -> {
+code_cast = (lang) ->
+  {
     inp: "text/#{lang}.*",
     out: 'mmm/dom',
-    transform: (val) -> pre code val
+    transform: (val) -> languages[lang] val
   }
 
 casts = {
@@ -117,7 +119,7 @@ class Browser
 
   -- render #browser-content
   get_content: (prop, convert=default_convert) =>
-    disp_error = (msg) -> span msg, style: { color: '#f00' }
+    disp_error = (msg) -> pre msg, style: { color: '#f00' }
     active = @active\get!
 
     return disp_error "fileder not found!" unless active
@@ -132,7 +134,7 @@ class Browser
       div!
     else
       warn "error: #{res}", trace
-      disp_error "error: #{res}"
+      disp_error "error: #{res}\n#{trace}"
 
   get_inspector: =>
     -- active property in inspect tab
@@ -163,7 +165,7 @@ class Browser
           if enabled
             button 'close', onclick: (_, e) -> @inspect\set false
       }
-      \append with div class: 'content'
+      \append with pre class: 'content'
         \append @inspect_prop\map (prop) ->
           @get_content prop, (prop) =>
             value, key = @get prop

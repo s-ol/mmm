@@ -5,14 +5,7 @@
 =>
   html = require 'mmm.dom'
   import article, h1, h2, h3, p, div, a, sup, ol, li, span, code, pre, br from html
-
-  moon = if MODE == 'SERVER'
-    (str) -> code (str\match '^ *(..-) *$'), class: 'hljs'
-  else
-    (str) ->
-      result = window.hljs\highlight 'moonscript', (str\match '^ *(..-) *$'), true
-      with code class: 'hljs'
-        .innerHTML = result.value
+  import moon from (require 'mmm.highlighting').languages
 
   article with _this = {}
     append = (a) -> table.insert _this, a
