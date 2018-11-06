@@ -107,6 +107,14 @@ class Fileder
     for child in *@children
       child\iterate depth - 1
 
+  -- get all unique names associated with properties (list)
+  get_prop_names: =>
+    names = {}
+    for key in pairs @props
+      names[key.name] = true
+
+    [name for name in pairs names]
+
   -- find property key according to criteria, nil if no value or conversion path
   -- * ... - arguments like Key
   find: (...) =>

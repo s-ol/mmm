@@ -14,6 +14,7 @@ tohtml = (val) ->
     assert (js.instanceof val, js.global.Node), "userdata is not a Node"
     val
   else
+    warn "NOT A NODE: #{val}, ", debug.traceback!
     error "not a Node: #{val}, #{type val}"
 
 -- shorthand to form a text node from strings
@@ -118,9 +119,8 @@ class ReactiveElement
       return
 
     child = tohtml child
-    ok, last = pcall tohtml, last
-    if ok
-      @node\replaceChild child, last
+    if last
+      @node\replaceChild child, tohtml last
     else
       switch mode
         when 'append' then @node\appendChild child

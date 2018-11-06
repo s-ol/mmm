@@ -72,27 +72,25 @@ class Browser
             current = current and current.name
             with select :onchange, disabled: not fileder
               if fileder
-                for key, _ in pairs {k,k for k in pairs fileder.props}
-                  value = key.name
+                for i, value in ipairs fileder\get_prop_names!
                   label = if value == '' then '(main)' else value
                   \append option label, :value, selected: value == current
-
-          ' as ',
-          @active\map (fileder) ->
-            onchange = (_, e) ->
-              { :name } = @prop\get!
-              @prop\set Key :name, type: e.target.value
-
-            current = @prop\get!
-            curent = current and current.type
-            with select :onchange
-              opt = (value) -> option value, :value, selected: value == current
-              \append opt 'mmm/dom'
-              \append opt 'text/plain'
-              -- if fileder
-              --   for key, _ in pairs fileder.props
-              --     value = key.type
-              --     \append option value, :value, selected: value == current
+--          ' as ',
+--          @active\map (fileder) ->
+--            onchange = (_, e) ->
+--              { :name } = @prop\get!
+--              @prop\set Key :name, type: e.target.value
+--
+--            current = @prop\get!
+--            curent = current and current.type
+--            with select :onchange
+--              opt = (value) -> option value, :value, selected: value == current
+--              \append opt 'mmm/dom'
+--              \append opt 'text/plain'
+--              -- if fileder
+--              --   for key, _ in pairs fileder.props
+--              --     value = key.type
+--              --     \append option value, :value, selected: value == current
         }
 
     -- append or patch #browser-content

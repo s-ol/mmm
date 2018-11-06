@@ -1,4 +1,4 @@
-import text, code from require 'mmm.dom'
+import div, text, code from require 'mmm.dom'
 import tohtml from require 'mmm.component'
 
 -- limit function to one argument
@@ -49,15 +49,15 @@ converts = {
     inp: 'text/html',
     out: 'mmm/dom',
     transform: if MODE == 'SERVER'
-      (...) -> ...
+      (html) -> div html
     else
       (html) ->
         tmp = document\createElement 'div'
         tmp.innerHTML = html
-        if tmp.childElementCount == 1
-          tmp.firstChild
-        else
-          tmp
+        -- if tmp.childElementCount == 1
+        --   tmp.firstChild
+        -- else
+        tmp
   },
   {
     inp: 'text/lua -> (.+)',
@@ -66,7 +66,7 @@ converts = {
   },
 }
 
-do
+if MODE == 'SERVER'
   ok, moon = pcall require, 'moonscript.base'
   if ok
     _load = moon.load or moon.loadstring
