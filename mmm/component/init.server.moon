@@ -68,6 +68,9 @@ class ReactiveElement
   destroy: =>
 
   set: (attr, value) =>
+    if 'table' == (type value) and ReactiveVar.isinstance value
+      value = value\get!
+
     if attr == 'style' and 'table' == type value
       for k,v in opairs value
         @attrs.style[k] = v
