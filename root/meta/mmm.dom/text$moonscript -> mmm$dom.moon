@@ -75,17 +75,17 @@ return dom.br()
 import h3, i, code from require 'mmm.dom'
 
 h3 "this is a ",
-(i 'headline'),
-" with some ",
-code 'rich text'
+  (i 'headline'),
+  " with some ",
+  code 'rich text'
 ]], [[
 local d = require 'mmm.dom'
 
 return d.h3(
-"this is a ",
-d.i 'headline',
-" with some ",
-d.code 'rich text'
+  "this is a ",
+  d.i 'headline',
+  " with some ",
+  d.code 'rich text'
 )
   ]]
 
@@ -99,24 +99,24 @@ d.code 'rich text'
 import article, h3, span, div, i, p from require 'mmm.dom'
 
 article {
-h3 "This is a headline with ", i "cursive text"
-p {
-  "The content goes ",
-  i "here."
-}
-p "more paragraphs can be added as well, of course."
+  h3 "This is a headline with ", i "cursive text"
+  p {
+    "The content goes ",
+    i "here."
+  }
+  p "more paragraphs can be added as well, of course."
 }
     ]], [[
 local dom = require 'mmm.dom'
 local article, h3, span, div, i, p = dom.article, dom.h3, dom.span, dom.div, dom.i, dom.p
 
 return article{
-h3{ "This is a headline with ", i "cursive text" },
-p{
-  "The content goes ",
-  i"here."
-},
-p"more paragraphs can be added as well, of course."
+  h3{ "This is a headline with ", i "cursive text" },
+  p{
+    "The content goes ",
+    i"here."
+  },
+  p"more paragraphs can be added as well, of course."
 }
   ]]
 
@@ -128,17 +128,17 @@ p"more paragraphs can be added as well, of course."
 import div from require 'mmm.dom'
 
 div {
-id: 'my_div',
-class: 'shadow',
-"This is div matches the CSS selector `div#my_div.shadow`"
+  id: 'my_div',
+  class: 'shadow',
+  "This is div matches the CSS selector `div#my_div.shadow`"
 }
     ]], [[
 local div = require('mmm.dom').div
 
 return div{
-id = 'my_div',
-class = 'shadow',
-"This is div matches the CSS selector `div#my_div.shadow`"
+  id = 'my_div',
+  class = 'shadow',
+  "This is div matches the CSS selector `div#my_div.shadow`"
 }
   ]]
 
@@ -153,20 +153,20 @@ class = 'shadow',
 import div from require 'mmm.dom'
 
 div "red div with white text", style: {
-background: 'red',
-color: '#ffffff',
+  background: 'red',
+  color: '#ffffff',
 }
     ]], [[
 local div = require('mmm.dom').div
 
 return div(
-"red div with white text",
-{
-  style = {
-    background = 'red',
-    color = '#ffffff',
+  "red div with white text",
+  {
+    style = {
+      background = 'red',
+      color = '#ffffff',
+    }
   }
-}
 )
   ]]
 }

@@ -150,9 +150,9 @@
     append pre moon [[
 -- render a preview block
 preview = (title, content) -> div {
-h3 title, style: { ... },
-content or span '(no renderable content)', style: { ... },
-style: { ... }
+  h3 title, style: { ... },
+  content or span '(no renderable content)', style: { ... },
+  style: { ... }
 }
 
 append div for child in *@children
@@ -172,13 +172,13 @@ preview title, content
 
     append pre moon [[
 Fileder {
-'title: text/plain': "I'm not even five lines of markdown but i render myself!",
-'preview: text/markdown': "See I have like
+  'title: text/plain': "I'm not even five lines of markdown but i render myself!",
+  'preview: text/markdown': "See I have like
 
-- a list of things
-- (two things)
+  - a list of things
+  - (two things)
 
-and some bold **text** and `code tags` with me.",
+  and some bold **text** and `code tags` with me.",
 }
     ]]
 
@@ -187,11 +187,11 @@ and some bold **text** and `code tags` with me.",
 
     append pre moon [[
 {
-inp: 'text/markdown',
-out: 'mmm/dom',
-transform: (md) ->
-  -- polymorphic client/serverside implementation here,
-  -- uses lua-discount on the server, marked.js on the client
+  inp: 'text/markdown',
+  out: 'mmm/dom',
+  transform: (md) ->
+    -- polymorphic client/serverside implementation here,
+    -- uses lua-discount on the server, marked.js on the client
 }
     ]]
 
@@ -206,9 +206,9 @@ transform: (md) ->
 
     append pre moon [[
 {
-inp: 'fn -> (.+)',
-out: '%1',
-transform: (val, fileder) -> val fileder
+  inp: 'fn -> (.+)',
+  out: '%1',
+  transform: (val, fileder) -> val fileder
 }
     ]]
 
@@ -224,11 +224,11 @@ transform: (val, fileder) -> val fileder
 
     append pre moon [[
 Fileder {
-'title: text/plain': "Hey I'm like a link to picture or smth",
-'URL -> image/png': 'https://picsum.photos/200?random',
-'preview: fn -> mmm/dom': =>
-  import img from require 'mmm.dom'
-  img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type
+  'title: text/plain': "Hey I'm like a link to picture or smth",
+  'URL -> image/png': 'https://picsum.photos/200?random',
+  'preview: fn -> mmm/dom': =>
+    import img from require 'mmm.dom'
+    img src: @gett 'URL -> image/png' -- look for main content with 'URL to png' type
 }
     ]]
 
