@@ -13,12 +13,22 @@
 
 # preload full mmmfs tree
 preload root
-preload root/animations
 preload root/articles
 preload root/articles/mmmfs
+preload root/articles/mmmfs/empty
+preload root/articles/mmmfs/image
+preload root/articles/mmmfs/markdown
+preload root/articles/realities
+preload root/animations
+preload root/animations/twisted
+preload root/animations/koch
 preload root/experiments
+preload root/experiments/center_of_mass
 preload root/experiments/tags
 preload root/meta
+preload root/meta/mmm.dom
+preload root/meta/test_mmm.component
+preload root/meta/todo
 
 # preload all of mmm
 preload mmm

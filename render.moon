@@ -1,23 +1,17 @@
 package.moonpath = './?.server.moon;./?/init.server.moon;' .. package.moonpath
-import flush from require 'mmm.init'
+require 'mmm.init'
 import render from require 'mmm.mmmfs'
+import load_fileder from require 'mmm.mmmfs.fs'
 
 -- usage:
--- moon render.moon <output> <fileder_path> [<prefix module> <prefix path>]
-{ output_name, path, prefix_mod, prefix_path } = arg
+-- moon render.moon <output> <fileder_path>
+{ output_name, path } = arg
 
 assert output_name, "please specify the output filename as an argument"
 assert path, "please specify the path name to build as an argument"
 
-root = if prefix_mod and prefix_path
-  -- prefix module and path are given, skip deeper into the tree
-  assert path\match '^' .. prefix_path
-  with require prefix_mod
-    \mount prefix_path, true
-else
-  -- load full tree
-  with require 'root'
-    \mount!
+root = load_fileder 'root' .. path
+root\mount path
 
 content, rehydrate = render root, path
 assert content, "no content"
@@ -48,7 +42,7 @@ with io.open output_name, 'w'
     <script type=\"application/lua\" src=\"/root.bundle.lua\"></script>
     <script defer type=\"application/lua\" src=\"/mmm/init.lua\"></script>
 
-    #{rehydrate}
+    #{'' or rehydrate}
   </body>
 </html>"
   \close!

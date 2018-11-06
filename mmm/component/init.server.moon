@@ -9,7 +9,9 @@ void_tags = { t,t for t in *void_tags }
 -- * string
 tohtml = (val) ->
   if 'table' == type val
-    assert val.render, "Table doesn't have .render"
+    if not val.render
+      warn val
+      assert val.render, "Table doesn't have .render"
     val = val\render!
   if 'string' == type val
     val

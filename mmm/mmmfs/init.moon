@@ -3,13 +3,6 @@ import Key, Fileder from require '.fileder'
 import Browser from require '.browser'
 import tohtml from require 'mmm.component'
 
-define_fileders = (...) ->
-  source_module = ...
-
-  (...) ->
-    with fileder = Fileder ...
-      .source_module = source_module
-
 render = (root, path) ->
   export BROWSER
   BROWSER = Browser root, path
@@ -35,6 +28,4 @@ render = (root, path) ->
   :Fileder
   :Browser
   :render
-  :define_fileders
-  :module_roots
 }

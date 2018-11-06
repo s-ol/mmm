@@ -37,10 +37,3 @@ relative = do
     (name, x) ->
       name = base .. name if '.' == name\sub 1, 1
       _require name
-
-{
-  -- access / flush the appended data
-  flush: ->
-    with x = buffer
-      buffer = ''
-}

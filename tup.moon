@@ -21,9 +21,9 @@ enum_dir = do
 
 -- COMPILE MOONSCRIPT
 -- mmmfs tree
-for file in enum_dir 'root'
-  basename = assert file\match '(.*)%.moon$'
-  print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {root_src}"
+-- for file in enum_dir 'root'
+--   basename = assert file\match '(.*)%.moon$'
+--   print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {root_src}"
 
 -- mmm
 for file in enum_dir 'mmm'
@@ -33,26 +33,22 @@ for file in enum_dir 'mmm'
   print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {mmm_src}"
 
 -- GENERATE BUNDLES
-print ": {root_src} |> ^ BUNDLE root^ moon bundle.moon %o %f |> dist/root.bundle.lua"
+-- print ": {root_src} |> ^ BUNDLE root^ moon bundle.moon %o %f |> dist/root.bundle.lua"
 print ": {mmm_src} |> ^ BUNDLE mmm^ moon bundle.moon %o %f |> dist/mmm.bundle.lua"
 
 -- PRE-RENDER MMMFS
-import module_roots from require 'mmm.mmmfs'
+import load_fileder from require 'mmm.mmmfs.fs'
 
-root = require 'root'
+root = load_fileder!
 root\mount!
 
-module_roots = {}
 for fileder in coroutine.wrap root\iterate
   name = fileder\gett 'name: alpha'
   { :path, :source_module } = fileder
 
-  module_roots[source_module] or= fileder.path
-  prefix_path = module_roots[source_module]
+  -- module_roots[source_module] or= fileder.path
+  -- prefix_path = module_roots[source_module]
 
   path = '/' if path == ''
 
-  if prefix_path
-    print ": |> ^ HTML #{name}^ moon render.moon %o '#{path}' #{source_module} '#{prefix_path}' |> dist#{path}/index.html"
-  else
-    print ": |> ^ HTML #{name}^ moon render.moon %o '#{path}' |> dist#{path}/index.html"
+  print ": |> ^ HTML #{path}^ moon render.moon %o '#{path}' |> dist#{path}/index.html"

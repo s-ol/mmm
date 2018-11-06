@@ -4,6 +4,11 @@ import tohtml from require 'mmm.component'
 -- limit function to one argument
 single = (func) -> (val) -> func val
 
+-- load a chunk using a specific 'load'er
+loadwith = (_load) -> (val, fileder, key) ->
+  func = assert _load val, "#{fileder}##{key}"
+  func!
+
 -- list of converts
 -- converts each have
 -- * inp - input type. can capture subtypes using `(.+)`
@@ -53,8 +58,29 @@ converts = {
           tmp.firstChild
         else
           tmp
-  }
+  },
+  {
+    inp: 'text/lua -> (.+)',
+    out: '%1',
+    transform: loadwith load or loadstring
+  },
 }
+
+do
+  ok, moon = pcall require, 'moonscript.base'
+  if ok
+    _load = moon.load or moon.loadstring
+    table.insert converts, {
+      inp: 'text/moonscript -> (.+)',
+      out: '%1',
+      transform: loadwith moon.load or moon.loadstring
+    }
+
+    table.insert converts, {
+      inp: 'text/moonscript -> (.+)',
+      out: 'text/lua -> %1',
+      transform: single moon.to_lua
+    }
 
 do
   local markdown

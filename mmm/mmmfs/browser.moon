@@ -15,7 +15,7 @@ class Browser
     if MODE == 'CLIENT'
       -- update URL bar
       @path\subscribe (path) ->
-        path ..= '/' unless path\match '/$'
+        path ..= '/' unless '/' == path\sub -1
         window.history\pushState nil, '', path
 
     -- active fileder
@@ -100,19 +100,20 @@ class Browser
 
         for i=#conversions,1,-1
           { :inp, :out, :transform } = conversions[i]
-          value = transform value, active
+          value = transform value, active, prop
 
         value
 
-      ok, res = if MODE == 'CLIENT'
-        pcall convert
-      else
-        true, convert!
+      ok, res, trace = xpcall convert, (err) -> err, debug.traceback!
 
       if ok
         res or disp_error "[no conversion path to mmm/dom]"
+      elseif res\match '%[nossr%]$'
+        warn '(SSR disabled)'
+        div!
       else
-        warn "error: ", res unless ok
+        warn "error: ", res
+        warn trace
         disp_error "[unknown error displaying]"
 
   navigate: (new) => @path\set new
