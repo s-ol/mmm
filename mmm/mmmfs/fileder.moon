@@ -19,6 +19,7 @@ class Key
     elseif 'table' == type opts
       @name = opts.name
       @type = opts.type
+      @original = opts.original
     else
       error "wrong argument type: #{type opts}, #{type second}"
 
@@ -28,6 +29,8 @@ class Key
       @type
     else
       "#{@name}: #{@type}"
+
+  __tostring: => @tostring!
 
 -- Fileder itself
 -- contains:
@@ -137,7 +140,7 @@ class Fileder
       -- apply conversions (in reverse order)
       for i=#conversions,1,-1
         { :inp, :out, :transform } = conversions[i]
-        value = transform value, @
+        value = transform value, @, key
 
       value, key
 
@@ -146,8 +149,10 @@ class Fileder
     want = Key ...
 
     value, key = @get want
-    assert value, "node doesn't have value for '#{want\tostring!}'"
+    assert value, "#{@} doesn't have value for '#{want\tostring!}'"
     value, key
+
+  __tostring: => "Fileder:#{@path}"
 
 {
   :Key

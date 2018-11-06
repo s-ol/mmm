@@ -9,7 +9,9 @@ void_tags = { t,t for t in *void_tags }
 -- * string
 tohtml = (val) ->
   if 'table' == type val
-    assert val.render, "Table doesn't have .render"
+    if not val.render
+      warn val
+      assert val.render, "Table doesn't have .render"
     val = val\render!
   if 'string' == type val
     val
@@ -68,6 +70,9 @@ class ReactiveElement
   destroy: =>
 
   set: (attr, value) =>
+    if 'table' == (type value) and ReactiveVar.isinstance value
+      value = value\get!
+
     if attr == 'style' and 'table' == type value
       for k,v in opairs value
         @attrs.style[k] = v
