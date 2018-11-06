@@ -18,6 +18,12 @@ root\mount path
 dump_fileder = do
   escape = (str) -> string.format '%q', tostring str
 
+  compile = (old, new, val) -> escape "
+-- this property has been transpiled from '#{old}'
+-- to '#{new}' for execution in the browser.
+-- refer to the original property as the source.
+#{to_lua val}"
+
   _dump = (fileder) ->
     code = "Fileder {"
 
@@ -28,7 +34,7 @@ dump_fileder = do
       if key.type\match '^text/moonscript %->'
         newkey = Key key.name, key.type\gsub '^text/moonscript %-> (.*)', 'text/lua -> %1'
         code ..= "
-          [#{escape newkey}] = #{escape to_lua val},"
+          [fromcache(#{escape newkey}, #{escape key})] = #{compile key, newkey, val},"
 
     for child in *fileder.children
       code ..= "
@@ -40,7 +46,13 @@ dump_fileder = do
 
 
   (fileder) -> "
-    local Fileder = (require 'mmm.mmmfs').Fileder
+    local mmmfs = require 'mmm.mmmfs'
+    local Key, Fileder = mmmfs.Key, mmmfs.Fileder
+    local function fromcache(str, orig)
+      local key = Key(str)
+      key.original = Key(orig)
+      return key
+    end
 
     return #{_dump fileder}
   "

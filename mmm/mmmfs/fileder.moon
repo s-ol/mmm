@@ -19,6 +19,7 @@ class Key
     elseif 'table' == type opts
       @name = opts.name
       @type = opts.type
+      @original = opts.original
     else
       error "wrong argument type: #{type opts}, #{type second}"
 
