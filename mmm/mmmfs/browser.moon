@@ -26,7 +26,9 @@ class Browser
     -- (re)set to default every time @active changes
     @prop = @active\map (fileder) ->
       return unless fileder
-      (fileder\find 'mmm/dom') or next fileder.props
+      last = @prop and @prop\get!
+      -- (fileder\find 'mmm/dom') or next fileder.props
+      Key if last then last.type else 'mmm/dom'
 
     -- retrieve or create the root
     @dom = get_or_create 'div', 'browser-root'
@@ -59,17 +61,39 @@ class Browser
             \append '/'
             \append path_segment name, href
 
-        \append span 'view property: ', @active\map (fileder) ->
-          onchange = (_, e) ->
-            @prop\set Key e.target.value
+        \append span {
+          'view property: ',
+          @active\map (fileder) ->
+            onchange = (_, e) ->
+              { :type } = @prop\get!
+              @prop\set Key name: e.target.value, :type
 
-          current = @prop\get!
-          current = current and current\tostring!
-          with select :onchange, disabled: not fileder
-            if fileder
-              for key, _ in pairs fileder.props
-                value = key\tostring!
-                \append option value, :value, selected: value == current
+            current = @prop\get!
+            current = current and current.name
+            with select :onchange, disabled: not fileder
+              if fileder
+                for key, _ in pairs {k,k for k in pairs fileder.props}
+                  value = key.name
+                  label = if value == '' then '(main)' else value
+                  \append option label, :value, selected: value == current
+
+          ' as ',
+          @active\map (fileder) ->
+            onchange = (_, e) ->
+              { :name } = @prop\get!
+              @prop\set Key :name, type: e.target.value
+
+            current = @prop\get!
+            curent = current and current.type
+            with select :onchange
+              opt = (value) -> option value, :value, selected: value == current
+              \append opt 'mmm/dom'
+              \append opt 'text/plain'
+              -- if fileder
+              --   for key, _ in pairs fileder.props
+              --     value = key.type
+              --     \append option value, :value, selected: value == current
+        }
 
     -- append or patch #browser-content
     @dom\append with get_or_create 'div', 'browser-content'
@@ -93,10 +117,11 @@ class Browser
       return disp_error "property not found!" unless prop
 
       convert = ->
-        conversions = get_conversions 'mmm/dom', prop.type
-        value = assert (active\get prop), "value went missing?"
+        value = active\get prop
 
-        return unless conversions
+        return unless value
+
+        conversions = get_conversions 'mmm/dom', prop.type
 
         for i=#conversions,1,-1
           { :inp, :out, :transform } = conversions[i]
@@ -110,7 +135,7 @@ class Browser
         true, convert!
 
       if ok
-        res or disp_error "[no conversion path to mmm/dom]"
+        res or disp_error "[no conversion path to #{prop.type}]"
       else
         warn "error: ", res unless ok
         disp_error "[unknown error displaying]"
