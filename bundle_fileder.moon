@@ -29,12 +29,12 @@ readfile = (name) ->
   with file\read '*all'
     file\close!
 
--- load a fs file as a fileder property
-load_property = (path, filename) ->
+-- load a fs file as a fileder facet
+load_facet = (filename) ->
   key = (filename\match '(.*)%.%w+') or filename
   key = Key key\gsub '%$', '/'
 
-  value = readfile path .. filename
+  value = readfile filename
 
   key, value
 
@@ -42,9 +42,9 @@ load_property = (path, filename) ->
 escape = (str) -> string.format '%q', tostring str
 
 -- compile a moonscript facet to lua
-compile = (old, new, val) -> "-- this property has been transpiled from '#{old}'
+compile = (old, new, val) -> "-- this facet has been transpiled from '#{old}'
 -- to '#{new}' for execution in the browser.
--- refer to the original property as the source.
+-- refer to the original facet as the source.
 #{to_lua val}"
 
 -- dump a fileder subtree as Lua source
@@ -52,7 +52,7 @@ dump_fileder = do
   _dump = (fileder, root=false) ->
     code = "Fileder {"
 
-    for key, val in pairs fileder.props
+    for key, val in pairs fileder.facets
       if key.original
         key = "fromcache(#{escape key}, #{escape key.original})"
       else
@@ -87,13 +87,13 @@ with io.open '$bundle.lua', 'w'
       if facet == '$order'
         order = [line for line in io.lines facet]
         continue
-      key, value = load_property '', facet
-      .props[key] = value
+      key, value = load_facet facet
+      .facets[key] = value
 
       if key.type\match '^text/moonscript %->'
         new_key = Key key.name, key.type\gsub '^text/moonscript %-> (.*)', 'text/lua -> %1'
         new_key.original = key
-        .props[new_key] = compile key, new_key, value
+        .facets[new_key] = compile key, new_key, value
 
     for child in *children_bundles
       -- @BUG: child bundles are malformed due to Tup bug ($ symbol)

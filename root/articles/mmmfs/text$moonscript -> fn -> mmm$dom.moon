@@ -28,12 +28,54 @@
         table.insert args, style: { 'list-style': 'none', 'font-size': '0.8em' }
         ol table.unpack args
 
-    append h1 'mmmfs', style: { 'margin-bottom': 0 }
     -- @TODO: s/filesystem/a way of organizing files/g
-    append p "a file and operating system to live in", style: { 'margin-top': 0, 'margin-bottom': '1em' }
+    append h1 'mmmfs', style: { 'margin-bottom': 0 }
+    append p "a file and operating system to live in", style: { 'margin-top': 0, 'padding-bottom': '0.2em', 'border-bottom': '1px solid black' }
+
+    append h2 "motivation"
+    append p "Today, computer users are losing more and more control over their data. Between web and cloud
+      applications holding customer data hostage for providing the services, unappealing and limited mobile file
+      browsing experiences and the non-interoperable, proprietary file formats holding on to their own data has
+      become infeasible for many users. mmmfs is an attempt at rethinking file-systems and the computer user
+      experience to give control back to and empower users."
+
+    append p "mmmfs tries to provide a filesystem that is powerful enough to let you use it as your canvas for thinking,
+      and working at the computer.  mmmfs is made for more than just storing information. Files in mmmfs can interact
+      and morph to create complex behaviours."
+
+    append p "Let us take as an example the simple task of collecting and arranging a mixed collection of images and texts
+      in order to brainstorm. To create an assemblage of pictures and text, many might be tempted to open an
+      Application like Microsoft Word or Adobe Photoshop and create a new document there. Both photoshop files and
+      word documents are capable of containing texts and images, but when the files are saved, direct access to the
+      contained data is lost. It is for example a non-trivial and unenjoyable task to edit an image file contained
+      in a word document in another application and have the changes apply to the document. In the same way,
+      text contained in a photoshop document cannot be edited in a text editor of your choice."
+
+    append p "mmmfs tries to change all this. In mmmfs, files can contain other files and so the collage document
+      becomes a container for the collected images and texts just as a regular directory would. This way the individual
+      files remain accessible and can be modified whenever necessary, while the collage document can be edited to
+      change the order, sizes and spacial arrangement of it's content if this is wanted, for example."
+
+    append p "The mmmfs file-type system also allows storing types of information that have become impractical to use
+      with current filesystems simply because noone has cared to make the right applications for them. It is not common
+      practice for example to store direct links to online content on the disk for example. In mmmfs, a link to a
+      picture and an actual picture are equivalent as long as you just want to view the picture. The collage file
+      described above for example wouldn't even know the difference, and you could mix and match between these types
+      as you wish."
 
     -- @TODO: motivation / outline problem + need
-    -- @TODO: quote http://pchiusano.github.io/2013-05-22/future-of-software.html on Applications
+    -- * applications don't let users *do* things (http://pchiusano.github.io/2013-05-22/future-of-software.html)
+    -- * applications are just (collections of) files - most users don't know this (anymore)
+    -- * users should know their system and how to move around in it
+    -- * filesystem trees are only *okay* for organizing information:
+    --   - users sooner or later choose something smarter because:
+    --  * filesystems work the same in every folder, even though the context can be very different
+    --  * appliances put their complex, structured data into opaque blocks
+    --    * the FS should be able to solve the structure issue
+    --    * the benefit is interoperability: edit the image of your report
+    --    * in image editor while the document editor automatically refreshes
+    -- * file formats dont mean much to users, they are meant for applications - let applications take care of converting them
+    -- * report.doc, report.pdf, report_orignal.pdf, report_old.doc, report2.doc....
 
     append p do
       fileder = footnote "fileder: file + folder. 'node', 'table' etc. are too general to be used all over."
@@ -91,52 +133,46 @@
         },
       }
 
-
     append div for child in *@children
       preview child
 
     append h2 "details"
     -- @TODO s/parts: dimensions, aspects?
-    -- @TODO: first mention both properties & children; then go into detail
+    -- @TODO: first mention both facets & children; then go into detail
     -- @TODO: main content
     append do
       name = html.i 'name'
       type = html.i 'type'
 
-      p "Fileders are made up of two main parts. The first is the list of ", (html.i 'properties'), ",
+      p "Fileders are made up of two main parts. The first is the list of ", (html.i 'facets'), ",
       which are values identified by a ", name, " and ", type, ". These values are queried using strings like ",
       (code 'title: text/plain'), " or ", (code 'mmm/dom'), ", which describe both the ", name,
-      " of a property (", (moon '"title"'), " and ", (moon '""'), ", the unnamed/main property) and the ", type,
-      " of a property. Property types can be something resembling a MIME-type or a more complex structure
-      (see ", (html.i "type chains"), " below). A fileder can have multiple properties of different types
-      set that share a ", name, ". In this case the overlapping properties are considered equivalent and the one
+      " of a facet (", (moon '"title"'), " and ", (moon '""'), ", the unnamed/main facet) and the ", type,
+      " of a facet. Facet types can be something resembling a MIME-type or a more complex structure
+      (see ", (html.i "type chains"), " below). A fileder can have multiple facets of different types
+      set that share a ", name, ". In this case the overlapping facets are considered equivalent and the one
       with the most appropriate ", type, " is selected, depending on the query.
-      The unnamed property is considered a fileder's 'main content', i.e. what you are interested in when viewing it."
+      The unnamed facet is considered a fileder's 'main content', i.e. what you are interested in when viewing it."
 
     append p "The second part of a fileder is the list of it's children, which are fileders itself.
       The children are stored in an ordered list and currently identified by their ", (code 'name: alpha'),
-      " property for UI and navigation purposes only (not sure if this is a good idea tbh)."
-
---      append do
---        github = footnote a 's-ol/mmm', href: 'https://github.com/s-ol/mmm/tree/master/app/mmmfs'
---          "Oh and also everything is on github and stuff", github,
---          " if you care about that."
+      " facet for UI and navigation purposes only (not sure if this is a good idea tbh)."
 
     append do
       mmmdom = code ('mmm/dom'), footnote span (code 'mmm/dom'), " is a polymorphic content type;
         on the server it is just an HTML string (like ", (code 'text/html'), "),
         but on the client it is a JS DOM Element instance."
 
-      p "What you are viewing right now is the main property of the root fileder.
-        The property is queried as ", mmmdom, ", a website fragment (DOM node). This website fragment
+      p "What you are viewing right now is the main facet of the root fileder.
+        The facet is queried as ", mmmdom, ", a website fragment (DOM node). This website fragment
         is then added to the page in the main content area, where you are most likely reading it right now."
 
       p "Anyway, this node is set up as a very generic sort of index thing and just lists its children-fileders' 
         alongside this text part you are reading.", br!, "For each child it displays the ", (code 'title: text/plain'),
-        " and shows the ", (code 'preview: mmm/dom'), " property (if set)."
+        " and shows the ", (code 'preview: mmm/dom'), " facet (if set)."
 
     append h3 "converts"
-    append p "So far I have always listed properties as they are being queried, but a main feature of mmmfs is
+    append p "So far I have always listed facets as they are being queried, but a main feature of mmmfs is
       type conversion. This means that you generally ask for content in whichever format suits your application,
       and rely on the type resolution mechanism to make that happen."
 
@@ -159,7 +195,7 @@ preview title, content
     ]]
 
     append p "Here the code that renders these previews. You can see it ", (html.i "asks"), " for the
-      properties ", (code 'title: text/plain'), ' and ', (code 'preview: mmm/dom'), "), but the values don't actually have to
+      facets ", (code 'title: text/plain'), ' and ', (code 'preview: mmm/dom'), "), but the values don't actually have to
       be ", (html.i "defined"), " as these types.
       For example, the markdown child below only provides ", (code 'preview'), " as ", (code 'text/markdown'), ":"
 
@@ -189,7 +225,7 @@ Fileder {
     ]]
 
     append h3 "type chains"
-    append p "In addition, a property type can be encoded using multiple types in a ", (code 'type chain'), ".
+    append p "In addition, a facet type can be encoded using multiple types in a ", (code 'type chain'), ".
       For example the root node you are viewing currently is actually defined as ", (code 'fn -> mmm/dom'), ",
       meaning it's value is a pre moon function returing a regular ", (code 'mmm/dom'), " value."
 

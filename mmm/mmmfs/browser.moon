@@ -40,12 +40,11 @@ class Browser
     -- (re)set every time @path changes
     @active = @path\map @root\walk
 
-    -- currently active property
+    -- currently active facet
     -- (re)set to default when @active changes
-    @prop = @active\map (fileder) ->
+    @facet = @active\map (fileder) ->
       return unless fileder
-      last = @prop and @prop\get!
-      -- (fileder\find 'mmm/dom') or next fileder.props
+      last = @facet and @facet\get!
       Key if last then last.type else 'mmm/dom'
 
     -- whether inspect tab is active
@@ -82,17 +81,17 @@ class Browser
             \append '/'
             \append path_segment name, href
 
-        \append span 'view property:', style: { 'margin-right': '0' }
+        \append span 'view facet:', style: { 'margin-right': '0' }
         \append @active\map (fileder) ->
             onchange = (_, e) ->
-              { :type } = @prop\get!
-              @prop\set Key name: e.target.value, :type
+              { :type } = @facet\get!
+              @facet\set Key name: e.target.value, :type
 
-            current = @prop\get!
+            current = @facet\get!
             current = current and current.name
             with select :onchange, disabled: not fileder
               if fileder
-                for i, value in ipairs fileder\get_prop_names!
+                for i, value in ipairs fileder\get_facets!
                   label = if value == '' then '(main)' else value
                   \append option label, :value, selected: value == current
         \append @inspect\map (enabled) ->
@@ -101,11 +100,11 @@ class Browser
 
     -- append or patch #browser-content
     main\append with get_or_create 'div', 'browser-content', class: 'content'
-      \append (@prop\map (p) -> @get_content p), (rehydrate and .node.lastChild)
+      \append (@facet\map (p) -> @get_content p), (rehydrate and .node.lastChild)
 
     if rehydrate
       -- force one rerender to set onclick handlers etc
-      @prop\set @prop\get!
+      @facet\set @facet\get!
 
     inspector = @inspect\map (enabled) -> if enabled then @get_inspector!
 
@@ -123,13 +122,13 @@ class Browser
     active = @active\get!
 
     return disp_error "fileder not found!" unless active
-    return disp_error "property not found!" unless prop
+    return disp_error "facet not found!" unless prop
 
     ok, res, trace = xpcall convert, err_and_trace, active, prop
 
     if ok
       res or disp_error "[no conversion path to #{prop.type}]"
-    elseif res\match '%[nossr%]$'
+    elseif res and res.match and res\match '%[nossr%]$'
       warn '(SSR disabled)'
       div!
     else
@@ -137,9 +136,9 @@ class Browser
       disp_error "error: #{res}\n#{trace}"
 
   get_inspector: =>
-    -- active property in inspect tab
-    -- (re)set to match when @prop changes
-    @inspect_prop = @prop\map (prop) ->
+    -- active facet in inspect tab
+    -- (re)set to match when @facet changes
+    @inspect_prop = @facet\map (prop) ->
       active = @active\get!
       key = active\find prop
       key = key.original if key and key.original
@@ -153,12 +152,12 @@ class Browser
           fileder = @active\get!
 
           onchange = (_, e) ->
-            { :name } = @prop\get!
+            { :name } = @facet\get!
             @inspect_prop\set Key e.target.value
 
           with select :onchange
             if fileder
-              for key, _ in pairs fileder.props
+              for key, _ in pairs fileder.facets
                 value = key\tostring!
                 \append option value, :value, selected: value == current
         @inspect\map (enabled) ->
