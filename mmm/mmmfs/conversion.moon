@@ -52,12 +52,8 @@ converts = {
       (html) -> div html
     else
       (html) ->
-        tmp = document\createElement 'div'
-        tmp.innerHTML = html
-        -- if tmp.childElementCount == 1
-        --   tmp.firstChild
-        -- else
-        tmp
+        with document\createElement 'div'
+          .innerHTML = html
   },
   {
     inp: 'text/lua -> (.+)',

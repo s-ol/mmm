@@ -1,7 +1,5 @@
-package.moonpath = './?.server.moon;./?/init.server.moon;' .. package.moonpath
-require 'mmm.init'
+require 'mmm'
 import render from require 'mmm.mmmfs'
-import load_fileder from require 'mmm.mmmfs.fs'
 
 -- usage:
 -- moon render.moon <path_to_root>

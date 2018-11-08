@@ -23,7 +23,7 @@ for convert in *converts
   table.insert casts, convert
 
 class Browser
-  new: (@root, path='/', rehydrate=false) =>
+  new: (@root, path='', rehydrate=false) =>
     -- root fileder
     assert @root, 'root fileder is nil'
 
@@ -69,7 +69,7 @@ class Browser
           href = ''
           path = path\match '^/(.*)'
 
-          \append path_segment 'root', '/'
+          \append path_segment 'root', ''
 
           while path
             name, rest = path\match '^(%w+)/(.*)'
