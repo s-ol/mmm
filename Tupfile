@@ -4,16 +4,12 @@ include_rules
 !sassc    = |> ^ SCSS %b^ sassc -mauto       %f %o |> | %o.map
 
 # download fengari dependencies
-: |> !download |> dist/fengari-web.js
-: |> !download |> dist/fengari-web.js.map
-: static/* |> cp %f dist/ |> dist/%b
+: |> !download |> root/fengari-web.js
+: |> !download |> root/fengari-web.js.map
+: static/* |> cp %f root/ |> root/%b
 
 # render stylesheet
-: scss/main.scss |> !sassc |> dist/main.css
+: scss/main.scss |> !sassc |> root/main.css
 
 # bundle for client loading
-: mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon bundle.moon %o --wrap %f |> dist/mmm.bundle.lua
-: root/$bundle.lua | <children> |> ^ WRAP %d^ cp '%f' '%o' |> dist/root.lua
-
-# render static content and compile sources
-run moon tup.moon
+: mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon bundle.moon %o --wrap %f |> root/mmm.bundle.lua

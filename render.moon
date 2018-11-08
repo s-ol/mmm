@@ -4,19 +4,27 @@ import render from require 'mmm.mmmfs'
 import load_fileder from require 'mmm.mmmfs.fs'
 
 -- usage:
--- moon render.moon <output> <fileder_path>
-{ output_name, path } = arg
+-- moon render.moon <path_to_root>
+{ root } = arg
 
-assert output_name, "please specify the output filename as an argument"
-assert path, "please specify the path name to build as an argument"
+assert root, "please specify the relative root path as an argument"
 
-root = load_fileder 'root' .. path
-root\mount path
+require 'lfs'
+cwd = lfs.currentdir!
+path = ''
+
+while root\find '^%.%./'
+  root = root\match '^%.%./(.*)'
+  cwd, trimmed = cwd\match '(.*)(/[^/]+)$'
+  path = trimmed .. path
+
+root = dofile '$bundle.lua'
+root\mount path, true
 
 content, rehydrate = render root, path
 assert content, "no content"
 
-with io.open output_name, 'w'
+with io.open 'index.html', 'w'
   \write "<!DOCTYPE html>
 <html>
   <head>
@@ -39,8 +47,7 @@ with io.open output_name, 'w'
     <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
     <script src=\"/fengari-web.js\"></script>
     <script type=\"application/lua\" src=\"/mmm.bundle.lua\"></script>
-    <script type=\"application/lua\" src=\"/root.bundle.lua\"></script>
-    <script defer type=\"application/lua\" src=\"/mmm/init.lua\"></script>
+    <script type=\"application/lua\">require 'mmm'</script>
 
     #{rehydrate}
   </body>

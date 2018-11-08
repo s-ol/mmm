@@ -23,29 +23,28 @@ with io.open output_name, 'w'
   else
     \write "return {\n"
 
-    for i=2, #arg
-      file = arg[i]
+    this = assert arg[2]
+    addmod = (module, file, source) ->
+      modname = "#{this}.#{module}"
+      modname = this if module == 'init'
+      \write "
+{
+  module = #{escape modname},
+  file = #{escape "#{this}/#{file}"},
+  source = #{escape source},
+},"
 
+    for file in *arg[3,]
       if dirname = file\match '^([%w-_]+)/%.bundle%.lua$'
         bundle = dofile file
         for { :module, :file, :source } in *bundle
-          \write "
-{
-  module = #{escape dirname .. '.' .. module},
-  file = #{escape dirname .. '/' .. file},
-  source = #{escape source},
-},
-          "
+          addmod module, file, source
       else
         module = file\gsub '%.lua$', ''
+        continue if module\match '%.server'
+        module = module\gsub '%.client$', ''
         module = module\gsub '%.init$', ''
-        \write "
-{
-  module = #{escape module},
-  file = #{escape file},
-  source = #{escape readfile file},
-},
-        "
+        addmod module, file, readfile file
 
     \write "}"
 
