@@ -20,22 +20,23 @@ enum_dir = do
     coroutine.wrap -> yieldtree dir
 
 -- COMPILE MOONSCRIPT
-for file in enum_dir 'mmm'
-  continue if file\match '%.server%.moon$'
-  basename = assert file\match '(.*)%.moon$'
-  basename = (file\match '(.*)%.client') or basename
-  print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {mmm_src}"
-
--- GENERATE BUNDLES
-print ": {mmm_src} |> ^ BUNDLE mmm^ moon bundle.moon %o %f |> dist/mmm.bundle.lua"
+-- for file in enum_dir 'mmm'
+--   continue if file\match '%.server%.moon$'
+--   basename = assert file\match '(.*)%.moon$'
+--   basename = (file\match '(.*)%.client') or basename
+--   print ": #{file} |> ^ MOON %b > %o^ moonc -o %o %f |> dist/#{basename}.lua {mmm_src}"
+-- 
+-- -- GENERATE BUNDLES
+-- print ": {mmm_src} |> ^ BUNDLE mmm^ moon bundle.moon %o %f |> dist/mmm.bundle.lua"
 
 -- COMPILE AND DUMP TREE
-print ": |> ^ DUMP root^ moon dump_tree.moon %o |> dist/root.lua"
+-- print ": |> ^ DUMP root^ moon dump_tree.moon %o |> dist/root.lua"
 
 -- PRE-RENDER TREE
-import load_fileder from require 'mmm.mmmfs.fs'
-
-root = load_fileder!
+-- import load_fileder from require 'mmm.mmmfs.fs'
+-- 
+-- root = load_fileder!
+root = dofile 'root/$bundle.lua'
 root\mount!
 
 for fileder in coroutine.wrap root\iterate
