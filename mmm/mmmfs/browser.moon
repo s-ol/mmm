@@ -72,12 +72,9 @@ class Browser
           \append path_segment 'root', ''
 
           while path
-            print "splitting #{path}"
             name, rest = path\match '^([%w-_%.]+)/(.*)'
             if not name
               name = path
-
-            print "adding #{name}..."
 
             path = rest
             href = "#{href}/#{name}"
