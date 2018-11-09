@@ -13,6 +13,7 @@ code_cast = (lang) ->
   }
 
 casts = {
+  code_cast 'javascript',
   code_cast 'moonscript',
   code_cast 'lua',
   code_cast 'markdown',
