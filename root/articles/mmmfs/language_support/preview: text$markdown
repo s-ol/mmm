@@ -1,0 +1,6 @@
+this Fileder contains some minimal examples showing support for various languages `mmmfs` supports currently.
+
+Language support is mostly limited by the fact that `mmmfs` currently targets web browsers,
+on the server any scripting language that can be executed can theoretically be integrated with minimal effort.
+
+Using the inspector mode to view the source of the Fileders below is encouraged.

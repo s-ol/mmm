@@ -15,8 +15,8 @@ render = (root, path) ->
   table.insert(on_load, function()
     local path = #{string.format '%q', path}
     local browser = require 'mmm.mmmfs.browser'
-    local root = require 'root'
-    root:mount()
+    local root = dofile '/$bundle.lua'
+    root:mount('', true)
 
     BROWSER = browser.Browser(root, path, true)
   end)

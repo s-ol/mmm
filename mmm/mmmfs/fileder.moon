@@ -1,7 +1,7 @@
 require = relative ..., 1
 import get_conversions, apply_conversions from require '.conversion'
 
--- Key of a Fileder Property
+-- Key of a Fileder Facet
 -- contains:
 -- * @name - key name or '' for main content
 -- * @type - type string (type -> type -> type)
@@ -34,16 +34,16 @@ class Key
 
 -- Fileder itself
 -- contains:
--- * @props - Property Map (Key to Value)
+-- * @facets - Facet Map (Key to Value)
 -- * @children - Children Array
 class Fileder
-  -- instantiate from props and children tables
-  -- or mix in one table (numeric keys are children, remainder props)
-  -- prop-keys are passed to Key constructor
-  new: (props, children) =>
+  -- instantiate from facets and children tables
+  -- or mix in one table (numeric keys are children, remainder facets)
+  -- facet-keys are passed to Key constructor
+  new: (facets, children) =>
     if not children
-      children = for i, child in ipairs props
-        props[i] = nil
+      children = for i, child in ipairs facets
+        facets[i] = nil
         child
 
     -- automatically mount children on insert
@@ -59,13 +59,13 @@ class Fileder
       @children[i] = child
 
     -- automatically reify string keys on insert
-    @props = setmetatable {}, __newindex: (t, key, v) ->
+    @facets = setmetatable {}, __newindex: (t, key, v) ->
       rawset t, key, nil -- fix for fengari.io
       rawset t, (Key key), v
 
-    -- copy props
-    for k, v in pairs props
-      @props[k] = v
+    -- copy facets
+    for k, v in pairs facets
+      @facets[k] = v
 
   -- recursively walk to and return the fileder with @path == path
   -- * path - the path to walk to
@@ -107,21 +107,21 @@ class Fileder
     for child in *@children
       child\iterate depth - 1
 
-  -- get all unique names associated with properties (list)
-  get_prop_names: =>
+  -- get all facet names (list)
+  get_facets: =>
     names = {}
-    for key in pairs @props
+    for key in pairs @facets
       names[key.name] = true
 
     [name for name in pairs names]
 
-  -- find property key according to criteria, nil if no value or conversion path
+  -- find facet and type according to criteria, nil if no value or conversion path
   -- * ... - arguments like Key
   find: (...) =>
     want = Key ...
 
-    -- filter props by name
-    matching = [ key for key in pairs @props when key.name == want.name ]
+    -- filter facets by name
+    matching = [ key for key in pairs @facets when key.name == want.name ]
     return unless #matching > 0
 
     -- get shortest conversion path
@@ -134,7 +134,7 @@ class Fileder
 
       error "couldn't find key after resolution?"
 
-  -- get property according to criteria, nil if no value or conversion path
+  -- get and convert facet according to criteria, nil if no value or conversion path
   -- * ... - arguments like Key
   get: (...) =>
     want = Key ...
@@ -143,7 +143,7 @@ class Fileder
     key, conversions = @find want
 
     if key
-      value = apply_conversions conversions, @props[key], @, key
+      value = apply_conversions conversions, @facets[key], @, key
       value, key
 
   -- like @get, throw if no value or conversion path

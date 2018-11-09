@@ -1,40 +1,15 @@
-.gitignore
+include_rules
 
 !download = |> ^ DOWNLOAD %O^ curl -L https://github.com/fengari-lua/fengari-web/releases/download/@(FENGARI_VERSION)/`basename %o` > %o |>
 !sassc    = |> ^ SCSS %b^ sassc -mauto       %f %o |> | %o.map
 
 # download fengari dependencies
-: |> !download |> dist/fengari-web.js
-: |> !download |> dist/fengari-web.js.map
-: static/* |> cp %f dist/ |> dist/%b
+: |> !download |> root/fengari-web.js
+: |> !download |> root/fengari-web.js.map
+: static/* |> cp %f root/ |> root/%b
 
 # render stylesheet
-: scss/main.scss |> !sassc |> dist/main.css
+: scss/main.scss |> !sassc |> root/main.css
 
-# preload full mmmfs tree
-preload root
-preload root/articles
-preload root/articles/mmmfs
-preload root/articles/mmmfs/empty
-preload root/articles/mmmfs/image
-preload root/articles/mmmfs/markdown
-preload root/articles/realities
-preload root/animations
-preload root/animations/twisted
-preload root/animations/koch
-preload root/experiments
-preload root/experiments/center_of_mass
-preload root/experiments/tags
-preload root/meta
-preload root/meta/mmm.dom
-preload root/meta/test_mmm.component
-preload root/meta/todo
-
-# preload all of mmm
-preload mmm
-preload mmm/dom
-preload mmm/mmmfs
-preload mmm/component
-
-# render static content and compile sources
-run moon tup.moon
+# bundle for client loading
+: mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon bundle.moon %o --wrap %f |> root/mmm.bundle.lua
