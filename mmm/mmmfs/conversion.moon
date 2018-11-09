@@ -77,6 +77,14 @@ if MODE == 'SERVER'
       out: 'text/lua -> %1',
       transform: single moon.to_lua
     }
+else
+  table.insert converts, {
+    inp: 'text/javascript -> (.+)',
+    out: '%1',
+    transform: (source) ->
+      f = js.new window.Function, source
+      f!
+  }
 
 do
   local markdown

@@ -54,14 +54,13 @@
     append p "mmmfs tries to change all this. In mmmfs, files can contain other files and so the collage document
       becomes a container for the collected images and texts just as a regular directory would. This way the individual
       files remain accessible and can be modified whenever necessary, while the collage document can be edited to
-      change the order, sizes and spacial arrangement of it's content if this is wanted, for example."
+      change the order, sizes and spatial arrangement of it's content if this is wanted, for example."
 
     append p "The mmmfs file-type system also allows storing types of information that have become impractical to use
-      with current filesystems simply because noone has cared to make the right applications for them. It is not common
-      practice for example to store direct links to online content on the disk for example. In mmmfs, a link to a
-      picture and an actual picture are equivalent as long as you just want to view the picture. The collage file
-      described above for example wouldn't even know the difference, and you could mix and match between these types
-      as you wish."
+      with current filesystems simply because noone has cared to make suitable applications for them. It is not common
+      practice, for example, to store direct links to online content on the disk for example. In mmmfs, a link to a
+      picture can be stored wherever an actual picture is expected for example, the system will take care of retrieving
+      the real picture as necessary."
 
     -- @TODO: motivation / outline problem + need
     -- * applications don't let users *do* things (http://pchiusano.github.io/2013-05-22/future-of-software.html)
