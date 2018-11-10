@@ -1,9 +1,3 @@
-facets = tup.glob '*'
-inputs = ''
-for i, file in ipairs(facets) do
-  inputs = inputs .. " '" .. file .. "'"
-end
-
 LUA_PATH = {}
 LUA_PATH += root .. '/?.lua'
 LUA_PATH += root .. '/?.server.lua'
@@ -13,6 +7,13 @@ LUA_PATH = 'LUA_PATH="' .. table.concat(LUA_PATH, ';') .. '"'
 
 bundle = LUA_PATH .. ' moon ' .. root .. '/bundle_fileder.moon'
 render = LUA_PATH .. ' moon ' .. root .. '/render.moon'
+
+-- @TODO: whish there was a better glob for this?
+facets = tup.glob '*$*'
+inputs = ''
+for i, file in ipairs(facets) do
+  inputs = inputs .. " '" .. file .. "'"
+end
 
 facets += '<children>'
 facets += root .. '/<modules>'

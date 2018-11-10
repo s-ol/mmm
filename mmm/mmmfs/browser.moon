@@ -49,7 +49,7 @@ class Browser
       Key if last then last.type else 'mmm/dom'
 
     -- whether inspect tab is active
-    @inspect = ReactiveVar false
+    @inspect = ReactiveVar (MODE == 'CLIENT' and window.location.search\match '[?&]inspect')
 
     -- retrieve or create the wrapper and main elements
     main = get_or_create 'div', 'browser-root', class: 'main view'
