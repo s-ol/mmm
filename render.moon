@@ -17,6 +17,7 @@ while root\find '^%.%./'
   path = trimmed .. path
 
 root = dofile '$bundle.lua'
+assert root, "couldn't load $bundle.lua"
 root\mount path, true
 
 content, rehydrate = render root, path

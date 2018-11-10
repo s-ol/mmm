@@ -1,4 +1,4 @@
-import article, h1, h2, p, a, span, div, pre, code from require 'mmm.dom'
+import article, h1, h2, p, a, div, pre, code from require 'mmm.dom'
 import lua, moonscript from (require 'mmm.highlighting').languages
 
 mmmdom = -> code 'mmm.dom'
