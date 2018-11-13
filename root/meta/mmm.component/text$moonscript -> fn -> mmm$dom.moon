@@ -1,4 +1,5 @@
 import article, section, h1, h2, h3, p, a, div, ul, li, pre, code from require 'mmm.dom'
+import tohtml from require 'mmm.component'
 import lua, moonscript from (require 'mmm.highlighting').languages
 
 mmmcomp = -> code 'mmm.component'
@@ -10,7 +11,7 @@ source = do
     return the_code unless demo
 
     example = assert load lua_src
-    div the_code, div example!, class: 'example'
+    div the_code, div (tohtml example!), class: 'example'
 
 => article {
   h1 mmmcomp!
@@ -25,7 +26,7 @@ source = do
     content can still be generated from the same code that powers the reactive interface."
 
   h2 "Examples"
-  p "Feel free to read the API documentation below, or take a look at the following examples using the ",
+  p "Feel free to read the documentation below, or take a look at the following examples using the ",
     (code 'mmmfs'), " inspect mode:"
 
   ul for child in *@children
@@ -36,7 +37,7 @@ source = do
         BROWSER\navigate child.path
     }
 
-  h2 "API"
+  h2 "Guide"
   p "Begin by requiring ", mmmcomp!, ". The module returns a table containing the following:"
 
   ul {
@@ -166,4 +167,118 @@ fruit:set("orange")
 print(loud_fruit:get()) -- prints 'ORANGE'
       ]], false
     }
+
+  section do
+    relem = -> code 'ReactiveElement'
+    rvar = -> code 'ReactiveVar'
+
+    {
+      id: 'ReactiveElement'
+
+      h3 relem!, "s"
+      p relem!, " is a wrapper around DOM elements that allows you to use ", rvar!, "s to specify attributes and
+        children of the element. Internally it ", (code ':subscribe()'), "s to each of the ", rvar!, "s so that it can
+        update whenever any of the values change."
+
+      p relem!, "s can be instantiated using the ", relem!, " constructor, but usually you will want to use the
+        shorthand functions that you can pull out of the ", (code 'elements'), " 'magic table', as they will make your
+        code much more legible. This table provides functions for creating any HTML element based on it's name.
+        The elements you use are automatically cached so you can either pull out only the ones you want to use into
+        your local namespace or use the table itself."
+
+      p "Each of these node creation functions accept any number of nodes or strings as arguments and will attach these
+        as their children:"
+
+      source [[
+import elements from require 'mmm.component'
+import h1, code from elements
+
+h1 "Hello from ", code 'mmm.component'
+
+-- or if you want to keep your namespace clean:
+e = elements
+e.h1 "Hello from ", e.code 'mmm.component'
+      ]], [[
+local elements = require'mmm.component'.elements
+local h1, code = elements.h1, elements.code
+
+h1("Hello from ", code 'mmm.component')
+
+-- or if you want to keep your namespace clean:
+local e = elements
+return e.h1("Hello from ", e.code 'mmm.component')
+        ]]
+
+      source [[
+import text, elements from require 'mmm.component'
+import div, button from elements
+
+count = ReactiveVar 0
+
+div {
+  button '-', onclick: () -> count\transform (c) -> c - 1
+  " count is: "
+  count\map (num) -> text num
+  " "
+  button '+', onclick: () -> count\transform (c) -> c + 1
+}
+      ]], [[
+local comp = require 'mmm.component'
+local div, button = comp.elements.div, comp.elements.button
+
+local count = comp.ReactiveVar(0)
+
+return div {
+  button {
+    '-',
+    onclick = function () count:set(count:get() - 1) end
+  },
+  " count is: ",
+  count:map(function (num) return comp.text(num) end),
+  " ",
+  button {
+    '+',
+    onclick = function () count:set(count:get() + 1) end
+  },
+}
+        ]]
+
+      source [[
+import text, elements from require 'mmm.component'
+import select, option from elements
+
+color = ReactiveVar 'white'
+
+div {
+  div 'test', style: color\map (background) ->
+    { padding: '1em', :background }
+
+  select {
+    onchange: (e) => color\set e.target.value
+
+    option 'white'
+    option 'red'
+    option 'green'
+  }
+}
+      ]], [[
+local comp = require 'mmm.component'
+local e = comp.elements
+
+local color = comp.ReactiveVar 'red'
+
+return e.div {
+  e.div { 'test', style = color:map(function (bg)
+    return { padding = '1em', background = bg }
+  end) },
+  e.select {
+    onchange = function (_, e) color:set(e.target.value) end,
+
+    e.option 'red',
+    e.option 'green',
+    e.option 'blue',
+  },
+}
+        ]]
+      }
 }

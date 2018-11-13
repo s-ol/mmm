@@ -115,6 +115,16 @@ class Fileder
 
     [name for name in pairs names]
 
+  -- check whether a facet is directly available
+  has: (...) =>
+    want = Key ...
+
+    for key in pairs @facets
+      continue if key.original
+
+      if key.name == want.name and key.type == want.type
+        return key
+
   -- find facet and type according to criteria, nil if no value or conversion path
   -- * ... - arguments like Key
   find: (...) =>

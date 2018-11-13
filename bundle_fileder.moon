@@ -23,18 +23,20 @@ do
       continue
     table.insert addto, file
 
-
-readfile = (name) ->
-  file = io.open name, 'r'
-  with file\read '*all'
-    file\close!
+-- compile a moonscript facet to lua
+compile = (old, new, val) -> "-- this facet has been transpiled from '#{old}'
+-- to '#{new}' for execution in the browser.
+-- refer to the original facet as the source.
+#{to_lua val}"
 
 -- load a fs file as a fileder facet
 load_facet = (filename) ->
   key = (filename\match '(.*)%.%w+') or filename
   key = Key key\gsub '%$', '/'
 
-  value = readfile filename
+  file = io.open filename, 'r'
+  value = file\read '*all'
+  file\close!
 
   key, value
 
@@ -90,10 +92,13 @@ with io.open '$bundle.lua', 'w'
       key, value = load_facet facet
       .facets[key] = value
 
-      if key.type\match '^text/moonscript %->'
-        new_key = Key key.name, key.type\gsub '^text/moonscript %-> (.*)', 'text/lua -> %1'
-        new_key.original = key
-        .facets[new_key] = compile key, new_key, value
+    for key, value in pairs .facets
+      continue unless key.type\match '^text/moonscript %->'
+      built_key = Key key.name, key.type\gsub '^text/moonscript %-> (.*)', 'text/lua -> %1'
+      built_key.original = key
+
+      continue if \has built_key
+      .facets[built_key] = compile key, built_key, value
 
     for child in *children_bundles
       -- @BUG: child bundles are malformed due to Tup bug ($ symbol)
