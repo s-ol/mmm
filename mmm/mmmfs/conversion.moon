@@ -102,11 +102,11 @@ do
     }
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
-escape_inp = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
+escape_pattern = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
 
 -- attempt to find a conversion path from 'have' to 'want'
 -- * have - start type string or list of type strings
--- * want - stop type string
+-- * want - stop type pattern
 -- * limit - limit conversion amount
 -- returns a list of conversion steps
 get_conversions = (want, have, _converts=converts, limit=3) ->
@@ -117,19 +117,19 @@ get_conversions = (want, have, _converts=converts, limit=3) ->
 
   assert #have > 0, 'need starting type(s) (list was empty)'
 
+  want = escape_pattern want
   iterations = limit + math.max table.unpack [count type for type in *have]
   have = [{ :start, rest: start, conversions: {} } for start in *have]
 
   for i=1, iterations
     next_have, c = {}, 1
     for { :start, :rest, :conversions } in *have
-      if want == rest
+      if rest\match want
         return conversions, start
       else
         for convert in *_converts
-          inp = escape_inp convert.inp
-          matches = { rest\match inp }
-          continue unless #matches > 0
+          inp = escape_pattern convert.inp
+          continue unless rest\match inp
           result = rest\gsub inp, convert.out
           if result
             next_have[c] = {
