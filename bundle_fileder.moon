@@ -23,12 +23,6 @@ do
       continue
     table.insert addto, file
 
--- compile a moonscript facet to lua
-compile = (old, new, val) -> "-- this facet has been transpiled from '#{old}'
--- to '#{new}' for execution in the browser.
--- refer to the original facet as the source.
-#{to_lua val}"
-
 -- load a fs file as a fileder facet
 load_facet = (filename) ->
   key = (filename\match '(.*)%.%w+') or filename
@@ -44,10 +38,16 @@ load_facet = (filename) ->
 escape = (str) -> string.format '%q', tostring str
 
 -- compile a moonscript facet to lua
-compile = (old, new, val) -> "-- this facet has been transpiled from '#{old}'
+compile = (old, new, val) ->
+  lua, err = to_lua val
+
+  if not lua
+    error "Error compiling #{old}: #{err}"
+
+  "-- this facet has been transpiled from '#{old}'
 -- to '#{new}' for execution in the browser.
 -- refer to the original facet as the source.
-#{to_lua val}"
+#{lua}"
 
 -- dump a fileder subtree as Lua source
 dump_fileder = do
@@ -92,13 +92,17 @@ with io.open '$bundle.lua', 'w'
       key, value = load_facet facet
       .facets[key] = value
 
+    extra_facets = {}
     for key, value in pairs .facets
       continue unless key.type\match '^text/moonscript %->'
       built_key = Key key.name, key.type\gsub '^text/moonscript %-> (.*)', 'text/lua -> %1'
       built_key.original = key
 
       continue if \has built_key
-      .facets[built_key] = compile key, built_key, value
+      extra_facets[built_key] = compile key, built_key, value
+
+    for k,v in pairs extra_facets
+      .facets[k] = v
 
     for child in *children_bundles
       -- @BUG: child bundles are malformed due to Tup bug ($ symbol)
