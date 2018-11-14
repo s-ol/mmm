@@ -17,7 +17,18 @@ tohtml = (val) ->
     error "not a Node: #{val}, #{type val}"
 
 -- shorthand to form a text node from strings
-text = (...) -> table.concat { ... }, ' '
+escapes = {
+  '&': '&amp;'
+  '<': '&lt;'
+  '>': '&gt;'
+  '"': '&quot;'
+  "'": '&#39;'
+  '/': '&#47;'
+}
+
+text = (str) ->
+  str = tostring str
+  str\gsub '[}{">/<\'&]', escapes
 
 class ReactiveVar
   @isinstance: (val) -> 'table' == (type val) and val.subscribe

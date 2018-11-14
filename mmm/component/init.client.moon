@@ -16,8 +16,8 @@ tohtml = (val) ->
   else
     error "not a Node: #{val}, #{type val}"
 
--- shorthand to form a text node from strings
-text = (...) -> document\createTextNode table.concat { ... }, ' '
+-- shorthand to form a text node from a string
+text = (str) -> document\createTextNode tostring str
 
 class ReactiveVar
   @isinstance: (val) -> 'table' == (type val) and val.subscribe
