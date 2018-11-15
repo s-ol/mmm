@@ -3,8 +3,8 @@ import div, h3, p, br, ul, li, b, a from require 'mmm.dom'
 => div {
     style: { 'max-width': '700px' },
     h3 @gett 'title: text/plain', style: { 'margin-bottom': '-.5em' },
-    p "mmm is a collection of Lua/Moonscript modules for web development.",
-      "All modules are 'polymorphic' - they can run in the ", (b 'browser'),
+    p "mmm is a collection of Lua/Moonscript modules for web development.
+      All modules are 'polymorphic' - they can run in the ", (b 'browser'),
       ", using the native browser API for creating and interacting with DOM content, as well as on the ",
       (b 'server'), ", where they operate on and produce equivalent HTML strings."
     p "As the two implementations of each module are designed to be compatible,
