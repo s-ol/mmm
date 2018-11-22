@@ -114,13 +114,13 @@ with io.open '$bundle.lua', 'w'
     if order
       -- order from order file
       for i, name in pairs order
-        child = assert children[name], "child in $order but not fs: #{name} of #{path}"
+        child = assert children[name], "child in $order but not fs: #{name}"
         table.insert .children, child
         children[name] = nil
 
     -- sort remainder alphabeticalally
     for name, child in opairs children
       table.insert .children, child
-      warn "child #{name} of #{path} not in $order!" if order
+      warn "child #{name} not in $order!" if order
 
   \close!
