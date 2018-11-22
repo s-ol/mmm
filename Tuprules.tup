@@ -1,3 +1,4 @@
 .gitignore
 
 &root = .
+&build = build

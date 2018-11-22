@@ -20,6 +20,7 @@ class Key
       @name = opts.name
       @type = opts.type
       @original = opts.original
+      @filename = opts.filename
     else
       error "wrong argument type: #{type opts}, #{type second}"
 

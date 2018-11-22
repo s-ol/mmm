@@ -1,21 +1,23 @@
 require 'mmm'
+import get_path from require 'build.util'
 import Fileder, Key from require 'mmm.mmmfs.fileder'
 import opairs from require 'mmm.ordered'
 import to_lua from require 'moonscript.base'
-require 'lfs'
 
 -- usage:
--- moon bundle_fileder.moon <dirname> <facets>... -- <children>...
-{ dirname } = arg
+-- moon bundle_fileder.moon <path_to_root> <dirname> <facets>... -- <children>...
+{ path_to_root, dirname } = arg
 
+assert path_to_root, "please specify the relative root path"
 assert dirname, "please specify the fileder dirname"
+path = get_path path_to_root
 
 facets = {}
 children_bundles = {}
 
 do
   addto = facets
-  for file in *arg[2,]
+  for file in *arg[3,]
     continue if file == 'Tupdefault.lua'
 
     if file == '--'
@@ -27,8 +29,9 @@ do
 load_facet = (filename) ->
   key = (filename\match '(.*)%.%w+') or filename
   key = Key key\gsub '%$', '/'
+  key.filename = filename
 
-  file = io.open filename, 'r'
+  file = assert (io.open filename, 'r'), "couldn't open facet file '#{filename}'"
   value = file\read '*all'
   file\close!
 
@@ -36,18 +39,6 @@ load_facet = (filename) ->
 
 -- escape a string for lua aparser
 escape = (str) -> string.format '%q', tostring str
-
--- compile a moonscript facet to lua
-compile = (old, new, val) ->
-  lua, err = to_lua val
-
-  if not lua
-    error "Error compiling #{old}: #{err}"
-
-  "-- this facet has been transpiled from '#{old}'
--- to '#{new}' for execution in the browser.
--- refer to the original facet as the source.
-#{lua}"
 
 -- dump a fileder subtree as Lua source
 dump_fileder = do
@@ -80,8 +71,37 @@ end
 return #{_dump fileder, true}
   "
 
+renders = {
+  {
+    inp: '^text/moonscript %-> (.*)'
+    out: 'text/lua -> %1'
+    render: (val, fileder, old, new) ->
+      lua, err = to_lua val
+
+      if not lua
+        error "Error compiling #{old}: #{err}"
+
+      "-- this moonscript facet has been transpiled to
+-- '#{new}' for execution in the browser.
+-- refer to the original facet as the source.
+#{lua}"
+  },
+  {
+    inp: '^image/'
+    out: 'URL -> %0'
+    render: (val, fileder, old, new) -> "#{fileder.path}/#{old.filename}", "[binary removed]"
+  },
+  {
+    inp: '^video/'
+    out: 'URL -> %0'
+    render: (val, fileder, old, new) -> "#{fileder.path}/#{old.filename}", "[binary removed]"
+  },
+}
+
 with io.open '$bundle.lua', 'w'
-  \write dump_fileder with Fileder 'name: alpha': dirname
+  \write dump_fileder with fileder = Fileder 'name: alpha': dirname
+    \mount path, true
+
     order = nil
     children = {}
 
@@ -94,12 +114,21 @@ with io.open '$bundle.lua', 'w'
 
     extra_facets = {}
     for key, value in pairs .facets
-      continue unless key.type\match '^text/moonscript %->'
-      built_key = Key key.name, key.type\gsub '^text/moonscript %-> (.*)', 'text/lua -> %1'
-      built_key.original = key
+      for { :inp, :out, :render } in *renders
+        continue unless key.type\match inp
 
-      continue if \has built_key
-      extra_facets[built_key] = compile key, built_key, value
+        built_key = Key key.name, key.type\gsub inp, out
+        built_key.original = key
+
+        -- dont overwrite existing keys
+        continue if \has built_key
+
+        rendered, replace = render value, fileder, key, built_key
+
+        extra_facets[built_key] = rendered
+        .facets[key] = replace if replace
+
+        break
 
     for k,v in pairs extra_facets
       .facets[k] = v

@@ -98,7 +98,7 @@ class Browser
             current = @facet\get!
             current = current and current.name
             with select :onchange, disabled: not fileder
-              has_main = fileder\find current.name, '.*'
+              has_main = fileder and fileder\find current.name, '.*'
               \append option '(main)', value: '', disabled: not has_main, selected: current == ''
               if fileder
                 for i, value in ipairs fileder\get_facets!
@@ -150,7 +150,7 @@ class Browser
     -- (re)set to match when @facet changes
     @inspect_prop = @facet\map (prop) ->
       active = @active\get!
-      key = active\find prop
+      key = active and active\find prop
       key = key.original if key and key.original
       key
 

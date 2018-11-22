@@ -1,20 +1,13 @@
 require 'mmm'
 import render from require 'mmm.mmmfs'
+import get_path from require 'build.util'
 
 -- usage:
 -- moon render.moon <path_to_root>
-{ root } = arg
+{ path_to_root } = arg
 
-assert root, "please specify the relative root path as an argument"
-
-require 'lfs'
-cwd = lfs.currentdir!
-path = ''
-
-while root\find '^%.%./'
-  root = root\match '^%.%./(.*)'
-  cwd, trimmed = cwd\match '(.*)(/[^/]+)$'
-  path = trimmed .. path
+assert path_to_root, "please specify the relative root path"
+path = get_path path_to_root
 
 root = dofile '$bundle.lua'
 assert root, "couldn't load $bundle.lua"

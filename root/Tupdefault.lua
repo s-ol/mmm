@@ -1,12 +1,6 @@
-LUA_PATH = {}
-LUA_PATH += root .. '/?.lua'
-LUA_PATH += root .. '/?.server.lua'
-LUA_PATH += root .. '/?/init.lua'
-LUA_PATH += root .. '/?/init.server.lua'
-LUA_PATH = 'LUA_PATH="' .. table.concat(LUA_PATH, ';') .. '"'
-
-bundle = LUA_PATH .. ' moon ' .. root .. '/bundle_fileder.moon'
-render = LUA_PATH .. ' moon ' .. root .. '/render.moon'
+local LUA_PATH = lua_path()
+bundle = LUA_PATH .. ' moon ' .. build .. '/bundle_fileder.moon'
+render = LUA_PATH .. ' moon ' .. build .. '/render_fileder.moon'
 
 -- @TODO: whish there was a better glob for this?
 facets = tup.glob '*$*'
@@ -20,7 +14,7 @@ facets += root .. '/<modules>'
 
 tup.rule(
   facets,
-  '^ BNDL %d^ ' .. bundle .. ' %d ' .. inputs .. ' -- %<children>',
+  '^ BNDL %d^ ' .. bundle .. ' ' .. root .. ' %d ' .. inputs .. ' -- %<children>',
   { '$bundle.lua', '../<children>' }
 )
 
