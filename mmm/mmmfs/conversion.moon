@@ -101,6 +101,23 @@ do
       transform: single markdown
     }
 
+    table.insert converts, {
+      inp: 'text/markdown%+span',
+      out: 'mmm/dom',
+      transform: if MODE == 'SERVER'
+        (source) ->
+          html = markdown source
+          html = html\gsub '^<p', '<span'
+          html\gsub '/p>$', '/span>'
+      else
+        (source) ->
+          html = markdown source
+          html = html\gsub '^<p>', ''
+          html = html\gsub '</p>$', ''
+          with document\createElement 'span'
+            .innerHTML = html
+    }
+
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
 escape_pattern = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
 
