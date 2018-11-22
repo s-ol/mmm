@@ -34,8 +34,15 @@ class Browser
     -- update URL bar
     if MODE == 'CLIENT'
       @path\subscribe (path) ->
-        path ..= '/' unless '/' == path\sub -1
-        window.history\pushState nil, '', path
+        return if @skip
+        vis_path = path .. (if '/' == path\sub -1 then '' else '/')
+        window.history\pushState path, '', vis_path
+
+      window.onpopstate = (_, event) ->
+        if event.state
+          @skip = true
+          @path\set event.state
+          @skip = nil
 
     -- active fileder
     -- (re)set every time @path changes
