@@ -1,10 +1,5 @@
 .browser {
-  position: absolute;
   display: flex;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 
   .view {
     display: flex;
@@ -13,24 +8,41 @@
     flex: 1 1 0;
     min-width: 0;
 
-    &.inspector .content {
-      margin: 0;
-      padding: 0;
-      display: flex;
+    &.inspector {
+      top: 0;
+      position: sticky;
+      height: 100vh;
+      color: #c5c8c6;
 
-      > * {
-        display: block;
-        margin: 2em;
+      @include left-border;
+      border-color: $gray-dark;
+      background: $gray-dark;
+
+      nav {
+        background: inherit;
       }
 
-      > code.hljs {
+      .content {
         margin: 0;
-        border-radius: 0;
-        flex: 1;
+        padding: 0;
+        display: flex;
+        background: $gray-darker;
+
+        > * {
+          display: block;
+          margin: 0;
+          padding: 1em;
+          border-radius: 0;
+          border: 0;
+          flex: 1;
+        }
       }
     }
 
     nav {
+      position: sticky;
+      top: 0;
+
       display: flex;
       flex: 0 0 3.2em;
       justify-content: space-between;

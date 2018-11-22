@@ -98,10 +98,12 @@ class Browser
             current = @facet\get!
             current = current and current.name
             with select :onchange, disabled: not fileder
+              has_main = fileder\find current.name, '.*'
+              \append option '(main)', value: '', disabled: not has_main, selected: current == ''
               if fileder
                 for i, value in ipairs fileder\get_facets!
-                  label = if value == '' then '(main)' else value
-                  \append option label, :value, selected: value == current
+                  continue if value == ''
+                  \append option value, :value, selected: value == current
         \append @inspect\map (enabled) ->
           if not enabled
             button 'inspect', onclick: (_, e) -> @inspect\set true
@@ -160,10 +162,12 @@ class Browser
           fileder = @active\get!
 
           onchange = (_, e) ->
+            return if e.target.value == ''
             { :name } = @facet\get!
             @inspect_prop\set Key e.target.value
 
           with select :onchange
+            \append option '(none)', value: '', disabled: true, selected: not value
             if fileder
               for key, _ in pairs fileder.facets
                 value = key\tostring!

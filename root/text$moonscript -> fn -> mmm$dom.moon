@@ -19,10 +19,7 @@ import opairs from require 'mmm.ordered'
 
   -- menu
   append h1 {
-    style: {
-      position: 'relative',
-      'border-bottom': '1px solid #000'
-    },
+    style: { 'border-bottom': '1px solid #000' },
     'mmm',
     div {
       class: 'icons',
