@@ -34,6 +34,7 @@ class Browser
     -- update URL bar
     if MODE == 'CLIENT'
       @path\subscribe (path) ->
+        document.body.classList\add 'loading'
         return if @skip
         vis_path = path .. (if '/' == path\sub -1 then '' else '/')
         window.history\pushState path, '', vis_path
@@ -110,7 +111,11 @@ class Browser
 
     -- append or patch #browser-content
     main\append with get_or_create 'div', 'browser-content', class: 'content'
-      \append (@facet\map (p) -> @get_content p), (rehydrate and .node.lastChild)
+      content = ReactiveVar @get_content @facet\get!
+      if MODE == 'CLIENT'
+        @facet\subscribe (p) ->
+          window\setTimeout (-> content\set @get_content p), 150
+      \append content, (rehydrate and .node.lastChild)
 
     if rehydrate
       -- force one rerender to set onclick handlers etc
@@ -190,11 +195,7 @@ class Browser
   default_convert = (key) => @get key.name, 'mmm/dom'
 
   navigate: (new) =>
-    if MODE == 'CLIENT'
-      document.body.classList\add 'loading'
-      window\setTimeout (-> @path\set new), 150
-    else
-      @path\set new
+    @path\set new
 
 {
   :Browser
