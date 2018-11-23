@@ -51,12 +51,6 @@
       justify-content: space-between;
       background: $gray-bright;
 
-      /*
-      > * {
-        flex: 0 0 auto;
-      }
-      */
-
       > span:first-of-type {
         flex: 1 0 auto;
       }
@@ -70,6 +64,15 @@
       flex: 1 1 auto;
       overflow: auto;
       padding: 1em 2em;
+    }
+  }
+
+  .content, .path {
+    opacity: 1;
+    transition: opacity 150ms;
+
+    body.loading & {
+      opacity: 0;
     }
   }
 }

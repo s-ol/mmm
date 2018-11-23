@@ -67,7 +67,7 @@ class Browser
     else
       main\prepend with get_or_create 'nav', 'browser-navbar'
         .node.innerHTML = ''
-        \append span 'path: ', @path\map (path) -> with div style: { display: 'inline-block' }
+        \append span 'path: ', @path\map (path) -> with div class: 'path', style: { display: 'inline-block' }
           path_segment = (name, href) ->
             a name, :href, onclick: (_, e) ->
               e\preventDefault!
@@ -136,6 +136,8 @@ class Browser
 
     ok, res, trace = xpcall convert, err_and_trace, active, prop
 
+    document.body.classList\remove 'loading' if MODE == 'CLIENT'
+
     if ok
       res or disp_error "[no conversion path to #{prop.type}]"
     elseif res and res.match and res\match '%[nossr%]$'
@@ -187,7 +189,12 @@ class Browser
 
   default_convert = (key) => @get key.name, 'mmm/dom'
 
-  navigate: (new) => @path\set new
+  navigate: (new) =>
+    if MODE == 'CLIENT'
+      document.body.classList\add 'loading'
+      window\setTimeout (-> @path\set new), 150
+    else
+      @path\set new
 
 {
   :Browser

@@ -1,8 +1,9 @@
 import div, h3, ul, li, a, h4, img, p from require 'mmm.dom'
+import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
 
 =>
   div {
-    h3 @gett 'title: text/plain', style: { 'margin-bottom': '-.5em' },
+    link_to @, h3 @gett 'title: text/plain', style: { 'margin-bottom': '-.5em' },
     ul with for child in *@children
         link_if_content = (opts) ->
           a with opts

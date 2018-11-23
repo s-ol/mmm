@@ -29,5 +29,12 @@ header {
     font-weight: 800;
     font-size: 0.7em;
     vertical-align: -0.04em;
+
+    transform: perspective(100rem) rotateY(0deg);
+    transition: transform 100ms;
+
+    body.loading & {
+      transform: perspective(100rem) rotateY(90deg);
+    }
   }
 }

@@ -22,6 +22,7 @@ import opairs from require 'mmm.ordered'
   }
 
   for child in *@children
+    continue if child\get 'hidden: bool'
     append div {
       class: 'well'
       (child\get 'preview: mmm/dom') or child\get 'mmm/dom'
