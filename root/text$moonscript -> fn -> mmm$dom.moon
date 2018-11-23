@@ -8,28 +8,6 @@ import opairs from require 'mmm.ordered'
     append = (stuff) -> table.insert content, stuff
     append, -> article content
 
-  moon = '\xe2\x98\xbd'
-
-  iconlink = (href, src, alt, style) -> a {
-    class: 'iconlink',
-    :href,
-    target: '_blank',
-    img :src, :alt, :style
-  }
-
-  -- menu
-  append h1 {
-    style: { 'border-bottom': '1px solid #000' },
-    'mmm',
-    div {
-      class: 'icons',
-      iconlink 'https://github.com/s-ol/mmm', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg',
-      iconlink 'https://twitter.com/S0lll0s', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/twitter.svg',
-      iconlink 'https://webring.xxiivv.com/#random', 'https://webring.xxiivv.com/icon.black.svg', 'webring',
-        { height: '0.9em', 'margin-left': '.04em' }
-    }
-  }
-
   append p {
     tt 'mmm'
     ' is not the '
@@ -44,11 +22,9 @@ import opairs from require 'mmm.ordered'
   }
 
   for child in *@children
-    append (child\get 'preview: mmm/dom') or child\get 'mmm/dom'
-
-  append p {
-    "made with #{moon} by "
-    a { 's-ol', href: 'https://twitter.com/S0lll0s' }
-  }
+    append div {
+      class: 'well'
+      (child\get 'preview: mmm/dom') or child\get 'mmm/dom'
+    }
 
   finish!

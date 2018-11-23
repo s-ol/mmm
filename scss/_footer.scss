@@ -1,0 +1,27 @@
+footer {
+  display: flex;
+  padding: 1rem 2rem;
+
+  color: $gray-bright;
+  background: $gray-dark;
+
+  .icons {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+
+    .iconlink  {
+      filter: invert(.7);
+
+      &:hover {
+        filter: invert(1);
+      }
+
+      > img {
+        height: 1em;
+        margin-left: 0.5em;
+        vertical-align: middle;
+      }
+    }
+  }
+}

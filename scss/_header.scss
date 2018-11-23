@@ -1,0 +1,33 @@
+header {
+  font-family: 'Source Sans Pro', sans-serif;
+  padding: 1rem 2rem;
+  text-align: right;
+
+  color: $gray-bright;
+  background: $gray-dark;
+
+  h1 {
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+    margin: 0;
+
+    font-size: 4rem;
+    font-weight: 200;
+
+    > b {
+      flex: 1;
+    }
+
+    .bold {
+      font-weight: 400;
+    }
+  }
+
+  .sun {
+    font-style: normal;
+    font-weight: 800;
+    font-size: 0.7em;
+    vertical-align: -0.04em;
+  }
+}

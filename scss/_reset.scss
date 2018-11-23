@@ -1,0 +1,65 @@
+* {
+  font-weight: inherit;
+  font-style: inherit;
+  font-family: inherit;
+  color: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input, select, button {
+  color: initial;
+}
+
+tt, code, kbd, samp {
+  font-family: 'monospace';
+}
+
+body, html, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+}
+
+::selection {
+  background: $gray-dark;
+  color: $gray-bright;
+  padding: 1em;
+}
+
+b { font-weight: bold; }
+i { font-style: italic; }
+a { cursor: pointer; }
+hr { clear: both; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: $white;
+  font-family: sans-serif;
+
+  min-height: 100vh;
+}
+
+a {
+  font-weight: bold;
+
+  text-decoration: underline;
+  text-decoration-color: transparent;
+
+  &:hover {
+    filter: invert(40%);
+    text-decoration-color: currentColor;
+  }
+
+  transition: filter 500ms, text-decoration-color 500ms;
+}
+
+code {
+  font-size: 0.8em;
+}
