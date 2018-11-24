@@ -65,13 +65,21 @@ converts = {
     out: '%1',
     transform: (source, fileder) ->
       source\gsub '{{(.-)}}', (expr) ->
-        path, facet = expr\match '^([%w-_/]*)%+(.*)'
+        path, facet = expr\match '^([%w%-_%./]*)%+(.*)'
         assert path, "couldn't match TPL expression '#{expr}'"
 
         target = fileder\walk "#{fileder.path}/#{path}"
         assert target, "couldn't resolve rpath '#{path}' relative to #{fileder}"
 
         target\gett facet
+  },
+  {
+    inp: 'time/iso8601-date',
+    out: 'time/unix',
+    transform: (val) ->
+      year, _, month, day = val\match '^%s*(%d%d%d%d)(%-?)([01]%d)%2([0-3]%d)%s*$'
+      assert year, "failed to parse ISO 8601 date: '#{val}'"
+      os.time :year, :month, :day
   }
 }
 
