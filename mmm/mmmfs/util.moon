@@ -2,6 +2,8 @@
   import a from elements
 
   link_to = (fileder, name) ->
+    assert fileder, "no fileder passed"
+
     name or= fileder\get 'title: mmm/dom'
     name or= fileder\gett 'name: alpha'
 

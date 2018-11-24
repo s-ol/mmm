@@ -48,12 +48,19 @@ class Fileder
         child
 
     -- automatically mount children on insert
-    @children = setmetatable {}, __newindex: (t, k, child) ->
-      rawset t, k, child
-      if @path == '/'
-        child\mount '/'
-      elseif @path
-        child\mount @path .. '/'
+    @children = setmetatable {}, {
+      __index: (t, k) ->
+        return rawget t, k unless 'string' == type k
+
+        @walk "#{@path}/#{k}"
+
+      __newindex: (t, k, child) ->
+        rawset t, k, child
+        if @path == '/'
+          child\mount '/'
+        elseif @path
+          child\mount @path .. '/'
+    }
 
     -- copy children
     for i, child in ipairs children
@@ -71,6 +78,10 @@ class Fileder
   -- recursively walk to and return the fileder with @path == path
   -- * path - the path to walk to
   walk: (path) =>
+    -- fix relative paths
+    if path != '' and '/' != path\sub 1, 1
+      path = "#{@path}/#{path}"
+
     -- early-out if we are outside of the path already
     return unless @path == path\sub 1, #@path
 
@@ -78,26 +89,21 @@ class Fileder
     return @ if #path == #@path
 
     for child in *@children
-      result = child\walk path
-      return result if result
+      if match = child\walk path
+        return match
 
   -- recursively mount fileder and children at path
-  -- * path - the path to mount at (default: '/')
+  -- * path - the path to mount at
   -- * mount_as - dont append own name to path
-  mount: (path='/', mount_as=false) =>
+  mount: (path, mount_as) =>
     assert not @path, "mounted twice: #{@path} and now #{path}"
 
-    if mount_as
-      @path = path
-    else
-      @path = path .. @gett 'name: alpha'
+    @path = path
+    if not mount_as
+      @path ..= @gett 'name: alpha'
 
-    if @path == '/'
-      for child in *@children
-        child\mount '/'
-    else
-      for child in *@children
-        child\mount @path .. '/'
+    for child in *@children
+      child\mount @path .. '/'
 
   -- recursively iterate all children (coroutine)
   -- * depth - depth to stop after; 1 = yield only self (default: infinite)

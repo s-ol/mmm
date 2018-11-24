@@ -1,4 +1,5 @@
 import article, h1, h3, div, b, p, a, br, ul, tt, li, img from require 'mmm.dom'
+import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
 
 =>
   append, finish = do
@@ -18,6 +19,9 @@ import article, h1, h3, div, b, p, a, br, ul, tt, li, img from require 'mmm.dom'
     'You can find the source code of everything '
     a { 'here', href: 'https://github.com/s-ol/mmm' }
     '.'
+    br!
+    'Most of the inner-workings of this page are documented in ',
+    link_to @walk 'articles/mmmfs'
   }
 
   for child in *@children

@@ -68,8 +68,8 @@ converts = {
         path, facet = expr\match '^([%w%-_%./]*)%+(.*)'
         assert path, "couldn't match TPL expression '#{expr}'"
 
-        target = fileder\walk "#{fileder.path}/#{path}"
-        assert target, "couldn't resolve rpath '#{path}' relative to #{fileder}"
+        target = fileder\walk path
+        assert target, "couldn't resolve path '#{path}' relative to #{fileder}"
 
         target\gett facet
   },
