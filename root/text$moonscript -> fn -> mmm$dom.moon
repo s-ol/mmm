@@ -1,5 +1,4 @@
 import article, h1, h3, div, b, p, a, br, ul, tt, li, img from require 'mmm.dom'
-import opairs from require 'mmm.ordered'
 
 =>
   append, finish = do

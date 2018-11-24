@@ -98,7 +98,7 @@ class ReactiveElement
 
   render: =>
     b = "<#{@element}"
-    for k,v in opairs @attrs
+    for k,v in opairs @attrs, nil, true
       if 'table' == type v
         tmp = ''
         for kk, vv in opairs v

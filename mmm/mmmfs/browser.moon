@@ -80,7 +80,7 @@ class Browser
           \append path_segment 'root', ''
 
           while path
-            name, rest = path\match '^([%w-_%.]+)/(.*)'
+            name, rest = path\match '^([%w%-_%.]+)/(.*)'
             if not name
               name = path
 

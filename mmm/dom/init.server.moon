@@ -14,7 +14,7 @@ element = (element) -> (...) ->
     attributes = {}
 
   b = "<#{element}"
-  for k,v in opairs attributes
+  for k,v in opairs attributes, nil, true
     if k == 'style' and 'table' == type v
       tmp = ''
       for kk, vv in opairs v

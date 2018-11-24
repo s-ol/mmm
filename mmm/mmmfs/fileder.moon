@@ -72,10 +72,10 @@ class Fileder
   -- * path - the path to walk to
   walk: (path) =>
     -- early-out if we are outside of the path already
-    return unless path\match '^' .. @path
+    return unless @path == path\sub 1, #@path
 
     -- gotcha
-    return @ if path == @path
+    return @ if #path == #@path
 
     for child in *@children
       result = child\walk path
