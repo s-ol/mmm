@@ -21,7 +21,7 @@ The script is pretty straightforward:
       kill $dmenupid
     done
 
-So here are all my current themes (click to view seperately)::
+So here are all my current themes:
 
 [![cavetree][cavetree]][cavetree]
 [![akira][akira]][akira]
@@ -37,7 +37,8 @@ So here are all my current themes (click to view seperately)::
 The wallpaper for the last one is intended to be tiled, not stretched, but that currently requries a manual change in my i3 config:
 [![dark][dark]][dark]
 
-I am thinking about implementing this as a Themer feature, but it will require it's own *presentation* plugin type so everyone can choose their own commands, bars, and waiting time,
+I am thinking about implementing this as a Themer feature, but it would require it's own *presentation* plugin type,
+so everyone can choose their own commands, bars, and waiting time.
 
 You can find more information about [Themer on the github page][themer], along with all my [config files][dotfiles].
 

@@ -60,6 +60,19 @@ converts = {
     out: '%1',
     transform: loadwith load or loadstring
   },
+  {
+    inp: 'mmm/tpl -> (.+)',
+    out: '%1',
+    transform: (source, fileder) ->
+      source\gsub '{{(.-)}}', (expr) ->
+        path, facet = expr\match '^([%w-_/]*)%+(.*)'
+        assert path, "couldn't match TPL expression '#{expr}'"
+
+        target = fileder\walk "#{fileder.path}/#{path}"
+        assert target, "couldn't resolve rpath '#{path}' relative to #{fileder}"
+
+        target\gett facet
+  }
 }
 
 if MODE == 'SERVER'

@@ -4,35 +4,5 @@
 @import 'header';
 @import 'footer';
 @import 'browser';
+@import 'content';
 @import 'canvasapp';
-
-pre > code.hljs {
-  @include left-border;
-  border-color: $gray-dark;
-}
-
-pre.dual-code {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 2rem;
-
-  > code.hljs {
-    @include right-border(0.3rem);
-
-    flex: 1;
-    margin: 0;
-  }
-
-  > code.hljs + code.hljs {
-    @include left-border(0.3rem);
-  }
-}
-
-.example, .well {
-  @include left-border;
-
-  margin: 1rem 2rem;
-  padding: 1rem;
-  background: $gray-bright;
-  border-color: $gray-neutral;
-}
