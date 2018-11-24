@@ -68,7 +68,6 @@ class Fileder
 
     -- automatically reify string keys on insert
     @facets = setmetatable {}, __newindex: (t, key, v) ->
-      rawset t, key, nil -- fix for fengari.io
       rawset t, (Key key), v
 
     -- copy facets
