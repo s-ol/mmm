@@ -114,7 +114,7 @@ converts = {
         }
   },
   {
-    inp: 'URL -> youtube',
+    inp: 'URL -> youtube/video',
     out: 'mmm/dom',
     transform: (link) ->
       id = link\match 'youtu%.be/([^/]+)'
