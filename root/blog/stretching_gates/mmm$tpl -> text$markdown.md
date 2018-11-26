@@ -78,9 +78,7 @@ made quick work of all that. Juan finished the top of the case with mounting hol
 potentiometers, the input jack, the switch, and two hot-glue-covered holes for the LEDs to shine
 through.
 
-<blockquote class="twitter-tweet" data-lang="en">
-  <a href="https://twitter.com/S0lll0s/status/881940776749543427">Finished Case</a>
-</blockquote>
+<mmm-embed path="finished_case" nolink></mmm-embed>
 
 [juan]:         https://twitter.com/juanorloz
 [555-src]:      https://electrosome.com/monostable-multivibrator-555-timer/

@@ -67,7 +67,7 @@ with io.open 'index.html', 'w'
     <script src=\"/highlight.pack.js\"></script>
     <script src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
     <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
-    <!-- <script src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script> -->
+    <script src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>
     <script src=\"/fengari-web.js\"></script>
     <script type=\"application/lua\" src=\"/mmm.bundle.lua\"></script>
     <script type=\"application/lua\">require 'mmm'</script>

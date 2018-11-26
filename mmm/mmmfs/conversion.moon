@@ -1,4 +1,4 @@
-import div, text, code, img, video, source, iframe from require 'mmm.dom'
+import div, text, code, img, video, blockquote, a, source, iframe from require 'mmm.dom'
 import find_fileder, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import tohtml from require 'mmm.component'
 
@@ -44,14 +44,22 @@ converts = {
       (html, fileder) ->
         div html\gsub '<mmm%-embed%s+(.-)></mmm%-embed>', (attrs) ->
           path, facet = '', ''
+          opts = {}
           while attrs and attrs != ''
-            key, val, attrs = attrs\match '^(%w+)="([^"]-)"%s*(.*)'
+            key, val, _attrs = attrs\match '^(%w+)="([^"]-)"%s*(.*)'
+            if not key
+              key, _attrs = attrs\match '^(%w+)%s*(.*)$'
+              val = true
+
+            attrs = _attrs
+
             switch key
               when 'path' then path = val
               when 'facet' then facet = val
+              when 'nolink' then opts.nolink = true
               else warn "unkown attribute '#{key}=\"#{val}\"' in <mmm-embed>"
 
-          embed path, facet, fileder
+          embed path, facet, fileder, opts
     else
       (html, fileder) ->
         with document\createElement 'div'
@@ -63,8 +71,9 @@ converts = {
           for element in *embeds
             path = js_fix element\getAttribute 'path'
             facet = js_fix element\getAttribute 'facet'
+            nolink = js_fix element\getAttribute 'nolink'
 
-            element\replaceWith embed path, facet, fileder
+            element\replaceWith embed path, facet, fileder, { :nolink }
   },
   {
     inp: 'text/lua -> (.+)',
@@ -90,6 +99,21 @@ converts = {
       os.time :year, :month, :day
   },
   {
+    inp: 'URL -> twitter/tweet',
+    out: 'mmm/dom',
+    transform: (href) ->
+      id = assert (href\match 'twitter.com/[^/]-/status/(%d*)'), "couldn't parse twitter/tweet URL: '#{href}'"
+      if MODE == 'CLIENT'
+        with parent = div!
+          window.twttr.widgets\createTweet id, parent
+      else
+        div blockquote {
+          class: 'twitter-tweet'
+          'data-lang': 'en'
+          a '(linked tweet)', :href
+        }
+  },
+  {
     inp: 'URL -> youtube',
     out: 'mmm/dom',
     transform: (link) ->
@@ -98,7 +122,7 @@ converts = {
       id or= link\match 'youtube.com/[ev]/([^/]+)'
       id or= link\match 'youtube.com/embed/([^/]+)'
 
-      assert id, "couldn't parse youtube URL: #{link}"
+      assert id, "couldn't parse youtube URL: '#{link}'"
 
       iframe {
         width: 560

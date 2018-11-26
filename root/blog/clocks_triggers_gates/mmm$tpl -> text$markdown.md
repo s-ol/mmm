@@ -40,7 +40,7 @@ sequencers.
 Originally I thought about putting a light dependant resistor (LDR) somewhere under the
 counterweight, and measure the shadow as a signal.
 In the time until I got the Metronome, I discussed this with Sam Battle, who runs the awesome
-youtube channel [LOOK MUM NO COMPUTER][no-computer] and he proposed to use a piezo crystal
+youtube channel [LOOK MUM NO COMPUTER][no-computer], and he proposed to use a piezo crystal
 (sometimes referred to as *Contact Mic*) instead.
 
 As it turns out, the metronome has plenty of space to glue the piezo right next to the metal plate
@@ -49,9 +49,7 @@ The 1/4" (6.3mm) audio jack also fit very well behind the panel, where there is 
 empty compartment, I guess to amplifiy the ticking sound.
 I just drilled a hole in the back, screwed the jack in and soldered two wires; done!
 
-<blockquote class="twitter-tweet" data-lang="en">
-  <a href="https://twitter.com/S0lll0s/status/878328052744241152">First Test</a>
-</blockquote>
+<mmm-embed path="tyktok_test" nolink></mmm-embed>
 
 In this first test you can see the Piezo work as a microphone amplifying the ticking noise on my
 speakers.
@@ -82,9 +80,7 @@ I just set it up to light up 4 LEDs in sequence, so that I could see whether the
 After an hour or so of figuring out stupid wiring mistakes and learning about open-drain outputs
 it was working:
 
-<blockquote class="twitter-tweet" data-lang="en">
-  <a href="https://twitter.com/S0lll0s/status/879046250880008193">analog metronome</a>
-</blockquote>
+<mmm-embed path="tyktok_leds" nolink></mmm-embed>  
 (this tweet is mislabeled, Juan's sequencer is in the next video).
 
 [Juan][juan] had an Akai Tomcat drum machine on hand, and we were stoked to try it out.
@@ -92,18 +88,14 @@ As usual at first, it didn't work at all.
 Pretty soon we figured out that the signal was just too quiet coming off our 9V supply,
 so we put an amplifier in between (alongside a whole mess of cables) and behold:
 
-<blockquote class="twitter-tweet" data-lang="en">
-  <a href="https://twitter.com/S0lll0s/status/879061152520699904">analog metronome</a>
-</blockquote>
+<mmm-embed path="tyktok_tomcat" nolink></mmm-embed>
 
 This worked pretty well, surprisingly!
 With the potentiometer set *just right*, it rarely triggered twice, and ran for some time before the
 spring weakened and the sound became a tiny bit more quiet and failed to trigger every beat.
 This is also a really nice effect actually and transforms rather simple beats into nice wacky ones:
 
-<blockquote class="twitter-tweet" data-lang="en">
-  <a href="https://twitter.com/S0lll0s/status/879072879924711426">analog metronome</a>
-</blockquote>
+<mmm-embed path="tyktok_tired" nolink></mmm-embed>
 
 The schematic at this point is very simple:
 

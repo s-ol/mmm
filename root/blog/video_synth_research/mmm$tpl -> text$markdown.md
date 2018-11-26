@@ -56,9 +56,7 @@ the amount of steps the brightness scale is sliced into.
 ## OBS -2.3
 The other videoish thing we have going on sofar is this:
 
-<blockquote class="twitter-tweet" data-lang="en">
-  <a href="https://twitter.com/S0lll0s/status/876077574639767552">Video Sketch Titler</a>
-</blockquote>
+<mmm-embed path="sketch_titler" nolink></mmm-embed>
 
 this *SONY Family Studio* 'Video Sketch Titler' is basically a little box that you connect inbetween
 your video camera with some awesome family vacation clips on tape and your VHS recorder, which is

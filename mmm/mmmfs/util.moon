@@ -24,10 +24,12 @@
           BROWSER\navigate fileder.path
       }
 
-  embed = (fileder, name='', origin) ->
+  embed = (fileder, name='', origin, opts={}) ->
     fileder = find_fileder fileder, origin
 
     node = fileder\gett name, 'mmm/dom'
+
+    return node if opts.nolink
     link_to fileder, node
 
   {
