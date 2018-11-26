@@ -1,8 +1,8 @@
 .content {
-  img, video, pre > code {
+  img, video {
     display: block;
     max-width: 100%;
-    max-height: 100%;
+    max-height: 50vh;
 
     padding: 0 2em;
     box-sizing: border-box;

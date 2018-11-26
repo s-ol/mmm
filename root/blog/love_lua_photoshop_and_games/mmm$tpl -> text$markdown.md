@@ -24,9 +24,7 @@ Specifically, I started writing something that loads a .PSD directly and animate
 I also added code that detects file changes and reloads them automatically.
 At the end of the second project day, I had this:
 
-<video controls>
-  <source src="{{sheet+URL -> video/mp4}}" type="video/mp4" />
-</video>
+<mmm-embed path="sheet" nolink></mmm-embed>
 
 The code for this isn't much, but it took a few iterations to make the file- reload-watching reuseable and work on Linux and Windows alike (and efficient).
 I used a 3rd party library for loading the photoshop files, but I had to patch it a lot.
@@ -116,7 +114,7 @@ Because this could also be done by a mixin, i am thinking about abolishing the _
 You can see the system working in this clip:
 
 
-<mmm-embed path="animating"></mmm-embed>
+<mmm-embed path="animating" nolink></mmm-embed>
 _making an animation out of the single rain layer_
 
 Moreover, I added a directory structure for mixins; to load a mixin called _name _for a scene called _scene_, it first looks in the scene specific directories:
@@ -225,7 +223,7 @@ Here's the code for both:
 By the end of the three day "test phase".
 This is how the first scene looked in-game:
 
-<mmm-embed path="final"></mmm-embed>
+<mmm-embed path="final" nolink></mmm-embed>
 
 Here's _psdscene.moon_, wrapping most things mentioned in this article:
 

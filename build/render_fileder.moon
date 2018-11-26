@@ -34,6 +34,36 @@ do
 
   seed path
 
+get_meta = =>
+  title = (@get 'title: text/plain') or @gett 'name: alpha'
+
+  l = (str) ->
+    str = str\gsub '[%s\\n]+$', ''
+    str\gsub '\\n', ' '
+  e = (str) -> string.format '%q', l str
+
+  meta = "
+    <meta charset=\"UTF-8\">
+    <title>#{l title}</title>
+  "
+
+  if page_meta = @get '_meta: mmm/dom'
+    meta ..= page_meta
+  else
+    _path = path
+    _path = '/' if _path == ''
+    meta ..= "
+    <meta property=\"og:title\" content=#{e title} />
+    <meta property=\"og:type\"  content=\"website\" />
+    <meta property=\"og:url\"   content=\"https://mmm.s-ol.nu#{_path}\" />
+    <meta property=\"og:site_name\" content=\"mmm\" />"
+
+    if desc = @get 'description: text/plain'
+      meta ..= "
+    <meta property=\"og:description\" content=#{e desc} />"
+
+  meta
+
 root = dofile '$bundle.lua'
 assert root, "couldn't load $bundle.lua"
 root\mount path, true
@@ -41,21 +71,23 @@ root\mount path, true
 BROWSER = Browser root, path
 
 with io.open 'index.html', 'w'
-  \write "<!DOCTYPE html>
+  \write [[
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset=\"UTF-8\">
-    <title>MMM: lunar low-gravity scripting playground</title>
-    <link rel=\"stylesheet\" type=\"text/css\" href=\"/main.css\" />
+    <link rel="stylesheet" type="text/css" href="/main.css" />
     <!--
-    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/dom/init.lua\" />
-    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/component/init.lua\" />
-    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/mmmfs/init.lua\" />
-    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/mmmfs/fileder.lua\" />
-    <link rel=\"preload\" as=\"fetch\" href=\"/mmm/mmmfs/browser.lua\" />
+    <link rel="preload" as="fetch" href="/mmm/dom/init.lua" />
+    <link rel="preload" as="fetch" href="/mmm/component/init.lua" />
+    <link rel="preload" as="fetch" href="/mmm/mmmfs/init.lua" />
+    <link rel="preload" as="fetch" href="/mmm/mmmfs/fileder.lua" />
+    <link rel="preload" as="fetch" href="/mmm/mmmfs/browser.lua" />
     -->
 
-    <link href=\"https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400\" rel=\"stylesheet\">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet">
+  ]]
+  \write "
+    #{get_meta root}
   </head>
   <body>
     #{header}
@@ -63,15 +95,17 @@ with io.open 'index.html', 'w'
     #{assert (tohtml BROWSER), "couldn't render BROWSER"}
 
     #{footer}
-
-    <script src=\"/highlight.pack.js\"></script>
-    <script src=\"//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js\"></script>
-    <script src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
-    <script src=\"//platform.twitter.com/widgets.js\" charset=\"utf-8\"></script>
-    <script src=\"/fengari-web.js\"></script>
-    <script type=\"application/lua\" src=\"/mmm.bundle.lua\"></script>
-    <script type=\"application/lua\">require 'mmm'</script>
-
+  "
+  \write [[
+    <script src="/highlight.pack.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
+    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script src="/fengari-web.js"></script>
+    <script type="application/lua" src="/mmm.bundle.lua"></script>
+    <script type="application/lua">require 'mmm'</script>
+  ]]
+  \write "
     <script type=\"application/lua\">
       on_load = on_load or {}
       table.insert(on_load, function()
@@ -84,5 +118,6 @@ with io.open 'index.html', 'w'
       end)
     </script>
   </body>
-</html>"
+</html>
+  "
   \close!

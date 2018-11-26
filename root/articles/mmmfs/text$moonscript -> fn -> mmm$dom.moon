@@ -43,8 +43,8 @@
       and working at the computer.  mmmfs is made for more than just storing information. Files in mmmfs can interact
       and morph to create complex behaviours."
 
-    append p "Let us take as an example the simple task of collecting and arranging a mixed collection of images and texts
-      in order to brainstorm. To create an assemblage of pictures and text, many might be tempted to open an
+    append p "Let us take as an example the simple task of collecting and arranging a mixed collection of images, videos
+      and texts in order to brainstorm. To create an assemblage of pictures and text, many might be tempted to open an
       Application like Microsoft Word or Adobe Photoshop and create a new document there. Both photoshop files and
       word documents are capable of containing texts and images, but when the files are saved, direct access to the
       contained data is lost. It is for example a non-trivial and unenjoyable task to edit an image file contained
