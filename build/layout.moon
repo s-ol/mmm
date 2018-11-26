@@ -1,4 +1,4 @@
-import header, footer, div, h1, span, b, a, img from require 'mmm.dom'
+import header, footer, div, svg, g, circle, h1, span, b, a, img from require 'mmm.dom'
 
 pick = (...) ->
   num = select '#', ...
@@ -13,10 +13,25 @@ iconlink = (href, src, alt, style) -> a {
   img :src, :alt, :style
 }
 
+logo = svg {
+  class: 'sun'
+  viewBox: '-0.75 -1 1.5 2'
+  xmlns: 'http://www.w3.org/2000/svg'
+  baseProfile: 'full'
+  version: '1.1'
+
+  g {
+    transform: 'translate(0 .18)'
+
+    circle class: 'out', r: '.6', fill: 'none', 'stroke-width': '.12'
+    circle class:  'in', r: '.2', stroke: 'none'
+  }
+}
+
 {
   header: header {
     h1 {
-      span '\xe2\x98\x89', class: 'sun'
+      logo
       b!
       span 'mmm', class: 'bold'
       '.s-ol.nu'

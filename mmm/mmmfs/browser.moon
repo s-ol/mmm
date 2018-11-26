@@ -33,8 +33,15 @@ class Browser
 
     -- update URL bar
     if MODE == 'CLIENT'
+      logo = document\querySelector 'header > h1 > svg'
+      spin = ->
+        logo.classList\add 'spin'
+        logo.parentElement.offsetWidth
+        logo.classList\remove 'spin'
       @path\subscribe (path) ->
         document.body.classList\add 'loading'
+        spin!
+
         return if @skip
         vis_path = path .. (if '/' == path\sub -1 then '' else '/')
         window.history\pushState path, '', vis_path

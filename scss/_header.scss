@@ -9,8 +9,9 @@ header {
   h1 {
     display: flex;
     justify-content: space-around;
-    align-items: baseline;
+    align-items: center;
     margin: 0;
+    height: 5rem;
 
     font-size: 4rem;
     font-weight: 200;
@@ -22,19 +23,35 @@ header {
     .bold {
       font-weight: 400;
     }
-  }
 
-  .sun {
-    font-style: normal;
-    font-weight: 800;
-    font-size: 0.7em;
-    vertical-align: -0.04em;
+    .sun {
+      height: 100%;
+      stroke: currentColor;
+      fill: currentColor;
 
-    transform: perspective(100rem) rotateY(0deg);
-    transition: transform 100ms;
+      .out {
+        animation: spin 2s;
+        animation-iteration-count: 1;
+      }
 
-    body.loading & {
-      transform: perspective(100rem) rotateY(90deg);
+      .in {
+        animation: size 2s;
+        animation-iteration-count: 1;
+      }
+
+      &.spin circle {
+        animation: none;
+      }
     }
   }
+}
+
+@keyframes spin {
+  0% { transform: perspective(100rem) rotate3d(0.5, 1, 0, 0turn); }
+  100% { transform: perspective(100rem) rotate3d(0.5, 1, 0, 1turn); }
+}
+
+@keyframes size {
+  0%, 100% { transform: scale(1); }
+  40%, 60% { transform: scale(1.8); }
 }
