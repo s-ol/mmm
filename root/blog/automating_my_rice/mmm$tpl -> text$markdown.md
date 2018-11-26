@@ -23,19 +23,19 @@ The script is pretty straightforward:
 
 So here are all my current themes:
 
-[![cavetree][cavetree]][cavetree]
-[![akira][akira]][akira]
-[![sidewalk][sidewalk]][sidewalk]
-[![hotline][hotline]][hotline]
-[![polar][polar]][polar]
-[![polysun][polysun]][polysun]
-[![psych][psych]][psych]
-[![trippy][trippy]][trippy]
-[![twostripe][twostripe]][twostripe]
-[![bwcube][bwcube]][bwcube]
+<mmm-embed path="cavetree"></mmm-embed>
+<mmm-embed path="akira"></mmm-embed>
+<mmm-embed path="sidewalk"></mmm-embed>
+<mmm-embed path="hotline"></mmm-embed>
+<mmm-embed path="polar"></mmm-embed>
+<mmm-embed path="polysun"></mmm-embed>
+<mmm-embed path="psych"></mmm-embed>
+<mmm-embed path="trippy"></mmm-embed>
+<mmm-embed path="twostripe"></mmm-embed>
+<mmm-embed path="bwcube"></mmm-embed>
 
 The wallpaper for the last one is intended to be tiled, not stretched, but that currently requries a manual change in my i3 config:
-[![dark][dark]][dark]
+<mmm-embed path="dark"></mmm-embed>
 
 I am thinking about implementing this as a Themer feature, but it would require it's own *presentation* plugin type,
 so everyone can choose their own commands, bars, and waiting time.
@@ -44,19 +44,3 @@ You can find more information about [Themer on the github page][themer], along w
 
 [themer]:     https://github.com/s-ol/themer
 [dotfiles]:   https://github.com/s-ol/dotfiles
-
-[akira]:      {{akira+URL -> image/png}}
-[bwcube]:     {{bwcube+URL -> image/png}}
-[cavetree]:   {{cavetree+URL -> image/png}}
-[dark]:       {{dark+URL -> image/png}}
-[hotline]:    {{hotline+URL -> image/png}}
-[laying]:     {{laying+URL -> image/png}}
-[polar]:      {{polar+URL -> image/png}}
-[polysun]:    {{polysun+URL -> image/png}}
-[psych]:      {{psych+URL -> image/png}}
-[sexy]:       {{sexy+URL -> image/png}}
-[sidewalk]:   {{sidewalk+URL -> image/png}}
-[tattooed]:   {{tattooed+URL -> image/png}}
-[touching]:   {{touching+URL -> image/png}}
-[trippy]:     {{trippy+URL -> image/png}}
-[twostripe]:  {{twostripe+URL -> image/png}}

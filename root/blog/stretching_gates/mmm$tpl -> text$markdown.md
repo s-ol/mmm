@@ -8,7 +8,7 @@ While the long steps can be useful to make an oscillator play long notes, shorte
 are much more interesting to create drum-ish sounds.
 Here's a crude drawing of how what the circuit was doing vs how it's supposed to work:
 
-![some graphs][crude.png]
+<mmm-embed path="crude"></mmm-embed>
 
 The black lines are the signal levels 'as they used to be': you can see that the comparator output
 has very short pulses of more or less random duration, the /2 output is on half of the time, the /3
@@ -23,7 +23,7 @@ The only missing part is the one that needs to hold the signal for a specified t
 Well, the famous 555 Timer IC has our back: in the *monostable Configuration* it will do just that.
 Here's a schematic of the basic circuit (pic taken from [here][555-src]):
 
-![monostable 555 circuit][monostable.jpg]
+![monostable][monostable.jpg]
 
 This is really half as bad as it looks, but the details are better read up on elsewhere.
 Basically, whenever the signal on the trigger (pin 2) goes __low__, the output (pin 3) goes high
@@ -37,7 +37,7 @@ always outputs the opposite result.
 ## putting it together
 Here's the final schematic as I built it:
 
-![the final schematic][schematic.jpg]
+<mmm-embed path="schematic"></mmm-embed>
 
 Some things you may notice:
 
@@ -60,7 +60,7 @@ After this was all working on the breadboard, I started to solder a second versi
 Before finishing the design I sketched some stripboard layouts on a piece of paper, but in the end I
 threw all care overboard and just placed components on the stripboard.
 
-![half-done stripboard][stripboard.jpg]
+<mmm-embed path="stripboard"></mmm-embed>
 
 I cut apart a large IC socket and soldered the two halfes to the sides of the board to simplify
 testing and panel wiring, but I'm not sure if it was the best idea bceause the sockets aren't really
@@ -71,7 +71,7 @@ sockets once all the cables are in place and tested.
 We used the Dremel that we had luckily gotten our hands on and started drilling holes for the audio
 jacks with a template made from paper.
 
-![the case][case.jpg]
+<mmm-embed path="case"></mmm-embed>
 
 The inside also needed some plastic spines ground away to make room for the jacks, but the Dremel
 made quick work of all that. Juan finished the top of the case with mounting holes for the two
@@ -84,9 +84,4 @@ through.
 
 [juan]:         https://twitter.com/juanorloz
 [555-src]:      https://electrosome.com/monostable-multivibrator-555-timer/
-
-[crude.png]:      {{crude+URL -> image/png}}
-[schematic.jpg]:  {{schematic+URL -> image/jpeg}}
-[stripboard.jpg]: {{stripboard+URL -> image/jpeg}}
-[case.jpg]:       {{case+URL -> image/jpeg}}
 [monostable.jpg]: https://electrosome.com/wp-content/uploads/2013/05/Monostable-Multivibrator-using-555-Timer-Circuit-Diagram.jpg

@@ -1,5 +1,12 @@
-import div, text, code from require 'mmm.dom'
+import div, text, code, img, video, source, iframe from require 'mmm.dom'
+import find_fileder, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import tohtml from require 'mmm.component'
+
+-- fix JS null values
+js_fix = if MODE == 'CLIENT'
+  (arg) ->
+    return if arg == js.null
+    arg
 
 -- limit function to one argument
 single = (func) -> (val) -> func val
@@ -21,21 +28,6 @@ converts = {
     transform: (val, fileder) -> val fileder
   },
   {
-    inp: 'text/plain',
-    out: 'mmm/dom',
-    transform: single text
-  },
-  {
-    inp: 'alpha',
-    out: 'mmm/dom',
-    transform: single code
-  },
-  {
-    inp: 'URL -> .*',
-    out: 'mmm/dom',
-    transform: single code
-  },
-  {
     inp: 'mmm/component',
     out: 'mmm/dom',
     transform: single tohtml
@@ -49,11 +41,30 @@ converts = {
     inp: 'text/html',
     out: 'mmm/dom',
     transform: if MODE == 'SERVER'
-      (html) -> div html
+      (html, fileder) ->
+        div html\gsub '<mmm%-embed%s+(.-)></mmm%-embed>', (attrs) ->
+          path, facet = '', ''
+          while attrs and attrs != ''
+            key, val, attrs = attrs\match '^(%w+)="([^"]-)"%s*(.*)'
+            switch key
+              when 'path' then path = val
+              when 'facet' then facet = val
+              else warn "unkown attribute '#{key}=\"#{val}\"' in <mmm-embed>"
+
+          embed path, facet, fileder
     else
-      (html) ->
+      (html, fileder) ->
         with document\createElement 'div'
           .innerHTML = html
+
+          -- copy to iterate safely, HTMLCollections update when nodes are GC'ed
+          embeds = \getElementsByTagName 'mmm-embed'
+          embeds = [embeds[i] for i=0, embeds.length - 1]
+          for element in *embeds
+            path = js_fix element\getAttribute 'path'
+            facet = js_fix element\getAttribute 'facet'
+
+            element\replaceWith embed path, facet, fileder
   },
   {
     inp: 'text/lua -> (.+)',
@@ -68,10 +79,7 @@ converts = {
         path, facet = expr\match '^([%w%-_%./]*)%+(.*)'
         assert path, "couldn't match TPL expression '#{expr}'"
 
-        target = fileder\walk path
-        assert target, "couldn't resolve path '#{path}' relative to #{fileder}"
-
-        target\gett facet
+        (find_fileder path, fileder)\gett facet
   },
   {
     inp: 'time/iso8601-date',
@@ -80,7 +88,53 @@ converts = {
       year, _, month, day = val\match '^%s*(%d%d%d%d)(%-?)([01]%d)%2([0-3]%d)%s*$'
       assert year, "failed to parse ISO 8601 date: '#{val}'"
       os.time :year, :month, :day
-  }
+  },
+  {
+    inp: 'URL -> youtube',
+    out: 'mmm/dom',
+    transform: (link) ->
+      id = link\match 'youtu%.be/([^/]+)'
+      id or= link\match 'youtube.com/watch.*[?&]v=([^&]+)'
+      id or= link\match 'youtube.com/[ev]/([^/]+)'
+      id or= link\match 'youtube.com/embed/([^/]+)'
+
+      assert id, "couldn't parse youtube URL: #{link}"
+
+      iframe {
+        width: 560
+        height: 315
+        frameborder: 0
+        allowfullscreen: true
+        src: "//www.youtube.com/embed/#{id}"
+      }
+  },
+  {
+    inp: 'URL -> image/.+',
+    out: 'mmm/dom',
+    transform: (src, fileder) -> img :src
+  },
+  {
+    inp: 'URL -> video/.+',
+    out: 'mmm/dom',
+    transform: (src) ->
+      -- @TODO: add parsed MIME type
+      video (source :src), controls: true
+  },
+  {
+    inp: 'text/plain',
+    out: 'mmm/dom',
+    transform: single text
+  },
+  {
+    inp: 'alpha',
+    out: 'mmm/dom',
+    transform: single code
+  },
+  {
+    inp: 'URL -> .*',
+    out: 'mmm/dom',
+    transform: single code
+  },
 }
 
 if MODE == 'SERVER'
@@ -111,7 +165,12 @@ do
   local markdown
   if MODE == 'SERVER'
     success, discount = pcall require, 'discount'
-    markdown = discount if success
+    if not success
+      warn "NO MARKDOWN SUPPORT!", discount
+
+    markdown = success and (md) ->
+      res, err = discount.compile md, 'githubtags'
+      res.body
   else
     markdown = window and window.marked and window\marked
 

@@ -22,7 +22,7 @@ I remembered the old wooden metronome that my grandma had at her piano and how I
 it as a child.  If we had a real metronome tick away, we could hold the needle in place,
 tap it to add an extra beat where there wasn't supposed to be one and more.
 
-![a wittner metronome][metronome.jpg]
+<mmm-embed path="metronome"></mmm-embed>
 
 Analog metronomes like this are actually pretty interesting little devices.
 They are purely mechanical and contain a spring that you have to wind up to give it power.
@@ -107,7 +107,7 @@ This is also a really nice effect actually and transforms rather simple beats in
 
 The schematic at this point is very simple:
 
-![threshold schematic][threshold.jpg]
+<mmm-embed path="threshold"></mmm-embed>
 
 I used an LM393 dual comparator and tied the unused half to ground, as the datasheet recommends.
 
@@ -143,5 +143,3 @@ should put it in with the /7 missing. I guess it could be useful for a slow melo
 [cgs36]:        http://www.elby-designs.com/webtek/cgs/cgs36/cgs36_pulse_divider.html
 
 [cgs36-schematic.gif]:  http://www.elby-designs.com/webtek/cgs/cgs36/schem_cgs36v14_pulse_divider.gif
-[metronome.jpg]:        {{metronome+URL -> image/jpeg}}
-[threshold.jpg]:        {{threshold+URL -> image/jpeg}}

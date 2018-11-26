@@ -20,8 +20,9 @@ import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
     a { 'here', href: 'https://github.com/s-ol/mmm' }
     '.'
     br!
-    'Most of the inner-workings of this page are documented in ',
+    'Most of the inner-workings of this page are documented in '
     link_to @walk 'articles/mmmfs'
+    '.'
   }
 
   for child in *@children

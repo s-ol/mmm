@@ -78,8 +78,8 @@ class Fileder
   -- * path - the path to walk to
   walk: (path) =>
     -- fix relative paths
-    if path != '' and '/' != path\sub 1, 1
-      path = "#{@path}/#{path}"
+    return @ if path == ''
+    path = "#{@path}/#{path}" if '/' != path\sub 1, 1
 
     -- early-out if we are outside of the path already
     return unless @path == path\sub 1, #@path

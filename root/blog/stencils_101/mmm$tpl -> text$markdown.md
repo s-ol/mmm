@@ -6,14 +6,14 @@ If I get better at hand drawing maybe one day I will sketch them up freehand rig
 
 As an example, let's take the Kill Bill Stencil I did a few days ago:
 
-![the Bride from Kill Bill][killbillfinal.jpg]
+<mmm-embed path="killbill_final"></mmm-embed>
 
 The first thing I did was create a new file in Photoshop, with the dimensions set to what I can print with my inkjet printer (International - A4).
 For the design process the canvas size doesn't really matter anyway and I like to work on a familiar size so I can judge how fine the details should be, also I print the images via my phone and so I need to have them in A4 size to get consistent results later anyway.
 
 The next thing I did was look for a picture to use, after a (very) quick google images tour I settled on this image:
 
-![Kill Bill movie poster][movieposter.jpg]
+<mmm-embed path="poster"></mmm-embed>
 
 In order to turn this into a stencil, I used the *Threshold* Image Adjustment, but before that I cut away all the background.
 With the Magic Wand and Quick Selection, I removed the black bar and yellow background.
@@ -37,7 +37,7 @@ Larger islands may be taped to the surface you are spraying on for art, but it's
 To visualize the final stencil, I have looked up the exact colors of the spraypaint I own at the manufacturers website and saved them as swatches in my photoshop.
 I use those to put a background behind the whole image and to color layers that I want to spraypaint in color later.
 
-![Final Stencil in PS][killbillstencil.png]
+<mmm-embed path="killbillstencil"></mmm-embed>
 
 One problem when you like working non-destructively on many layers, as I do, is that you normally cannot remove something on a layer below by painting over it.
 There are two options, either you can just draw the background color, which means you will have to flatten the image later to get the outline, or you can use the *Layer Blend Modes* to your advantage:
@@ -58,7 +58,7 @@ Cutting is very straightforward, I just try to get as many details as possible.
 I use a standard box cutter but a scalpel / x-acto knife would probably work even better.
 I have a rubber cutting mat that is specifically made for this and works very well.
 
-![Cutting Progress][killbillprogress.jpg]
+<mmm-embed path="killbill_progress"></mmm-embed>
 
 For small round holes I use an old screwdriver part that turned out to be a perfect hole-punching tool and hit it into the paper with a hammer (on a piece of wood).
 
@@ -73,10 +73,10 @@ I try not to hit the same spot too often or too long so the paint doesn't flow b
 # Results
 Here are some of my stencils:
 
-![The Bride][killbillfinal.jpg]
-![Electronic Revolution][elerev.jpg]
-![Suits][suits.jpg]
-![Balisong][balifinal.jpg]
+<mmm-embed path="killbill_final"></mmm-embed>
+<mmm-embed path="technofist_final"></mmm-embed>
+<mmm-embed path="suits_final"></mmm-embed>
+<mmm-embed path="balistencil_final"></mmm-embed>
 
 I tweet all my daily stencils with the [hashtag #astenciladay on twitter][#astenciladay] and post them in the [*Daily Stencil Art* streak on *streak.club*][dailystencil].
 
@@ -85,11 +85,3 @@ If you want any of the `psd`s or the printable outline `jpg`s, [shoot me a tweet
 [#astenciladay]:        https://twitter.com/hashtag/astenciladay
 [dailystencil]:         https://streak.club/s/614/daily-stencil-art
 [twitter]:              https://twitter.com/S0lll0s
-
-[killbillstencil.png]:  {{killbillstencil+URL -> image/png}}
-[killbillfinal.jpg]:    {{killbill_final+URL -> image/jpeg}}
-[movieposter.jpg]:      {{poster+URL -> image/jpeg}}
-[killbillprogress.jpg]: {{killbill_progress+URL -> image/jpeg}}
-[balifinal.jpg]:        {{balistencil_final+URL -> image/jpeg}}
-[elerev.jpg]:           {{technofist_final+URL -> image/jpeg}}
-[suits.jpg]:            {{suits_final+URL -> image/jpeg}}

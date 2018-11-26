@@ -6,7 +6,7 @@ The theme was *You are the Monster*, and I wanted to really incorporate the them
 
 Many games I have seen took the theme quite literally and made the main character a monster:
 
-![Credit: @RedOshal][smert.png]  
+<mmm-embed path="smert"></mmm-embed>  
 [*image by @RedOshal*][smert_src]
 
 Although you play a monster in *The Monster Within*, I took the theme a bit further.
@@ -15,7 +15,7 @@ The theme reminded me of an exclamated "*Look at yourself! You've become a Monst
 The idea I came up with was the following: your main objective is to eliminate enemies from within a crowd of mostly civilians (in a generic top-down action game). However you turn into a Monster whenever you kill someone, which grants you a lot more power, but also impairs your senses; you can no longer differentiate between civilians and enemies.
 As a result, I figured, people would have to decide between two playstyles, going on a rampage and killing as many people as possible, regardless of their type, or trying to play strategically by memorizing the enemies in the crowd.
 
-![split view][split.png]  
+<mmm-embed path="split"></mmm-embed>  
 *The Monster Within, normal and beast mode*
 
 To make playing in "Beast Mode" more appealing I increased the primary attack (punch) range and added a secondary lunge attack that is exclusive to that mode. This, I hope, tempts players to make use of the beast mode and facilitates players stopping to play for the original objective - eliminating enemies - and instead try to kill as many people as possible (which is an intended effect).
@@ -91,6 +91,3 @@ You can check out *The Monster Within* on the [Ludum Dare entry page][entry], [o
 [steering]:   http://gamedevelopment.tutsplus.com/series/understanding-steering-behaviors--gamedev-12732
 [autonom]:    http://natureofcode.com/book/chapter-6-autonomous-agents/
 [rgamedev]:   https://reddit.com/r/gamedev
-
-[split.png]:  {{split+URL -> image/png}}
-[split.png]:  {{smert+URL -> image/png}}

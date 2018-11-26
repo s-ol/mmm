@@ -1,7 +1,7 @@
 Recently I've been building a 2d game engine for my semester project at [CGL](http://colognegamelab.de).
 Below, I'll copy and paste two blog posts from my internal documentation blog:
 
---- 
+---
 
 After nailing down the basic narrative and gameplay idea in a lengthy group discussion on the first day,
 we each set goals for the next few days in order to kickstart the project.
@@ -91,7 +91,7 @@ Here's the main part for the animated-layer-loading:
 
 After being able to load simple animations from photoshop without even closing the game was working, I tried loading the scene İlke had created meanwhile:
 
-![outside1]({{outside1+URL -> image/jpeg}})
+<mmm-embed path="outside"></mmm-embed>
 
 Naturally, this failed at first.
 He was using clipping masks and blend modes, neither of which were implemented at the time,
@@ -116,9 +116,7 @@ Because this could also be done by a mixin, i am thinking about abolishing the _
 You can see the system working in this clip:
 
 
-<video controls>
-  <source src="{{animating+URL -> video/mp4}}" type="video/mp4" />
-</video>
+<mmm-embed path="animating"></mmm-embed>
 _making an animation out of the single rain layer_
 
 Moreover, I added a directory structure for mixins; to load a mixin called _name _for a scene called _scene_, it first looks in the scene specific directories:
@@ -227,9 +225,7 @@ Here's the code for both:
 By the end of the three day "test phase".
 This is how the first scene looked in-game:
 
-<video controls>
-  <source src="{{final+URL -> video/mp4}}" type="video/mp4" />
-</video>
+<mmm-embed path="final"></mmm-embed>
 
 Here's _psdscene.moon_, wrapping most things mentioned in this article:
 

@@ -5,6 +5,7 @@ render = LUA_PATH .. ' moon ' .. build .. '/render_fileder.moon'
 local _facets, facets = {}, {}
 for i, file in ipairs(tup.glob '*$*') do _facets[file] = true end
 for i, file in ipairs(tup.glob '*:*') do _facets[file] = true end
+for i, file in ipairs(tup.glob '*->*') do _facets[file] = true end
 
 for file in pairs(_facets) do facets += file end
 table.sort(facets)
