@@ -216,8 +216,8 @@ do
       else
         (source) ->
           html = markdown source
-          html = html\gsub '^<p>', ''
-          html = html\gsub '</p>$', ''
+          html = html\gsub '^%s*<p>%s*', ''
+          html = html\gsub '%s*</p>%s*$', ''
           with document\createElement 'span'
             .innerHTML = html
     }
