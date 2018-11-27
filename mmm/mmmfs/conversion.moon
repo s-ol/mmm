@@ -42,7 +42,7 @@ converts = {
     out: 'mmm/dom',
     transform: if MODE == 'SERVER'
       (html, fileder) ->
-        div html\gsub '<mmm%-embed%s+(.-)></mmm%-embed>', (attrs) ->
+        html\gsub '<mmm%-embed%s+(.-)></mmm%-embed>', (attrs) ->
           path, facet = '', ''
           opts = {}
           while attrs and attrs != ''
@@ -62,7 +62,7 @@ converts = {
           embed path, facet, fileder, opts
     else
       (html, fileder) ->
-        with document\createElement 'div'
+        parent = with document\createElement 'div'
           .innerHTML = html
 
           -- copy to iterate safely, HTMLCollections update when nodes are GC'ed
@@ -74,6 +74,9 @@ converts = {
             nolink = js_fix element\getAttribute 'nolink'
 
             element\replaceWith embed path, facet, fileder, { :nolink }
+
+        assert 1 == parent.childElementCount, "text/html with more than one child!"
+        parent.firstElementChild
   },
   {
     inp: 'text/lua -> (.+)',
@@ -142,7 +145,7 @@ converts = {
     out: 'mmm/dom',
     transform: (src) ->
       -- @TODO: add parsed MIME type
-      video (source :src), controls: true
+      video (source :src), controls: true, loop: true
   },
   {
     inp: 'text/plain',
@@ -193,7 +196,7 @@ do
       warn "NO MARKDOWN SUPPORT!", discount
 
     markdown = success and (md) ->
-      res, err = discount.compile md, 'githubtags'
+      res = assert discount.compile md, 'githubtags'
       res.body
   else
     markdown = window and window.marked and window\marked
@@ -202,7 +205,7 @@ do
     table.insert converts, {
       inp: 'text/markdown',
       out: 'text/html',
-      transform: single markdown
+      transform: (md) -> "<div class=\"markdown\">#{markdown md}</div>"
     }
 
     table.insert converts, {
