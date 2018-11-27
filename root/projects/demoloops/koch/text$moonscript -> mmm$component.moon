@@ -5,8 +5,8 @@ import CanvasApp from require 'mmm.canvasapp'
 import hsl from require 'mmm.color'
 
 class KochDemo extends CanvasApp
-  width: 600
-  height: 600
+  width: 500
+  height: 400
   length: math.pi * 2
 
   new: (@iterations=3) =>

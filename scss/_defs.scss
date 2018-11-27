@@ -6,6 +6,15 @@ $gray-neutral:  #b9bdc1;
 $gray-success:  #bdddc1;
 $gray-fail:     #ddbdc1;
 
+:root {
+  --gray-bright:  #{$gray-bright};
+  --gray-dark:    #{$gray-dark};
+  --gray-darker:  #{$gray-darker};
+  --gray-neutral: #{$gray-neutral};
+  --gray-success: #{$gray-success};
+  --gray-fail:    #{$gray-fail};
+}
+
 @mixin left-border($w: 0.6rem) {
   border-style: solid;
   border-width: 0 0 0 $w;
