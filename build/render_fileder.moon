@@ -2,7 +2,7 @@ require 'mmm'
 import get_path from require 'build.util'
 import tohtml from require 'mmm.component'
 import Browser from require 'mmm.mmmfs.browser'
-import header, footer from require 'build.layout'
+import get_meta, header, footer from require 'build.layout'
 
 export BROWSER
 
@@ -33,36 +33,6 @@ do
     math.randomseed upper, lower
 
   seed path
-
-get_meta = =>
-  title = (@get 'title: text/plain') or @gett 'name: alpha'
-
-  l = (str) ->
-    str = str\gsub '[%s\\n]+$', ''
-    str\gsub '\\n', ' '
-  e = (str) -> string.format '%q', l str
-
-  meta = "
-    <meta charset=\"UTF-8\">
-    <title>#{l title}</title>
-  "
-
-  if page_meta = @get '_meta: mmm/dom'
-    meta ..= page_meta
-  else
-    _path = path
-    _path = '/' if _path == ''
-    meta ..= "
-    <meta property=\"og:title\" content=#{e title} />
-    <meta property=\"og:type\"  content=\"website\" />
-    <meta property=\"og:url\"   content=\"https://mmm.s-ol.nu#{_path}\" />
-    <meta property=\"og:site_name\" content=\"mmm\" />"
-
-    if desc = @get 'description: text/plain'
-      meta ..= "
-    <meta property=\"og:description\" content=#{e desc} />"
-
-  meta
 
 root = dofile '$bundle.lua'
 assert root, "couldn't load $bundle.lua"

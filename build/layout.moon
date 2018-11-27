@@ -56,4 +56,31 @@ logo = svg {
         { height: '1.3em', 'margin-left': '.3em', 'margin-top': '-0.12em' }
     }
   }
+  get_meta: =>
+    title = (@get 'title: text/plain') or @gett 'name: alpha'
+
+    l = (str) ->
+      str = str\gsub '[%s\\n]+$', ''
+      str\gsub '\\n', ' '
+    e = (str) -> string.format '%q', l str
+
+    meta = "
+      <meta charset=\"UTF-8\">
+      <title>#{l title}</title>
+    "
+
+    if page_meta = @get '_meta: mmm/dom'
+      meta ..= page_meta
+    else
+      meta ..= "
+      <meta property=\"og:title\" content=#{e title} />
+      <meta property=\"og:type\"  content=\"website\" />
+      <meta property=\"og:url\"   content=\"https://mmm.s-ol.nu#{@path}/\" />
+      <meta property=\"og:site_name\" content=\"mmm\" />"
+
+      if desc = @get 'description: text/plain'
+        meta ..= "
+      <meta property=\"og:description\" content=#{e desc} />"
+
+    meta
 }
