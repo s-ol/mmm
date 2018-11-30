@@ -1,4 +1,4 @@
-import div, text, code, img, video, blockquote, a, source, iframe from require 'mmm.dom'
+import div, code, img, video, blockquote, a, source, iframe from require 'mmm.dom'
 import find_fileder, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import tohtml from require 'mmm.component'
 
@@ -73,7 +73,7 @@ converts = {
             facet = js_fix element\getAttribute 'facet'
             nolink = js_fix element\getAttribute 'nolink'
 
-            element\replaceWith embed path, facet, fileder, { :nolink }
+            element\replaceWith embed path or '', facet or '', fileder, { :nolink }
 
         assert 1 == parent.childElementCount, "text/html with more than one child!"
         parent.firstElementChild
@@ -150,7 +150,7 @@ converts = {
   {
     inp: 'text/plain',
     out: 'mmm/dom',
-    transform: single text
+    transform: (val) -> val
   },
   {
     inp: 'alpha',
