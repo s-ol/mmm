@@ -1,15 +1,21 @@
 import div, span, h3, ul, li, a, h4, img, p from require 'mmm.dom'
 import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
+import ropairs from require 'mmm.ordered'
 
 =>
   div {
     h3 link_to @
-    ul for child in *@children
-      desc = child\gett 'description: mmm/dom'
-      jam = if link = child\get 'jam: mmm/dom'
-        span '[', link, ']', style: { float: 'right', color: 'var(--gray-dark)' }
+    ul do
+      games = { (p\gett 'date: time/unix'), p for p in *@children }
 
-      li (link_to child), ': ', desc, jam
+      children = for k, child in ropairs games
+        desc = child\gett 'description: mmm/dom'
+        jam = if link = child\get 'jam: mmm/dom'
+          span '[', link, ']', style: { float: 'right', color: 'var(--gray-dark)' }
+
+        li (link_to child), ': ', desc, jam
+
+      children
 --    ul with for child in *@children
 --        link_if_content = (opts) ->
 --          a with opts
