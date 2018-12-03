@@ -19,7 +19,7 @@
     else
       a name, {
         href: fileder.path
-        onclick: (e) =>
+        onclick: if MODE == 'CLIENT' then (e) =>
           e\preventDefault!
           BROWSER\navigate fileder.path
       }

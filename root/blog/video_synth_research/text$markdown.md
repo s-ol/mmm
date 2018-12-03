@@ -8,7 +8,7 @@ initially a bit worried about the complexity of it.
 I had found out about [LZX Industries][lzx] a few months ago, who make amazing modular video synth
 gear... that is very expensive. It looks amazing though:
 
-<mmm-embed path="LZX_reel"></mmm-embed>
+<mmm-embed path="LZX_reel" nolink></mmm-embed>
 
 I think the price is probably justified, as a lot of engineering goes into making this work in the
 first place, and it looks very clean, which I would attribute to high quality components.
@@ -31,7 +31,7 @@ information in [this post summarizing forum gold][vfold].
 This led me onto the track of the MC1377 chip, an RGB-to-PAL/NTSC video encoder IC.
 At some point I found this video showcasing a video effect device based on it, the *Visualist*:
 
-<mmm-embed path="visualist"></mmm-embed>
+<mmm-embed path="visualist" nolink></mmm-embed>
 
 The best thing is that there is [awesome documentation][visualist] (hotlinked from original dropbox,
 I have a copy if it goes down) for this thing.
@@ -79,8 +79,8 @@ Like an ancient livestreaming tool like OBS.
 Also some other people else has already circuit-bent this.
 It looks amazing, so we might just give that a go aswell:
 
-<mmm-embed path="bent1"></mmm-embed>
-<mmm-embed path="bent2"></mmm-embed>
+<mmm-embed path="bent1" nolink></mmm-embed>
+<mmm-embed path="bent2" nolink></mmm-embed>
 
 Since taking this for a spin and making a BOM for the *Visualist*,
 I haven't spent any more time on the *Visualist* and turned to the audio side of things for now.
