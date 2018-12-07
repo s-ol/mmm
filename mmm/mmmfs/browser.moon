@@ -18,6 +18,11 @@ casts = {
   code_cast 'lua',
   code_cast 'markdown',
   code_cast 'html',
+  {
+    inp: 'text/plain'
+    out: 'mmm/dom'
+    transform: (val) -> text val
+  }
 }
 
 for convert in *converts

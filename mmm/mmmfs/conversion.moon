@@ -1,4 +1,4 @@
-import div, code, img, video, blockquote, a, source, iframe from require 'mmm.dom'
+import div, code, img, video, blockquote, a, span, source, iframe from require 'mmm.dom'
 import find_fileder, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import tohtml from require 'mmm.component'
 
@@ -150,7 +150,7 @@ converts = {
   {
     inp: 'text/plain',
     out: 'mmm/dom',
-    transform: (val) -> val
+    transform: (val) -> span val
   },
   {
     inp: 'alpha',
