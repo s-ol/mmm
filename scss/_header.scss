@@ -1,54 +1,63 @@
 header {
-  font-family: 'Source Sans Pro', sans-serif;
-  padding: 1rem 2rem;
-  text-align: right;
+  > div {
+    font-family: 'Source Sans Pro', sans-serif;
+    padding: 1rem 2rem;
+    text-align: right;
 
-  color: $gray-bright;
-  background: $gray-dark;
+    color: $gray-bright;
+    background: $gray-dark;
 
-  h1 {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
+    h1 {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 0;
+      height: 5rem;
+
+      font-size: 4rem;
+      font-weight: 200;
+
+      > b {
+        flex: 1;
+      }
+
+      .bold {
+        font-weight: 400;
+      }
+
+      .sun {
+        height: 100%;
+        stroke: currentColor;
+        fill: currentColor;
+
+        .out, .in {
+          animation: spin 2s;
+          animation-iteration-count: 1;
+          transform: scale(1);
+        }
+
+        .in {
+          animation: size 2s;
+        }
+
+        &.spin .circle {
+          animation: none;
+        }
+      }
+    }
+  }
+
+  aside {
     margin: 0;
-    height: 5rem;
-
-    font-size: 4rem;
-    font-weight: 200;
-
-    > b {
-      flex: 1;
-    }
-
-    .bold {
-      font-weight: 400;
-    }
-
-    .sun {
-      height: 100%;
-      stroke: currentColor;
-      fill: currentColor;
-
-      .out {
-        animation: spin 2s;
-        animation-iteration-count: 1;
-      }
-
-      .in {
-        animation: size 2s;
-        animation-iteration-count: 1;
-      }
-
-      &.spin circle {
-        animation: none;
-      }
-    }
+    padding: 1em 2rem;
+    color: $gray-bright;
+    background: $gray-darker;
   }
 }
 
 @keyframes spin {
-  0% { transform: perspective(100rem) rotate3d(0.5, 1, 0, 0turn); }
-  100% { transform: perspective(100rem) rotate3d(0.5, 1, 0, 1turn); }
+  0% { transform: rotate3d(0.5, 1, 0, 0turn); }
+  100% { transform: rotate3d(0.5, 1, 0, 1turn); }
 }
 
 @keyframes size {

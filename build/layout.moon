@@ -1,4 +1,4 @@
-import header, footer, div, svg, g, circle, h1, span, b, a, img from require 'mmm.dom'
+import header, aside, footer, div, svg, g, circle, h1, span, b, a, img from require 'mmm.dom'
 
 pick = (...) ->
   num = select '#', ...
@@ -23,24 +23,29 @@ logo = svg {
   g {
     transform: 'translate(0 .18)'
 
-    circle class: 'out', r: '.6', fill: 'none', 'stroke-width': '.12'
-    circle class:  'in', r: '.2', stroke: 'none'
+    g { class: 'circle out', circle r: '.6', fill: 'none', 'stroke-width': '.12' }
+    g { class: 'circle  in', circle r: '.2', stroke: 'none' }
   }
 }
 
 {
   header: header {
-    h1 {
-      logo
-      b!
-      span 'mmm', class: 'bold'
-      '.s-ol.nu'
+    div {
+      h1 {
+        logo
+        b!
+        span 'mmm', class: 'bold'
+        '.s-ol.nu'
+      }
+      span "fun stuff with code and wires"
+    --        pick 'fun', 'cool', 'weird', 'interesting', 'new'
+    --        pick 'stuff', 'things', 'projects', 'experiments', 'news'
+    --        "with"
+    --        pick 'mostly code', 'code and wires', 'silicon', 'electronics'
     }
-    span "fun stuff with code and wires"
-  --        pick 'fun', 'cool', 'weird', 'interesting', 'new'
-  --        pick 'stuff', 'things', 'projects', 'experiments', 'news'
-  --        "with"
-  --        pick 'mostly code', 'code and wires', 'silicon', 'electronics'
+--    aside {
+--      a 'message me', href: '#'
+--    }
   }
   footer: footer {
     span {
