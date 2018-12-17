@@ -44,7 +44,7 @@ logo = svg {
     --        pick 'mostly code', 'code and wires', 'silicon', 'electronics'
     }
     aside {
-      -- a 'about me', href: '/about'
+      a 'about me', href: '/about'
       a 'games', href: '/games'
       a 'other', href: '/projects'
       a {
