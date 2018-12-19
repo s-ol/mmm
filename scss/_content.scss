@@ -1,6 +1,11 @@
 .content {
-  .markdown {
-    img, video {
+  img, video {
+    width: inherit;
+    height: inherit;
+  }
+
+  .markdown, .markdown > p, .markdown > p > a {
+    > img, > video {
       display: block;
       max-width: 100%;
       max-height: 50vh;

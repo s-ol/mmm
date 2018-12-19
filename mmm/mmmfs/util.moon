@@ -18,7 +18,6 @@ merge = (orig={}, extra) ->
     opts.onclick = if MODE == 'CLIENT' then (e) =>
       e\preventDefault!
       BROWSER\navigate path
-    opts.target = 'default'
     a name, opts
 
   link_to = (fileder, name, origin, attr) ->

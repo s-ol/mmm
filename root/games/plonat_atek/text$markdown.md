@@ -1,4 +1,7 @@
 # <mmm-embed nolink facet="title"></mmm-embed>
+
+<mmm-embed nolink path="pictures"></mmm-embed>
+
 *Plonat Atek* is a digital game that communicates itself to the player only via the stereo headphone jack.
 The signal is split, and one of the streams is fed into a pair of headphones that show the game to the player as a melody,
 interlaced with a series of blips and bursts of noise.
