@@ -199,6 +199,7 @@ class Browser
         \append @inspect_prop\map (prop) ->
           @get_content prop, (prop) =>
             value, key = @get prop
+            assert key, "couldn't @get #{prop}"
 
             conversions = get_conversions 'mmm/dom', key.type, casts
             assert conversions, "cannot cast '#{key.type}'"

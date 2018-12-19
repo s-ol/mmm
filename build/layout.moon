@@ -1,4 +1,5 @@
 import header, aside, footer, div, svg, script, g, circle, h1, span, b, a, img from require 'mmm.dom'
+import navigate_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
 
 pick = (...) ->
   num = select '#', ...
@@ -44,15 +45,14 @@ logo = svg {
     --        pick 'mostly code', 'code and wires', 'silicon', 'electronics'
     }
     aside {
-      a 'about me', href: '/about'
-      a 'games', href: '/games'
-      a 'other', href: '/projects'
+      navigate_to '/about', 'about me'
+      navigate_to '/games', 'games'
+      navigate_to '/projects', 'other'
       a {
         href: 'mailto:s%20[removethis]%20[at]%20s-ol.nu'
         'contact'
         script "
           var l = document.currentScript.parentElement;
-          console.log(l);
           l.href = l.href.replace('%20[at]%20', '@');
           l.href = l.href.replace('%20[removethis]', '') + '?subject=Hey there :)';
         "

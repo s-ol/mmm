@@ -1,3 +1,8 @@
+merge = (orig={}, extra) ->
+  with attr = {k,v for k,v in pairs orig}
+    for k,v in pairs extra
+      attr[k] = v
+
 (elements) ->
   import a from elements
 
@@ -8,16 +13,24 @@
     else
       assert fileder, "no fileder passed."
 
-  link_to = (fileder, name, origin) ->
+  navigate_to = (path, name, opts={}) ->
+    opts.href = path
+    opts.onclick = if MODE == 'CLIENT' then (e) =>
+      e\preventDefault!
+      BROWSER\navigate path
+    opts.target = 'default'
+    a name, opts
+
+  link_to = (fileder, name, origin, attr) ->
     fileder = find_fileder fileder, origin
 
     name or= fileder\get 'title: mmm/dom'
     name or= fileder\gett 'name: alpha'
 
     if href = fileder\get 'link: URL.*'
-      a name, :href, target: '_blank'
+      a name, merge attr, :href, target: '_blank'
     else
-      a name, {
+      a name, merge attr, {
         href: fileder.path
         onclick: if MODE == 'CLIENT' then (e) =>
           e\preventDefault!
@@ -30,10 +43,11 @@
     node = fileder\gett name, 'mmm/dom'
 
     return node if opts.nolink
-    link_to fileder, node
+    link_to fileder, node, nil, opts.attr
 
   {
     :find_fileder
     :link_to
+    :navigate_to
     :embed
   }
