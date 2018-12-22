@@ -15,8 +15,20 @@ In *Plonat Atek*, the sound is designed to be seen and the visuals are designed 
 For example the blip heard when the ball bounces is the distortion seen in the same moment,
 and the noise heard when the ball is lost is visible as a glitch on the oscilloscope.
 
-<mmm-embed path="video"></mmm-embed>
+<mmm-embed nolink path="video"></mmm-embed>
 
+## History
+*Plonat Atek* was originally developed in 48 hours for the *Ludum Dare 38 Compo* in June 2017.
+It was awarded first place in the *Innovation* category and was placed 8th in *Audio* and 24th overall.
+You can find the original submission [here][ld] and documentation on how to download and run the jam version on the [itch.io page][itch].
+
+Articles on the game accompanied by the video recording above have been published by [Hackaday][hackaday], [VICE Motherboard][motherboard] and others.
+
+The jam version is designed to run on an end-user Computer and is played using the keyboard.
+In early 2018 I decided to build a self-contained hardware version that is played using a rotary knob.
+This is the version pictured above.
+
+## Artist Statement
 *Plonat Atek* is an exploration into the unification of audiovisual signals in the context of feedback in interactive systems.
 Both digital and analog audio signals are very thin encodings,
 as they map directly to the vibrations on our tympana and thereby the sensations they represent.
@@ -34,3 +46,9 @@ coupled with a homely sense of healthy imperfection.
 The game itself is a reinterpretation of the classic *Breakout*, a game many players may recognize nostalgically and
 that has already gone through transformations from hardware to software, and from an arcade to a pc and finally a mobile game
 or something found on a children’s toy that comes free with an order at a fast-food restaurant.
+
+[ld]: https://ldjam.com/events/ludum-dare/38/plonat-atek
+[itch]: https://s-ol.itch.io/plonat-atek
+
+[hackaday]: https://hackaday.com/2017/11/05/programming-an-oscilloscope-breakout-game-in-pure-data/
+[motherboard]: https://motherboard.vice.com/en_us/article/59yw9z/watch-this-awesome-oscilloscope-breakout-game
