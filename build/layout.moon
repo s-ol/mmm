@@ -34,9 +34,10 @@ logo = svg {
     div {
       h1 {
         logo
-        b!
-        span 'mmm', class: 'bold'
-        '.s-ol.nu'
+        span {
+          span 'mmm', class: 'bold'
+          '.s-ol.nu'
+        }
       }
       span "fun stuff with code and wires"
     --        pick 'fun', 'cool', 'weird', 'interesting', 'new'
