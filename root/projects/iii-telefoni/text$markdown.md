@@ -4,6 +4,7 @@ tre telefoni
 
 *Tre Telefoni* is an installation piece and experimental cooperative game that seeks to unite three strangers by
 tasking them with getting to know each other despite complications.
+
 It consists of three wall-mounted telephone boxes set up out of earshot from each other.
 When a player is ready on each of the stations, the phones become active and the three players are connected to each other.
 However their communication is complicated by the unconventional nature of the phone system they are using:
@@ -17,6 +18,9 @@ Each phone is set up to only relay sound from its microphone to the next station
 
 The players have to try to figure out a way to communicate to each other despite not being able to directly respond to each other in order to find out each other's identities.
 If they succeed, they can optionally try to arrange a meeting point on the grounds of the showcase to debrief and reflect on their experience.
+
+Though *Tre Telefoni* has been designed as an installation piece as described above,
+a [web-based rototype][proto] is also available to playtest the premise itself.
 
 artist statement
 ----------------
@@ -35,5 +39,7 @@ Each station is powered by a single-board computer (Raspberry Pi) connected to
 - a small speaker for the ringing sound
 
 The physical realisation of the station enclosures and telephone handles are currently a work in progress.
-The software exists as a protoype version that can be accessed at [iii-telefoni.s-ol.nu](//iii-telefoni.s-ol.nu)
+The software exists as a protoype version that can be accessed at [iii-telefoni.s-ol.nu][proto]
 and playtested for example on mobile phones (compatibility with iOS devices may vary).
+
+[proto]: //iii-telefoni.s-ol.nu
