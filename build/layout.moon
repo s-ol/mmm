@@ -36,7 +36,8 @@ logo = svg {
         logo
         span {
           span 'mmm', class: 'bold'
-          '.s-ol.nu'
+          '&#8203;'
+          '.s&#8209;ol.nu'
         }
       }
       span "fun stuff with code and wires"

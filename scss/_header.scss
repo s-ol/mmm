@@ -9,7 +9,7 @@ header {
 
     h1 {
       display: flex;
-      justify-content: space-around;
+      justify-content: flex-end;
       align-items: center;
       flex-wrap: wrap;
       margin: 0;
@@ -20,7 +20,6 @@ header {
 
       > span {
         margin-left: auto;
-        white-space: nowrap;
       }
 
       .bold {
@@ -51,9 +50,10 @@ header {
 
   aside {
     margin: 0;
-    padding: 1em 2rem;
+    padding: 0 2rem;
     color: $gray-bright;
     background: $gray-darker;
+    line-height: 3em;
 
     > a {
       margin-right: 2em;

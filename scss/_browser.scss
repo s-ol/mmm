@@ -47,7 +47,8 @@
       top: 0;
 
       display: flex;
-      flex: 0 0 3.2em;
+      flex: 0 0 auto;
+      flex-wrap: wrap;
       justify-content: space-between;
       background: $gray-bright;
       z-index: 1000;
@@ -58,6 +59,11 @@
 
       > * {
         margin: 1em;
+        white-space: nowrap;
+      }
+
+      > .inspect-btn {
+        @include media-small() { display: none; }
       }
     }
 

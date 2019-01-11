@@ -21,7 +21,7 @@
 
     display: block;
     border-radius: 6px;
-    margin: 0 2em;
+    margin: 0 var(--margin-wide);
     padding: 1em;
     white-space: pre-wrap;
     overflow-x: auto;
@@ -50,7 +50,7 @@
   .example, .well {
     @include left-border;
 
-    margin: 1rem 2rem;
+    margin: 1rem var(--margin-wide);
     padding: 1rem;
     background: $gray-bright;
     border-color: $gray-neutral;
