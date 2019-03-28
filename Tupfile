@@ -1,7 +1,7 @@
 include_rules
 
 !download = |> ^ DOWNLOAD %O^ curl -L https://github.com/fengari-lua/fengari-web/releases/download/@(FENGARI_VERSION)/`basename %o` > %o |>
-!sassc    = |> ^ SCSS %b^ sassc -mauto       %f %o |> | %o.map
+!sassc    = |> ^ SCSS %b^ sassc -m %f %o |> | %o.map
 
 # download fengari dependencies
 : |> !download |> root/fengari-web.js
