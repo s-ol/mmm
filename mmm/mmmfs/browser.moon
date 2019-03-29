@@ -5,6 +5,12 @@ import ReactiveVar, get_or_create, text, elements from require 'mmm.component'
 import pre, div, nav, span, button, a, select, option from elements
 import languages from require 'mmm.highlighting'
 
+keep = (var) ->
+  last = var\get!
+  var\map (val) ->
+    last = val or last
+    last
+
 code_cast = (lang) ->
   {
     inp: "text/#{lang}.*",
@@ -121,13 +127,18 @@ class Browser
           if not enabled
             button 'inspect', onclick: (_, e) -> @inspect\set true
 
+    @error = ReactiveVar!
+    main\append with get_or_create 'div', 'browser-error', class: @error\map (e) -> if e then 'error-wrap' else 'error-wrap empty'
+      \append (span "an error occured while rendering this view:"), (rehydrate and .node.firstChild)
+      \append @error
+
     -- append or patch #browser-content
     main\append with get_or_create 'div', 'browser-content', class: 'content'
-      content = ReactiveVar @get_content @facet\get!
+      content = ReactiveVar if rehydrate then .node.lastChild else @get_content @facet\get!
+      \append keep content
       if MODE == 'CLIENT'
         @facet\subscribe (p) ->
           window\setTimeout (-> content\set @get_content p), 150
-      \append content, (rehydrate and .node.lastChild)
 
     if rehydrate
       -- force one rerender to set onclick handlers etc
@@ -144,8 +155,15 @@ class Browser
   default_convert = (key) => @get key.name, 'mmm/dom'
 
   -- render #browser-content
-  get_content: (prop, convert=default_convert) =>
-    disp_error = (msg) -> pre msg, style: { color: '#f00' }
+  get_content: (prop, err=@error, convert=default_convert) =>
+    clear_error = ->
+      err\set! if MODE == 'CLIENT'
+    disp_error = (msg) ->
+      if MODE == 'CLIENT'
+        err\set pre msg
+      warn "ERROR rendering content: #{msg}"
+      nil
+
     active = @active\get!
 
     return disp_error "fileder not found!" unless active
@@ -155,14 +173,17 @@ class Browser
 
     document.body.classList\remove 'loading' if MODE == 'CLIENT'
 
-    if ok
-      res or disp_error "[no conversion path to #{prop.type}]"
+    if ok and res
+      clear_error!
+      res
+    elseif ok
+      div "[no conversion path to #{prop.type}]"
     elseif res and res.match and res\match '%[nossr%]$'
-      warn '(SSR disabled)'
-      div!
+      div "[this page could not be pre-renderer on the server]"
     else
-      warn "error: #{res}", trace
-      disp_error "error: #{res}\n#{trace}"
+      if trace
+        res = "#{res}\n#{trace}"
+      disp_error res
 
   get_inspector: =>
     -- active facet in inspect tab
@@ -172,6 +193,8 @@ class Browser
       key = active and active\find prop
       key = key.original if key and key.original
       key
+
+    @inspect_err = ReactiveVar!
 
     with div class: 'view inspector'
       \append nav {
@@ -195,9 +218,12 @@ class Browser
           if enabled
             button 'close', onclick: (_, e) -> @inspect\set false
       }
+      \append with div class: @inspect_err\map (e) -> if e then 'error-wrap' else 'error-wrap empty'
+        \append span "an error occured while rendering this view:"
+        \append @inspect_err
       \append with pre class: 'content'
-        \append @inspect_prop\map (prop) ->
-          @get_content prop, (prop) =>
+        \append keep @inspect_prop\map (prop, old) ->
+          @get_content prop, @inspect_err, (prop) =>
             value, key = @get prop
             assert key, "couldn't @get #{prop}"
 

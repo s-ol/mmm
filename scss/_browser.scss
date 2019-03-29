@@ -67,6 +67,30 @@
       }
     }
 
+    .error-wrap {
+      flex: 0 0 auto;
+      padding: 1em 2em;
+      overflow: hidden;
+
+      background: $gray-fail;
+
+      &.empty {
+        display: none;
+      }
+
+      > span {
+        display: inline-block;
+        margin-bottom: 0.5em;
+
+        font-weight: bold;
+        color: #f00;
+      }
+
+      > pre {
+        margin: 0;
+      }
+    }
+
     .content {
       flex: 1 1 auto;
       overflow: auto;
