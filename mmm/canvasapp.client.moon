@@ -43,7 +43,6 @@ class CanvasApp
     else
       @canvas
 
-
   update: (dt) =>
     @time += dt
 
