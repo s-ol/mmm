@@ -4,7 +4,7 @@ merge = (orig={}, extra) ->
       attr[k] = v
 
 (elements) ->
-  import a from elements
+  import a, div, pre from elements
 
   find_fileder = (fileder, origin) ->
     if 'string' == type fileder
@@ -39,7 +39,16 @@ merge = (orig={}, extra) ->
   embed = (fileder, name='', origin, opts={}) ->
     fileder = find_fileder fileder, origin
 
-    node = fileder\gett name, 'mmm/dom'
+    -- node = fileder\gett name, 'mmm/dom'
+    ok, node = pcall fileder.gett, fileder, name, 'mmm/dom'
+
+    if not ok
+      return div "couldn't embed #{fileder} #{name}",
+          (pre node),
+          style: {
+            background: 'var(--gray-fail)',
+            padding: '1em',
+          }
 
     return node if opts.nolink
     link_to fileder, node, nil, opts.attr

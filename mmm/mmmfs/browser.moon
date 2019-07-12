@@ -179,7 +179,7 @@ class Browser
     elseif ok
       div "[no conversion path to #{prop.type}]"
     elseif res and res.match and res\match '%[nossr%]$'
-      div "[this page could not be pre-renderer on the server]"
+      div "[this page could not be pre-rendered on the server]"
     else
       if trace
         res = "#{res}\n#{trace}"
