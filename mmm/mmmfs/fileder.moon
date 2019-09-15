@@ -95,11 +95,12 @@ class Fileder
   -- * path - the path to mount at
   -- * mount_as - dont append own name to path
   mount: (path, mount_as) =>
-    assert not @path, "mounted twice: #{@path} and now #{path}"
+    if not mount_as
+      path ..= @gett 'name: alpha'
+
+    assert not @path or @path == path, "mounted twice: #{@path} and now #{path}"
 
     @path = path
-    if not mount_as
-      @path ..= @gett 'name: alpha'
 
     for child in *@children
       child\mount @path .. '/'
@@ -159,7 +160,7 @@ class Fileder
     key, conversions = @find want
 
     if key
-      value = apply_conversions conversions, @facets[key], @, key
+      value = apply_conversions conversions, @facets[key]!, @, key
       value, key
 
   -- like @get, throw if no value or conversion path

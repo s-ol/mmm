@@ -35,12 +35,12 @@ for convert in *converts
   table.insert casts, convert
 
 class Browser
-  new: (@root, path='', rehydrate=false) =>
+  new: (@root, path, rehydrate=false) =>
     -- root fileder
     assert @root, 'root fileder is nil'
 
     -- active path
-    @path = ReactiveVar path
+    @path = ReactiveVar path or ''
 
     -- update URL bar
     if MODE == 'CLIENT'
