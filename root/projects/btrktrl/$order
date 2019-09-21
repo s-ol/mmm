@@ -1,0 +1,13 @@
+proto_rgb
+proto_encoder
+proto_spi
+knobs_all
+knobs_testing
+pcb_glamour_close
+pcb_glamour_far
+pcb_glamour_top
+pcb_glamour
+pcb_glamour_connector
+pcb_dev_configuration
+pcb_dev_encoder
+pcb_osc

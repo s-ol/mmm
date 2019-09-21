@@ -1,0 +1,1 @@
+a browser application talking to the encoders through a websocket/serial OSC bridge (nodejs)

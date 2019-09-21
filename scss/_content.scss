@@ -4,7 +4,10 @@
     height: inherit;
   }
 
-  .markdown, .markdown > p, .markdown > p > a {
+  .markdown,
+  .markdown > p,
+  .markdown > p > a,
+  .markdown > a {
     > img, > video {
       display: block;
       max-width: 100%;

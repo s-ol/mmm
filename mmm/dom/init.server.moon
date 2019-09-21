@@ -27,6 +27,12 @@ element = (element) -> (...) ->
   if #children == 0
     children = attributes
 
+  for i,v in ipairs children
+    if 'string' != type v
+      print v
+      error "wrong type: #{type v}"
+    children[i] = '' unless v
+
   if void_tags[element]
     assert #children == 0, "void tag #{element} cannot have children!"
     b .. ">"
