@@ -1,1 +1,3 @@
 Dockerfile
+$bundle.lua
+.bundle.lua
