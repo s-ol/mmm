@@ -18,6 +18,27 @@
     }
   }
 
+  .embed {
+    width: inherit;
+    height: inherit;
+
+    .description {
+      text-align: center;
+    }
+
+    &.inline {
+      display: inline-block;
+    }
+
+    &.desc {
+      display: inline-block;
+      background: var(--gray-dark);
+      color: var(--gray-bright);
+      padding: 0.5em;
+      margin: 0.2em;
+    }
+  }
+
   pre > code {
     @include left-border;
     border-color: $gray-dark;
