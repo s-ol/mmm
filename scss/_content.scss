@@ -32,10 +32,9 @@
 
     &.desc {
       display: inline-block;
-      background: var(--gray-dark);
-      color: var(--gray-bright);
       padding: 0.5em;
       margin: 0.2em;
+      background: $gray-bright;
     }
   }
 
