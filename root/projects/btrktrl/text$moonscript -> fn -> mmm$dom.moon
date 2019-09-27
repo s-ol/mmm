@@ -52,6 +52,13 @@ import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
     filtered_block '^pcb_glamour'
     filtered_block '^pcb_dev'
 
+    text "I also contacted some suppliers of machined aluminum knobs online and ordered a some samples from one of them.",
+         "I selected only knobs that are made made from solid aluminum and that use a set-screw for fastening to make sure
+          that the aluminum and the encoder would make electrical contact through the set-screw, which is required for the
+          capacitive sensing to work (at leas the way I implemented it)."
+
+    filtered_block '^knobs'
+
     text "The daughterboards and controller communicate over a custom SPI protocol I designed.
           The controller configures the daughterboards on boot or request from the PC.
           It sends and receives OSC messages over SLIP-encoded Serial.
