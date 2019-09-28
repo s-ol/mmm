@@ -160,7 +160,7 @@ class Fileder
     key, conversions = @find want
 
     if key
-      value = apply_conversions conversions, @facets[key]!, @, key
+      value = apply_conversions conversions, @facets[key], @, key
       value, key
 
   -- like @get, throw if no value or conversion path
