@@ -28,7 +28,12 @@ casts = {
     inp: 'text/plain'
     out: 'mmm/dom'
     transform: (val) -> text val
-  }
+  },
+  {
+    inp: 'URL.*'
+    out: 'mmm/dom'
+    transform: (href) -> span a href, :href
+  },
 }
 
 for convert in *converts
@@ -58,7 +63,7 @@ class Browser
         window.history\pushState path, '', vis_path
 
       window.onpopstate = (_, event) ->
-        if event.state
+        if event.state and not event.state == js.null
           @skip = true
           @path\set event.state
           @skip = nil
