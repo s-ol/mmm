@@ -6,11 +6,11 @@ pick = (...) ->
   i = math.ceil math.random! * num
   select i, ...
 
-
 iconlink = (href, src, alt, style) -> a {
   class: 'iconlink',
-  :href,
   target: '_blank',
+  rel: 'me',
+  :href,
   img :src, :alt, :style
 }
 
@@ -69,8 +69,9 @@ logo = svg {
     }
     div {
       class: 'icons',
-      iconlink 'https://github.com/s-ol/mmm', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg',
-      iconlink 'https://twitter.com/S0lll0s', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/twitter.svg',
+      iconlink 'https://github.com/s-ol', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg', 'github'
+      iconlink 'https://merveilles.town/@s_ol', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/mastodon.svg', 'mastodon'
+      iconlink 'https://twitter.com/S0lll0s', 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/twitter.svg', 'twitter'
       iconlink 'https://webring.xxiivv.com/#random', 'https://webring.xxiivv.com/icon.black.svg', 'webring',
         { height: '1.3em', 'margin-left': '.3em', 'margin-top': '-0.12em' }
     }
