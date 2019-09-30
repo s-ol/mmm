@@ -28,7 +28,12 @@ casts = {
     inp: 'text/plain'
     out: 'mmm/dom'
     transform: (val) -> text val
-  }
+  },
+  {
+    inp: 'URL.*'
+    out: 'mmm/dom'
+    transform: (href) -> span a href, :href
+  },
 }
 
 for convert in *converts
@@ -58,7 +63,7 @@ class Browser
         window.history\pushState path, '', vis_path
 
       window.onpopstate = (_, event) ->
-        if event.state
+        if event.state and not event.state == js.null
           @skip = true
           @path\set event.state
           @skip = nil
@@ -151,7 +156,7 @@ class Browser
     @node = wrapper.node
     @render = wrapper\render
 
-  err_and_trace = (err) -> err, debug.traceback!
+  err_and_trace = (msg) -> { :msg, trace: debug.traceback! }
   default_convert = (key) => @get key.name, 'mmm/dom'
 
   -- render #browser-content
@@ -169,7 +174,7 @@ class Browser
     return disp_error "fileder not found!" unless active
     return disp_error "facet not found!" unless prop
 
-    ok, res, trace = xpcall convert, err_and_trace, active, prop
+    ok, res = xpcall convert, err_and_trace, active, prop
 
     document.body.classList\remove 'loading' if MODE == 'CLIENT'
 
@@ -178,11 +183,10 @@ class Browser
       res
     elseif ok
       div "[no conversion path to #{prop.type}]"
-    elseif res and res.match and res\match '%[nossr%]$'
+    elseif res and res.msg.match and res.msg\match '%[nossr%]$'
       div "[this page could not be pre-rendered on the server]"
     else
-      if trace
-        res = "#{res}\n#{trace}"
+      res = "#{res.msg}\n#{res.trace}"
       disp_error res
 
   get_inspector: =>

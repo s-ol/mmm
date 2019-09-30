@@ -1,5 +1,5 @@
 import div, code, img, video, blockquote, a, span, source, iframe from require 'mmm.dom'
-import find_fileder, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
+import find_fileder, link_to, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import tohtml from require 'mmm.component'
 
 -- fix JS null values
@@ -42,9 +42,29 @@ converts = {
     out: 'mmm/dom',
     transform: if MODE == 'SERVER'
       (html, fileder) ->
-        html\gsub '<mmm%-embed%s+(.-)></mmm%-embed>', (attrs) ->
+        html = html\gsub '<mmm%-link%s+(.-)>(.-)</mmm%-link>', (attrs, text) ->
+          text = nil if #text == 0
+          path = ''
+          while attrs and attrs != ''
+            key, val, _attrs = attrs\match '^(%w+)="([^"]-)"%s*(.*)'
+            if not key
+              key, _attrs = attrs\match '^(%w+)%s*(.*)$'
+              val = true
+
+            attrs = _attrs
+
+            switch key
+              when 'path' then path = val
+              else warn "unkown attribute '#{key}=\"#{val}\"' in <mmm-link>"
+
+          link_to path, text, fileder
+
+        html = html\gsub '<mmm%-embed%s+(.-)>(.-)</mmm%-embed>', (attrs, desc) ->
           path, facet = '', ''
           opts = {}
+          if #desc != 0
+            opts.desc = desc
+
           while attrs and attrs != ''
             key, val, _attrs = attrs\match '^(%w+)="([^"]-)"%s*(.*)'
             if not key
@@ -57,9 +77,12 @@ converts = {
               when 'path' then path = val
               when 'facet' then facet = val
               when 'nolink' then opts.nolink = true
+              when 'inline' then opts.inline = true
               else warn "unkown attribute '#{key}=\"#{val}\"' in <mmm-embed>"
 
           embed path, facet, fileder, opts
+
+        html
     else
       (html, fileder) ->
         parent = with document\createElement 'div'
@@ -72,8 +95,18 @@ converts = {
             path = js_fix element\getAttribute 'path'
             facet = js_fix element\getAttribute 'facet'
             nolink = js_fix element\getAttribute 'nolink'
+            inline = js_fix element\getAttribute 'inline'
+            desc = js_fix element.innerText
 
-            element\replaceWith embed path or '', facet or '', fileder, { :nolink }
+            element\replaceWith embed path or '', facet or '', fileder, { :nolink, :inline, :desc }
+
+          embeds = \getElementsByTagName 'mmm-link'
+          embeds = [embeds[i] for i=0, embeds.length - 1]
+          for element in *embeds
+            text = js_fix element.innerText
+            path = js_fix element\getAttribute 'path'
+
+            element\replaceWith link_to path or '', text, fileder
 
         assert 1 == parent.childElementCount, "text/html with more than one child!"
         parent.firstElementChild
@@ -132,6 +165,7 @@ converts = {
         height: 315
         frameborder: 0
         allowfullscreen: true
+        frameBorder: 0
         src: "//www.youtube.com/embed/#{id}"
       }
   },

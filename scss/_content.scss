@@ -4,7 +4,10 @@
     height: inherit;
   }
 
-  .markdown, .markdown > p, .markdown > p > a {
+  .markdown,
+  .markdown > p,
+  .markdown > p > a,
+  .markdown > a {
     > img, > video {
       display: block;
       max-width: 100%;
@@ -12,6 +15,26 @@
 
       padding: 0 2em;
       box-sizing: border-box;
+    }
+  }
+
+  .embed {
+    width: inherit;
+    height: inherit;
+
+    .description {
+      text-align: center;
+    }
+
+    &.inline {
+      display: inline-block;
+    }
+
+    &.desc {
+      display: inline-block;
+      padding: 0.5em;
+      margin: 0.2em;
+      background: $gray-bright;
     }
   }
 

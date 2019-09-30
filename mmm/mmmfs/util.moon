@@ -50,6 +50,17 @@ merge = (orig={}, extra) ->
             padding: '1em',
           }
 
+    klass = 'embed'
+    klass ..= ' desc' if opts.desc
+    klass ..= ' inline' if opts.inline
+
+    node = div {
+      class: klass
+      node
+      if opts.desc
+        div opts.desc, class: 'description'
+    }
+
     return node if opts.nolink
     link_to fileder, node, nil, opts.attr
 

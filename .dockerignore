@@ -1,1 +1,4 @@
+.tup
 Dockerfile
+$bundle.lua
+.bundle.lua
