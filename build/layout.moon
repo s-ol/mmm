@@ -33,7 +33,7 @@ logo = svg {
   header: header {
     div {
       h1 {
-        logo
+        navigate_to '/', logo
         span {
           span 'mmm', class: 'bold'
           '&#8203;'
