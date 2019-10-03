@@ -11,6 +11,9 @@ First a quick overview of what this guide will cover:
   - fine-grained permissions and SSH public-key access
 - micro 'CI' setup rebuilds & redeploys docker images when updates are pushed
 
+**UPDATE (2019-10-03)**: I updated the git hook below to one that supports pushing and building
+multiple branches based on the `docker-compose.yml`.
+
 Most of these projects are very well documented so I won't go into a lot of detail on setting them up.
 
 # HTTPS Server
@@ -47,7 +50,6 @@ as self-contained as possible. Therefore I went with this [traefik in docker-com
           - ./acme.json:/acme.json
         container_name: traefik
 
-
     networks:
       web:
         external: true
@@ -61,7 +63,7 @@ With traefik set up, dockerized services can be added and exposed trivially.
 For example to start `redirectly`, a tiny link redirect service, this addition suffices:
 
     redirectly:
-      image: local/redirectly:git
+      image: local/redirectly:master
       restart: always
       networks:
         - web
@@ -150,38 +152,59 @@ The hooks are stored in the same repo under `local/hooks/repo-specific`.
 Here is the `docker-deploy` hook I am using:
 
     #!/bin/bash
-    read oldrev newrev refname
     set -e
 
-    # Get project name
-    PROJECT=$(basename "$PWD")
-    PROJECT=${PROJECT%.git}
+    while read oldrev newrev refname
+    do
+      BRANCH="$(git rev-parse --symbolic --abbrev-ref $refname)"
 
-    # Paths
-    CHECKOUT_DIR=/tmp/git/${PROJECT}
-    TARGET_DIR=... # POINT TO docker-compose.yml directory
+      # Get project name
+      PROJECT="$PWD"
+      PROJECT="${PROJECT#*/repositories/public/}"
+      PROJECT="${PROJECT#*/repositories/}"
+      PROJECT="${PROJECT%.git}"
+      PROJECT="$(echo "$PROJECT" | tr "/ " "-_")"
 
-    if [ ! -d ${TARGET_DIR} ]; then
-      echo -e "\e[1;32mNo target directory to compile into\e[00m"
-    fi
+      # Paths
+      CHECKOUT_DIR=/tmp/git/$PROJECT
+      TARGET_DIR=/home/s-ol/aerol
+      IMAGE_NAME=local/$PROJECT:$BRANCH
 
-    mkdir -p ${CHECKOUT_DIR}
-    GIT_WORK_TREE=${CHECKOUT_DIR} git checkout -q -f $newrev
-    echo -e "\e[1;32mChecked out ${PROJECT}.\e[00m"
+      # this one doesn't require python & yq, but it means the container has to run already...
+      # SERVICES=$(docker ps --filter "ancestor=${IMAGE_NAME}" --format '{{.Label "com.docker.compose.service"}}' \
+      #             | sort | uniq)
 
-    cd ${CHECKOUT_DIR}
-    docker build -t local/${PROJECT}:git .
-    echo -e "\e[1;32mImage built.\e[00m"
+      SERVICES=$(yq -r <"$TARGET_DIR/docker-compose.yml" \
+                        ".services | to_entries | map(select(.value.image == \"${IMAGE_NAME}\").key) \
+                         | join(\" \")")
 
-    cd ${TARGET_DIR}
-    docker-compose up -d ${PROJECT}
-    echo -e "\e[1;32mContainer restarted.\e[00m"
+      if [ -z "$SERVICES" ]; then
+        continue
+      fi
 
-It will build a `local/$REPO:git` image whenever you push, then run `docker-compose up -d $REPO` in `$TARGET_DIR`.
-Just make sure that your docker-compose service is called the same as the image name (like in the `redirectly` example above).
+      mkdir -p "$CHECKOUT_DIR"
+      GIT_WORK_TREE="$CHECKOUT_DIR" git checkout -q -f $newrev
+      echo -e "\e[1;32mChecked out '$PROJECT'.\e[00m"
 
-This hook definetely needs an addition to filter which pushes trigger a redeploy (e.g. only tags or only master),
-but that should be trivial to add (and well documented online).
+      cd "$CHECKOUT_DIR"
+      docker build -t "$IMAGE_NAME" .
+      echo -e "\e[1;32mImage '$IMAGE_NAME' built.\e[00m"
+
+      cd "$TARGET_DIR"
+      docker-compose up -d $SERVICES
+      echo -e "\e[1;32mService(s) '$SERVICES' restarted.\e[00m"
+    done
+
+It will build a `local/$REPO:$BRANCH` image whenever you push, then run `docker-compose up -d $SERVICES` in `$TARGET_DIR`,
+where `$SERVICES` are all the docker-compose services that use the image. If there are none, no image will be built.
+For this to work it has to parse the `docker-compose.yaml` file, which means you have to install [`yq`][yq] and `jq`, e.g. on Ubuntu:
+
+    sudo apt-get install jq python3-pip
+    sudo pip install yq
+
+If you would like to avoid that, you can use the commented command for `SERVICES=` above, which only relies on docker itself,
+the only problem is that you will have to do the first build manually (or re-tag a dummy image) before the first build,
+since it can only detect containers that are already running.
 
 ---
 
@@ -196,5 +219,6 @@ If you have questions or comments i'll be happy to hear from you on twitter, git
 [traefik-in-docker]: https://blog.kilian.io/server-setup/
 [klaus-autoreload]: https://github.com/jonashaag/klaus/wiki/Autoreloader
 [gitolite-hooks]: http://gitolite.com/gitolite/cookbook#v36-variation-repo-specific-hooks
+[yq]: https://github.com/kislyuk/yq
 
 [merveilles]: https://merveilles.town/@s_ol
