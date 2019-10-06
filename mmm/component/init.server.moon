@@ -28,7 +28,7 @@ escapes = {
 
 text = (str) ->
   str = tostring str
-  str\gsub '[}{">/<\'&]', escapes
+  (str\gsub '[}{">/<\'&]', escapes)
 
 class ReactiveVar
   @isinstance: (val) -> 'table' == (type val) and val.subscribe
