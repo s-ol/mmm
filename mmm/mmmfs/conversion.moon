@@ -62,8 +62,7 @@ converts = {
         html = html\gsub '<mmm%-embed%s+(.-)>(.-)</mmm%-embed>', (attrs, desc) ->
           path, facet = '', ''
           opts = {}
-          if #desc != 0
-            opts.desc = desc
+          opts.desc = desc if #desc > 0
 
           while attrs and attrs != ''
             key, val, _attrs = attrs\match '^(%w+)="([^"]-)"%s*(.*)'
@@ -97,6 +96,7 @@ converts = {
             nolink = js_fix element\getAttribute 'nolink'
             inline = js_fix element\getAttribute 'inline'
             desc = js_fix element.innerText
+            desc = nil if #desc < 1
 
             element\replaceWith embed path or '', facet or '', fileder, { :nolink, :inline, :desc }
 

@@ -18,6 +18,20 @@
     }
   }
 
+  .markdown {
+    h2 + p,
+    h3 + p,
+    h4 + p,
+    h5 + p,
+    h6 + p {
+      margin-top: 0.2em;
+    }
+  }
+
+  .markdown > ul {
+    margin-block-end: 1em;
+  }
+
   .embed {
     width: inherit;
     height: inherit;

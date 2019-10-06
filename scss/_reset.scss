@@ -40,7 +40,12 @@ a {
   text-decoration: underline;
   text-decoration-color: transparent;
 
-  &:hover {
+  cursor: default;
+  &[href] {
+    cursor: pointer;
+  }
+
+  &[href]:hover {
     filter: invert(40%);
     text-decoration-color: currentColor;
   }

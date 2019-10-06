@@ -49,7 +49,7 @@ class Browser
 
     -- update URL bar
     if MODE == 'CLIENT'
-      logo = document\querySelector 'header h1 > svg'
+      logo = document\querySelector 'header h1 > a > svg'
       spin = ->
         logo.classList\add 'spin'
         logo.parentElement.offsetWidth

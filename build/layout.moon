@@ -48,6 +48,7 @@ logo = svg {
     }
     aside {
       navigate_to '/about', 'about me'
+      navigate_to '/portfolio', 'portfolio'
       navigate_to '/games', 'games'
       navigate_to '/projects', 'other'
       a {

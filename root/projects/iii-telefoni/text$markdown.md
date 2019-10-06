@@ -20,7 +20,7 @@ The players have to try to figure out a way to communicate to each other despite
 If they succeed, they can optionally try to arrange a meeting point on the grounds of the showcase to debrief and reflect on their experience.
 
 Though *Tre Telefoni* has been designed as an installation piece as described above,
-a [web-based rototype][proto] is also available to playtest the premise itself.
+a [web-based prototype][proto] is also available to playtest the premise itself.
 
 artist statement
 ----------------
