@@ -1,8 +1,20 @@
 sqlite = require 'sqlite3'
 
-class TreeStore
-  new: (name='db.sqlite3') =>
-    @db = if name then sqlite.open name else sqlite.open_memory!
+class SQLStore
+  new: (opts = {}) =>
+    opts.name or= 'db.sqlite3'
+    opts.verbose or= false
+    opts.memory or= false
+
+    if not opts.verbose
+      @log = ->
+
+    if opts.memory
+      @log "opening in-memory DB..."
+      @db = sqlite.open_memory!
+    else
+      @log "opening '#{opts.name}'..."
+      @db = sqlite.open opts.name
 
     assert @db\exec [[
       PRAGMA foreign_keys = ON;
@@ -14,6 +26,8 @@ class TreeStore
                       ON DELETE CASCADE
                       ON UPDATE CASCADE
       );
+      INSERT OR IGNORE INTO fileder (path, parent) VALUES ("", NULL);
+
       CREATE TABLE IF NOT EXISTS facet (
         fileder_id INTEGER NOT NULL
                    REFERENCES fileder
@@ -27,6 +41,9 @@ class TreeStore
       CREATE INDEX IF NOT EXISTS facet_fileder_id ON facet(fileder_id);
       CREATE INDEX IF NOT EXISTS facet_name ON facet(name);
     ]]
+
+  log: (...) =>
+    print "[DB]", ...
 
   close: =>
     @db\close!
@@ -47,13 +64,13 @@ class TreeStore
     res = assert stmt\exec!
 
   -- fileders
-  list_fileders_in: (path) =>
+  list_fileders_in: (path='') =>
     coroutine.wrap ->
       for { path } in @fetch 'SELECT path
                               FROM fileder WHERE parent IS ?', path
         coroutine.yield path
 
-  list_all_fileders: (path) =>
+  list_all_fileders: (path='') =>
     coroutine.wrap ->
       for path in @list_fileders_in path
         coroutine.yield path
@@ -61,14 +78,19 @@ class TreeStore
           coroutine.yield p
 
   create_fileder: (parent, name) =>
+    path = "#{parent}/#{name}"
+
+    @log "creating fileder #{path}"
     @exec 'INSERT INTO fileder (path, parent)
-           VALUES (IFNULL(:parent, "") || "/" || :name, :parent)',
-          { :parent, :name }
+           VALUES (:path, :parent)',
+          { :path, :parent }
 
     changes = @fetch_one 'SELECT changes()'
     assert changes[1] == 1, "couldn't create fileder - parent missing?"
+    path
 
   remove_fileder: (path) =>
+    @log "removing fileder #{path}"
     @exec 'DELETE FROM fileder
            WHERE path LIKE :path || "/%"
               OR path = :path', path
@@ -77,7 +99,7 @@ class TreeStore
     error 'not implemented'
 
     @exec 'UPDATE fileder
-           SET path = IFNULL(parent, "") || "/" || :next_name
+           SET path = parent || "/" || :next_name
            WHERE path = :path',
           { :path, :next_name }
 
@@ -108,6 +130,7 @@ class TreeStore
     v and v[1]
 
   create_facet: (path, name, type, blob) =>
+    @log "creating facet #{path} | #{name}: #{type}"
     @exec 'INSERT INTO facet (fileder_id, name, type, value)
            SELECT id, :name, :type, :blob
            FROM fileder
@@ -118,6 +141,7 @@ class TreeStore
     assert changes[1] == 1, "couldn't create facet - fileder missing?"
 
   remove_facet: (path, name, type) =>
+    @log "removing facet #{path} | #{name}: #{type}"
     @exec 'DELETE FROM facet
            WHERE name = :name
              AND type = :type
@@ -128,6 +152,7 @@ class TreeStore
     assert changes[1] == 1, "no such facet"
 
   rename_facet: (path, name, type, next_name) =>
+    @log "renaming facet #{path} | #{name}: #{type} -> #{next_name}"
     @exec 'UPDATE facet
            SET name = :next_name
            WHERE name = :name
@@ -139,6 +164,7 @@ class TreeStore
     assert changes[1] == 1, "no such facet"
 
   update_facet: (path, name, type, blob) =>
+    @log "updating facet #{path} | #{name}: #{type}"
     @exec 'UPDATE facet
            SET value = :blob
            WHERE facet.name = :name
@@ -149,37 +175,6 @@ class TreeStore
     changes = @fetch_one 'SELECT changes()'
     assert changes[1] == 1, "no such facet"
 
-load_tree = (file='root.zip') ->
-  archive = zip.open file
-
-  fileders = setmetatable {},
-    __index: (path) =>
-      with val = Fileder {}
-        .path = path
-        rawset @, path, val
-
-  fileders['/root'].facets['name: alpha'] = -> 'root'
-
-  for i = 1, #archive
-    { :name, :size } = archive\stat i
-
-    path, facet = dir_base "/#{name}"
-    parent, name = dir_base path
-
-    key = load_facet facet
-
-    this = fileders[path]
-    this.facets['name: alpha'] = -> name
-    this.facets[key] = ->
-      file = archive\open i
-      with file\read size
-        file\close!
-
-    table_add fileders[parent].children, this
-
-  fileders['/root']
-
 {
-  :TreeStore,
-  load_tree,
+  :SQLStore
 }

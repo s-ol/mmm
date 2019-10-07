@@ -1,4 +1,4 @@
-import TreeStore from require 'mmm.mmmfs.drivers.sql'
+import SQLStore from require 'mmm.mmmfs.drivers.sql'
 
 sort2 = (a, b) ->
   {ax, ay}, {bx, by} = a, b
@@ -11,7 +11,7 @@ toseq2 = (iter) -> with v = [{x, y} for x, y in iter]
 describe "sql driver", ->
   randomize false
 
-  ts = TreeStore!
+  ts = SQLStore memory: true
 
   it "starts out empty", ->
     assert.are.same {}, toseq ts\list_fileders_in!
@@ -22,12 +22,14 @@ describe "sql driver", ->
       ts\create_fileder '/hello', 'world'
 
   it "can create root fileders", ->
-    ts\create_fileder nil, 'hello'
+    assert.are.same '/hello', ts\create_fileder '', 'hello'
     assert.are.same {'/hello'}, toseq ts\list_all_fileders!
 
   it "can create and list child fileders recursively", ->
-    ts\create_fileder '/hello', 'world'
-    ts\create_fileder '/hello/world', 'again'
+    assert.are.same '/hello/world',
+                    ts\create_fileder '/hello', 'world'
+    assert.are.same '/hello/world/again',
+                    ts\create_fileder '/hello/world', 'again'
 
     assert.are.same {'/hello', '/hello/world', '/hello/world/again'},
                     toseq ts\list_all_fileders!
