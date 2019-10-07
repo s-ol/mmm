@@ -12,6 +12,10 @@ import tohtml from require 'mmm.component'
 import Browser from require 'mmm.mmmfs.browser'
 import get_meta, header, footer from require 'build.layout'
 
+-- usage:
+-- moon render_all.moon [db.sqlite3]
+{ file } = arg
+
 export BROWSER
 
 render = (fileder, output) ->
@@ -106,7 +110,7 @@ load_tree = (store, root='') ->
 
   root
 
-tree = load_tree SQLStore!
+tree = load_tree SQLStore :name
 
 for fileder in coroutine.wrap tree\iterate
   print "rendering '#{fileder.path}'..."

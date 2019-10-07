@@ -17,7 +17,7 @@ import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
     '.'
     br!
     'You can find the source code of everything '
-    a { 'here', href: 'https://github.com/s-ol/mmm' }
+    a { 'here', href: 'https://git.s-ol.nu/mmm' }
     '.'
     br!
     'Most of the inner-workings of this page are documented in '

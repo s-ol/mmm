@@ -24,7 +24,11 @@ You can build the static content with:
     $ tup init
     $ tup
 
-Then, run some kind of HTTP server from within `root`, e.g. with python 3 installed:
+Next you can render a sqlite3 mmmfs database using
+
+    $ moon build/render_all.moon db.sqlite3
+
+Then, run some kind of HTTP server from within `out`, e.g. with python 3 installed:
 
     $ cd root
     $ python -m http.server
@@ -36,6 +40,14 @@ During development you may want to automatically rebuild the project as files ar
 You can do this with the following command:
 
     $ tup monitor -f -a
+
+### Dependencies
+You will need:
+
+- [MoonScript][moonscript]: `luarocks install moonscript`
+- [lua-sqlite3](https://luarocks.org/modules/moteus/sqlite3): `luarocks install sqlite3`
+- [discount](https://luarocks.org/modules/craigb/discount): `luarocks install discount` (requires libmarkdown2)
+- [busted](https://olivinelabs.com/busted/): `luarocks install busted` (for testing only)
 
 [moonscript]: https://moonscript.org/
 [mmm]: https://mmm.s-ol.nu/

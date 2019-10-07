@@ -13,8 +13,8 @@ import Fileder, Key from require 'mmm.mmmfs.fileder'
 import SQLStore from require 'mmm.mmmfs.drivers.sql'
 
 -- usage:
--- moon import_all.moon <root>
-{ root } = arg
+-- moon import.moon <root> [output.sqlite3]
+{ root, output } = arg
 
 assert root, "please specify the root directory"
 
@@ -31,7 +31,7 @@ load_facet = (filename, filepath) ->
   key, value
 
 
-with SQLStore verbose: true
+with SQLStore name: output, verbose: true
   import_fileder = (fileder, dirpath) ->
     for file in lfs.dir dirpath
       continue if '.' == file\sub 1, 1
