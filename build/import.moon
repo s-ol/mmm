@@ -30,7 +30,6 @@ load_facet = (filename, filepath) ->
 
   key, value
 
-
 with SQLStore name: output, verbose: true
   import_fileder = (fileder, dirpath) ->
     for file in lfs.dir dirpath

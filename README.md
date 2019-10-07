@@ -46,6 +46,7 @@ You will need:
 
 - [MoonScript][moonscript]: `luarocks install moonscript`
 - [lua-sqlite3](https://luarocks.org/modules/moteus/sqlite3): `luarocks install sqlite3`
+- [lua-http](https://github.com/daurnimator/lua-http): `luarocks install http`
 - [discount](https://luarocks.org/modules/craigb/discount): `luarocks install discount` (requires libmarkdown2)
 - [busted](https://olivinelabs.com/busted/): `luarocks install busted` (for testing only)
 

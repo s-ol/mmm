@@ -123,6 +123,7 @@ class Fileder
     [name for name in pairs names]
 
   -- check whether a facet is directly available
+  -- when passing a Key, set type to false to check for name only
   has: (...) =>
     want = Key ...
 
@@ -130,6 +131,14 @@ class Fileder
       continue if key.original
 
       if key.name == want.name and key.type == want.type
+        return key
+
+  -- check whether any facet with that name exists
+  has_facet: (want) =>
+    for key in pairs @facets
+      continue if key.original
+
+      if key.name == want
         return key
 
   -- find facet and type according to criteria, nil if no value or conversion path
