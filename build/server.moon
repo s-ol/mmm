@@ -82,7 +82,6 @@ class Server
     path = req\get ':path'
 
     path, facet = dir_base path
-    print "'#{path}', '#{facet}'"
     facet = if #facet > 0
       facet = '' if facet == ':'
       accept = req\get 'mmm-accept'
@@ -95,7 +94,7 @@ class Server
     res = headers.new!
     response_type = if status > 299 then 'text/plain'
     else if facet then facet.type
-    else 'text/plain'
+    else 'text/json'
     res\append ':status', tostring status
     res\append 'content-type', response_type
 
