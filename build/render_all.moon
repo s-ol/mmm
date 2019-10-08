@@ -21,7 +21,7 @@ import load_tree from require 'build.util'
 export BROWSER, STATIC
 STATIC = true
 
-tree = load_tree SQLStore :name
+tree = load_tree SQLStore :file
 tree = tree\walk startpath if startpath
 
 for fileder in coroutine.wrap tree\iterate

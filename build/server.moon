@@ -163,9 +163,9 @@ class Server
     print msg
 
 -- usage:
--- moon server.moon [db.sqlite3]
-{ file } = arg
+-- moon server.moon [db.sqlite3] [host] [port]
+{ file, host, port } = arg
 
 tree = load_tree SQLStore :file
-server = Server tree
+server = Server tree, :host, port: port and tonumber port
 server\listen!

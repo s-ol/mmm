@@ -2,7 +2,7 @@ sqlite = require 'sqlite3'
 
 class SQLStore
   new: (opts = {}) =>
-    opts.name or= 'db.sqlite3'
+    opts.file or= 'db.sqlite3'
     opts.verbose or= false
     opts.memory or= false
 
@@ -13,8 +13,8 @@ class SQLStore
       @log "opening in-memory DB..."
       @db = sqlite.open_memory!
     else
-      @log "opening '#{opts.name}'..."
-      @db = sqlite.open opts.name
+      @log "opening '#{opts.file}'..."
+      @db = sqlite.open opts.file
 
     assert @db\exec [[
       PRAGMA foreign_keys = ON;

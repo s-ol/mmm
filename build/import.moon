@@ -14,7 +14,7 @@ import SQLStore from require 'mmm.mmmfs.drivers.sql'
 
 -- usage:
 -- moon import.moon <root> [output.sqlite3]
-{ root, output } = arg
+{ root, file } = arg
 
 assert root, "please specify the root directory"
 
@@ -30,7 +30,7 @@ load_facet = (filename, filepath) ->
 
   key, value
 
-with SQLStore name: output, verbose: true
+with SQLStore :file, verbose: true
   import_fileder = (fileder, dirpath) ->
     for file in lfs.dir dirpath
       continue if '.' == file\sub 1, 1
