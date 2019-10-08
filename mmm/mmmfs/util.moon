@@ -5,9 +5,9 @@ merge = (orig={}, extra) ->
 
 tourl = (path) ->
   if STATIC
-    path
+    path .. '/'
   else
-    "#{path}/:"
+    path .. '/'
 
 (elements) ->
   import a, div, pre from elements

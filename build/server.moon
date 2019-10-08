@@ -63,7 +63,7 @@ class Server
           if val
             200, val
           else
-            406, 'cant convert facet'
+            406, "cant convert facet '#{facet.name}' to '#{facet.type}'"
         elseif fileder
           -- no facet given
           facets = [{k.name, k.type} for k,v in pairs fileder.facets]
@@ -74,71 +74,75 @@ class Server
           -- fileder not found
           404, "fileder '#{path}' not found"
       else
-        501, 'not implemented'
+        501, "not implemented"
+
+  handle_static: (method, path, stream) =>
+    path = path\match '^/%?static/(.*)'
+    return unless path
+
+    respond = (code, type, body) ->
+      res = headers.new!
+      res\upsert ':status', code
+      res\append 'content-type', type
+
+      assert stream\write_headers res, method == 'HEAD'
+      if body and method ~= 'HEAD'
+        assert stream\write_body_from_string body
+
+    if method ~= 'GET' and method ~= 'HEAD'
+      respond '405', 'text/plain', "can only GET/HEAD static resources"
+      return true
+
+    if path\match '^%.' or path\match '^%~'
+      respond '404', 'text/plain', "not found"
+      return
+
+    file_path = "static/#{path}"
+    if 'file' == lfs.attributes file_path, 'mode'
+      fd, err, errno = io.open file_path, 'rb'
+
+      if not fd
+        code = switch errno
+          when ce.ENOENT then '404'
+          when ce.EACCES then '403'
+          else '503'
+
+        respond code, 'text/plain', err or ''
+
+      else
+        suffix = file_path\match '%.([a-z]+)$'
+        type = switch suffix
+          when 'css' then 'text/css'
+          when 'lua' then 'application/lua'
+          when 'js' then 'application/javascript'
+          else 'application/octet-stream'
+
+        respond '200', type, nil
+        if method ~= 'HEAD'
+          assert stream\write_body_from_file fd
+    else
+      respond '404', 'text/plain', "not found"
+
+    true
 
   stream: (sv, stream) =>
     req = stream\get_headers!
     method = req\get ':method'
     path = req\get ':path'
 
-    if path\match '^/%?'
-      -- serve static assets, cheap hack for now
+    -- serve static assets, cheap hack for now
+    return if @handle_static method, path, stream
 
-      res = headers.new!
-      if method ~= 'GET' and method ~= 'HEAD'
-        res\append ':status', '405'
-        stream\write_headers res, true
-        return
+    path_facet, type = path\match '(.*):(.*)'
+    path_facet or= path
+    path, facet = path_facet\match '(.*)/([^/]*)'
 
-      static_path = "static/#{path\sub 3}"
-
-      if 'file' == lfs.attributes static_path, 'mode'
-        fd, err, errno = io.open static_path, 'rb'
-
-        if not fd
-          code = switch errno
-            when ce.ENOENT then '404'
-            when ce.EACCES then '403'
-            else '503'
-
-          res\upsert ':status', code
-          res\append 'content-type', 'text/plain'
-
-          assert stream\write_headers res, method == 'HEAD'
-          if method ~= 'HEAD'
-            assert stream\write_body_from_string err
-
-        else
-          suffix = static_path\match '%.([a-z]+)$'
-          type = switch suffix
-            when 'css' then 'text/css'
-            when 'lua' then 'application/lua'
-            when 'js' then 'application/javascript'
-            else 'application/octet-stream'
-
-          res\upsert ':status', '200'
-          res\append 'content-type', type
-
-          assert stream\write_headers res, method == 'HEAD'
-          if method ~= 'HEAD'
-            assert stream\write_body_from_file fd
-      else
-        res\upsert ':status', '404'
-        res\append 'content-type', 'text/plain'
-
-        assert stream\write_headers res, method == 'HEAD'
-        if method ~= 'HEAD'
-          assert stream\write_body_from_string "not found"
-
-      return
-
-    path, facet = dir_base path
-    facet = if #facet > 0
-      facet = '' if facet == ':'
-      accept = req\get 'mmm-accept'
-      Key facet, accept or 'text/html'
+    if facet ~= '?index'
+      type or= 'text/html'
+      type = type\match '%s*(.*)'
+      facet = Key facet, type
     else
-      nil
+      facet = nil
 
     status, body = @handle method, path, facet
 
@@ -149,10 +153,8 @@ class Server
     res\append ':status', tostring status
     res\append 'content-type', response_type
 
-    if method == 'HEAD'
-      stream\write_headers res, true
-    else
-      stream\write_headers res, false
+    stream\write_headers res, method == 'HEAD'
+    if method ~= 'HEAD'
       stream\write_chunk body, true
 
   error: (sv, ctx, op, err, errno) =>
