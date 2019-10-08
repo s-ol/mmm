@@ -12,6 +12,7 @@ require 'mmm'
 import dir_base, load_tree from require 'build.util'
 import Key from require 'mmm.mmmfs.fileder'
 import SQLStore from require 'mmm.mmmfs.drivers.sql'
+import decodeURI from require 'http.util'
 
 lfs = require 'lfs'
 server = require 'http.server'
@@ -129,6 +130,7 @@ class Server
     req = stream\get_headers!
     method = req\get ':method'
     path = req\get ':path'
+    path = decodeURI path
 
     -- serve static assets, cheap hack for now
     return if @handle_static method, path, stream
