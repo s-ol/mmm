@@ -77,7 +77,7 @@ class Server
         501, "not implemented"
 
   handle_static: (method, path, stream) =>
-    path = path\match '^/%?static/(.*)'
+    path = path\match '^/%.static/(.*)'
     return unless path
 
     respond = (code, type, body) ->
@@ -93,7 +93,7 @@ class Server
       respond '405', 'text/plain', "can only GET/HEAD static resources"
       return true
 
-    if path\match '^%.' or path\match '^%~'
+    if path\match '%.%.' or path\match '^%~'
       respond '404', 'text/plain', "not found"
       return
 

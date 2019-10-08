@@ -14,4 +14,4 @@ include_rules
 : mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon &(build)/bundle_module.moon %o --wrap %f |> static/mmm.bundle.lua
 
 # copy for static builds
-: foreach static/* |> cp %f out/ |> out/%b
+: foreach static/* |> cp %f out/.static/ |> out/.static/%b

@@ -129,7 +129,7 @@ render = (content, fileder, opts={}) ->
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="/?static/main.css" />
+    <link rel="stylesheet" type="text/css" href="/.static/main.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" />
   ]]
   buf ..= "
@@ -143,12 +143,12 @@ render = (content, fileder, opts={}) ->
     #{footer}
   "
   buf ..= [[
-    <script type="application/javascript" src="/?static/highlight.pack.js"></script>
+    <script type="application/javascript" src="/.static/highlight.pack.js"></script>
     <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js"></script>
     <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
     <script type="application/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <script type="application/javascript" src="/?static/fengari-web.js"></script>
-    <script type="application/lua" src="/?static/mmm.bundle.lua"></script>
+    <script type="application/javascript" src="/.static/fengari-web.js"></script>
+    <script type="application/lua" src="/.static/mmm.bundle.lua"></script>
     <script type="application/lua">require 'mmm'</script>
   ]]
 
