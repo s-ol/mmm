@@ -201,7 +201,7 @@ converts = {
     transform: single code
   },
   {
-    inp: 'URL -> .*',
+    inp: 'URL -> .+',
     out: 'mmm/dom',
     transform: single code
   },

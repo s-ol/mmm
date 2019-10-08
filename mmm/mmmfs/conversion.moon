@@ -2,14 +2,15 @@ require = relative ..., 1
 converts = require '.converts'
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
-escape_pattern = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
+escape_pattern = (inp) -> "^#{inp\gsub '([^%w])', '%%%1'}$"
+escape_inp = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
 
 -- attempt to find a conversion path from 'have' to 'want'
 -- * have - start type string or list of type strings
 -- * want - stop type pattern
 -- * limit - limit conversion amount
 -- returns a list of conversion steps
-get_conversions = (want, have, _converts=converts, limit=3) ->
+get_conversions = (want, have, _converts=converts, limit=5) ->
   assert have, 'need starting type(s)'
 
   if 'string' == type have
@@ -28,7 +29,7 @@ get_conversions = (want, have, _converts=converts, limit=3) ->
         return conversions, start
       else
         for convert in *_converts
-          inp = escape_pattern convert.inp
+          inp = escape_inp convert.inp
           continue unless rest\match inp
           result = rest\gsub inp, convert.out
           if result
