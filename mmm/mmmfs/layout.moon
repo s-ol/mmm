@@ -5,7 +5,7 @@ import navigate_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
 pick = (...) ->
   num = select '#', ...
   i = math.ceil math.random! * num
-  select i, ...
+  (select i, ...)
 
 iconlink = (href, src, alt, style) -> a {
   class: 'iconlink',
@@ -30,37 +30,41 @@ logo = svg {
   }
 }
 
-header = header {
-  div {
-    h1 {
-      logo
-      span {
-        span 'mmm', class: 'bold'
-        '&#8203;'
-        '.s&#8209;ol.nu'
+gen_header = ->
+  header {
+    div {
+      h1 {
+        navigate_to '', logo
+        span {
+          span 'mmm', class: 'bold'
+          '&#8203;'
+          '.s&#8209;ol.nu'
+        }
+      }
+      -- span "fun stuff with code and wires"
+      table.concat {
+        pick 'fun', 'cool', 'weird', 'interesting', 'new', 'pleasant'
+        pick 'stuff', 'things', 'projects', 'experiments', 'visuals', 'ideas'
+        pick "with", 'and'
+        pick 'mostly code', 'code and wires', 'silicon', 'electronics', 'shaders',
+             'oscilloscopes', 'interfaces', 'hardware', 'FPGAs'
+      }, ' '
+    }
+    aside {
+      navigate_to '/about', 'about me'
+      navigate_to '/games', 'games'
+      navigate_to '/projects', 'other'
+      a {
+        href: 'mailto:s%20[removethis]%20[at]%20s-ol.nu'
+        'contact'
+        script "
+          var l = document.currentScript.parentElement;
+          l.href = l.href.replace('%20[at]%20', '@');
+          l.href = l.href.replace('%20[removethis]', '') + '?subject=Hey there :)';
+        "
       }
     }
-    span "fun stuff with code and wires"
-  --        pick 'fun', 'cool', 'weird', 'interesting', 'new'
-  --        pick 'stuff', 'things', 'projects', 'experiments', 'news'
-  --        "with"
-  --        pick 'mostly code', 'code and wires', 'silicon', 'electronics'
   }
-  aside {
-    navigate_to '/about', 'about me'
-    navigate_to '/games', 'games'
-    navigate_to '/projects', 'other'
-    a {
-      href: 'mailto:s%20[removethis]%20[at]%20s-ol.nu'
-      'contact'
-      script "
-        var l = document.currentScript.parentElement;
-        l.href = l.href.replace('%20[at]%20', '@');
-        l.href = l.href.replace('%20[removethis]', '') + '?subject=Hey there :)';
-      "
-    }
-  }
-}
 
 footer = footer {
   span {
@@ -108,53 +112,59 @@ get_meta = =>
 
   meta
 
-render = (content, fileder) ->
+render = (content, fileder, opts={}) ->
+  opts.meta or= get_meta fileder
+  opts.scripts or= ''
+
+  unless opts.noview
+    content = [[
+      <div class="view main">
+        <div class="content">
+      ]] .. content .. [[
+        </div>
+      </div>
+    ]]
+
   buf = [[
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="/main.css" />
-    <!--
-    <link rel="preload" as="fetch" href="/mmm/dom/init.lua" />
-    <link rel="preload" as="fetch" href="/mmm/component/init.lua" />
-    <link rel="preload" as="fetch" href="/mmm/mmmfs/init.lua" />
-    <link rel="preload" as="fetch" href="/mmm/mmmfs/fileder.lua" />
-    <link rel="preload" as="fetch" href="/mmm/mmmfs/browser.lua" />
-    -->
-
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/?main.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" />
   ]]
   buf ..= "
     #{get_meta fileder}
   </head>
   <body>
-    #{header}
+    #{gen_header!}
 
     #{content}
 
     #{footer}
   "
   buf ..= [[
-    <script src="/highlight.pack.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
-    <script src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <script src="/fengari-web.js"></script>
-    <script type="application/lua" src="/mmm.bundle.lua"></script>
+    <script type="application/javascript" src="/?highlight.pack.js"></script>
+    <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js"></script>
+    <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
+    <script type="application/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script type="application/javascript" src="/?fengari-web.js"></script>
+    <script type="application/lua" src="/?mmm.bundle.lua"></script>
     <script type="application/lua">require 'mmm'</script>
   ]]
-  buf ..= "
-    <script type=\"application/lua\">
-      on_load = on_load or {}
-      table.insert(on_load, function()
-        local path = #{string.format '%q', path}
-        local browser = require 'mmm.mmmfs.browser'
-        local root = dofile '/$bundle.lua'
-        root:mount('', true)
 
-        BROWSER = browser.Browser(root, path, true)
-      end)
-    </script>
+  buf ..= opts.scripts
+  --  <script type=\"application/lua\">
+  --    on_load = on_load or {}
+  --    table.insert(on_load, function()
+  --      local path = #{string.format '%q', path}
+  --      local browser = require 'mmm.mmmfs.browser'
+  --      local root = dofile '/$bundle.lua'
+  --      root:mount('', true)
+
+  --      BROWSER = browser.Browser(root, path, true)
+  --    end)
+  --  </script>
+  buf ..= "
   </body>
 </html>
   "

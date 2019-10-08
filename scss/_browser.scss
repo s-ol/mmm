@@ -3,109 +3,109 @@
   flex: 1;
 
   border-top: 0.2rem solid $gray-bright;
+}
 
-  .view {
-    display: flex;
-    flex-direction: column;
+.view {
+  display: flex;
+  flex-direction: column;
 
-    flex: 1 1 0;
-    min-width: 0;
+  flex: 1 1 0;
+  min-width: 0;
 
-    &.inspector {
-      top: 0;
-      position: sticky;
-      max-height: 100vh;
-      color: #c5c8c6;
+  &.inspector {
+    top: 0;
+    position: sticky;
+    max-height: 100vh;
+    color: #c5c8c6;
 
-      @include left-border;
-      border-color: $gray-dark;
-      background: $gray-dark;
-
-      nav {
-        background: inherit;
-      }
-
-      .content {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        background: $gray-darker;
-
-        > * {
-          display: block;
-          margin: 0;
-          padding: 1em;
-          border-radius: 0;
-          border: 0;
-          flex: 1;
-        }
-      }
-    }
+    @include left-border;
+    border-color: $gray-dark;
+    background: $gray-dark;
 
     nav {
-      position: sticky;
-      top: 0;
-
-      display: flex;
-      flex: 0 0 auto;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      background: $gray-bright;
-      z-index: 1000;
-
-      > span:first-of-type {
-        flex: 1 0 auto;
-      }
-
-      > * {
-        margin: 1em;
-        white-space: nowrap;
-      }
-
-      > .inspect-btn {
-        @include media-small() { display: none; }
-      }
-    }
-
-    .error-wrap {
-      flex: 0 0 auto;
-      padding: 1em 2em;
-      overflow: hidden;
-
-      background: $gray-fail;
-
-      &.empty {
-        display: none;
-      }
-
-      > span {
-        display: inline-block;
-        margin-bottom: 0.5em;
-
-        font-weight: bold;
-        color: #f00;
-      }
-
-      > pre {
-        margin: 0;
-      }
+      background: inherit;
     }
 
     .content {
-      flex: 1 1 auto;
-      overflow: auto;
-      padding: 1em 2em;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      background: $gray-darker;
 
-      position: relative;
+      > * {
+        display: block;
+        margin: 0;
+        padding: 1em;
+        border-radius: 0;
+        border: 0;
+        flex: 1;
+      }
+    }
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background: $gray-bright;
+    z-index: 1000;
+
+    > span:first-of-type {
+      flex: 1 0 auto;
+    }
+
+    > * {
+      margin: 1em;
+      white-space: nowrap;
+    }
+
+    > .inspect-btn {
+      @include media-small() { display: none; }
+    }
+  }
+
+  .error-wrap {
+    flex: 0 0 auto;
+    padding: 1em 2em;
+    overflow: hidden;
+
+    background: $gray-fail;
+
+    &.empty {
+      display: none;
+    }
+
+    > span {
+      display: inline-block;
+      margin-bottom: 0.5em;
+
+      font-weight: bold;
+      color: #f00;
+    }
+
+    > pre {
+      margin: 0;
     }
   }
 
   .content {
-    opacity: 1;
-    transition: opacity 150ms;
+    flex: 1 1 auto;
+    overflow: auto;
+    padding: 1em 2em;
 
-    body.loading & {
-      opacity: 0;
-    }
+    position: relative;
+  }
+}
+
+.content {
+  opacity: 1;
+  transition: opacity 150ms;
+
+  body.loading & {
+    opacity: 0;
   }
 }

@@ -3,6 +3,12 @@ merge = (orig={}, extra) ->
     for k,v in pairs extra
       attr[k] = v
 
+tourl = (path) ->
+  if STATIC
+    path
+  else
+    "#{path}/:"
+
 (elements) ->
   import a, div, pre from elements
 
@@ -14,7 +20,7 @@ merge = (orig={}, extra) ->
       assert fileder, "no fileder passed."
 
   navigate_to = (path, name, opts={}) ->
-    opts.href = path
+    opts.href = tourl path
     opts.onclick = if MODE == 'CLIENT' then (e) =>
       e\preventDefault!
       BROWSER\navigate path
@@ -30,7 +36,7 @@ merge = (orig={}, extra) ->
       a name, merge attr, :href, target: '_blank'
     else
       a name, merge attr, {
-        href: fileder.path
+        href: tourl fileder.path
         onclick: if MODE == 'CLIENT' then (e) =>
           e\preventDefault!
           BROWSER\navigate fileder.path
