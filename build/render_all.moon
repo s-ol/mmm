@@ -18,7 +18,8 @@ import load_tree from require 'build.util'
 -- moon render_all.moon [db.sqlite3] [startpath]
 { file, startpath } = arg
 
-export BROWSER
+export BROWSER, STATIC
+STATIC = true
 
 tree = load_tree SQLStore :name
 tree = tree\walk startpath if startpath

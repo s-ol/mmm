@@ -39,8 +39,7 @@ with SQLStore name: output, verbose: true
       continue if file == '$order'
 
       filepath = "#{dirpath}/#{file}"
-      attr = lfs.attributes filepath
-      switch attr.mode
+      switch lfs.attributes filepath, 'mode'
         when 'file'
           key, value = load_facet file, filepath
           \create_facet fileder, key.name, key.type, value

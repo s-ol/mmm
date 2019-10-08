@@ -8,10 +8,12 @@ add '?/init'
 add '?/init.server'
 
 require 'mmm'
+
 import dir_base, load_tree from require 'build.util'
 import Key from require 'mmm.mmmfs.fileder'
 import SQLStore from require 'mmm.mmmfs.drivers.sql'
 
+lfs = require 'lfs'
 server = require 'http.server'
 headers = require 'http.headers'
 
@@ -66,8 +68,6 @@ class Server
           -- no facet given
           facets = [{k.name, k.type} for k,v in pairs fileder.facets]
           children = [f.path for f in *fileder.children]
-          print facets
-          print children
           contents = tojson :facets, :children
           200, contents
         else
@@ -80,6 +80,57 @@ class Server
     req = stream\get_headers!
     method = req\get ':method'
     path = req\get ':path'
+
+    if path\match '^/%?'
+      -- serve static assets, cheap hack for now
+
+      res = headers.new!
+      if method ~= 'GET' and method ~= 'HEAD'
+        res\append ':status', '405'
+        stream\write_headers res, true
+        return
+
+      static_path = "static/#{path\sub 3}"
+
+      if 'file' == lfs.attributes static_path, 'mode'
+        fd, err, errno = io.open static_path, 'rb'
+
+        if not fd
+          code = switch errno
+            when ce.ENOENT then '404'
+            when ce.EACCES then '403'
+            else '503'
+
+          res\upsert ':status', code
+          res\append 'content-type', 'text/plain'
+
+          assert stream\write_headers res, method == 'HEAD'
+          if method ~= 'HEAD'
+            assert stream\write_body_from_string err
+
+        else
+          suffix = static_path\match '%.([a-z]+)$'
+          type = switch suffix
+            when 'css' then 'text/css'
+            when 'lua' then 'application/lua'
+            when 'js' then 'application/javascript'
+            else 'application/octet-stream'
+
+          res\upsert ':status', '200'
+          res\append 'content-type', type
+
+          assert stream\write_headers res, method == 'HEAD'
+          if method ~= 'HEAD'
+            assert stream\write_body_from_file fd
+      else
+        res\upsert ':status', '404'
+        res\append 'content-type', 'text/plain'
+
+        assert stream\write_headers res, method == 'HEAD'
+        if method ~= 'HEAD'
+          assert stream\write_body_from_string "not found"
+
+      return
 
     path, facet = dir_base path
     facet = if #facet > 0
