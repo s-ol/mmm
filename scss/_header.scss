@@ -26,8 +26,12 @@ header {
         font-weight: 400;
       }
 
-      .sun {
+      > a {
         height: 5rem;
+      }
+
+      .sun {
+        height: 100%;
         stroke: currentColor;
         fill: currentColor;
 

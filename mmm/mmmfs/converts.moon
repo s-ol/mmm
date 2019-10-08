@@ -42,9 +42,7 @@ converts = {
   {
     inp: 'text/html%+frag',
     out: 'text/html',
-    transform: (html, fileder) =>
-      html = '<div class="content">' .. html .. '</div>'
-      render html, fileder
+    transform: (html, fileder) => render html, fileder
   },
   {
     inp: 'text/html%+frag',
