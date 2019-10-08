@@ -2,7 +2,7 @@ require = relative ..., 1
 import Key from require '.fileder'
 import converts, get_conversions, apply_conversions from require '.conversion'
 import ReactiveVar, get_or_create, text, elements from require 'mmm.component'
-import pre, div, nav, span, button, a, select, option from elements
+import pre, div, nav, span, button, a, code, select, option from elements
 import languages from require 'mmm.highlighting'
 
 keep = (var) ->
@@ -32,7 +32,7 @@ casts = {
   {
     inp: 'URL.*'
     out: 'mmm/dom'
-    transform: (href) -> span a href, :href
+    transform: (href) -> span a (code href), :href
   },
 }
 

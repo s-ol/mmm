@@ -36,7 +36,7 @@ get_conversions = (want, have, _converts=converts, limit=5) ->
             next_have[c] = {
               :start,
               rest: result,
-              conversions: { convert, table.unpack conversions }
+              conversions: { { :convert, from: rest, to: result }, table.unpack conversions }
             }
             c += 1
 
@@ -50,8 +50,8 @@ get_conversions = (want, have, _converts=converts, limit=5) ->
 -- returns converted value
 apply_conversions = (conversions, value, ...) ->
   for i=#conversions,1,-1
-    { :inp, :out, :transform } = conversions[i]
-    value = transform value, ...
+    step = conversions[i]
+    value = step.convert.transform step, value, ...
 
   value
 

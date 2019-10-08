@@ -11,10 +11,10 @@ js_fix = if MODE == 'CLIENT'
     arg
 
 -- limit function to one argument
-single = (func) -> (val) -> func val
+single = (func) -> (val) => func val
 
 -- load a chunk using a specific 'load'er
-loadwith = (_load) -> (val, fileder, key) ->
+loadwith = (_load) -> (val, fileder, key) =>
   func = assert _load val, "#{fileder}##{key}"
   func!
 
@@ -27,7 +27,7 @@ converts = {
   {
     inp: 'fn -> (.+)',
     out: '%1',
-    transform: (val, fileder) -> val fileder
+    transform: (val, fileder) => val fileder
   },
   {
     inp: 'mmm/component',
@@ -37,12 +37,12 @@ converts = {
   {
     inp: 'mmm/dom',
     out: 'text/html+frag',
-    transform: (node) -> if MODE == 'SERVER' then node else node.outerHTML
+    transform: (node) => if MODE == 'SERVER' then node else node.outerHTML
   },
   {
     inp: 'text/html%+frag',
     out: 'text/html',
-    transform: (html, fileder) ->
+    transform: (html, fileder) =>
       html = '<div class="content">' .. html .. '</div>'
       render html, fileder
   },
@@ -50,7 +50,7 @@ converts = {
     inp: 'text/html%+frag',
     out: 'mmm/dom',
     transform: if MODE == 'SERVER'
-      (html, fileder) ->
+      (html, fileder) =>
         html = html\gsub '<mmm%-link%s+(.-)>(.-)</mmm%-link>', (attrs, text) ->
           text = nil if #text == 0
           path = ''
@@ -93,7 +93,7 @@ converts = {
 
         html
     else
-      (html, fileder) ->
+      (html, fileder) =>
         parent = with document\createElement 'div'
           .innerHTML = html
 
@@ -128,7 +128,7 @@ converts = {
   {
     inp: 'mmm/tpl -> (.+)',
     out: '%1',
-    transform: (source, fileder) ->
+    transform: (source, fileder) =>
       source\gsub '{{(.-)}}', (expr) ->
         path, facet = expr\match '^([%w%-_%./]*)%+(.*)'
         assert path, "couldn't match TPL expression '#{expr}'"
@@ -138,7 +138,7 @@ converts = {
   {
     inp: 'time/iso8601-date',
     out: 'time/unix',
-    transform: (val) ->
+    transform: (val) =>
       year, _, month, day = val\match '^%s*(%d%d%d%d)(%-?)([01]%d)%2([0-3]%d)%s*$'
       assert year, "failed to parse ISO 8601 date: '#{val}'"
       os.time :year, :month, :day
@@ -146,7 +146,7 @@ converts = {
   {
     inp: 'URL -> twitter/tweet',
     out: 'mmm/dom',
-    transform: (href) ->
+    transform: (href) =>
       id = assert (href\match 'twitter.com/[^/]-/status/(%d*)'), "couldn't parse twitter/tweet URL: '#{href}'"
       if MODE == 'CLIENT'
         with parent = div!
@@ -161,7 +161,7 @@ converts = {
   {
     inp: 'URL -> youtube/video',
     out: 'mmm/dom',
-    transform: (link) ->
+    transform: (link) =>
       id = link\match 'youtu%.be/([^/]+)'
       id or= link\match 'youtube.com/watch.*[?&]v=([^&]+)'
       id or= link\match 'youtube.com/[ev]/([^/]+)'
@@ -181,29 +181,35 @@ converts = {
   {
     inp: 'URL -> image/.+',
     out: 'mmm/dom',
-    transform: (src, fileder) -> img :src
+    transform: (src, fileder) => img :src
   },
   {
     inp: 'URL -> video/.+',
     out: 'mmm/dom',
-    transform: (src) ->
+    transform: (src) =>
       -- @TODO: add parsed MIME type
       video (source :src), controls: true, loop: true
   },
   {
     inp: 'text/plain',
     out: 'mmm/dom',
-    transform: (val) -> span val
+    transform: (val) => span val
   },
   {
     inp: 'alpha',
     out: 'mmm/dom',
     transform: single code
   },
+  -- this one needs a higher cost
+  -- {
+  --   inp: 'URL -> .+',
+  --   out: 'mmm/dom',
+  --   transform: single code
+  -- },
   {
-    inp: 'URL -> .+',
-    out: 'mmm/dom',
-    transform: single code
+    inp: '(.+)',
+    out: 'URL -> %1',
+    transform: (_, fileder, key) => "#{fileder.path}/#{key.name}:#{@from}"
   },
 }
 
@@ -226,7 +232,7 @@ else
   table.insert converts, {
     inp: 'text/javascript -> (.+)',
     out: '%1',
-    transform: (source) ->
+    transform: (source) =>
       f = js.new window.Function, source
       f!
   }
@@ -248,19 +254,19 @@ do
     table.insert converts, {
       inp: 'text/markdown',
       out: 'text/html+frag',
-      transform: (md) -> "<div class=\"markdown\">#{markdown md}</div>"
+      transform: (md) => "<div class=\"markdown\">#{markdown md}</div>"
     }
 
     table.insert converts, {
       inp: 'text/markdown%+span',
       out: 'mmm/dom',
       transform: if MODE == 'SERVER'
-        (source) ->
+        (source) =>
           html = markdown source
           html = html\gsub '^<p', '<span'
           html\gsub '/p>$', '/span>'
       else
-        (source) ->
+        (source) =>
           html = markdown source
           html = html\gsub '^%s*<p>%s*', ''
           html = html\gsub '%s*</p>%s*$', ''

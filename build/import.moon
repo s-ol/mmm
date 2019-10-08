@@ -24,7 +24,7 @@ load_facet = (filename, filepath) ->
   key = Key key\gsub '%$', '/'
   key.filename = filename
 
-  file = assert (io.open filepath, 'r'), "couldn't open facet file '#{filename}'"
+  file = assert (io.open filepath, 'rb'), "couldn't open facet file '#{filename}'"
   value = file\read '*all'
   file\close!
 
