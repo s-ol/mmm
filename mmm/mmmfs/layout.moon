@@ -130,7 +130,7 @@ render = (content, fileder, opts={}) ->
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/.static/main.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />
   ]]
   buf ..= "
     #{get_meta fileder}

@@ -4,7 +4,7 @@ require = relative ..., 0
 -- e.g.: sql, fs:/path/to/root, sql:MEMORY, sql:db.sqlite3
 get_store = (args='sql', opts={verbose: true}) ->
   type, arg = args\match '(%w+):(.*)'
-  type = arg unless type
+  type = args unless type
 
   switch type\lower!
     when 'sql'
@@ -18,11 +18,11 @@ get_store = (args='sql', opts={verbose: true}) ->
       SQLStore opts
 
     when 'fs'
-      import LFSStore from require '.fs'
+      import FSStore from require '.fs'
 
       opts.root = arg
 
-      LFSStore opts
+      FSStore opts
 
     else
       warn "unknown or missing value for STORE: valid types values are sql, fs"

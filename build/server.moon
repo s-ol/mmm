@@ -34,7 +34,7 @@ tojson = (obj) ->
       'null'
 
 class Server
-  new: (@tree, opts={}) =>
+  new: (@store, opts={}) =>
     opts = {k,v for k,v in pairs opts}
     opts.host = 'localhost' unless opts.host
     opts.port = 8000 unless opts.port
@@ -51,7 +51,7 @@ class Server
     assert @server\loop!
 
   handle: (method, path, facet) =>
-    fileder = @tree\walk path
+    fileder = load_tree @store, path -- @tree\walk path
     switch method
       when 'GET', 'HEAD'
         if fileder and facet
@@ -168,6 +168,5 @@ class Server
 { store, host, port } = arg
 
 store = get_store store
-tree = load_tree store
-server = Server tree, :host, port: port and tonumber port
+server = Server store, :host, port: port and tonumber port
 server\listen!
