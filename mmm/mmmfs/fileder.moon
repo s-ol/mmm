@@ -190,7 +190,7 @@ dir_base = (path) ->
 
   dir, base
 
--- load tree from a driver instance
+-- load tree from a store instance
 -- optionally load subtree starting at 'root' path
 load_tree = (store, root='') ->
   fileders = setmetatable {},

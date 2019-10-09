@@ -10,7 +10,7 @@ add '?/init.server'
 require 'mmm'
 
 import Key, dir_base, load_tree from require 'mmm.mmmfs.fileder'
-import SQLStore from require 'mmm.mmmfs.drivers.sql'
+import get_store from require 'mmm.mmmfs.stores'
 import decodeURI from require 'http.util'
 
 lfs = require 'lfs'
@@ -164,9 +164,10 @@ class Server
     print msg
 
 -- usage:
--- moon server.moon [db.sqlite3] [host] [port]
-{ file, host, port } = arg
+-- moon server.moon [STORE] [host] [port]
+{ store, host, port } = arg
 
-tree = load_tree SQLStore :file
+store = get_store store
+tree = load_tree store
 server = Server tree, :host, port: port and tonumber port
 server\listen!

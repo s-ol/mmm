@@ -9,17 +9,18 @@ add '?/init.server'
 
 require 'mmm'
 import load_tree from require 'mmm.mmmfs.fileder'
+import get_store from require 'mmm.mmmfs.stores'
 import render from require 'mmm.mmmfs.layout'
-import SQLStore from require 'mmm.mmmfs.drivers.sql'
 
 -- usage:
--- moon render_all.moon [db.sqlite3] [startpath]
-{ file, startpath } = arg
+-- moon render_all.moon [STORE] [startpath]
+{ store, startpath } = arg
 
 export STATIC
 STATIC = true
 
-tree = load_tree SQLStore :file
+store = get_store store
+tree = load_tree store
 tree = tree\walk startpath if startpath
 
 for fileder in coroutine.wrap tree\iterate

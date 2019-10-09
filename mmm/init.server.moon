@@ -1,4 +1,4 @@
-export MODE, print, warn, relative, on_client
+export MODE, print, warn, relative
 MODE = 'SERVER'
 
 deep_tostring = (tbl, space='') ->
@@ -29,7 +29,7 @@ relative = do
   _require = require
 
   (base, sub) ->
-    sub = 0 unless 'number' == type sub
+    sub = sub or 0
 
     for i=1, sub
       base = base\match '^(.*)%.%w+$'

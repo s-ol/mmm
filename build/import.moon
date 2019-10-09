@@ -14,7 +14,7 @@ import SQLStore from require 'mmm.mmmfs.drivers.sql'
 
 -- usage:
 -- moon import.moon <root> [output.sqlite3]
-{ root, file } = arg
+{ root, store } = arg
 
 assert root, "please specify the root directory"
 
