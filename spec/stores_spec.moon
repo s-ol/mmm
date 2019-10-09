@@ -10,7 +10,7 @@ toseq2 = (iter) ->
   with v = [{x, y} for x, y in iter]
     table.sort v, sort2
 
-test_driver = (ts) ->
+test_store = (ts) ->
   randomize false
 
   it "starts out empty", ->
@@ -89,13 +89,13 @@ test_driver = (ts) ->
     ts\remove_fileder '/hello'
     assert.are.same {}, toseq ts\list_all_fileders!
 
-describe "SQL driver", ->
-  import SQLStore from require 'mmm.mmmfs.drivers.sql'
+describe "SQL spec", ->
+  import SQLStore from require 'mmm.mmmfs.stores.sql'
 
-  test_driver SQLStore memory: true
+  test_store SQLStore memory: true
 
-describe "LFS driver", ->
-  import LFSStore from require 'mmm.mmmfs.drivers.lfs'
+describe "FS store", ->
+  import FSStore from require 'mmm.mmmfs.stores.fs'
 
   lfs = require 'lfs'
 
@@ -105,7 +105,7 @@ describe "LFS driver", ->
     assert os.remove root
     assert lfs.mkdir root
 
-  test_driver LFSStore :root
+  test_store LFSStore :root
 
   teardown ->
     assert lfs.rmdir root

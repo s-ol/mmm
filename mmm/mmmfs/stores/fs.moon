@@ -8,8 +8,7 @@ dir_base = (path) ->
 
   dir, base
 
-
-class LFSStore
+class FSStore
   new: (opts = {}) =>
     opts.root or= 'root'
     opts.verbose or= false
@@ -153,5 +152,5 @@ class LFSStore
     file\close!
 
 {
-  :LFSStore
+  :FSStore
 }

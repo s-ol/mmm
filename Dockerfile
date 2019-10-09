@@ -16,4 +16,4 @@ WORKDIR /code
 RUN tup init && tup generate --config tup.docker.config build-static.sh && ./build-static.sh
 
 EXPOSE 8000
-ENTRYPOINT ["moon", "build/server.moon", "/db.sqlite3", "0.0.0.0", "8000"]
+ENTRYPOINT ["moon", "build/server.moon", "sql:/db.sqlite3", "0.0.0.0", "8000"]
