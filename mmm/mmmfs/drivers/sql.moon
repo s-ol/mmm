@@ -1,4 +1,5 @@
 sqlite = require 'sqlite3'
+root = os.tmpname!
 
 class SQLStore
   new: (opts = {}) =>
@@ -96,6 +97,7 @@ class SQLStore
               OR path = :path', path
 
   rename_fileder: (path, next_name) =>
+    @log "renaming fileder #{path} -> '#{next_name}'"
     error 'not implemented'
 
     @exec 'UPDATE fileder
@@ -105,7 +107,8 @@ class SQLStore
 
     -- @TODO: rename all children, child-children...
 
-  move_fileder: (path, new_parent) =>
+  move_fileder: (path, next_parent) =>
+    @log "moving fileder #{path} -> #{next_parent}/"
     error 'not implemented'
 
     -- @TODO: remove all children, child-children...

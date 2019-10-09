@@ -1,17 +1,17 @@
-import SQLStore from require 'mmm.mmmfs.drivers.sql'
-
 sort2 = (a, b) ->
   {ax, ay}, {bx, by} = a, b
   "#{ax}//#{ay}" < "#{bx}//#{by}"
-toseq = (iter) -> with v = [x for x in iter]
-                    table.sort v
-toseq2 = (iter) -> with v = [{x, y} for x, y in iter]
-                     table.sort v, sort2
 
-describe "sql driver", ->
+toseq = (iter) ->
+  with v = [x for x in iter]
+    table.sort v
+
+toseq2 = (iter) ->
+  with v = [{x, y} for x, y in iter]
+    table.sort v, sort2
+
+test_driver = (ts) ->
   randomize false
-
-  ts = SQLStore memory: true
 
   it "starts out empty", ->
     assert.are.same {}, toseq ts\list_fileders_in!
@@ -44,13 +44,13 @@ describe "sql driver", ->
     ts\create_facet '/hello/world', 'name', 'alpha', 'world'
     ts\create_facet '/hello/world', '', 'text/markdown', '# Helau World!'
 
-    it "can't create facet for nonexistant fileders", ->
+    it "but can't create facet for nonexistant fileders", ->
       assert.has_error -> ts\create_facet '/hello/orldw', 'name', 'alpha', 'foo'
 
-    it "can't create facet without value", ->
+    it "but can't create facet without value", ->
       assert.has_error -> ts\create_facet '/hello/world', 'other', 'alpha', nil
 
-    it "can't create facet for duplicate keys", ->
+    it "but can't create facet for duplicate keys", ->
       assert.has_error -> ts\create_facet '/hello/world', 'name', 'alpha', 'foo'
 
     assert.are.same {{'name', 'alpha'}}, toseq2 ts\list_facets '/hello'
@@ -88,3 +88,24 @@ describe "sql driver", ->
 
     ts\remove_fileder '/hello'
     assert.are.same {}, toseq ts\list_all_fileders!
+
+describe "SQL driver", ->
+  import SQLStore from require 'mmm.mmmfs.drivers.sql'
+
+  test_driver SQLStore memory: true
+
+describe "LFS driver", ->
+  import LFSStore from require 'mmm.mmmfs.drivers.lfs'
+
+  lfs = require 'lfs'
+
+  root = os.tmpname!
+
+  setup ->
+    assert os.remove root
+    assert lfs.mkdir root
+
+  test_driver LFSStore :root
+
+  teardown ->
+    assert lfs.rmdir root
