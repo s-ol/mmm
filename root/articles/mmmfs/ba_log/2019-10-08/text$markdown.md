@@ -30,8 +30,13 @@ The fileder-index metadata was moved to a `?index` 'pseudofacet' (e.g. `/fileder
 > [`/meta/mmm.dom/:text/html`](/meta/mmm.dom/:text/html)
 >
 > now, instead of asking for the rendered HTML document, we can also ask for the source, which is of the type
-> `text/moonscript -> mmm/dom` (a Moonscript-script file that evaluates to a website-fragment):  
+> `text/moonscript -> mmm/dom` (a Moonscript file that evaluates to a website-fragment):  
 > [`meta/mmm.dom/:text/moonscript -> mmm/dom`](/meta/mmm.dom/:text/moonscript%20-%3E%20mmm/dom)
+>
+> the source code was written in MoonScript, which compiles to Lua before it is executed.
+> We can also ask the server to do that for us:
+> `text/lua -> mmm/dom` (a Lua file that evaluates to a website-fragment):  
+> [`meta/mmm.dom/:text/lua -> mmm/dom`](/meta/mmm.dom/:text/lua%20-%3E%20mmm/dom)
 >
 > or, we could ask for the generated html fragment, but without the full HTML layout around it -
 > that would be the type `text/html+frag`, as mentioned in the last post:  
