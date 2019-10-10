@@ -9,7 +9,7 @@ add '?/init.server'
 
 require 'mmm'
 
-import Key, dir_base, load_tree from require 'mmm.mmmfs.fileder'
+import dir_base, Key, Fileder from require 'mmm.mmmfs.fileder'
 import convert from require 'mmm.mmmfs.conversion'
 import get_store from require 'mmm.mmmfs.stores'
 import render from require 'mmm.mmmfs.layout'
@@ -38,7 +38,7 @@ class Server
     assert @server\loop!
 
   handle: (method, path, facet) =>
-    fileder = load_tree @store, path -- @tree\walk path
+    fileder = Fileder @store, path
 
     if not fileder
       -- fileder not found
@@ -50,7 +50,7 @@ class Server
           when '?interactive'
             export BROWSER
 
-            root = load_tree @store
+            root = Fileder @store
             BROWSER = Browser root, path
             render BROWSER\todom!, fileder, noview: true, scripts: "
     <script type=\"application/lua\">

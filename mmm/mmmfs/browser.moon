@@ -215,7 +215,7 @@ class Browser
           with select :onchange
             \append option '(none)', value: '', disabled: true, selected: not value
             if fileder
-              for key, _ in pairs fileder.facets
+              for i, key in ipairs fileder\get_facets!
                 value = key\tostring!
                 \append option value, :value, selected: value == current
         @inspect\map (enabled) ->

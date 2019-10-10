@@ -8,7 +8,7 @@ add '?/init'
 add '?/init.server'
 
 require 'mmm'
-import load_tree from require 'mmm.mmmfs.fileder'
+import Fileder from require 'mmm.mmmfs.fileder'
 import get_store from require 'mmm.mmmfs.stores'
 import render from require 'mmm.mmmfs.layout'
 
@@ -20,7 +20,7 @@ export STATIC
 STATIC = true
 
 store = get_store store
-tree = load_tree store
+tree = Fileder store
 tree = tree\walk startpath if startpath
 
 for fileder in coroutine.wrap tree\iterate

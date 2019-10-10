@@ -9,7 +9,7 @@ add '?/init.server'
 
 require 'mmm'
 require 'lfs'
-import Fileder, Key from require 'mmm.mmmfs.fileder'
+import Key from require 'mmm.mmmfs.fileder'
 import SQLStore from require 'mmm.mmmfs.stores.sql'
 
 -- usage:

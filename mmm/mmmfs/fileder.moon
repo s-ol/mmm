@@ -1,6 +1,14 @@
 require = relative ..., 1
 import get_conversions, apply_conversions from require '.conversion'
 
+-- split filename into dirname + basename
+dir_base = (path) ->
+  dir, base = path\match '(.-)([^/]-)$'
+  if dir and #dir > 0
+    dir = dir\sub 1, #dir - 1
+
+  dir, base
+
 -- Key of a Fileder Facet
 -- contains:
 -- * @name - key name or '' for main content
@@ -38,41 +46,142 @@ class Key
 -- * @facets - Facet Map (Key to Value)
 -- * @children - Children Array
 class Fileder
-  -- instantiate from facets and children tables
-  -- or mix in one table (numeric keys are children, remainder facets)
-  -- facet-keys are passed to Key constructor
-  new: (facets, children) =>
-    if not children
-      children = for i, child in ipairs facets
-        facets[i] = nil
-        child
+  new: (@store, @path='') =>
+    @loaded = false
 
+    -- lazy-load children,
+    -- allow indexing by name as well as numeric index,
     -- automatically mount children on insert
     @children = setmetatable {}, {
-      __index: (t, k) ->
-        return rawget t, k unless 'string' == type k
+      __len: (t) ->
+        @load! unless @loaded
+        rawlen t
 
-        @walk "#{@path}/#{k}"
+      __ipairs: (t) ->
+        @load! unless @loaded
+        ipairs t
+
+      __index: (t, k) ->
+        @load! unless @loaded
+
+        if 'string' == type k
+          @walk "#{@path}/#{k}"
+        else
+          rawget t, k
 
       __newindex: (t, k, child) ->
         rawset t, k, child
+
         if @path == '/'
           child\mount '/'
         elseif @path
           child\mount @path .. '/'
     }
 
-    -- copy children
-    for i, child in ipairs children
-      @children[i] = child
+    -- lazy-load facets,
+    -- allow indexing by name as well as numeric index,
+    -- automatically mount children on insert
 
-    -- automatically reify string keys on insert
-    @facets = setmetatable {}, __newindex: (t, key, v) ->
-      rawset t, (Key key), v
+    -- we need to store the presence of facets separately from the actual (cached) value,
+    -- because we want to lazily load the tree (index) *and* facet contents.
+    -- @facet_keys maps from key-strings to Key instances ('canonical Key instances')
+    -- @facets maps from canonical keys to cached values and lazy-loads.
+    -- both maps automatically rewrite __index and __newindex for both Key instances and strings.
+    @facet_keys = setmetatable {}, {
+      __pairs: (t) ->
+        @load! unless @loaded
+        next, t
 
-    -- copy facets
-    for k, v in pairs facets
-      @facets[k] = v
+      __index: (t, k) ->
+        canonical = rawget t, tostring k
+        canonical or= Key k
+        canonical
+
+      __newindex: (t, k, v) ->
+        k = Key k
+        rawset t, (tostring k), v
+    }
+    @facets = setmetatable {}, {
+      __index: (t, k) ->
+        @load! unless @loaded
+
+        -- get canonical Key instance
+        k = @facet_keys[k]
+
+        -- if cached, return
+        if v = rawget t, k
+          return v
+
+        with v = @store\load_facet @path, k.name, k.type
+          rawset t, k, v
+
+      __pairs: (t) ->
+        @load! unless @loaded
+
+        -- force cache all facets
+        for k, v in pairs @facet_keys
+          t[v]
+
+        pairs @facets
+
+      __newindex: (t, k, v) ->
+        -- get canonical Key instance
+        k = @facet_keys[k]
+
+        rawset t, k, v
+
+        v = k unless v == nil
+        rawset @facet_keys, k, v
+    }
+
+  load: =>
+    @loaded = true
+
+    for path in @store\list_fileders_in @path
+      table.insert @children, Fileder @store, path
+
+    for name, type in @store\list_facets @path
+      key = Key name, type
+      @facet_keys[key] = key
+
+    _, name = dir_base @path
+    @facets['name: alpha'] = name
+
+  -- -- instantiate from facets and children tables
+  -- -- or mix in one table (numeric keys are children, remainder facets)
+  -- -- facet-keys are passed to Key constructor
+  -- new: (facets, children) =>
+  --   if not children
+  --     children = for i, child in ipairs facets
+  --       facets[i] = nil
+  --       child
+
+  --   -- automatically mount children on insert
+  --   @children = setmetatable {}, {
+  --     __index: (t, k) ->
+  --       return rawget t, k unless 'string' == type k
+
+  --       @walk "#{@path}/#{k}"
+
+  --     __newindex: (t, k, child) ->
+  --       rawset t, k, child
+  --       if @path == '/'
+  --         child\mount '/'
+  --       elseif @path
+  --         child\mount @path .. '/'
+  --   }
+
+  --   -- copy children
+  --   for i, child in ipairs children
+  --     @children[i] = child
+
+  --   -- automatically reify string keys on insert
+  --   @facets = setmetatable {}, __newindex: (t, key, v) ->
+  --     rawset t, (Key key), v
+
+  --   -- copy facets
+  --   for k, v in pairs facets
+  --     @facets[k] = v
 
   -- recursively walk to and return the fileder with @path == path
   -- * path - the path to walk to
@@ -117,15 +226,17 @@ class Fileder
   -- get all facet names (list)
   get_facets: =>
     names = {}
-    for key in pairs @facets
+    for str, key in pairs @facet_keys
       names[key.name] = true
 
     [name for name in pairs names]
 
+  -- get an index table, listing path, facets and children
+  -- optionally get recursive index
   get_index: (recursive=false) =>
     {
       path: @path
-      facets: [{k.name, k.type} for k,v in pairs @facets]
+      facets: [key for str, key in pairs @facet_keys]
       children: if recursive
         [child\get_index true for child in *@children]
       else
@@ -133,19 +244,14 @@ class Fileder
     }
 
   -- check whether a facet is directly available
-  -- when passing a Key, set type to false to check for name only
   has: (...) =>
     want = Key ...
 
-    for key in pairs @facets
-      continue if key.original
-
-      if key.name == want.name and key.type == want.type
-        return key
+    @facet_keys[want]
 
   -- check whether any facet with that name exists
   has_facet: (want) =>
-    for key in pairs @facets
+    for str, key in pairs @facet_keys
       continue if key.original
 
       if key.name == want
@@ -157,7 +263,7 @@ class Fileder
     want = Key ...
 
     -- filter facets by name
-    matching = [ key for key in pairs @facets when key.name == want.name ]
+    matching = [ key for str, key in pairs @facet_keys when key.name == want.name ]
     return unless #matching > 0
 
     -- get shortest conversion path
@@ -192,45 +298,8 @@ class Fileder
 
   __tostring: => "Fileder:#{@path}"
 
--- split filename into dirname + basename
-dir_base = (path) ->
-  dir, base = path\match '(.-)([^/]-)$'
-  if dir and #dir > 0
-    dir = dir\sub 1, #dir - 1
-
-  dir, base
-
--- load tree from a store instance
--- optionally load subtree starting at 'root' path
-load_tree = (store, root='') ->
-  fileders = setmetatable {},
-    __index: (path) =>
-      with val = Fileder {}
-        .path = path
-        rawset @, path, val
-
-  root = fileders[root]
-  root.facets['name: alpha'] = ''
-  for fn, ft in store\list_facets root.path
-    val = store\load_facet root.path, fn, ft
-    root.facets[Key fn, ft] = val
-
-  for path in store\list_all_fileders root.path
-    fileder = fileders[path]
-
-    parent, name = dir_base path
-    fileder.facets['name: alpha'] = name
-    table.insert fileders[parent].children, fileder
-
-    for fn, ft in store\list_facets path
-      val = store\load_facet path, fn, ft
-      fileder.facets[Key fn, ft] = val
-
-  root
-
 {
   :Key
   :Fileder
   :dir_base
-  :load_tree
 }
