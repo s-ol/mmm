@@ -12,7 +12,7 @@ class Key
     if 'string' == type second
       @name, @type = (opts or ''), second
     elseif 'string' == type opts
-      @name, @type = opts\match '(%w+): *(.+)'
+      @name, @type = opts\match '^([%w-_]+): *(.+)$'
       if not @name
         @name = ''
         @type = opts

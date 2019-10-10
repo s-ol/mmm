@@ -81,7 +81,7 @@ class FSStore
         if 'file' == lfs.attributes entry_path, 'mode'
           entry_name = (entry_name\match '(.*)%.%w+') or entry_name
           entry_name = entry_name\gsub '%$', '/'
-          name, type = entry_name\match '(%w+): *(.+)'
+          name, type = entry_name\match '([%w-_]+): *(.+)'
           if not name
             name = ''
             type = entry_name
