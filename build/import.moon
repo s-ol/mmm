@@ -10,7 +10,7 @@ add '?/init.server'
 require 'mmm'
 require 'lfs'
 import Fileder, Key from require 'mmm.mmmfs.fileder'
-import SQLStore from require 'mmm.mmmfs.drivers.sql'
+import SQLStore from require 'mmm.mmmfs.stores.sql'
 
 -- usage:
 -- moon import.moon <root> [output.sqlite3]
