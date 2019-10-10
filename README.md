@@ -50,6 +50,12 @@ You will need:
 - [discount](https://luarocks.org/modules/craigb/discount): `luarocks install discount` (requires libmarkdown2)
 - [busted](https://olivinelabs.com/busted/): `luarocks install busted` (for testing only)
 
+### Live Reloading (during development)
+[entr][entr] is useful for reloading the dev server when code outside the root changes:
+
+    $ ls build/**.moon mmm/**.moon | entr -r moon build/server.moon fs
+
 [moonscript]: https://moonscript.org/
 [mmm]: https://mmm.s-ol.nu/
 [tup]: https://gittup.org/tup
+[entr]: http://eradman.com/entrproject/
