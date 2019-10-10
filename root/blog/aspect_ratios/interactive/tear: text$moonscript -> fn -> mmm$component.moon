@@ -1,6 +1,4 @@
 =>
-  assert MODE == 'CLIENT', '[nossr]'
-
   import UIDemo from @get '_base: table'
 
   arr = (args) ->

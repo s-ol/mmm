@@ -1,6 +1,4 @@
 =>
-  assert MODE == 'CLIENT', '[nossr]'
-
   import Box, Example from @get '_base: table'
 
   class Sidebar extends Example

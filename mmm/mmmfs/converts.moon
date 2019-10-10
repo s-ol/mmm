@@ -40,7 +40,9 @@ converts = {
     transform: (node) => if MODE == 'SERVER' then node else node.outerHTML
   },
   {
-    inp: 'text/html%+frag',
+    -- inp: 'text/html%+frag',
+    -- @TODO: this doesn't feel right... maybe mmm/dom has to go?
+    inp: 'mmm/dom',
     out: 'text/html',
     transform: (html, fileder) => render html, fileder
   },

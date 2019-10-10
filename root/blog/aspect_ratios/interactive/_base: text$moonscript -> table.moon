@@ -1,7 +1,29 @@
-assert MODE == 'CLIENT', '[nossr]'
+import div from require 'mmm.dom'
+
+if MODE ~= 'CLIENT'
+  class Dummy
+    render: =>
+      div 'Interactive Example not available with Server-Side rendering', style:
+        position: 'relative'
+        resize: 'horizontal'
+        overflow: 'hidden'
+
+        width: '576px'
+        height: '324px'
+        'min-width': '324px'
+        'max-width': '742px'
+
+        margin: 'auto'
+        padding: '10px'
+        boxSizing: 'border-box'
+        background: 'var(--gray-bright)'
+
+  return {
+    UIDemo: Dummy
+    Example: Dummy
+  }
 
 import CanvasApp from require 'mmm.canvasapp'
-import div from require 'mmm.dom'
 
 class UIDemo extends CanvasApp
   width: nil
