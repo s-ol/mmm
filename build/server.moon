@@ -71,7 +71,7 @@ class Server
             -- '?index': one level deep
             -- '?tree': recursively
             index = fileder\get_index facet.name == '?tree'
-            convert 'table', facet.type, index
+            convert 'table', facet.type, index, fileder, facet.name
           else
             -- fileder and facet given
             if not fileder\has_facet facet.name

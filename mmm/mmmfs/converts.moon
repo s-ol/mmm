@@ -1,5 +1,5 @@
 require = relative ..., 1
-import div, code, img, video, blockquote, a, span, source, iframe from require 'mmm.dom'
+import div, pre, code, img, video, blockquote, a, span, source, iframe from require 'mmm.dom'
 import find_fileder, link_to, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import render from require '.layout'
 import tohtml from require 'mmm.component'
@@ -234,6 +234,23 @@ converts = {
             error "unknown type '#{type obj}'"
 
       (val) => tojson val
+  },
+  {
+    inp: 'table',
+    out: 'mmm/dom',
+    transform: do
+      deep_tostring = (tbl, space='') ->
+        buf = space .. tostring tbl
+
+        return buf unless 'table' == type tbl
+
+        buf = buf .. ' {\n'
+        for k,v in pairs tbl
+          buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  '}\n"
+        buf = buf .. "#{space}}"
+        buf
+
+      (tbl) => pre code deep_tostring tbl
   }
 }
 
