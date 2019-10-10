@@ -58,8 +58,9 @@ class Server
       table.insert(on_load, function()
         local path = #{string.format '%q', path}
         local browser = require 'mmm.mmmfs.browser'
-        local root = dofile '/$bundle.lua'
-        root:mount('', true)
+        local fileder = require 'mmm.mmmfs.fileder'
+        local web = require 'mmm.mmmfs.stores.web'
+        local root = fileder.Fileder(web.WebStore({ verbose = true }), path)
 
         BROWSER = browser.Browser(root, path, true)
       end)

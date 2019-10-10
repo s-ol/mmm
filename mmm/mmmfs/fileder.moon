@@ -122,7 +122,7 @@ class Fileder
         for k, v in pairs @facet_keys
           t[v]
 
-        pairs @facets
+        next, t
 
       __newindex: (t, k, v) ->
         -- get canonical Key instance
@@ -131,7 +131,7 @@ class Fileder
         rawset t, k, v
 
         v = k unless v == nil
-        rawset @facet_keys, k, v
+        @facet_keys[k] = v
     }
 
   load: =>
@@ -146,42 +146,6 @@ class Fileder
 
     _, name = dir_base @path
     @facets['name: alpha'] = name
-
-  -- -- instantiate from facets and children tables
-  -- -- or mix in one table (numeric keys are children, remainder facets)
-  -- -- facet-keys are passed to Key constructor
-  -- new: (facets, children) =>
-  --   if not children
-  --     children = for i, child in ipairs facets
-  --       facets[i] = nil
-  --       child
-
-  --   -- automatically mount children on insert
-  --   @children = setmetatable {}, {
-  --     __index: (t, k) ->
-  --       return rawget t, k unless 'string' == type k
-
-  --       @walk "#{@path}/#{k}"
-
-  --     __newindex: (t, k, child) ->
-  --       rawset t, k, child
-  --       if @path == '/'
-  --         child\mount '/'
-  --       elseif @path
-  --         child\mount @path .. '/'
-  --   }
-
-  --   -- copy children
-  --   for i, child in ipairs children
-  --     @children[i] = child
-
-  --   -- automatically reify string keys on insert
-  --   @facets = setmetatable {}, __newindex: (t, key, v) ->
-  --     rawset t, (Key key), v
-
-  --   -- copy facets
-  --   for k, v in pairs facets
-  --     @facets[k] = v
 
   -- recursively walk to and return the fileder with @path == path
   -- * path - the path to walk to

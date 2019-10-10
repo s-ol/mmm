@@ -15,7 +15,7 @@ code_cast = (lang) ->
   {
     inp: "text/#{lang}.*",
     out: 'mmm/dom',
-    transform: (val) -> languages[lang] val
+    transform: (val) => languages[lang] val
   }
 
 casts = {
@@ -27,12 +27,12 @@ casts = {
   {
     inp: 'text/plain'
     out: 'mmm/dom'
-    transform: (val) -> text val
+    transform: (val) => text val
   },
   {
     inp: 'URL.*'
     out: 'mmm/dom'
-    transform: (href) -> span a (code href), :href
+    transform: (href) => span a (code href), :href
   },
 }
 
@@ -49,7 +49,7 @@ class Browser
 
     -- update URL bar
     if MODE == 'CLIENT'
-      logo = document\querySelector 'header h1 > svg'
+      logo = document\querySelector 'header h1 > a > svg'
       spin = ->
         logo.classList\add 'spin'
         logo.parentElement.offsetWidth
@@ -115,19 +115,19 @@ class Browser
 
         \append span 'view facet:', style: { 'margin-right': '0' }
         \append @active\map (fileder) ->
-            onchange = (_, e) ->
-              { :type } = @facet\get!
-              @facet\set Key name: e.target.value, :type
+          onchange = (_, e) ->
+            { :type } = @facet\get!
+            @facet\set Key name: e.target.value, :type
 
-            current = @facet\get!
-            current = current and current.name
-            with select :onchange, disabled: not fileder
-              has_main = fileder and fileder\find current.name, '.*'
-              \append option '(main)', value: '', disabled: not has_main, selected: current == ''
-              if fileder
-                for i, value in ipairs fileder\get_facets!
-                  continue if value == ''
-                  \append option value, :value, selected: value == current
+          current = @facet\get!
+          current = current and current.name
+          with select :onchange, disabled: not fileder
+            has_main = fileder and fileder\has_facet ''
+            \append option '(main)', value: '', disabled: not has_main, selected: current == ''
+            if fileder
+              for i, value in ipairs fileder\get_facets!
+                continue if value == ''
+                \append option value, :value, selected: value == current
         \append @inspect\map (enabled) ->
           if not enabled
             button 'inspect', onclick: (_, e) -> @inspect\set true
@@ -215,8 +215,7 @@ class Browser
           with select :onchange
             \append option '(none)', value: '', disabled: true, selected: not value
             if fileder
-              for i, key in ipairs fileder\get_facets!
-                value = key\tostring!
+              for value in pairs fileder.facet_keys
                 \append option value, :value, selected: value == current
         @inspect\map (enabled) ->
           if enabled
