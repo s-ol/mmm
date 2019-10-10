@@ -76,63 +76,11 @@ class Server
       else
         501, "not implemented"
 
-  handle_static: (method, path, stream) =>
-    path = path\match '^/%.static/(.*)'
-    return unless path
-
-    respond = (code, type, body) ->
-      res = headers.new!
-      res\upsert ':status', code
-      res\append 'content-type', type
-
-      assert stream\write_headers res, method == 'HEAD'
-      if body and method ~= 'HEAD'
-        assert stream\write_body_from_string body
-
-    if method ~= 'GET' and method ~= 'HEAD'
-      respond '405', 'text/plain', "can only GET/HEAD static resources"
-      return true
-
-    if path\match '%.%.' or path\match '^%~'
-      respond '404', 'text/plain', "not found"
-      return
-
-    file_path = "static/#{path}"
-    if 'file' == lfs.attributes file_path, 'mode'
-      fd, err, errno = io.open file_path, 'rb'
-
-      if not fd
-        code = switch errno
-          when ce.ENOENT then '404'
-          when ce.EACCES then '403'
-          else '503'
-
-        respond code, 'text/plain', err or ''
-
-      else
-        suffix = file_path\match '%.([a-z]+)$'
-        type = switch suffix
-          when 'css' then 'text/css'
-          when 'lua' then 'application/lua'
-          when 'js' then 'application/javascript'
-          else 'application/octet-stream'
-
-        respond '200', type, nil
-        if method ~= 'HEAD'
-          assert stream\write_body_from_file fd
-    else
-      respond '404', 'text/plain', "not found"
-
-    true
-
   stream: (sv, stream) =>
     req = stream\get_headers!
     method = req\get ':method'
     path = req\get ':path'
     path = decodeURI path
-
-    -- serve static assets, cheap hack for now
-    return if @handle_static method, path, stream
 
     path_facet, type = path\match '(.*):(.*)'
     path_facet or= path

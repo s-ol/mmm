@@ -4,4 +4,3 @@ db.sqlite3
 ##### Do not edit.
 .tup
 /.gitignore
-/out
