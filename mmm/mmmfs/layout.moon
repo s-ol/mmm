@@ -153,17 +153,6 @@ render = (content, fileder, opts={}) ->
   ]]
 
   buf ..= opts.scripts
-  --  <script type=\"application/lua\">
-  --    on_load = on_load or {}
-  --    table.insert(on_load, function()
-  --      local path = #{string.format '%q', path}
-  --      local browser = require 'mmm.mmmfs.browser'
-  --      local root = dofile '/$bundle.lua'
-  --      root:mount('', true)
-
-  --      BROWSER = browser.Browser(root, path, true)
-  --    end)
-  --  </script>
   buf ..= "
   </body>
 </html>

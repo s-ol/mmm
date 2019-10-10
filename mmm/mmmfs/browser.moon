@@ -1,7 +1,7 @@
 require = relative ..., 1
 import Key from require '.fileder'
 import converts, get_conversions, apply_conversions from require '.conversion'
-import ReactiveVar, get_or_create, text, elements from require 'mmm.component'
+import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
 import pre, div, nav, span, button, a, code, select, option from elements
 import languages from require 'mmm.highlighting'
 
@@ -239,6 +239,8 @@ class Browser
 
   navigate: (new) =>
     @path\set new
+
+  todom: => tohtml @
 
 {
   :Browser

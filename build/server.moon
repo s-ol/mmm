@@ -12,6 +12,8 @@ require 'mmm'
 import Key, dir_base, load_tree from require 'mmm.mmmfs.fileder'
 import convert from require 'mmm.mmmfs.conversion'
 import get_store from require 'mmm.mmmfs.stores'
+import render from require 'mmm.mmmfs.layout'
+import Browser from require 'mmm.mmmfs.browser'
 import decodeURI from require 'http.util'
 
 lfs = require 'lfs'
@@ -45,6 +47,24 @@ class Server
     switch method
       when 'GET', 'HEAD'
         val = switch facet.name
+          when '?interactive'
+            export BROWSER
+
+            root = load_tree @store
+            BROWSER = Browser root, path
+            render BROWSER\todom!, fileder, noview: true, scripts: "
+    <script type=\"application/lua\">
+      on_load = on_load or {}
+      table.insert(on_load, function()
+        local path = #{string.format '%q', path}
+        local browser = require 'mmm.mmmfs.browser'
+        local root = dofile '/$bundle.lua'
+        root:mount('', true)
+
+        BROWSER = browser.Browser(root, path, true)
+      end)
+    </script>"
+
           when '?index', '?tree'
             -- serve fileder index
             -- '?index': one level deep
