@@ -10,28 +10,13 @@ add '?/init.server'
 require 'mmm'
 
 import Key, dir_base, load_tree from require 'mmm.mmmfs.fileder'
+import convert from require 'mmm.mmmfs.conversion'
 import get_store from require 'mmm.mmmfs.stores'
 import decodeURI from require 'http.util'
 
 lfs = require 'lfs'
 server = require 'http.server'
 headers = require 'http.headers'
-
-tojson = (obj) ->
-  switch type obj
-    when 'string'
-      string.format '%q', obj
-    when 'table'
-      if obj[1] or not next obj
-        "[#{table.concat [tojson c for c in *obj], ','}]"
-      else
-        "{#{table.concat ["#{tojson k}: #{tojson v}" for k,v in pairs obj], ', '}}"
-    when 'number'
-      tostring obj
-    when 'boolean'
-      tostring obj
-    when nil
-      'null'
 
 class Server
   new: (@store, opts={}) =>
@@ -52,27 +37,31 @@ class Server
 
   handle: (method, path, facet) =>
     fileder = load_tree @store, path -- @tree\walk path
+
+    if not fileder
+      -- fileder not found
+      404, "fileder '#{path}' not found"
+
     switch method
       when 'GET', 'HEAD'
-        if fileder and facet
-          -- fileder and facet given
-          if not fileder\has_facet facet.name
-            return 404, "facet '#{facet.name}' not found in fileder '#{path}'"
-
-          val = fileder\get facet
-          if val
-            200, val
+        val = switch facet.name
+          when '?index', '?tree'
+            -- serve fileder index
+            -- '?index': one level deep
+            -- '?tree': recursively
+            index = fileder\get_index facet.name == '?tree'
+            convert 'table', facet.type, index
           else
-            406, "cant convert facet '#{facet.name}' to '#{facet.type}'"
-        elseif fileder
-          -- no facet given
-          facets = [{k.name, k.type} for k,v in pairs fileder.facets]
-          children = [f.path for f in *fileder.children]
-          contents = tojson :facets, :children
-          200, contents
+            -- fileder and facet given
+            if not fileder\has_facet facet.name
+              return 404, "facet '#{facet.name}' not found in fileder '#{path}'"
+
+            fileder\get facet
+
+        if val
+          200, val
         else
-          -- fileder not found
-          404, "fileder '#{path}' not found"
+          406, "cant convert facet '#{facet.name}' to '#{facet.type}'"
       else
         501, "not implemented"
 
@@ -86,14 +75,15 @@ class Server
     path_facet or= path
     path, facet = path_facet\match '(.*)/([^/]*)'
 
-    if facet ~= '?index'
-      type or= 'text/html'
-      type = type\match '%s*(.*)'
-      facet = Key facet, type
-    else
-      facet = nil
+    type or= 'text/html'
+    type = type\match '%s*(.*)'
+    facet = Key facet, type
 
-    status, body = @handle method, path, facet
+    ok, status, body = pcall @.handle, @, method, path, facet
+    if not ok
+      warn status, body
+      body = "Internal Server Error: #{status}"
+      status = 500
 
     res = headers.new!
     response_type = if status > 299 then 'text/plain'
@@ -109,7 +99,6 @@ class Server
   error: (sv, ctx, op, err, errno) =>
     msg = "#{op} on #{tostring ctx} failed"
     msg = "#{msg}: #{err}" if err
-    print msg
 
 -- usage:
 -- moon server.moon [STORE] [host] [port]

@@ -55,8 +55,26 @@ apply_conversions = (conversions, value, ...) ->
 
   value
 
+-- find and apply a conversion path from 'have' to 'want'
+-- * have - start type string or list of type strings
+-- * want - stop type pattern
+-- * value - value or map from have-types to values
+-- returns converted value
+convert = (have, want, value, ...) ->
+  conversions, start = get_conversions want, have
+
+  if not conversions
+    warn "couldn't convert from '#{have}' to '#{want}'"
+    return
+
+  if 'string' ~= type have
+     value = value[start]
+
+  apply_conversions conversions, value, ...
+
 {
   :converts
   :get_conversions
   :apply_conversions
+  :convert
 }

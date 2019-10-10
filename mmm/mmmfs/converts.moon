@@ -211,6 +211,30 @@ converts = {
     out: 'URL -> %1',
     transform: (_, fileder, key) => "#{fileder.path}/#{key.name}:#{@from}"
   },
+  {
+    inp: 'table',
+    out: 'application/json',
+    transform: do
+      tojson = (obj) ->
+        switch type obj
+          when 'string'
+            string.format '%q', obj
+          when 'table'
+            if obj[1] or not next obj
+              "[#{table.concat [tojson c for c in *obj], ','}]"
+            else
+              "{#{table.concat ["#{tojson k}: #{tojson v}" for k,v in pairs obj], ', '}}"
+          when 'number'
+            tostring obj
+          when 'boolean'
+            tostring obj
+          when 'nil'
+            'null'
+          else
+            error "unknown type '#{type obj}'"
+
+      (val) => tojson val
+  }
 }
 
 if MODE == 'SERVER'

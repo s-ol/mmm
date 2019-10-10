@@ -122,6 +122,16 @@ class Fileder
 
     [name for name in pairs names]
 
+  get_index: (recursive=false) =>
+    {
+      path: @path
+      facets: [{k.name, k.type} for k,v in pairs @facets]
+      children: if recursive
+        [child\get_index true for child in *@children]
+      else
+        [{ :path } for { :path } in *@children]
+    }
+
   -- check whether a facet is directly available
   -- when passing a Key, set type to false to check for name only
   has: (...) =>
