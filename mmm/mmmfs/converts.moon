@@ -3,6 +3,13 @@ import div, pre, code, img, video, blockquote, a, span, source, iframe from requ
 import find_fileder, link_to, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import render from require '.layout'
 import tohtml from require 'mmm.component'
+import languages from require 'mmm.highlighting'
+
+keep = (var) ->
+  last = var\get!
+  var\map (val) ->
+    last = val or last
+    last
 
 -- fix JS null values
 js_fix = if MODE == 'CLIENT'
@@ -18,6 +25,14 @@ loadwith = (_load) -> (val, fileder, key) =>
   func = assert _load val, "#{fileder}##{key}"
   func!
 
+-- highlight code
+code_hl = (lang) ->
+  {
+    inp: "text/#{lang}",
+    out: 'mmm/dom',
+    transform: (val) => pre languages[lang] val
+  }
+
 -- list of converts
 -- converts each have
 -- * inp - input type. can capture subtypes using `(.+)`
@@ -28,24 +43,24 @@ converts = {
     inp: 'fn -> (.+)',
     out: '%1',
     transform: (val, fileder) => val fileder
-  },
+  }
   {
     inp: 'mmm/component',
     out: 'mmm/dom',
     transform: single tohtml
-  },
+  }
   {
     inp: 'mmm/dom',
     out: 'text/html+frag',
     transform: (node) => if MODE == 'SERVER' then node else node.outerHTML
-  },
+  }
   {
     -- inp: 'text/html%+frag',
     -- @TODO: this doesn't feel right... maybe mmm/dom has to go?
     inp: 'mmm/dom',
     out: 'text/html',
     transform: (html, fileder) => render html, fileder
-  },
+  }
   {
     inp: 'text/html%+frag',
     out: 'mmm/dom',
@@ -119,12 +134,12 @@ converts = {
 
         assert 1 == parent.childElementCount, "text/html with more than one child!"
         parent.firstElementChild
-  },
+  }
   {
     inp: 'text/lua -> (.+)',
     out: '%1',
     transform: loadwith load or loadstring
-  },
+  }
   {
     inp: 'mmm/tpl -> (.+)',
     out: '%1',
@@ -134,7 +149,7 @@ converts = {
         assert path, "couldn't match TPL expression '#{expr}'"
 
         (find_fileder path, fileder)\gett facet
-  },
+  }
   {
     inp: 'time/iso8601-date',
     out: 'time/unix',
@@ -142,7 +157,7 @@ converts = {
       year, _, month, day = val\match '^%s*(%d%d%d%d)(%-?)([01]%d)%2([0-3]%d)%s*$'
       assert year, "failed to parse ISO 8601 date: '#{val}'"
       os.time :year, :month, :day
-  },
+  }
   {
     inp: 'URL -> twitter/tweet',
     out: 'mmm/dom',
@@ -157,7 +172,7 @@ converts = {
           'data-lang': 'en'
           a '(linked tweet)', :href
         }
-  },
+  }
   {
     inp: 'URL -> youtube/video',
     out: 'mmm/dom',
@@ -177,43 +192,43 @@ converts = {
         frameBorder: 0
         src: "//www.youtube.com/embed/#{id}"
       }
-  },
+  }
   {
     inp: 'URL -> image/.+',
     out: 'mmm/dom',
     transform: (src, fileder) => img :src
-  },
+  }
   {
     inp: 'URL -> video/.+',
     out: 'mmm/dom',
     transform: (src) =>
       -- @TODO: add parsed MIME type
       video (source :src), controls: true, loop: true
-  },
+  }
   {
     inp: 'text/plain',
     out: 'mmm/dom',
     transform: (val) => span val
-  },
+  }
   {
     inp: 'alpha',
     out: 'mmm/dom',
     transform: single code
-  },
+  }
   -- this one needs a higher cost
   -- {
   --   inp: 'URL -> .+',
   --   out: 'mmm/dom',
   --   transform: single code
-  -- },
+  -- }
   {
     inp: '(.+)',
     out: 'URL -> %1',
     transform: (_, fileder, key) => "#{fileder.path}/#{key.name}:#{@from}"
-  },
+  }
   {
     inp: 'table',
-    out: 'application/json',
+    out: 'text/json',
     transform: do
       tojson = (obj) ->
         switch type obj
@@ -234,7 +249,7 @@ converts = {
             error "unknown type '#{type obj}'"
 
       (val) => tojson val
-  },
+  }
   {
     inp: 'table',
     out: 'mmm/dom',
@@ -252,6 +267,11 @@ converts = {
 
       (tbl) => pre code deep_tostring tbl
   }
+  code_hl 'javascript'
+  code_hl 'moonscript'
+  code_hl 'lua'
+  code_hl 'markdown'
+  code_hl 'css'
 }
 
 if MODE == 'SERVER'

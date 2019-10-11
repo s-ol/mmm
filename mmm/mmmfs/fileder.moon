@@ -144,6 +144,9 @@ class Fileder
 
     assert ('string' == type @path), "invalid path: '#{@path}'"
 
+  -- load fact/children contents
+  -- called automatically by metamethods set up in constructor
+  -- can take an index instance if it is already available,
   load: (index) =>
     assert not @loaded, "already loaded!"
     @loaded = true

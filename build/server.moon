@@ -34,7 +34,7 @@ class Server
     assert @server\listen!
 
     _, ip, port = @server\localname!
-    print "SV", "running at #{ip}:#{port}"
+    print "[#{@@__name}]", "running at #{ip}:#{port}"
     assert @server\loop!
 
   handle: (method, path, facet) =>
@@ -61,7 +61,7 @@ class Server
               root = Fileder @store
               BROWSER = Browser root, path, facet.name
               render BROWSER\todom!, fileder, noview: true, scripts: "
-      <script type=\"application/lua\">
+      <script type=\"text/lua\">
         on_load = on_load or {}
         table.insert(on_load, function()
           local path = #{string.format '%q', path}
@@ -71,8 +71,7 @@ class Server
           local web = require 'mmm.mmmfs.stores.web'
 
           local store = web.WebStore({ verbose = true })
-          local index = store:get_index(path, -1)
-          local root = fileder.Fileder(store, index)
+          local root = fileder.Fileder(store, store:get_index(nil, -1))
 
           BROWSER = browser.Browser(root, path, facet, true)
         end)

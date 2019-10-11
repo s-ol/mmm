@@ -45,13 +45,13 @@ class WebStore extends Store
 
   get_index: (path='', depth=1) =>
     pseudo = if depth > 1 or depth < 0 '?tree' else '?index'
-    json = fetch "#{@host .. path}/#{pseudo}: application/json"
+    json = fetch "#{@host .. path}/#{pseudo}: text/json"
     parse_json json
 
   -- fileders
   list_fileders_in: (path='') =>
     coroutine.wrap ->
-      json = fetch "#{@host .. path}/?index: application/json"
+      json = fetch "#{@host .. path}/?index: text/json"
       index = parse_json json
       for child in js.of index.children
         coroutine.yield child.path
@@ -75,7 +75,7 @@ class WebStore extends Store
   -- facets
   list_facets: (path) =>
     coroutine.wrap ->
-      json = fetch "#{@host .. path}/?index: application/json"
+      json = fetch "#{@host .. path}/?index: text/json"
       index = JSON\parse json
       for facet in js.of index.facets
         coroutine.yield facet.name, facet.type

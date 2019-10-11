@@ -2,9 +2,8 @@ Today I moved the static resources needed by the web-frontend into the content o
 The server doesn't make an exception for static files anymore (as described in [a previous update][2019-10-08]),
 but rather the files are just in a fileder called `static` now, and properly typed, here:
 
-- [`/static/style/`](/static/style/:%20text/html+interactive#inspect)
-- [`/static/mmm/`](/static/mmm/:%20text/html+interactive#inspect)
-- [`/static/fengari-web/`](/static/fengari-web/:%20text/html+interactive#inspect)
+- [/static/style/](/static/style/:%20text/html+interactive)
+- [/static/mmm/](/static/mmm/:%20text/html+interactive)
 
 This removed a big exception and left the server implementation much cleaner and shorter, as can be seen in the corresponding commit [`005cc9b`][005cc9b].
 
@@ -16,7 +15,7 @@ all content below the current fileder, rather than just including the child-file
 
 Here are some example links for viewing these:
 
-- [`/?index`](/?index)
+- [`/?index: text/html`](/?index:%20text/html)
 - [`/articles/mmmfs/ba_log/?index: text/html`](/articles/mmmfs/ba_log/?index:%20text/html)
 
 Finally I added a third pseudo-facet called `?interactive` that renders the Inspector that the old page ran on,

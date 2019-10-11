@@ -24,7 +24,7 @@ if MODE == 'SERVER'
     render: =>
       rplc = with div id: @id, :style
         \append '(diagram goes here)'
-        -- \append "<script type=\"application/lua\">
+        -- \append "<script type=\"text/lua\">
         --   local rplc = js.global.document:getElementById('#{@id}');
         --   local fn = #{compile @func}
         --   diag = Diagram(fn)

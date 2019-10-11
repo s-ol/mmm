@@ -22,12 +22,19 @@ class FSStore extends Store
 
   -- fileders
   list_fileders_in: (path='') =>
+    paths = for entry_name in lfs.dir @root .. path
+      continue if '.' == entry_name\sub 1, 1
+      entry_path = @root .. "#{path}/#{entry_name}"
+      if 'directory' ~= lfs.attributes entry_path, 'mode'
+        continue
+
+      "#{path}/#{entry_name}"
+
+    table.sort paths
     coroutine.wrap ->
-      for entry_name in lfs.dir @root .. path
-        continue if '.' == entry_name\sub 1, 1
-        entry_path = @root .. "#{path}/#{entry_name}"
-        if 'directory' == lfs.attributes entry_path, 'mode'
-          coroutine.yield "#{path}/#{entry_name}"
+      -- @TODO: respect $order
+      for path in *paths
+        coroutine.yield path
 
   create_fileder: (parent, name) =>
     @log "creating fileder #{path}"
@@ -68,6 +75,7 @@ class FSStore extends Store
     coroutine.wrap ->
       for entry_name in lfs.dir @root .. path
         entry_path = "#{@root .. path}/#{entry_name}"
+        continue if entry_name == '$order'
         if 'file' == lfs.attributes entry_path, 'mode'
           entry_name = (entry_name\match '(.*)%.%w+') or entry_name
           entry_name = entry_name\gsub '%$', '/'

@@ -19,21 +19,17 @@ code_cast = (lang) ->
   }
 
 casts = {
-  code_cast 'javascript',
-  code_cast 'moonscript',
-  code_cast 'lua',
-  code_cast 'markdown',
-  code_cast 'html',
-  {
-    inp: 'text/plain'
-    out: 'mmm/dom'
-    transform: (val) => text val
-  },
+  code_cast 'javascript'
+  code_cast 'moonscript'
+  code_cast 'lua'
+  code_cast 'markdown'
+  code_cast 'html'
+  code_cast 'css'
   {
     inp: 'URL.*'
     out: 'mmm/dom'
     transform: (href) => span a (code href), :href
-  },
+  }
 }
 
 for convert in *converts

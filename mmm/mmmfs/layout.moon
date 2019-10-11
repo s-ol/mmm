@@ -143,13 +143,13 @@ render = (content, fileder, opts={}) ->
     #{footer}
   "
   buf ..= [[
-    <script type="application/javascript" src="/static/highlight-pack/:application/javascript"></script>
-    <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js"></script>
-    <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
-    <script type="application/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <script type="application/javascript" src="/static/fengari-web/:application/javascript"></script>
-    <script type="application/lua" src="/static/mmm/:application/lua"></script>
-    <script type="application/lua">require 'mmm'</script>
+    <script type="text/javascript" src="/static/highlight-pack/:text/javascript"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/marked/0.5.1/marked.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
+    <script type="text/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/fengari-web/:text/javascript"></script>
+    <script type="text/lua" src="/static/mmm/:text/lua"></script>
+    <script type="text/lua">require 'mmm'</script>
   ]]
 
   buf ..= opts.scripts

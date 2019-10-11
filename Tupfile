@@ -6,4 +6,4 @@ include_rules
 : scss/main.scss |> !sassc |> root/static/style/text$css.css
 
 # bundle for client loading
-: mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon &(build)/bundle_module.moon '%o' --wrap %f |> root/static/mmm/application$lua.lua
+: mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon &(build)/bundle_module.moon '%o' --wrap %f |> root/static/mmm/text$lua.lua
