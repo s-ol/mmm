@@ -35,5 +35,9 @@ relative = do
       base = base\match '^(.*)%.%w+$'
 
     (name, x) ->
-      name = base .. name if '.' == name\sub 1, 1
+      if name == '.'
+        name = base
+      else if '.' == name\sub 1, 1
+        name = base .. name
+
       _require name

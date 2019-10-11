@@ -1,3 +1,21 @@
+-- relative imports
+_G.relative = do
+  _require = require
+
+  (base, sub) ->
+    sub = sub or 0
+
+    for i=1, sub
+      base = base\match '^(.*)%.%w+$'
+
+    (name, x) ->
+      if name == '.'
+        name = base
+      else if '.' == name\sub 1, 1
+        name = base .. name
+
+      _require name
+
 sort2 = (a, b) ->
   {ax, ay}, {bx, by} = a, b
   "#{ax}//#{ay}" < "#{bx}//#{by}"
@@ -57,6 +75,51 @@ test_store = (ts) ->
     assert.are.same {{'', 'text/markdown'}, {'name', 'alpha'}},
                     toseq2 ts\list_facets '/hello/world'
 
+  describe "can get indexes", ->
+    hello_index = {
+      path: '/hello'
+      children: {
+        '/hello/world'
+      }
+      facets: {
+        { name: 'name', type: 'alpha' }
+      }
+    }
+
+    it "for a single level", ->
+      assert.are.same hello_index, ts\get_index '/hello'
+
+
+    root_index = {
+      path: ''
+      children: {
+        hello_index
+      }
+      facets: {}
+    }
+    it "for a limited number of levels", ->
+      assert.are.same root_index, ts\get_index '', 2
+
+    it "recursively", ->
+      hello_index.children[1] = {
+        path: '/hello/world'
+        children: {
+          {
+            path: '/hello/world/again'
+            children: {}
+            facets: {}
+          }
+        }
+        facets: {
+          { name: '', type: 'text/markdown' }
+          { name: 'name', type: 'alpha' }
+        }
+      }
+
+      assert.are.same root_index, ts\get_index '', -1
+
+  it "can get indexes recursively", ->
+
   it "can load facets", ->
     assert.are.equal 'hello', ts\load_facet '/hello', 'name', 'alpha'
     assert.are.equal 'world', ts\load_facet '/hello/world', 'name', 'alpha'
@@ -89,7 +152,10 @@ test_store = (ts) ->
     ts\remove_fileder '/hello'
     assert.are.same {}, toseq ts\list_all_fileders!
 
-describe "SQL spec", ->
+  it "can be closed", ->
+    ts\close!
+
+describe "SQL store", ->
   import SQLStore from require 'mmm.mmmfs.stores.sql'
 
   test_store SQLStore memory: true
@@ -105,7 +171,7 @@ describe "FS store", ->
     assert os.remove root
     assert lfs.mkdir root
 
-  test_store LFSStore :root
+  test_store FSStore :root
 
   teardown ->
     assert lfs.rmdir root

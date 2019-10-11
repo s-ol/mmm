@@ -134,14 +134,26 @@ class Fileder
         @facet_keys[k] = v
     }
 
-  load: =>
+    -- this fails with JS objects from JSON.parse
+    if 'table' == type @path
+      index = @path
+      @path = index.path
+      @load index
+
+    assert ('string' == type @path), "invalid path: '#{@path}'"
+
+  load: (index) =>
+    assert not @loaded, "already loaded!"
     @loaded = true
 
-    for path in @store\list_fileders_in @path
-      table.insert @children, Fileder @store, path
+    if not index
+      index = @store\get_index @path
 
-    for name, type in @store\list_facets @path
-      key = Key name, type
+    for path_or_index in *index.children
+      table.insert @children, Fileder @store, path_or_index
+
+    for key in *index.facets
+      key = Key key
       @facet_keys[key] = key
 
     _, name = dir_base @path
@@ -194,18 +206,6 @@ class Fileder
       names[key.name] = true
 
     [name for name in pairs names]
-
-  -- get an index table, listing path, facets and children
-  -- optionally get recursive index
-  get_index: (recursive=false) =>
-    {
-      path: @path
-      facets: [key for str, key in pairs @facet_keys]
-      children: if recursive
-        [child\get_index true for child in *@children]
-      else
-        [{ :path } for { :path } in *@children]
-    }
 
   -- check whether a facet is directly available
   has: (...) =>

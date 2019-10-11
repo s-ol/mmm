@@ -1,4 +1,6 @@
+require = relative ..., 1
 lfs = require 'lfs'
+import Store from require '.'
 
 -- split filename into dirname + basename
 dir_base = (path) ->
@@ -8,20 +10,15 @@ dir_base = (path) ->
 
   dir, base
 
-class FSStore
+class FSStore extends Store
   new: (opts = {}) =>
-    opts.root or= 'root'
-    opts.verbose or= false
+    super opts
 
-    if not opts.verbose
-      @log = ->
+    opts.root or= 'root'
 
     -- ensure path doesnt end with a slash
     @root = opts.root\match '^(.-)/?$'
     @log "opening '#{opts.root}'..."
-
-  log: (...) =>
-    print "[DB]", ...
 
   -- fileders
   list_fileders_in: (path='') =>
@@ -31,13 +28,6 @@ class FSStore
         entry_path = @root .. "#{path}/#{entry_name}"
         if 'directory' == lfs.attributes entry_path, 'mode'
           coroutine.yield "#{path}/#{entry_name}"
-
-  list_all_fileders: (path='') =>
-    coroutine.wrap ->
-      for path in @list_fileders_in path
-        coroutine.yield path
-        for p in @list_all_fileders path
-          coroutine.yield p
 
   create_fileder: (parent, name) =>
     @log "creating fileder #{path}"

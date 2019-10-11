@@ -1,14 +1,13 @@
+require = relative ..., 1
 sqlite = require 'sqlite3'
-root = os.tmpname!
+import Store from require '.'
 
-class SQLStore
+class SQLStore extends Store
   new: (opts = {}) =>
-    opts.file or= 'db.sqlite3'
-    opts.verbose or= false
-    opts.memory or= false
+    super opts
 
-    if not opts.verbose
-      @log = ->
+    opts.file or= 'db.sqlite3'
+    opts.memory or= false
 
     if opts.memory
       @log "opening in-memory DB..."
@@ -43,9 +42,6 @@ class SQLStore
       CREATE INDEX IF NOT EXISTS facet_name ON facet(name);
     ]]
 
-  log: (...) =>
-    print "[DB]", ...
-
   close: =>
     @db\close!
 
@@ -70,13 +66,6 @@ class SQLStore
       for { path } in @fetch 'SELECT path
                               FROM fileder WHERE parent IS ?', path
         coroutine.yield path
-
-  list_all_fileders: (path='') =>
-    coroutine.wrap ->
-      for path in @list_fileders_in path
-        coroutine.yield path
-        for p in @list_all_fileders path
-          coroutine.yield p
 
   create_fileder: (parent, name) =>
     path = "#{parent}/#{name}"

@@ -1,3 +1,7 @@
+require = relative ..., 1
+import Store from require '.'
+{ :location, :XMLHttpRequest, :JSON, :Object, :Array } = js.global
+
 -- split filename into dirname + basename
 dir_base = (path) ->
   dir, base = path\match '(.-)([^/]-)$'
@@ -6,7 +10,6 @@ dir_base = (path) ->
 
   dir, base
 
-{ :location, :XMLHttpRequest, :JSON } = js.global
 fetch = (url) ->
   request = js.new XMLHttpRequest
   request\open 'GET', url, false
@@ -15,37 +18,45 @@ fetch = (url) ->
   assert request.status == 200, "unexpected status code: #{request.status}"
   request.responseText
 
-class WebStore
+parse_json = do
+  fix = (val) ->
+    switch type val
+      when 'userdata'
+        if Array\isArray val
+          [fix x for x in js.of val]
+        else
+          {(fix e[0]), (fix e[1]) for e in js.of Object\entries(val)}
+      else
+        val
+
+  (string) ->
+    print fix JSON\parse string
+    fix JSON\parse string
+
+class WebStore extends Store
   new: (opts = {}) =>
+    super opts
+
     if MODE == 'CLIENT'
       origin = location.origin
       opts.host or= origin
-    opts.verbose or= false
-
-    if not opts.verbose
-      @log = ->
 
     -- ensure host ends without a slash
     @host = opts.host\match '^(.-)/?$'
     @log "connecting to '#{@host}'..."
 
-  log: (...) =>
-    print "[DB]", ...
+  get_index: (path='', depth=1) =>
+    pseudo = if depth > 1 or depth < 0 '?tree' else '?index'
+    json = fetch "#{@host .. path}/#{pseudo}: application/json"
+    parse_json json
 
   -- fileders
   list_fileders_in: (path='') =>
     coroutine.wrap ->
       json = fetch "#{@host .. path}/?index: application/json"
-      index = JSON\parse json
+      index = parse_json json
       for child in js.of index.children
         coroutine.yield child.path
-
-  list_all_fileders: (path='') =>
-    coroutine.wrap ->
-      for path in @list_fileders_in path
-        coroutine.yield path
-        for p in @list_all_fileders path
-          coroutine.yield p
 
   create_fileder: (parent, name) =>
     @log "creating fileder #{path}"
@@ -70,9 +81,6 @@ class WebStore
       index = JSON\parse json
       for facet in js.of index.facets
         coroutine.yield facet.name, facet.type
-        -- @TODO: this doesn't belong here!
-        if facet.type\match 'text/moonscript'
-          coroutine.yield facet.name, facet.type\gsub 'text/moonscript', 'text/lua'
 
   load_facet: (path, name, type) =>
     fetch "#{@host .. path}/#{name}: #{type}"

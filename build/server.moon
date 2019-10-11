@@ -60,7 +60,10 @@ class Server
         local browser = require 'mmm.mmmfs.browser'
         local fileder = require 'mmm.mmmfs.fileder'
         local web = require 'mmm.mmmfs.stores.web'
-        local root = fileder.Fileder(web.WebStore({ verbose = true }), path)
+
+        local store = web.WebStore({ verbose = true })
+        local index = store:get_index(path, -1)
+        local root = fileder.Fileder(store, index)
 
         BROWSER = browser.Browser(root, path, true)
       end)
@@ -70,7 +73,8 @@ class Server
             -- serve fileder index
             -- '?index': one level deep
             -- '?tree': recursively
-            index = fileder\get_index facet.name == '?tree'
+            depth = if facet.name == '?tree' then -1 else 1
+            index = @store\get_index path, depth
             convert 'table', facet.type, index, fileder, facet.name
           else
             -- fileder and facet given
