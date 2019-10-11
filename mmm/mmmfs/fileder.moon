@@ -34,8 +34,9 @@ class Key
     assert ('string' == type @type), "type is not a string: '#{@type}'"
 
   -- format as a string (see constructor)
-  tostring: =>
-    if @name == ''
+  -- in strict mode never omit name
+  tostring: (strict=false) =>
+    if not strict and @name == ''
       @type
     else
       "#{@name}: #{@type}"

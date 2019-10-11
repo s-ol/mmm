@@ -47,28 +47,6 @@ class Server
     switch method
       when 'GET', 'HEAD'
         val = switch facet.name
-          when '?interactive'
-            export BROWSER
-
-            root = Fileder @store
-            BROWSER = Browser root, path
-            render BROWSER\todom!, fileder, noview: true, scripts: "
-    <script type=\"application/lua\">
-      on_load = on_load or {}
-      table.insert(on_load, function()
-        local path = #{string.format '%q', path}
-        local browser = require 'mmm.mmmfs.browser'
-        local fileder = require 'mmm.mmmfs.fileder'
-        local web = require 'mmm.mmmfs.stores.web'
-
-        local store = web.WebStore({ verbose = true })
-        local index = store:get_index(path, -1)
-        local root = fileder.Fileder(store, index)
-
-        BROWSER = browser.Browser(root, path, true)
-      end)
-    </script>"
-
           when '?index', '?tree'
             -- serve fileder index
             -- '?index': one level deep
@@ -81,7 +59,30 @@ class Server
             if not fileder\has_facet facet.name
               return 404, "facet '#{facet.name}' not found in fileder '#{path}'"
 
-            fileder\get facet
+            if facet.type == 'text/html+interactive'
+              export BROWSER
+
+              root = Fileder @store
+              BROWSER = Browser root, path, facet.name
+              render BROWSER\todom!, fileder, noview: true, scripts: "
+      <script type=\"application/lua\">
+        on_load = on_load or {}
+        table.insert(on_load, function()
+          local path = #{string.format '%q', path}
+          local facet = #{string.format '%q', facet.name}
+          local browser = require 'mmm.mmmfs.browser'
+          local fileder = require 'mmm.mmmfs.fileder'
+          local web = require 'mmm.mmmfs.stores.web'
+
+          local store = web.WebStore({ verbose = true })
+          local index = store:get_index(path, -1)
+          local root = fileder.Fileder(store, index)
+
+          BROWSER = browser.Browser(root, path, facet, true)
+        end)
+      </script>"
+            else
+              fileder\get facet
 
         if val
           200, val
@@ -100,7 +101,7 @@ class Server
     path_facet or= path
     path, facet = path_facet\match '(.*)/([^/]*)'
 
-    type or= 'text/html'
+    type or= 'text/html+interactive'
     type = type\match '%s*(.*)'
     facet = Key facet, type
 
@@ -112,8 +113,8 @@ class Server
 
     res = headers.new!
     response_type = if status > 299 then 'text/plain'
-    else if facet then facet.type
-    else 'text/json'
+    else if facet.type == 'text/html+interactive' then 'text/html'
+    else facet.type
     res\append ':status', tostring status
     res\append 'content-type', response_type
 

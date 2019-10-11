@@ -40,12 +40,25 @@ for convert in *converts
   table.insert casts, convert
 
 class Browser
-  new: (@root, path, rehydrate=false) =>
+  new: (@root, path, facet, rehydrate=false) =>
     -- root fileder
     assert @root, 'root fileder is nil'
 
     -- active path
     @path = ReactiveVar path or ''
+
+    -- active fileder
+    -- (re)set every time @path changes
+    @active = @path\map @root\walk
+
+    -- currently active facet
+    -- (re)set to default when @active changes
+    @facet = ReactiveVar Key facet, 'mmm/dom'
+    if MODE == 'CLIENT'
+      @active\subscribe (fileder) ->
+        return unless fileder
+        last = @facet and @facet\get!
+        @facet\set Key if last then last.type else 'mmm/dom'
 
     -- update URL bar
     if MODE == 'CLIENT'
@@ -54,30 +67,28 @@ class Browser
         logo.classList\add 'spin'
         logo.parentElement.offsetWidth
         logo.classList\remove 'spin'
-      @path\subscribe (path) ->
+
+      @facet\subscribe (facet) ->
         document.body.classList\add 'loading'
         spin!
 
         return if @skip
-        vis_path = path .. (if '/' == path\sub -1 then '' else '/')
-        window.history\pushState path, '', vis_path
+
+        path = @path\get!
+        state = js.global\eval 'new Object()'
+        state.path = path
+        state.name = facet.name
+        state.type = facet.type
+
+        window.history\pushState state, '', "#{path}/#{(Key facet.name, 'text/html+interactive')\tostring true}"
 
       window.onpopstate = (_, event) ->
-        if event.state and not event.state == js.null
+        state = event.state
+        if state != js.null
           @skip = true
-          @path\set event.state
+          @path\set state.path
+          @facet\set Key state.name, state.type
           @skip = nil
-
-    -- active fileder
-    -- (re)set every time @path changes
-    @active = @path\map @root\walk
-
-    -- currently active facet
-    -- (re)set to default when @active changes
-    @facet = @active\map (fileder) ->
-      return unless fileder
-      last = @facet and @facet\get!
-      Key if last then last.type else 'mmm/dom'
 
     -- whether inspect tab is active
     @inspect = ReactiveVar (MODE == 'CLIENT' and window.location.search\match '[?&]inspect')
@@ -121,7 +132,7 @@ class Browser
 
           current = @facet\get!
           current = current and current.name
-          with select :onchange, disabled: not fileder
+          with select :onchange, disabled: not fileder, value: @facet\map (f) -> f and f.name
             has_main = fileder and fileder\has_facet ''
             \append option '(main)', value: '', disabled: not has_main, selected: current == ''
             if fileder

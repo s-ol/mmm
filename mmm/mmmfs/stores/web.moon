@@ -29,9 +29,7 @@ parse_json = do
       else
         val
 
-  (string) ->
-    print fix JSON\parse string
-    fix JSON\parse string
+  (string) -> fix JSON\parse string
 
 class WebStore extends Store
   new: (opts = {}) =>

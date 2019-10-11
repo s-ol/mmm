@@ -56,3 +56,13 @@ describe "Key", ->
     assert.is.equal 'facet: and -> long -> type', tostring Key 'facet: and -> long -> type'
     assert.is.equal 'facet: and -> long -> type', tostring Key 'facet', 'and -> long -> type'
     assert.is.equal 'facet: and -> long -> type', tostring Key 'facet:   and -> long -> type'
+
+  it ":tostring formats the key", ->
+    assert.is.equal 'type/only', (Key 'type/only')\tostring!
+    assert.is.equal 'type/only', (Key '', 'type/only')\tostring!
+    assert.is.equal 'type/only', (Key ":   type/only")\tostring!
+
+  it ":tostring supports strict mode", ->
+    assert.is.equal ': type/only', (Key 'type/only')\tostring true
+    assert.is.equal ': type/only', (Key '', 'type/only')\tostring true
+    assert.is.equal ': type/only', (Key ":   type/only")\tostring true
