@@ -91,7 +91,7 @@ class Browser
           @skip = nil
 
     -- whether inspect tab is active
-    @inspect = ReactiveVar (MODE == 'CLIENT' and window.location.search\match '[?&]inspect')
+    @inspect = ReactiveVar (MODE == 'CLIENT' and window.location.hash == '#inspect')
 
     -- retrieve or create the wrapper and main elements
     main = get_or_create 'div', 'browser-root', class: 'main view'
