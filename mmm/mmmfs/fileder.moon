@@ -158,6 +158,11 @@ class Fileder
       key = Key key
       @facet_keys[key] = key
 
+      if MODE == 'CLIENT' and key.type\match 'text/moonscript'
+        -- @TODO: this doesn't belong here
+        copy = Key key.name, key.type\gsub 'text/moonscript', 'text/lua'
+        @facet_keys[copy] = copy
+
     _, name = dir_base @path
     @facets['name: alpha'] = name
 
