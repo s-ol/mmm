@@ -55,10 +55,6 @@ class Server
             index = @store\get_index path, depth
             convert 'table', facet.type, index, fileder, facet.name
           else
-            -- fileder and facet given
-            if not fileder\has_facet facet.name
-              return 404, "facet '#{facet.name}' not found in fileder '#{path}'"
-
             if facet.type == 'text/html+interactive'
               export BROWSER
 
@@ -81,6 +77,8 @@ class Server
           BROWSER = browser.Browser(root, path, facet, true)
         end)
       </script>"
+            else if not fileder\has_facet facet.name
+              404, "facet '#{facet.name}' not found in fileder '#{path}'"
             else
               fileder\get facet
 
