@@ -20,17 +20,18 @@ class Key
     if 'string' == type second
       @name, @type = (opts or ''), second
     elseif 'string' == type opts
-      @name, @type = opts\match '^([%w-_]+): *(.+)$'
+      @name, @type = opts\match '^([%w-_]*): *(.+)$'
       if not @name
         @name = ''
-        @type = opts
+        @type = opts\match '^ *(.+)$'
     elseif 'table' == type opts
-      @name = opts.name
+      @name = opts.name or ''
       @type = opts.type
-      @original = opts.original
-      @filename = opts.filename
     else
       error "wrong argument type: #{type opts}, #{type second}"
+
+    assert ('string' == type @name), "name is not a string: '#{@name}'"
+    assert ('string' == type @type), "type is not a string: '#{@type}'"
 
   -- format as a string (see constructor)
   tostring: =>
