@@ -96,7 +96,7 @@ class Fileder
 
       __index: (t, k) ->
         canonical = rawget t, tostring k
-        canonical or= Key k
+        -- canonical or= Key k
         canonical
 
       __newindex: (t, k, v) ->
@@ -109,6 +109,7 @@ class Fileder
 
         -- get canonical Key instance
         k = @facet_keys[k]
+        return unless k
 
         -- if cached, return
         if v = rawget t, k
@@ -129,6 +130,7 @@ class Fileder
       __newindex: (t, k, v) ->
         -- get canonical Key instance
         k = @facet_keys[k]
+        return unless k
 
         rawset t, k, v
 
@@ -167,7 +169,9 @@ class Fileder
         @facet_keys[copy] = copy
 
     _, name = dir_base @path
-    @facets['name: alpha'] = name
+    name_key = Key 'name: alpha'
+    @facet_keys[name_key] = name_key
+    @facets[name_key] = name
 
   -- recursively walk to and return the fileder with @path == path
   -- * path - the path to walk to
@@ -254,6 +258,10 @@ class Fileder
   -- * ... - arguments like Key
   get: (...) =>
     want = Key ...
+
+    -- return directly if present
+    if val = @facets[want]
+      return val, want
 
     -- find matching key and shortest conversion path
     key, conversions = @find want

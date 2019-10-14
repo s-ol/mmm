@@ -1,16 +1,19 @@
 require = relative ..., 1
-converts = require '.converts'
+base_converts = require '.converts'
+import Queue from require '.queue'
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
 escape_pattern = (inp) -> "^#{inp\gsub '([^%w])', '%%%1'}$"
 escape_inp = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
+
+local print_conversions
 
 -- attempt to find a conversion path from 'have' to 'want'
 -- * have - start type string or list of type strings
 -- * want - stop type pattern
 -- * limit - limit conversion amount
 -- returns a list of conversion steps
-get_conversions = (want, have, _converts=converts, limit=5) ->
+get_conversions = (want, have, converts=base_converts, limit=5) ->
   assert have, 'need starting type(s)'
 
   if 'string' == type have
@@ -19,29 +22,55 @@ get_conversions = (want, have, _converts=converts, limit=5) ->
   assert #have > 0, 'need starting type(s) (list was empty)'
 
   want = escape_pattern want
-  iterations = limit + math.max table.unpack [count type for type in *have]
-  have = [{ :start, rest: start, conversions: {} } for start in *have]
+  limit = limit + 3 * math.max table.unpack [count type for type in *have]
 
-  for i=1, iterations
-    next_have, c = {}, 1
-    for { :start, :rest, :conversions } in *have
-      if rest\match want
-        return conversions, start
+  had = {}
+  queue = Queue!
+  for start in *have
+    return {}, start if want\match start
+    queue\add { :start, rest: start, conversions: {} }, 0, start
+
+  best = Queue!
+
+  while true
+    entry, cost = queue\pop!
+    if not entry or cost > limit
+      break
+
+    { :start, :rest, :conversions } = entry
+    had[rest] = true
+    for convert in *converts
+      inp = escape_inp convert.inp
+      continue unless rest\match inp
+      result = rest\gsub inp, convert.out
+      continue unless result
+      continue if had[result]
+
+      next_entry = {
+        :start
+        rest: result
+        cost: cost + convert.cost
+        conversions: { { :convert, from: rest, to: result }, table.unpack conversions }
+      }
+
+      if result\match want
+        best\add next_entry, next_entry.cost
       else
-        for convert in *_converts
-          inp = escape_inp convert.inp
-          continue unless rest\match inp
-          result = rest\gsub inp, convert.out
-          if result
-            next_have[c] = {
-              :start,
-              rest: result,
-              conversions: { { :convert, from: rest, to: result }, table.unpack conversions }
-            }
-            c += 1
+        queue\add next_entry, next_entry.cost, result
 
-    have = next_have
-    return unless #have > 0
+
+  if solution = best\pop!
+    -- print "BEST: (#{solution.cost})"
+    -- print_conversions solution.conversions
+    solution.conversions, solution.start if solution
+
+-- stringify conversions for debugging
+-- * conversions - conversions from get_conversions
+print_conversions = (conversions) ->
+  print "converting:"
+  for i=#conversions,1,-1
+    step = conversions[i]
+    print "- #{step.from} -> #{step.to} (#{step.convert.cost})"
 
 -- apply transforms for conversion path sequentially
 -- * conversions - conversions from get_conversions
@@ -73,7 +102,6 @@ convert = (have, want, value, ...) ->
   apply_conversions conversions, value, ...
 
 {
-  :converts
   :get_conversions
   :apply_conversions
   :convert

@@ -1,9 +1,10 @@
 require = relative ..., 1
 import Key from require '.fileder'
-import converts, get_conversions, apply_conversions from require '.conversion'
+import get_conversions, apply_conversions from require '.conversion'
 import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
 import pre, div, nav, span, button, a, code, select, option from elements
 import languages from require 'mmm.highlighting'
+converts = require '.converts'
 
 keep = (var) ->
   last = var\get!
@@ -15,6 +16,7 @@ code_cast = (lang) ->
   {
     inp: "text/#{lang}.*",
     out: 'mmm/dom',
+    cost: 0
     transform: (val) => languages[lang] val
   }
 
@@ -28,6 +30,7 @@ casts = {
   {
     inp: 'URL.*'
     out: 'mmm/dom'
+    cost: 0
     transform: (href) => span a (code href), :href
   }
 }

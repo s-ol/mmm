@@ -30,6 +30,7 @@ code_hl = (lang) ->
   {
     inp: "text/#{lang}",
     out: 'mmm/dom',
+    cost: 5
     transform: (val) => pre languages[lang] val
   }
 
@@ -42,16 +43,19 @@ converts = {
   {
     inp: 'fn -> (.+)',
     out: '%1',
+    cost: 1
     transform: (val, fileder) => val fileder
   }
   {
     inp: 'mmm/component',
     out: 'mmm/dom',
+    const: 3
     transform: single tohtml
   }
   {
     inp: 'mmm/dom',
     out: 'text/html+frag',
+    cost: 3
     transform: (node) => if MODE == 'SERVER' then node else node.outerHTML
   }
   {
@@ -59,11 +63,13 @@ converts = {
     -- @TODO: this doesn't feel right... maybe mmm/dom has to go?
     inp: 'mmm/dom',
     out: 'text/html',
+    cost: 3
     transform: (html, fileder) => render html, fileder
   }
   {
     inp: 'text/html%+frag',
     out: 'mmm/dom',
+    cost: 1
     transform: if MODE == 'SERVER'
       (html, fileder) =>
         html = html\gsub '<mmm%-link%s+(.-)>(.-)</mmm%-link>', (attrs, text) ->
@@ -138,11 +144,13 @@ converts = {
   {
     inp: 'text/lua -> (.+)',
     out: '%1',
+    cost: 0.5
     transform: loadwith load or loadstring
   }
   {
     inp: 'mmm/tpl -> (.+)',
     out: '%1',
+    cost: 1
     transform: (source, fileder) =>
       source\gsub '{{(.-)}}', (expr) ->
         path, facet = expr\match '^([%w%-_%./]*)%+(.*)'
@@ -153,6 +161,7 @@ converts = {
   {
     inp: 'time/iso8601-date',
     out: 'time/unix',
+    cost: 0.5
     transform: (val) =>
       year, _, month, day = val\match '^%s*(%d%d%d%d)(%-?)([01]%d)%2([0-3]%d)%s*$'
       assert year, "failed to parse ISO 8601 date: '#{val}'"
@@ -161,6 +170,7 @@ converts = {
   {
     inp: 'URL -> twitter/tweet',
     out: 'mmm/dom',
+    cost: 1
     transform: (href) =>
       id = assert (href\match 'twitter.com/[^/]-/status/(%d*)'), "couldn't parse twitter/tweet URL: '#{href}'"
       if MODE == 'CLIENT'
@@ -176,6 +186,7 @@ converts = {
   {
     inp: 'URL -> youtube/video',
     out: 'mmm/dom',
+    cost: 1
     transform: (link) =>
       id = link\match 'youtu%.be/([^/]+)'
       id or= link\match 'youtube.com/watch.*[?&]v=([^&]+)'
@@ -196,11 +207,13 @@ converts = {
   {
     inp: 'URL -> image/.+',
     out: 'mmm/dom',
+    cost: 1
     transform: (src, fileder) => img :src
   }
   {
     inp: 'URL -> video/.+',
     out: 'mmm/dom',
+    cost: 1
     transform: (src) =>
       -- @TODO: add parsed MIME type
       video (source :src), controls: true, loop: true
@@ -208,11 +221,13 @@ converts = {
   {
     inp: 'text/plain',
     out: 'mmm/dom',
+    cost: 2
     transform: (val) => span val
   }
   {
     inp: 'alpha',
     out: 'mmm/dom',
+    cost: 2
     transform: single code
   }
   -- this one needs a higher cost
@@ -224,11 +239,13 @@ converts = {
   {
     inp: '(.+)',
     out: 'URL -> %1',
+    cost: 10
     transform: (_, fileder, key) => "#{fileder.path}/#{key.name}:#{@from}"
   }
   {
     inp: 'table',
     out: 'text/json',
+    cost: 2
     transform: do
       tojson = (obj) ->
         switch type obj
@@ -253,6 +270,7 @@ converts = {
   {
     inp: 'table',
     out: 'mmm/dom',
+    cost: 5
     transform: do
       deep_tostring = (tbl, space='') ->
         buf = space .. tostring tbl
@@ -281,18 +299,21 @@ if MODE == 'SERVER'
     table.insert converts, {
       inp: 'text/moonscript -> (.+)',
       out: '%1',
+      cost: 1
       transform: loadwith moon.load or moon.loadstring
     }
 
     table.insert converts, {
       inp: 'text/moonscript -> (.+)',
       out: 'text/lua -> %1',
+      cost: 2
       transform: single moon.to_lua
     }
 else
   table.insert converts, {
     inp: 'text/javascript -> (.+)',
     out: '%1',
+    cost: 1
     transform: (source) =>
       f = js.new window.Function, source
       f!
@@ -315,12 +336,14 @@ do
     table.insert converts, {
       inp: 'text/markdown',
       out: 'text/html+frag',
+      cost: 1
       transform: (md) => "<div class=\"markdown\">#{markdown md}</div>"
     }
 
     table.insert converts, {
       inp: 'text/markdown%+span',
       out: 'mmm/dom',
+      cost: 1
       transform: if MODE == 'SERVER'
         (source) =>
           html = markdown source
