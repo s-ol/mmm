@@ -81,6 +81,7 @@ class WebStore extends Store
         coroutine.yield facet.name, facet.type
 
   load_facet: (path, name, type) =>
+    @log "loading facet #{path} #{name}: #{type}"
     fetch "#{@host .. path}/#{name}: #{type}"
 
   create_facet: (path, name, type, blob) =>

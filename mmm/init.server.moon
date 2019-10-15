@@ -4,7 +4,7 @@ MODE = 'SERVER'
 deep_tostring = (tbl, space='') ->
   buf = space .. tostring tbl
 
-  return buf unless 'table' == type tbl
+  return buf unless 'table' == (type tbl) or tbl.__tostring
 
   buf = buf .. ' {\n'
   for k,v in pairs tbl

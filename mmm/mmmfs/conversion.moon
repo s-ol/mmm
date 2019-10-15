@@ -77,10 +77,14 @@ print_conversions = (conversions) ->
 -- * value - value
 -- * ... - other transform parameters (fileder, key)
 -- returns converted value
+err_and_trace = (msg) -> debug.traceback msg, 2
 apply_conversions = (conversions, value, ...) ->
   for i=#conversions,1,-1
     step = conversions[i]
-    value = step.convert.transform step, value, ...
+    ok, value = xpcall step.convert.transform, err_and_trace, step, value, ...
+    if not ok
+      f, k = ...
+      error "error while converting #{f} #{k} from '#{step.from}' to '#{step.to}':\n#{value}"
 
   value
 

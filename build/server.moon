@@ -73,7 +73,9 @@ class Server
           local store = web.WebStore({ verbose = true })
           local root = fileder.Fileder(store, store:get_index(nil, -1))
 
-          BROWSER = browser.Browser(root, path, facet, true)
+          local err_and_trace = function (msg) return debug.traceback(msg, 2) end
+          ok, BROWSER = xpcall(browser.Browser, err_and_trace, root, path, facet, true)
+          if not ok then error(BROWSER) end
         end)
       </script>"
             else if not fileder\has_facet facet.name
@@ -88,6 +90,7 @@ class Server
       else
         501, "not implemented"
 
+  err_and_trace = (msg) -> debug.traceback msg, 2
   stream: (sv, stream) =>
     req = stream\get_headers!
     method = req\get ':method'
@@ -102,10 +105,10 @@ class Server
     type = type\match '%s*(.*)'
     facet = Key facet, type
 
-    ok, status, body = pcall @.handle, @, method, path, facet
+    ok, status, body = xpcall @.handle, err_and_trace, @, method, path, facet
     if not ok
-      warn status, body
-      body = "Internal Server Error: #{status}"
+      warn "Error handling request (#{method} #{path} #{facet}):\n#{status}"
+      body = "Internal Server Error:\n#{status}"
       status = 500
 
     res = headers.new!

@@ -16,6 +16,8 @@ tohtml = (val) ->
   else
     error "not a Node: #{val}, #{type val}"
 
+fromhtml = (node) -> :node
+
 -- shorthand to form a text node from a string
 text = (str) -> document\createTextNode tostring str
 
@@ -146,6 +148,7 @@ elements = setmetatable {}, __index: (name) =>
   :get_or_create,
 --  :join,
   :tohtml,
+  :fromhtml,
   :text,
   :elements,
 }

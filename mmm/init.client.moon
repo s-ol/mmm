@@ -10,7 +10,7 @@ deep_tostring = (tbl, space='') ->
   return tbl if 'userdata' == type tbl
 
   buf = space .. tostring tbl
-  return buf unless 'table' == type tbl
+  return buf unless 'table' == (type tbl) or table.__tostring
 
   buf = buf .. ' {\n'
   for k,v in pairs tbl

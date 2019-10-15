@@ -16,6 +16,8 @@ tohtml = (val) ->
   else
     error "not a Node: #{val}, #{type val}"
 
+fromhtml = (html) -> render: -> html
+
 -- shorthand to form a text node from strings
 escapes = {
   '&': '&amp;'
@@ -128,6 +130,7 @@ get_or_create = (elem, id, ...) ->
   :ReactiveElement,
   :get_or_create,
   :tohtml,
+  :fromhtml,
   :text,
   :elements,
 }

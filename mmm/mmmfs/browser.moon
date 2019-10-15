@@ -166,7 +166,7 @@ class Browser
     @node = wrapper.node
     @render = wrapper\render
 
-  err_and_trace = (msg) -> { :msg, trace: debug.traceback! }
+  err_and_trace = (msg) -> debug.traceback msg, 2
   default_convert = (key) => @get key.name, 'mmm/dom'
 
   -- render #browser-content
@@ -177,7 +177,7 @@ class Browser
       if MODE == 'CLIENT'
         err\set pre msg
       warn "ERROR rendering content: #{msg}"
-      nil
+      div!
 
     active = @active\get!
 
@@ -193,10 +193,9 @@ class Browser
       res
     elseif ok
       div "[no conversion path to #{prop.type}]"
-    elseif res and res.msg.match and res.msg\match '%[nossr%]$'
+    elseif res and res\match '%[nossr%]'
       div "[this page could not be pre-rendered on the server]"
     else
-      res = "#{res.msg}\n#{res.trace}"
       disp_error res
 
   get_inspector: =>

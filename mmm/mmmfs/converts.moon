@@ -127,6 +127,7 @@ converts = {
             nolink = js_fix element\getAttribute 'nolink'
             inline = js_fix element\getAttribute 'inline'
             desc = js_fix element.innerText
+            desc = nil if desc == ''
 
             element\replaceWith embed path or '', facet or '', fileder, { :nolink, :inline, :desc }
 
@@ -239,7 +240,7 @@ converts = {
   {
     inp: '(.+)',
     out: 'URL -> %1',
-    cost: 10
+    cost: 5
     transform: (_, fileder, key) => "#{fileder.path}/#{key.name}:#{@from}"
   }
   {
