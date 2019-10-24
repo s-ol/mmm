@@ -359,4 +359,17 @@ do
             .innerHTML = html
     }
 
+if MODE == 'CLIENT' and window.mermaid
+  id_counter = 1
+  table.insert converts, {
+    inp: 'text/mermaid-graph'
+    out: 'mmm/dom'
+    cost: 1
+    transform: (source, fileder, key) =>
+      with container = document\createElement 'div'
+        cb = (svg, two) =>
+          .innerHTML = svg
+        id_counter += 1
+        window.mermaid\render "mermaid-#{id_counter}", source, cb
+  }
 converts
