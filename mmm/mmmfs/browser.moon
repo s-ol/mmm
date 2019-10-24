@@ -34,8 +34,11 @@ casts = {
 for convert in *converts
   table.insert casts, convert
 
+export BROWSER
 class Browser
   new: (@root, path, facet, rehydrate=false) =>
+    BROWSER = @
+
     -- root fileder
     assert @root, 'root fileder is nil'
 

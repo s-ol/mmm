@@ -56,10 +56,8 @@ class Server
             convert 'table', facet.type, index, fileder, facet.name
           else
             if facet.type == 'text/html+interactive'
-              export BROWSER
-
               root = Fileder @store
-              BROWSER = Browser root, path, facet.name
+              browser = Browser root, path, facet.name
 
               deps = [[
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
@@ -70,7 +68,7 @@ class Server
     <script type="text/lua">require 'mmm'</script>
               ]]
 
-              render BROWSER\todom!, fileder, noview: true, scripts: deps .. "
+              render browser\todom!, fileder, noview: true, scripts: deps .. "
       <script type=\"text/lua\">
         on_load = on_load or {}
         table.insert(on_load, function()
@@ -84,8 +82,8 @@ class Server
           local root = fileder.Fileder(store, store:get_index(nil, -1))
 
           local err_and_trace = function (msg) return debug.traceback(msg, 2) end
-          ok, BROWSER = xpcall(browser.Browser, err_and_trace, root, path, facet, true)
-          if not ok then error(BROWSER) end
+          local ok, browser = xpcall(browser.Browser, err_and_trace, root, path, facet, true)
+          if not ok then error(browser) end
         end)
       </script>"
             else if not fileder\has_facet facet.name

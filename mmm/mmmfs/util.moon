@@ -14,8 +14,12 @@ tourl = (path) ->
 
   find_fileder = (fileder, origin) ->
     if 'string' == type fileder
-      assert origin, "cannot resolve path '#{fileder}' without origin!"
-      assert (origin\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
+      if '.' == fileder\sub 1, 1
+        assert origin, "cannot resolve path '#{fileder}' without origin!"
+        assert (origin\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
+      else
+        assert BROWSER and BROWSER.root, "cannot resolve path '#{fileder}' without BROWSER and root set!"
+        assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
     else
       assert fileder, "no fileder passed."
 
