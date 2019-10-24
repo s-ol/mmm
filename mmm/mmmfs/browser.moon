@@ -13,20 +13,16 @@ keep = (var) ->
     last
 
 code_cast = (lang) ->
-  {
-    inp: "text/#{lang}.*",
-    out: 'mmm/dom',
-    cost: 0
-    transform: (val) => languages[lang] val
-  }
 
 casts = {
-  code_cast 'javascript'
-  code_cast 'moonscript'
-  code_cast 'lua'
-  code_cast 'markdown'
-  code_cast 'html'
-  code_cast 'css'
+  {
+    inp: 'text/.*',
+    out: 'mmm/dom',
+    cost: 0
+    transform: (val) =>
+      lang = @from\match 'text/(.*)'
+      languages[lang] val
+  }
   {
     inp: 'URL.*'
     out: 'mmm/dom'
