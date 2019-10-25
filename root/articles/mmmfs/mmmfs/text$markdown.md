@@ -7,7 +7,7 @@ This is accomplished using two major components, the *Type System and Coercion E
 The Fileder Model is the underlying unified data storage model.
 Like almost all current data storage and access models it is based fundamentally on the concept of a hierarchical tree-structure.
 
-<mmm-embed path="mainstream_fs">schematic view of an example tree in a mainstream filesystem</mmm-embed>
+<mmm-embed path="tree_mainstream">schematic view of an example tree in a mainstream filesystem</mmm-embed>
 
 In common filesystems as pictured, data can be organized hierarchically into *folders* (or *directories*),
 which serve only as containers of *files*, in which data is actually stored.
@@ -36,7 +36,7 @@ Users renaming extensions:
   https://www.quora.com/What-happens-when-you-rename-a-jpg-to-a-png-file
 
 In mmmfs, the example above might look like this instead:  
-<mmm-embed path="schematic">schematic view of an example mmmfs tree</mmm-embed>
+<mmm-embed path="tree_mmmfs">schematic view of an example mmmfs tree</mmm-embed>
 
 
 Superficially, this may look quite similar: there is still only two types of nodes (referred to as *fileders* and *facets*),
@@ -167,28 +167,4 @@ it continues search until it either completely exhausts the result space,
 or until all non-exhaustively searched paths are already higher than the maximum allowed path.
 This ensures that the optimal path is found, even if a more expensive path is found more quickly initially.
 
-```
-graph LR
-graph LR
-  md_lua[text/lua -> text/markdown]
-  md[text/markdown]
-  moon[text/moonscript -> fn -> mmm/dom]
-  lua[text/lua -> fn -> mmm/dom]
-  fn[fn -> mmm/dom]
-  dom[mmm/dom]
-  moon_url[URL -> text/moonscript -> fn -> mmm/dom]
-  lua_url[URL -> text/lua -> fn -> mmm/dom]
-
-  md_lua -- cost: 1 --> md -- cost: 2 --> dom
-  moon -- cost: 5 --> moon_url
-  moon -- cost: 1 --> fn -- cost: 2 --> dom
-  moon -- cost: 2 --> lua -- cost: 5 --> lua_url
-  lua -- cost: 1 --> fn
-  moon_url -- cost: 10 --> dom
-  lua_url -- cost: 10 -->dom
-
-  classDef given fill:#ada;
-  classDef path stroke:#ada;
-  linkStyle 3,1,0,4 stroke:#8d8,stroke-width:2px
-  class md_lua,moon given
-```
+<mmm-embed path="type_coercion_graph">excerpt of the graph of conversion paths from two starting facets to mmm/dom</mmm-embed>

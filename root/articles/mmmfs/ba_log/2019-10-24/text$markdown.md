@@ -26,7 +26,7 @@ Once mermaid.js is done, the rendered content is added in the container element.
 Here is one of the two diagrams that I implemented the feature for,
 you can also follow the link through to the source and view the textual representation using the 'inspect' button.
 
-<mmm-embed path="/articles/mmmfs/mmmfs/mainstream_fs"></mmm-embed>
+<mmm-embed path="/articles/mmmfs/mmmfs/tree_mainstream"></mmm-embed>
 
 [mermaid]: https://mermaidjs.github.io/mermaid-live-editor/
 [2ff6f90]: https://git.s-ol.nu/mmm/commit/2ff6f906c498c1b742dd8437a09c97ebe29a652a/
