@@ -30,6 +30,7 @@
       margin: 0;
       padding: 0;
       display: flex;
+      align-self: stretch;
       background: $gray-darker;
 
       > * {
@@ -101,6 +102,10 @@
     flex: 1 1 auto;
     overflow: auto;
     padding: 1em 2em;
+    margin: 0 1em;
+    align-self: flex-start;
+    min-width: 30vw;
+    background: var(--white);
 
     position: relative;
   }

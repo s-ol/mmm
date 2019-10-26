@@ -4,11 +4,17 @@
     height: inherit;
   }
 
+  .markdown {
+    max-width: 640px;
+    position: relative;
+  }
+
   .markdown,
   .markdown > p,
-  .markdown > p > a,
-  .markdown > a {
-    max-width: 100%;
+  .markdown > p > a {
+    p, a {
+      max-width: 100%;
+    }
 
     > img, > video {
       display: block;
@@ -38,6 +44,10 @@
       padding: 0.5em;
       margin: 0.2em;
       background: $gray-bright;
+    }
+
+    > *:not(.description) {
+      max-width: 100%;
     }
   }
 
