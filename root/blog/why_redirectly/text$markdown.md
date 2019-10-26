@@ -31,8 +31,13 @@ instead of directly linking to the content.
 
 This way, whenever I make changes to my content's adressing scheme,
 I simply change the URL location, and any old links that are floating around remain functional.
-Should I ever change to another domain, I will consider simply leaving the redirection service running on this domain anyhow,
-to keep old links alive. At least for a few years :)
+It's also helpful to direct people to the best documentation for a particular project:
+when I start working on something, it might exist only as a git repo,
+but later in the project's lifecycle I may add a descriptive article on my website or as part of the blog.
+Perhaps one of my projects will outgrow this website and need its own domain some time.
+By always linking using a canonical project-URL, I can make sure that old links always point to the best place.
+Also if I ever decide to move to a different domain again,
+I can simply leave the redirection service running on here, at least for a few years :)
 
 Of course all of this doesn't work when visitors of my page navigate around by themselves,
 and then share the URL from their address bar.
