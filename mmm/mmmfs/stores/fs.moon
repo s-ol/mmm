@@ -22,18 +22,31 @@ class FSStore extends Store
 
   -- fileders
   list_fileders_in: (path='') =>
-    paths = for entry_name in lfs.dir @root .. path
+    entries = {}
+    for entry_name in lfs.dir @root .. path
       continue if '.' == entry_name\sub 1, 1
       entry_path = @root .. "#{path}/#{entry_name}"
       if 'directory' ~= lfs.attributes entry_path, 'mode'
         continue
 
-      "#{path}/#{entry_name}"
+      entries[entry_name] = "#{path}/#{entry_name}"
 
-    table.sort paths
+    sorted = {}
+
+    order_file = @root .. "#{path}/$order"
+    if 'file' == lfs.attributes order_file, 'mode'
+      for line in io.lines order_file
+        path = assert entries[line], "entry in $order but not on disk: #{line}"
+        table.insert sorted, path
+        sorted[line] = true
+
+    entries = [path for entry, path in pairs entries when not sorted[entry]]
+    table.sort entries
+    for path in *entries
+      table.insert sorted, path
+
     coroutine.wrap ->
-      -- @TODO: respect $order
-      for path in *paths
+      for path in *sorted
         coroutine.yield path
 
   create_fileder: (parent, name) =>
