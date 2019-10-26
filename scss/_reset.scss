@@ -27,7 +27,7 @@ body {
   flex-direction: column;
   justify-content: space-between;
 
-  background: $white;
+  background: var(--gray-bright);
   font-family: sans-serif;
 
   min-height: 100vh;
