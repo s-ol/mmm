@@ -8,6 +8,8 @@
   .markdown > p,
   .markdown > p > a,
   .markdown > a {
+    max-width: 100%;
+
     > img, > video {
       display: block;
       max-width: 100%;
@@ -21,6 +23,7 @@
   .embed {
     width: inherit;
     height: inherit;
+    max-width: inherit;
 
     .description {
       text-align: center;

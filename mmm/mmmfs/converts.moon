@@ -376,6 +376,9 @@ if MODE == 'CLIENT' and window.mermaid
       with container = document\createElement 'div'
         cb = (svg) =>
           .innerHTML = svg
+          .firstElementChild.style.width = '100%'
+          .firstElementChild.style.height = 'auto'
+
         window\setImmediate (_) ->
           window.mermaid\render id, source, cb, container
   }
