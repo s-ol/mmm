@@ -4,6 +4,12 @@ footer {
 
   position: sticky;
   bottom: 0;
+  
+  @media print {
+    position: absolute;
+    display: none;
+  }
+
 
   color: $gray-bright;
   background: $gray-dark;

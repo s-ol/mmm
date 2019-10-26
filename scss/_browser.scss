@@ -47,6 +47,11 @@
     position: sticky;
     top: 0;
 
+    @media print {
+      position: relative;
+      display: none;
+    }
+
     display: flex;
     flex: 0 0 auto;
     flex-wrap: wrap;
