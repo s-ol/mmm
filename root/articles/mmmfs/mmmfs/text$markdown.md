@@ -5,25 +5,24 @@ This is accomplished using two major components, the *Type System and Coercion E
 
 # The Fileder Unified Data Model
 The Fileder Model is the underlying unified data storage model.
-Like almost all current data storage and access models it is based fundamentally on the concept of a hierarchical tree-structure.
+Like many data storage models it is based fundamentally on the concept of a hierarchical tree-structure.
 
 <mmm-embed path="tree_mainstream">schematic view of an example tree in a mainstream filesystem</mmm-embed>
 
-In common filesystems as pictured, data can be organized hierarchically into *folders* (or *directories*),
+In common filesystems, as pictured, data can be organized hierarchically into *folders* (or *directories*),
 which serve only as containers of *files*, in which data is actually stored.
 While *directories* are fully transparent to both system and user (they can be created, browser, listed and viewed by both),
 *files* are, from the system perspective, mostly opaque and inert blocks of data.
-Some metadata is associated with them (filesize, access permissions),
+
+Some metadata, such as file size and access permissions, is associated with each file,
 but notably the type of data is generally not actually stored in the filesystem,
-but is determined loosely based on multiple heuristics based on the system and context, notably:
+but determined loosely based on multiple heuristics depending on the system and context.
+Some notable mechanism are:
 - Suffixes in the name are often used to indicate what kind of data a file should contain.
   However there is no standardization over this, and often a suffix is used for multiple incompatible versions of a file-format.
 - Many file-formats specify a specific data-pattern either at the very beginning or very end of a given file.
   On unix systems the `libmagic` database and library of these so-called *magic constants* is commonly used to guess the file-type based on
   these fragments of data.
-  However, since not all file-formats use magic constants, and since the location and value of the magic constants varies between constants,
-  files can often (considered to) be valid in multiple formats at the same time.
-  [TODO: quote: "Abusing file formats; or, Corkami, the Novella", Ange Albertini, PoC||GTFO 7]
 - on UNIX systems files to be executed are checked by a variety of methods to determine which format would fit.
   for script files, the "shebang" (`#!`) can be used to specify the program that should parse this file in the first line of the file.
   [@TODO: src: https://stackoverflow.com/questions/23295724/how-does-linux-execute-a-file]
@@ -31,13 +30,22 @@ but is determined loosely based on multiple heuristics based on the system and c
 It should be clear already from this short list that to mainstream operating systems, as well as the applications running on them,
 the format of a file is almost completely unknown and at best educated guesses can be made.
 
+Because these various mechanisms are applied at different times by the operating system and applications,
+it is possible for files to be labelled as or considered as being in different formats at the same time by different components of the system.
+This leads to confusion about the factual format of data among users (e.g. making unclear the difference between changing a file extension
+and converting a file between formats [TODO: quote below]), but can also pose a serious security risk.
+It is for example possible, under some circumstances,
+that a file contains maliciously-crafted code and is treated as an executable by one software component,
+while a security mechanism meant to detect such code determines the same file to be a legitimate image
+(the file may in fact be valid in both formats).
+[TODO: quote: "Abusing file formats; or, Corkami, the Novella", Ange Albertini, PoC||GTFO 7]
+
 Users renaming extensions:
   https://askubuntu.com/questions/166602/why-is-it-possible-to-convert-a-file-just-by-renaming-its-extension
   https://www.quora.com/What-happens-when-you-rename-a-jpg-to-a-png-file
 
 In mmmfs, the example above might look like this instead:  
 <mmm-embed path="tree_mmmfs">schematic view of an example mmmfs tree</mmm-embed>
-
 
 Superficially, this may look quite similar: there is still only two types of nodes (referred to as *fileders* and *facets*),
 and again one of them, the *fileders* are used only to hierarchically organize *facets*.

@@ -1,6 +1,58 @@
 # motivation
+The application-centric computing paradigm common today is harmful to users,
+because it leaves behind "intert" data as D. Cragg calls it:
 
-The state of sof
+[Cragg 2016]
+D. Cragg coins the term "inert data" for the data created, and left behind, by apps and applications in the computing model that is currently prevalent:
+Most data today is either intrinsically linked to one specific application, that controls and limits access to the actual information,
+or even worse, stored in the cloud where users have no direct access at all and depend soley on online tools that require a stable network connection
+and a modern browser, and that could be modified, removed or otherwise negatively impacted at any moment.
+
+This issue is worsened by the fact that the a lot of software we use today is deployed through the cloud computing and SaaS paradigms,
+which are far less reliable than earlier means of distributing software:
+Software that runs in the cloud is subject to outages due to network problems,
+pricing or availability changes etc. at the whim of the company providing it, as well as ISPs involved in the distribution.
+Cloud software, as well as subscription-model software with online-verification mechanisms are additionally subject
+to license changes, updates modifiying, restricting or simply removing past functionality etc.
+Additionally, many cloud software solutions and ecosystems store the users' data in the cloud,
+where they are subject to foreign laws and privacy concerns are intransparently handled by the companies.
+Should the company, for any reason, be unable or unwanting to continue servicing a customer,
+the data may be irrecoverably lost (or access prevented).
+
+However this lack of control over data access is not the only problem the application-centric approach induces:
+Another consequence is that interoperability between applications and data formats is hindered.
+Because applications are incentivised to keep customers, they make use of network effects to keep customers locked-in.
+As a result applications tend to accrete features rather then modularise and delegate to other software [P Chiusano].
+
+This leads to massively complex file formats,
+such as for example the .docx format commonly used for storing mostly
+textual data enriched with images and videos on occasion.
+The docx format is in fact an archive that can contain many virtual files internally,
+such as the images and videos referenced before.
+However this is completely unknown to the operating system,
+and so users are unable to access the contents in this way.
+As a result, editing an image contained in a word document is far from a trivial task:
+first the document has to be opened in a word processing application,
+then the image has to be exported from it and saved in its own, temporary file.
+This file can then be edited and saved back to disk.
+Once updated, the image may be reimported into the .docx document.
+If the word-processing application supports this,
+the old image may be replaced directly, otherwise the user may have to remove the old image,
+insert the new one and carefully ensure that the positioning in the document remains intact.
+
+In fact all of this is unnecessary, since the image had been stored in a compatible format on disk in the first place:
+The system was simply unaware of this because the word document had to be archived into a single file
+for ease of use by the word processor, and this single file is opaque to the system.
+
+Data rarely really fits the metaphora of files very well,
+and even when it does it is rarely exposed to the user that way:
+The 'Contacts' app on a mobile phone or laptop for example does not store each contacts's information
+in a separate 'file' (as the metaphora may have initially suggested),
+but rather keeps this database hidden away from the user.
+Consequently, access to the information contained in the database is only enabled through the contacts applications GUI.
+
+--
+
 According to some researchers in the field of Human-Computer-Interaction, the state of computing is rather dire.
 
 It seems that a huge majority of daily computer users have silently accepted
@@ -10,12 +62,6 @@ and surrendered it to the relatively small group of 'programmers' curating their
 - Applications are bad
 - Services are worse
 
-
-[Cragg 2016]
-D. Cragg coins the term "inert data" for the data created, and left behind, by apps and applications in the computing model that is currently prevalent:
-Most data today is either intrinsically linked to one specific application, that controls and limits access to the actual information,
-or even worse, stored in the cloud where users have no direct access at all and depend soley on online tools that require a stable network connection
-and a modern browser, and that could be modified, removed or otherwise negatively impacted at any moment.
 
 Chiusano blames these issues on the metaphor of the *machine*, and likens apps and applications to appliances.
 According to him, what should really be provided are *tools*:
