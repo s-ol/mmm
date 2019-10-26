@@ -49,7 +49,7 @@ converts = {
   {
     inp: 'mmm/component',
     out: 'mmm/dom',
-    const: 3
+    cost: 3
     transform: single tohtml
   }
   {
