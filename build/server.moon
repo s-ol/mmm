@@ -8,6 +8,7 @@ add '?/init'
 add '?/init.server'
 
 require 'mmm'
+require 'mmm.mmmfs'
 
 import dir_base, Key, Fileder from require 'mmm.mmmfs.fileder'
 import convert from require 'mmm.mmmfs.conversion'
@@ -65,7 +66,7 @@ class Server
     <script type="text/javascript" src="//unpkg.com/marked@0.7.0/marked.min.js"></script>
     <script type="text/javascript" src="/static/fengari-web/:text/javascript"></script>
     <script type="text/lua" src="/static/mmm/:text/lua"></script>
-    <script type="text/lua">require 'mmm'</script>
+    <script type="text/lua">require 'mmm'; require 'mmm.mmmfs'</script>
               ]]
 
               render browser\todom!, fileder, noview: true, scripts: deps .. "

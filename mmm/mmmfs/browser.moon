@@ -1,18 +1,16 @@
 require = relative ..., 1
 import Key from require '.fileder'
+import converts from require '.plugins'
 import get_conversions, apply_conversions from require '.conversion'
 import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
 import pre, div, nav, span, button, a, code, select, option from elements
 import languages from require 'mmm.highlighting'
-converts = require '.converts'
 
 keep = (var) ->
   last = var\get!
   var\map (val) ->
     last = val or last
     last
-
-code_cast = (lang) ->
 
 casts = {
   {

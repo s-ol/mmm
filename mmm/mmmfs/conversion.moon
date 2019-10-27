@@ -1,5 +1,4 @@
 require = relative ..., 1
-base_converts = require '.converts'
 import Queue from require '.queue'
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
@@ -13,8 +12,9 @@ local print_conversions
 -- * want - stop type pattern
 -- * limit - limit conversion amount
 -- returns a list of conversion steps
-get_conversions = (want, have, converts=base_converts, limit=5) ->
+get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5) ->
   assert have, 'need starting type(s)'
+  assert converts,  'need to pass list of converts'
 
   if 'string' == type have
     have = { have }

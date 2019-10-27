@@ -1,9 +1,8 @@
 require = relative ..., 1
-import div, pre, code, img, video, blockquote, a, span, source, iframe from require 'mmm.dom'
+import div, pre, code, img, video, span, source  from require 'mmm.dom'
 import find_fileder, link_to, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import render from require '.layout'
 import tohtml from require 'mmm.component'
-import languages from require 'mmm.highlighting'
 
 keep = (var) ->
   last = var\get!
@@ -25,20 +24,13 @@ loadwith = (_load) -> (val, fileder, key) =>
   func = assert _load val, "#{fileder}##{key}"
   func!
 
--- highlight code
-code_hl = (lang) ->
-  {
-    inp: "text/#{lang}",
-    out: 'mmm/dom',
-    cost: 5
-    transform: (val) => pre languages[lang] val
-  }
-
 -- list of converts
 -- converts each have
 -- * inp - input type. can capture subtypes using `(.+)`
 -- * out - output type. can substitute subtypes from inp with %1, %2 etc.
--- * transform - function (val: inp, fileder) -> val: out
+-- * cost - conversion cost
+-- * transform - function (val: inp, fileder) => val: out
+--               @convert, @from, @to contain the convert and the concrete types
 converts = {
   {
     inp: 'fn -> (.+)',
@@ -169,43 +161,6 @@ converts = {
       os.time :year, :month, :day
   }
   {
-    inp: 'URL -> twitter/tweet',
-    out: 'mmm/dom',
-    cost: 1
-    transform: (href) =>
-      id = assert (href\match 'twitter.com/[^/]-/status/(%d*)'), "couldn't parse twitter/tweet URL: '#{href}'"
-      if MODE == 'CLIENT'
-        with parent = div!
-          window.twttr.widgets\createTweet id, parent
-      else
-        div blockquote {
-          class: 'twitter-tweet'
-          'data-lang': 'en'
-          a '(linked tweet)', :href
-        }
-  }
-  {
-    inp: 'URL -> youtube/video',
-    out: 'mmm/dom',
-    cost: 1
-    transform: (link) =>
-      id = link\match 'youtu%.be/([^/]+)'
-      id or= link\match 'youtube.com/watch.*[?&]v=([^&]+)'
-      id or= link\match 'youtube.com/[ev]/([^/]+)'
-      id or= link\match 'youtube.com/embed/([^/]+)'
-
-      assert id, "couldn't parse youtube URL: '#{link}'"
-
-      iframe {
-        width: 560
-        height: 315
-        frameborder: 0
-        allowfullscreen: true
-        frameBorder: 0
-        src: "//www.youtube.com/embed/#{id}"
-      }
-  }
-  {
     inp: 'URL -> image/.+',
     out: 'mmm/dom',
     cost: 1
@@ -286,12 +241,26 @@ converts = {
 
       (tbl) => pre code deep_tostring tbl
   }
-  code_hl 'javascript'
-  code_hl 'moonscript'
-  code_hl 'lua'
-  code_hl 'markdown'
-  code_hl 'css'
 }
+
+add_converts = (module) ->
+  ok, plugin = pcall require, ".plugins.#{module}"
+
+  if not ok
+    print "[Plugins] couldn't load plugins.#{module}: #{plugin}"
+    return
+
+  print "[Plugins] loaded plugins.#{module}"
+
+  if plugin.converts
+    for convert in *plugin.converts
+      table.insert converts, convert
+
+add_converts 'code'
+add_converts 'markdown'
+add_converts 'mermaid'
+add_converts 'twitter'
+add_converts 'youtube'
 
 if MODE == 'SERVER'
   ok, moon = pcall require, 'moonscript.base'
@@ -320,67 +289,4 @@ else
       f!
   }
 
-do
-  local markdown
-  if MODE == 'SERVER'
-    success, discount = pcall require, 'discount'
-    if not success
-      warn "NO MARKDOWN SUPPORT!", discount
-
-    markdown = success and (md) ->
-      res = assert discount.compile md, 'githubtags'
-      res.body
-  else
-    markdown = window and window.marked and window\marked
-
-  if markdown
-    table.insert converts, {
-      inp: 'text/markdown',
-      out: 'text/html+frag',
-      cost: 1
-      transform: (md) => "<div class=\"markdown\">#{markdown md}</div>"
-    }
-
-    table.insert converts, {
-      inp: 'text/markdown%+span',
-      out: 'mmm/dom',
-      cost: 1
-      transform: if MODE == 'SERVER'
-        (source) =>
-          html = markdown source
-          html = html\gsub '^<p', '<span'
-          html\gsub '/p>$', '/span>'
-      else
-        (source) =>
-          html = markdown source
-          html = html\gsub '^%s*<p>%s*', ''
-          html = html\gsub '%s*</p>%s*$', ''
-          with document\createElement 'span'
-            .innerHTML = html
-    }
-
-if MODE == 'CLIENT' and window.mermaid
-  window.mermaid\initialize {
-    startOnLoad: false
-    fontFamily: 'monospace'
-   }
-  
-  id_counter = 1
-  table.insert converts, {
-    inp: 'text/mermaid-graph'
-    out: 'mmm/dom'
-    cost: 1
-    transform: (source, fileder, key) =>
-      id_counter += 1
-      id = "mermaid-#{id_counter}"
-      with container = document\createElement 'div'
-        cb = (svg) =>
-          .innerHTML = svg
-          .firstElementChild.style.width = '100%'
-          .firstElementChild.style.height = 'auto'
-
-        window\setImmediate (_) ->
-          window.mermaid\render id, source, cb, container
-  }
-
-converts
+:converts
