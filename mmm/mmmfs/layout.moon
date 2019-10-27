@@ -144,6 +144,7 @@ render = (content, fileder, opts={}) ->
   "
   buf ..= [[
     <script type="text/javascript" src="/static/highlight-pack/:text/javascript"></script>
+    <script type="text/javascript">hljs.initHighlighting()</script>
     <script type="text/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
   ]]
 
