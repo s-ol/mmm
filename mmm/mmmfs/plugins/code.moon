@@ -2,7 +2,7 @@ import div from require 'mmm.dom'
 import languages from require 'mmm.highlighting'
 
 class Editor
-  o = do
+  o = if MODE == 'CLIENT'
     mkobj = window\eval "(function () { return {}; })"
     (tbl) ->
       with obj = mkobj!

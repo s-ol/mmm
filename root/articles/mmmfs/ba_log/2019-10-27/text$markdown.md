@@ -19,35 +19,37 @@ First, here is the convert itself:
 
 and the main part of the code, the `Editor` widget:
 
-    class Editor
-      new: (value, mode, @fileder, @key) =>
-        @node = div class: 'editor'
-        -- 'o' is a little helper for converting a Lua table to a JS object
-        @cm = window\CodeMirror @node, o {
-          :value
-          :mode
-          lineNumber: true
-          lineWrapping: true
-          autoRefresh: true
-          theme: 'hybrid'
-        }
+```moonscript
+class Editor
+  new: (value, mode, @fileder, @key) =>
+    @node = div class: 'editor'
+    -- 'o' is a little helper for converting a Lua table to a JS object
+    @cm = window\CodeMirror @node, o {
+      :value
+      :mode
+      lineNumber: true
+      lineWrapping: true
+      autoRefresh: true
+      theme: 'hybrid'
+    }
 
-        @cm\on 'changes', (_, mirr) ->
-          window\clearTimeout @timeout if @timeout
-          @timeout = window\setTimeout (-> @change!), 300
+    @cm\on 'changes', (_, mirr) ->
+      window\clearTimeout @timeout if @timeout
+      @timeout = window\setTimeout (-> @change!), 300
 
-      change: =>
-        @timeout = nil
-        doc = @cm\getDoc!
-        if @lastState and doc\isClean @lastState
-          -- no changes since last event
-          return
-        
-        @lastState = doc\changeGeneration true
-        value = doc\getValue!
+  change: =>
+    @timeout = nil
+    doc = @cm\getDoc!
+    if @lastState and doc\isClean @lastState
+      -- no changes since last event
+      return
+    
+    @lastState = doc\changeGeneration true
+    value = doc\getValue!
 
-        @fileder.facets[@key] = value
-        BROWSER\refresh!
+    @fileder.facets[@key] = value
+    BROWSER\refresh!
+```
 
 I chose the [CodeMirror][codemirror] library as the basis for the editor,
 because it seemed like one of the leanest ones I could find

@@ -3,10 +3,34 @@ markdown = if MODE == 'SERVER'
   assert success, "couldn't require 'discount'"
 
   (md) ->
-    res = assert discount.compile md, 'githubtags'
+    res = assert discount.compile md, 'githubtags', 'fencedcode'
     res.body
 else
   assert window and window.marked, "marked.js not found"
+
+  o = do
+    mkobj = window\eval "(function () { return {}; })"
+    (tbl) ->
+      with obj = mkobj!
+        for k,v in pairs(tbl)
+          obj[k] = v
+
+  trim = (str) -> str\match '^ *(..-) *$'
+
+  window.marked\setOptions o {
+    gfm: true
+    smartypants: true
+    langPrefix: 'lang-'
+    highlight: (code, lang) =>
+      code = trim code
+      result = if lang and #lang > 0
+        window.hljs\highlight lang, code, true
+      else
+        window.hljs\highlightAuto code
+
+      result.value
+  }
+
   window\marked
 
 assert markdown, "no markdown implementation found"
