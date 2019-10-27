@@ -1,9 +1,9 @@
 require = relative ..., 1
 import Key from require '.fileder'
-import converts from require '.plugins'
+import converts, editors from require '.plugins'
 import get_conversions, apply_conversions from require '.conversion'
 import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
-import pre, div, nav, span, button, a, code, select, option from elements
+import pre, div, nav, span, button, a, code, option from elements
 import languages from require 'mmm.highlighting'
 
 keep = (var) ->
@@ -12,15 +12,16 @@ keep = (var) ->
     last = val or last
     last
 
+combine = (...) ->
+  res = {}
+  lists = {...}
+  for list in *lists
+    for val in *list
+      table.insert res, val
+
+  res
+
 casts = {
-  {
-    inp: 'text/.*',
-    out: 'mmm/dom',
-    cost: 0
-    transform: (val) =>
-      lang = @from\match 'text/(.*)'
-      languages[lang] val
-  }
   {
     inp: 'URL.*'
     out: 'mmm/dom'
@@ -28,9 +29,7 @@ casts = {
     transform: (href) => span a (code href), :href
   }
 }
-
-for convert in *converts
-  table.insert casts, convert
+casts = combine casts, converts, editors
 
 export BROWSER
 class Browser
@@ -128,7 +127,7 @@ class Browser
 
           current = @facet\get!
           current = current and current.name
-          with select :onchange, disabled: not fileder, value: @facet\map (f) -> f and f.name
+          with elements.select :onchange, disabled: not fileder, value: @facet\map (f) -> f and f.name
             has_main = fileder and fileder\has_facet ''
             \append option '(main)', value: '', disabled: not has_main, selected: current == ''
             if fileder
@@ -146,11 +145,11 @@ class Browser
 
     -- append or patch #browser-content
     main\append with get_or_create 'div', 'browser-content', class: 'content'
-      content = ReactiveVar if rehydrate then .node.lastChild else @get_content @facet\get!
-      \append keep content
+      @content = ReactiveVar if rehydrate then .node.lastChild else @get_content @facet\get!
+      \append keep @content
       if MODE == 'CLIENT'
         @facet\subscribe (p) ->
-          window\setTimeout (-> content\set @get_content p), 150
+          window\setTimeout (-> @refresh p), 150
 
     if rehydrate
       -- force one rerender to set onclick handlers etc
@@ -165,6 +164,10 @@ class Browser
 
   err_and_trace = (msg) -> debug.traceback msg, 2
   default_convert = (key) => @get key.name, 'mmm/dom'
+
+  -- rerender main content
+  refresh: (facet=@facet\get!) =>
+    @content\set @get_content facet
 
   -- render #browser-content
   get_content: (prop, err=@error, convert=default_convert) =>
@@ -218,7 +221,7 @@ class Browser
             { :name } = @facet\get!
             @inspect_prop\set Key e.target.value
 
-          with select :onchange
+          with elements.select :onchange
             \append option '(none)', value: '', disabled: true, selected: not value
             if fileder
               for value in pairs fileder.facet_keys

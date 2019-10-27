@@ -134,8 +134,8 @@ class Fileder
 
         rawset t, k, v
 
-        v = k unless v == nil
-        @facet_keys[k] = v
+        if not v
+          @facet_keys[k] = nil
     }
 
     -- this fails with JS objects from JSON.parse

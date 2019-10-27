@@ -64,6 +64,11 @@ class Server
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
     <script type="text/javascript" src="//unpkg.com/mermaid@8.4.0/dist/mermaid.min.js"></script>
     <script type="text/javascript" src="//unpkg.com/marked@0.7.0/marked.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//unpkg.com/codemirror@5.49.2/lib/codemirror.css" />
+    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/lib/codemirror.js"></script>
+    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/mode/lua/lua.js"></script>
+    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/mode/markdown/markdown.js"></script>
+    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/addon/display/autorefresh.js"></script>
     <script type="text/javascript" src="/static/fengari-web/:text/javascript"></script>
     <script type="text/lua" src="/static/mmm/:text/lua"></script>
     <script type="text/lua">require 'mmm'; require 'mmm.mmmfs'</script>

@@ -4,12 +4,6 @@ import find_fileder, link_to, embed from (require 'mmm.mmmfs.util') require 'mmm
 import render from require '.layout'
 import tohtml from require 'mmm.component'
 
-keep = (var) ->
-  last = var\get!
-  var\map (val) ->
-    last = val or last
-    last
-
 -- fix JS null values
 js_fix = if MODE == 'CLIENT'
   (arg) ->
@@ -24,13 +18,14 @@ loadwith = (_load) -> (val, fileder, key) =>
   func = assert _load val, "#{fileder}##{key}"
   func!
 
--- list of converts
+-- list of converts, editors
 -- converts each have
 -- * inp - input type. can capture subtypes using `(.+)`
 -- * out - output type. can substitute subtypes from inp with %1, %2 etc.
 -- * cost - conversion cost
 -- * transform - function (val: inp, fileder) => val: out
 --               @convert, @from, @to contain the convert and the concrete types
+editors = {}
 converts = {
   {
     inp: 'fn -> (.+)',
@@ -256,6 +251,10 @@ add_converts = (module) ->
     for convert in *plugin.converts
       table.insert converts, convert
 
+  if plugin.editors
+    for editor in *plugin.editors
+      table.insert editors, editor
+
 add_converts 'code'
 add_converts 'markdown'
 add_converts 'mermaid'
@@ -289,4 +288,7 @@ else
       f!
   }
 
-:converts
+{
+  :converts
+  :editors
+}
