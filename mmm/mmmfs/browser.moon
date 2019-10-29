@@ -1,6 +1,5 @@
 require = relative ..., 1
 import Key from require '.fileder'
-import converts, editors from require '.plugins'
 import get_conversions, apply_conversions from require '.conversion'
 import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
 import pre, div, nav, span, button, a, code, option from elements
@@ -29,7 +28,7 @@ casts = {
     transform: (href) => span a (code href), :href
   }
 }
-casts = combine casts, converts, editors
+get_casts = -> combine casts, PLUGINS.converts, PLUGINS.editors
 
 export BROWSER
 class Browser
@@ -239,7 +238,7 @@ class Browser
             value, key = @get prop
             assert key, "couldn't @get #{prop}"
 
-            conversions = get_conversions 'mmm/dom', key.type, casts
+            conversions = get_conversions 'mmm/dom', key.type, get_casts
             assert conversions, "cannot cast '#{key.type}'"
             apply_conversions conversions, value, @, prop
 

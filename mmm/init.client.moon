@@ -1,10 +1,11 @@
-export MODE, print, warn, relative, on_load
+export MODE, UNSAFE, print, warn, relative, on_load
 export window, document
 
 window = js.global
 { :document, :console } = window
 
 MODE = 'CLIENT'
+UNSAFE = true
 
 deep_tostring = (tbl, space='') ->
   return tbl if 'userdata' == type tbl

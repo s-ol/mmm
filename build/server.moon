@@ -8,7 +8,6 @@ add '?/init'
 add '?/init.server'
 
 require 'mmm'
-require 'mmm.mmmfs'
 
 import dir_base, Key, Fileder from require 'mmm.mmmfs.fileder'
 import convert from require 'mmm.mmmfs.conversion'
@@ -21,8 +20,6 @@ lfs = require 'lfs'
 server = require 'http.server'
 headers = require 'http.headers'
 
-export UNSAFE
-
 class Server
   new: (@store, opts={}) =>
     opts = {k,v for k,v in pairs opts}
@@ -31,18 +28,28 @@ class Server
     opts.onstream = @\stream
     opts.onerror = @\error
 
-    if opts.host == 'localhost'
-      UNSAFE = true
-
-    @editable_paths = opts.editable_paths
-
     @server = server.listen opts
+
+    @flags = opts.flags
+
+    if @flags.rw == nil
+      @flags.rw = opts.host == 'localhost' or opts.host == '127.0.0.1'
+
+    if @flags.unsafe == nil
+      @flags.unsafe = opts.host == 'localhost' or opts.host == '127.0.0.1'
+
+    export UNSAFE
+    UNSAFE = @flags.unsafe
+    require 'mmm.mmmfs'
 
   listen: =>
     assert @server\listen!
 
     _, ip, port = @server\localname!
-    print "[#{@@__name}]", "running at #{ip}:#{port}"
+    print "[#{@@__name}]",
+          "running at #{ip}:#{port}",
+          "[#{table.concat [flag for flag,on in pairs @flags when on], ', '}]"
+
     assert @server\loop!
 
   handle_interactive: (fileder, facet) =>
@@ -88,9 +95,8 @@ class Server
       -- fileder not found
       404, "fileder '#{path}' not found"
 
-    if method != 'GET' and method != 'HEAD'
-      if not @editable_paths or not path\match @editable_paths
-        return 403, 'editing not allowed'
+    if not @flags.rw and method != 'GET' and method != 'HEAD'
+      return 403, 'editing not allowed'
 
     switch method
       when 'GET', 'HEAD'
@@ -164,13 +170,27 @@ class Server
     msg = "#{msg}: #{err}" if err
 
 -- usage:
--- moon server.moon [STORE] [host] [port] [editable-paths]
--- * STORE: see mmm/mmmfs/stores/init.moon:get_store
--- * host: interface to bind to (default localhost, set to 0.0.0.0 for public hosting)
--- * port: port to serve from, default 8000
--- * editable-paths: Lua pattern to match paths in which editing is allowed, default none
-{ store, host, port, editable_paths } = arg
+-- moon server.moon [FLAGS] [STORE] [host] [port]
+-- * FLAGS - any of the following:
+--   --[no-]rw     - enable/disable POST?PUT/DELETE operations                     (default: on if local)
+--   --[no-]unsafe - enable/disable server-side code execution when writable is on (default: on if local)
+-- * STORE - see mmm/mmmfs/stores/init.moon:get_store
+-- * host  - interface to bind to (default localhost, set to 0.0.0.0 for public hosting)
+-- * port  - port to serve from, default 8000
+
+flags = {}
+arguments = for a in *arg
+  if flag = a\match '^%-%-no%-(.*)$'
+    flags[flag] = false
+    continue
+  elseif flag = a\match '^%-%-(.*)$'
+    flags[flag] = true
+    continue
+  else
+    a
+
+{ store, host, port } = arguments
 
 store = get_store store
-server = Server store, :host, :editable_paths, port: port and tonumber port
+server = Server store, :flags, :host, port: port and tonumber port
 server\listen!
