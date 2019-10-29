@@ -133,17 +133,16 @@ class FSStore extends Store
     @log "creating facet #{path} | #{name}: #{type}"
     assert blob, "cant create facet without value!"
 
-    filepath = @tofp path, name, type
-    if lfs.attributes filepath, 'mode'
-      error "facet file already exists!"
+    filepath = @locate path, name, type
+    assert not filepath, "facet file already exists!"
 
+    filepath = @tofp path, name, type
     file = assert (io.open filepath, 'wb'), "couldn't open facet file '#{filepath}'"
     file\write blob
     file\close!
 
   remove_facet: (path, name, type) =>
     @log "removing facet #{path} | #{name}: #{type}"
-
     filepath = @locate path, name, type
     assert filepath, "couldn't locate facet!"
     assert os.remove filepath

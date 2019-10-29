@@ -43,6 +43,12 @@ class Key
 
   __tostring: => @tostring!
 
+-- stateless iterator for implementing __ipairs
+inext = (tbl, i) ->
+  i += 1
+  if v = tbl[i]
+    i, v
+
 -- Fileder itself
 -- contains:
 -- * @facets - Facet Map (Key to Value)
@@ -61,7 +67,7 @@ class Fileder
 
       __ipairs: (t) ->
         @load! unless @loaded
-        ipairs t
+        inext, t, 0
 
       __index: (t, k) ->
         @load! unless @loaded

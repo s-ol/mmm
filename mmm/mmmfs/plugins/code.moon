@@ -1,4 +1,4 @@
-import div, button from require 'mmm.dom'
+import pre, div, button from require 'mmm.dom'
 import languages from require 'mmm.highlighting'
 
 class Editor
