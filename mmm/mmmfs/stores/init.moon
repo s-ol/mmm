@@ -26,6 +26,21 @@ class Store
       children: [@get_index child, depth - 1 for child in @list_fileders_in path]
     }
 
+  create_fileder: => error "not implemented"
+  remove_fileder: => error "not implemented"
+  rename_fileder: => error "not implemented"
+  move_fileder: => error "not implemented"
+
+  list_facets: => error "not implemented"
+  create_facet: => error "not implemented"
+  remove_facet: => error "not implemented"
+  load_facet: => error "not implemented"
+  rename_facet: (path, name, type, next_name) =>
+    @log "renaming facet #{path} | #{name}: #{type} -> #{next_name}"
+    blob = assert "no such facet", @load_facet path, name, type
+    @create_facet path, next_name, type, blob
+    @remove_facet path, name, type  update_facet: => error "not implemented"
+
   close: =>
 
   log: (...) =>

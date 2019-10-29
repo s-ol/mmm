@@ -38,7 +38,43 @@ class Server
     print "[#{@@__name}]", "running at #{ip}:#{port}"
     assert @server\loop!
 
-  handle: (method, path, facet) =>
+  handle_interactive: (fileder, facet) =>
+    root = Fileder @store
+    browser = Browser root, fileder.path, facet.name
+
+    deps = [[
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
+    <script type="text/javascript" src="//unpkg.com/mermaid@8.4.0/dist/mermaid.min.js"></script>
+    <script type="text/javascript" src="//unpkg.com/marked@0.7.0/marked.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//unpkg.com/codemirror@5.49.2/lib/codemirror.css" />
+    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/lib/codemirror.js"></script>
+    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/mode/lua/lua.js"></script>
+    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/mode/markdown/markdown.js"></script>
+    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/addon/display/autorefresh.js"></script>
+    <script type="text/javascript" src="/static/fengari-web/:text/javascript"></script>
+    <script type="text/lua" src="/static/mmm/:text/lua"></script>
+    <script type="text/lua">require 'mmm'; require 'mmm.mmmfs'</script>]]
+
+    render browser\todom!, fileder, noview: true, scripts: deps .. "
+    <script type=\"text/lua\">
+      on_load = on_load or {}
+      table.insert(on_load, function()
+        local path = #{string.format '%q', fileder.path}
+        local facet = #{string.format '%q', facet.name}
+        local browser = require 'mmm.mmmfs.browser'
+        local fileder = require 'mmm.mmmfs.fileder'
+        local web = require 'mmm.mmmfs.stores.web'
+
+        local store = web.WebStore({ verbose = true })
+        local root = fileder.Fileder(store, store:get_index(nil, -1))
+
+        local err_and_trace = function (msg) return debug.traceback(msg, 2) end
+        local ok, browser = xpcall(browser.Browser, err_and_trace, root, path, facet, true)
+        if not ok then error(browser) end
+      end)
+    </script>"
+
+  handle: (method, path, facet, value) =>
     fileder = Fileder @store, path
 
     if not fileder
@@ -57,41 +93,7 @@ class Server
             convert 'table', facet.type, index, fileder, facet.name
           else
             if facet.type == 'text/html+interactive'
-              root = Fileder @store
-              browser = Browser root, path, facet.name
-
-              deps = [[
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js"></script>
-    <script type="text/javascript" src="//unpkg.com/mermaid@8.4.0/dist/mermaid.min.js"></script>
-    <script type="text/javascript" src="//unpkg.com/marked@0.7.0/marked.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="//unpkg.com/codemirror@5.49.2/lib/codemirror.css" />
-    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/lib/codemirror.js"></script>
-    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/mode/lua/lua.js"></script>
-    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/mode/markdown/markdown.js"></script>
-    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/addon/display/autorefresh.js"></script>
-    <script type="text/javascript" src="/static/fengari-web/:text/javascript"></script>
-    <script type="text/lua" src="/static/mmm/:text/lua"></script>
-    <script type="text/lua">require 'mmm'; require 'mmm.mmmfs'</script>
-              ]]
-
-              render browser\todom!, fileder, noview: true, scripts: deps .. "
-      <script type=\"text/lua\">
-        on_load = on_load or {}
-        table.insert(on_load, function()
-          local path = #{string.format '%q', path}
-          local facet = #{string.format '%q', facet.name}
-          local browser = require 'mmm.mmmfs.browser'
-          local fileder = require 'mmm.mmmfs.fileder'
-          local web = require 'mmm.mmmfs.stores.web'
-
-          local store = web.WebStore({ verbose = true })
-          local root = fileder.Fileder(store, store:get_index(nil, -1))
-
-          local err_and_trace = function (msg) return debug.traceback(msg, 2) end
-          local ok, browser = xpcall(browser.Browser, err_and_trace, root, path, facet, true)
-          if not ok then error(browser) end
-        end)
-      </script>"
+              @handle_interactive fileder, facet
             else if not fileder\has_facet facet.name
               404, "facet '#{facet.name}' not found in fileder '#{path}'"
             else
@@ -101,6 +103,15 @@ class Server
           200, val
         else
           406, "cant convert facet '#{facet.name}' to '#{facet.type}'"
+      when 'POST'
+        @store\create_facet path, facet.name, facet.type, value
+        200, 'ok'
+      when 'PUT'
+        @store\update_facet path, facet.name, facet.type, value
+        200, 'ok'
+      when 'DELETE'
+        @store\remove_facet path, facet.name, facet.type
+        200, 'ok'
       else
         501, "not implemented"
 
@@ -119,7 +130,8 @@ class Server
     type = type\match '%s*(.*)'
     facet = Key facet, type
 
-    ok, status, body = xpcall @.handle, err_and_trace, @, method, path, facet
+    value = stream\get_body_as_string!
+    ok, status, body = xpcall @.handle, err_and_trace, @, method, path, facet, value
     if not ok
       warn "Error handling request (#{method} #{path} #{facet}):\n#{status}"
       body = "Internal Server Error:\n#{status}"

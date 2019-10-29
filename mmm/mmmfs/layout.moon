@@ -130,8 +130,7 @@ render = (content, fileder, opts={}) ->
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/static/style/:text/css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />
-  ]]
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />]]
   buf ..= "
     #{get_meta fileder}
   </head>
@@ -140,19 +139,16 @@ render = (content, fileder, opts={}) ->
 
     #{content}
 
-    #{footer}
-  "
+    #{footer}"
   buf ..= [[
     <script type="text/javascript" src="/static/highlight-pack/:text/javascript"></script>
     <script type="text/javascript">hljs.initHighlighting()</script>
-    <script type="text/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-  ]]
+    <script type="text/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>]]
 
   buf ..= opts.scripts
   buf ..= "
   </body>
-</html>
-  "
+</html>"
 
   buf
 

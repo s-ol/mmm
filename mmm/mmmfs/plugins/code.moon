@@ -1,4 +1,4 @@
-import div from require 'mmm.dom'
+import div, button from require 'mmm.dom'
 import languages from require 'mmm.highlighting'
 
 class Editor
@@ -10,7 +10,27 @@ class Editor
           obj[k] = v
 
   new: (value, mode, @fileder, @key) =>
-    @node = div class: 'editor'
+    @node = div {
+      class: 'editor'
+      style:
+        display: 'flex'
+        'flex-direction': 'column'
+        'justify-content': 'space-around'
+
+      div {
+        style:
+          display: 'flex'
+          flex: '0'
+          'justify-content': 'flex-end'
+          'border-bottom': '2px solid var(--gray-dark)'
+          'padding-bottom': '0.5em'
+          'margin': '-0.5em 0 0.5em'
+
+        with @saveBtn = button 'save changes'
+          .disabled = true
+          .onclick = (_, e) -> @save e
+      }
+    }
     @cm = window\CodeMirror @node, o {
       :value
       :mode
@@ -20,22 +40,35 @@ class Editor
       theme: 'hybrid'
     }
 
+    @lastSave = @cm\getDoc!\changeGeneration true
+
     @cm\on 'changes', (_, mirr) ->
+      doc = @cm\getDoc!
+      @saveBtn.disabled = doc\isClean @lastSave
+
       window\clearTimeout @timeout if @timeout
       @timeout = window\setTimeout (-> @change!), 300
 
   change: =>
     @timeout = nil
     doc = @cm\getDoc!
-    if @lastState and doc\isClean @lastState
+
+    if @lastPreview and doc\isClean @lastPreview
       -- no changes since last event
       return
     
-    @lastState = doc\changeGeneration true
+    @lastPreview = doc\changeGeneration!
     value = doc\getValue!
 
     @fileder.facets[@key] = value
     BROWSER\refresh!
+
+  save: (e) =>
+    e\preventDefault!
+
+    doc = @cm\getDoc!
+    @fileder\set @key, doc\getValue!
+    @lastSave = doc\changeGeneration true
 
 -- syntax-highlighted code
 {

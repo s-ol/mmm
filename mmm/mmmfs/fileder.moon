@@ -278,6 +278,21 @@ class Fileder
     assert value, "#{@} doesn't have value for '#{want}'"
     value, key
 
+  -- set a facet value and propagate to the store
+  set: (key, key2, value) =>
+    if value
+      key = Key key, key2
+    else
+      key = Key key
+      value = key2
+
+    if @facet_keys[key]
+      @store\update_facet @path, key.name, key.type, value
+    else
+      @store\create_facet @path, key.name, key.type, value
+
+    @facets[key] = value
+
   __tostring: => "Fileder:#{@path}"
 
 {
