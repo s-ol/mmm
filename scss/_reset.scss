@@ -13,7 +13,12 @@ body, html, h1, h2, h3, h4, h5, h6 {
 }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; }
-input, select, button { color: initial; }
+input, select, button {
+  color: initial;
+  &:disabled {
+    color: graytext;
+  }
+}
 tt, code, kbd, samp { font-family: monospace; }
 code { font-size: 0.8em; }
 b, strong { font-weight: bold; }
