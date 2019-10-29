@@ -21,6 +21,8 @@ lfs = require 'lfs'
 server = require 'http.server'
 headers = require 'http.headers'
 
+export UNSAFE
+
 class Server
   new: (@store, opts={}) =>
     opts = {k,v for k,v in pairs opts}
@@ -28,6 +30,9 @@ class Server
     opts.port = 8000 unless opts.port
     opts.onstream = @\stream
     opts.onerror = @\error
+
+    if opts.host == 'localhost'
+      UNSAFE = true
 
     @editable_paths = opts.editable_paths
 

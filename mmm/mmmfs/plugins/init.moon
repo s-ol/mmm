@@ -130,12 +130,6 @@ converts = {
         parent.firstElementChild
   }
   {
-    inp: 'text/lua -> (.+)',
-    out: '%1',
-    cost: 0.5
-    transform: loadwith load or loadstring
-  }
-  {
     inp: 'mmm/tpl -> (.+)',
     out: '%1',
     cost: 1
@@ -238,6 +232,14 @@ converts = {
   }
 }
 
+if MODE == 'CLIENT' or UNSAFE
+  table.insert converts, {
+    inp: 'text/lua -> (.+)',
+    out: '%1',
+    cost: 0.5
+    transform: loadwith load or loadstring
+  }
+
 add_converts = (module) ->
   ok, plugin = pcall require, ".plugins.#{module}"
 
@@ -265,12 +267,13 @@ if MODE == 'SERVER'
   ok, moon = pcall require, 'moonscript.base'
   if ok
     _load = moon.load or moon.loadstring
-    table.insert converts, {
-      inp: 'text/moonscript -> (.+)',
-      out: '%1',
-      cost: 1
-      transform: loadwith moon.load or moon.loadstring
-    }
+    if UNSAFE
+      table.insert converts, {
+        inp: 'text/moonscript -> (.+)',
+        out: '%1',
+        cost: 1
+        transform: loadwith moon.load or moon.loadstring
+      }
 
     table.insert converts, {
       inp: 'text/moonscript -> (.+)',
