@@ -10,7 +10,7 @@ tourl = (path) ->
     path .. '/'
 
 (elements) ->
-  import a, div, pre from elements
+  import a, div, span, pre from elements
 
   find_fileder = (fileder, origin) ->
     if 'string' == type fileder
@@ -53,8 +53,9 @@ tourl = (path) ->
     ok, node = pcall fileder.gett, fileder, name, 'mmm/dom'
 
     if not ok
-      return div "couldn't embed #{fileder} #{name}",
+      return span "couldn't embed #{fileder} #{name}",
           (pre node),
+          class: 'embed'
           style: {
             background: 'var(--gray-fail)',
             padding: '1em',
@@ -64,7 +65,7 @@ tourl = (path) ->
     klass ..= ' desc' if opts.desc
     klass ..= ' inline' if opts.inline
 
-    node = div {
+    node = span {
       class: klass
       node
       if opts.desc
