@@ -11,7 +11,6 @@
 
   .markdown,
   .markdown > p,
-  .markdown > p > a,
   .markdown > a {
     > img, > video {
       display: block;
@@ -20,6 +19,10 @@
 
       padding: 0 2em;
       box-sizing: border-box;
+    }
+
+    a, p {
+      max-width: 100%;
     }
   }
 
@@ -38,6 +41,7 @@
   }
 
   .embed {
+    display: block;
     width: inherit;
     height: inherit;
 
@@ -54,6 +58,10 @@
       padding: 0.5em;
       margin: 0.2em;
       background: $gray-bright;
+    }
+
+    > *:not(.description) {
+      max-width: 100%;
     }
   }
 
