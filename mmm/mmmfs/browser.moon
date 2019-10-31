@@ -43,13 +43,13 @@ class Browser
 
     -- active fileder
     -- (re)set every time @path changes
-    @active = @path\map @root\walk
+    @fileder = @path\map @root\walk
 
     -- currently active facet
-    -- (re)set to default when @active changes
+    -- (re)set to default when @fileder changes
     @facet = ReactiveVar Key facet, 'mmm/dom'
     if MODE == 'CLIENT'
-      @active\subscribe (fileder) ->
+      @fileder\subscribe (fileder) ->
         return unless fileder
         last = @facet and @facet\get!
         @facet\set Key if last then last.type else 'mmm/dom'
@@ -119,7 +119,7 @@ class Browser
             \append path_segment name, href
 
         \append span 'view facet:', style: { 'margin-right': '0' }
-        \append @active\map (fileder) ->
+        \append @fileder\map (fileder) ->
           onchange = (_, e) ->
             { :type } = @facet\get!
             @facet\set Key name: e.target.value, :type
@@ -178,7 +178,7 @@ class Browser
       warn "ERROR rendering content: #{msg}"
       div!
 
-    active = @active\get!
+    active = @fileder\get!
 
     return disp_error "fileder not found!" unless active
     return disp_error "facet not found!" unless prop
@@ -201,7 +201,7 @@ class Browser
     -- active facet in inspect tab
     -- (re)set to match when @facet changes
     @inspect_prop = @facet\map (prop) ->
-      active = @active\get!
+      active = @fileder\get!
       key = active and active\find prop
       key = key.original if key and key.original
       key
@@ -213,21 +213,34 @@ class Browser
         span 'inspector'
         @inspect_prop\map (current) ->
           current = current and current\tostring!
-          fileder = @active\get!
+          fileder = @fileder\get!
 
           onchange = (_, e) ->
-            return if e.target.value == ''
-            { :name } = @facet\get!
-            @inspect_prop\set Key e.target.value
+            facet = e.target.value
+            return if facet == ''
+            @inspect_prop\set Key facet
 
           with elements.select :onchange
             \append option '(none)', value: '', disabled: true, selected: not value
             if fileder
               for value in pairs fileder.facet_keys
                 \append option value, :value, selected: value == current
-        @inspect\map (enabled) ->
-          if enabled
-            button 'close', onclick: (_, e) -> @inspect\set false
+
+        button 'rm', class: 'tight', onclick: (_, e) ->
+          if window\confirm "continuing will permanently remove the facet '#{@inspect_prop\get!}'."
+            fileder = @fileder\get!
+            fileder\set @inspect_prop\get!, nil
+            @fileder\set fileder -- trigger re-selection of active facet & inspector
+
+        button 'add', class: 'tight', onclick: (_, e) ->
+          facet = window\prompt "please enter the facet string ('name: type' or 'type'):", 'text/markdown'
+          return if not facet or facet == '' or facet == js.null
+          fileder = @fileder\get!
+          fileder\set facet, ''
+          @inspect_prop\set Key facet
+          @refresh!
+
+        button 'close', onclick: (_, e) -> @inspect\set false
       }
       \append with div class: @inspect_err\map (e) -> if e then 'error-wrap' else 'error-wrap empty'
         \append span "an error occured while rendering this view:"

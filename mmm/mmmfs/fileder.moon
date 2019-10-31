@@ -135,13 +135,18 @@ class Fileder
 
       __newindex: (t, k, v) ->
         -- get canonical Key instance
-        k = @facet_keys[k]
-        return unless k
+        key = @facet_keys[k]
 
-        rawset t, k, v
+        -- new creating, also create canonical Key
+        if not key
+          key = Key k
+          @facet_keys[key] = key
 
+        rawset t, key, v
+
+        -- when deleting, also delete canonical Key
         if not v
-          @facet_keys[k] = nil
+          @facet_keys[key] = nil
     }
 
     -- this fails with JS objects from JSON.parse
@@ -243,15 +248,15 @@ class Fileder
 
   -- find facet and type according to criteria, nil if no value or conversion path
   -- * ... - arguments like Key
-  find: (...) =>
-    want = Key ...
+  find: (key, key2, ...) =>
+    want = Key key, key2
 
     -- filter facets by name
     matching = [ key for str, key in pairs @facet_keys when key.name == want.name ]
     return unless #matching > 0
 
     -- get shortest conversion path
-    shortest_path, start = get_conversions want.type, [ key.type for key in *matching ]
+    shortest_path, start = get_conversions want.type, [ key.type for key in *matching ], ...
 
     if start
       for key in *matching
@@ -292,7 +297,9 @@ class Fileder
       key = Key key
       value = key2
 
-    if @facet_keys[key]
+    if value == nil
+      @store\remove_facet @path, key.name, key.type
+    elseif @facet_keys[key]
       @store\update_facet @path, key.name, key.type, value
     else
       @store\create_facet @path, key.name, key.type, value

@@ -56,7 +56,7 @@ converts = {
   {
     inp: 'text/html%+frag',
     out: 'mmm/dom',
-    cost: 1
+    cost: 0.1
     transform: if MODE == 'SERVER'
       (html, fileder) =>
         html = html\gsub '<mmm%-link%s+(.-)>(.-)</mmm%-link>', (attrs, text) ->

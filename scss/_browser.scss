@@ -72,6 +72,10 @@
     > .inspect-btn {
       @include media-small() { display: none; }
     }
+
+    .tight {
+      margin-left: 0;
+    }
   }
 
   .error-wrap {
