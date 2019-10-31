@@ -238,7 +238,7 @@ class Browser
             value, key = @get prop
             assert key, "couldn't @get #{prop}"
 
-            conversions = get_conversions 'mmm/dom', key.type, get_casts
+            conversions = get_conversions 'mmm/dom', key.type, get_casts!
             assert conversions, "cannot cast '#{key.type}'"
             apply_conversions conversions, value, @, prop
 

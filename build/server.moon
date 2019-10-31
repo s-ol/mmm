@@ -36,7 +36,7 @@ class Server
       @flags.rw = opts.host == 'localhost' or opts.host == '127.0.0.1'
 
     if @flags.unsafe == nil
-      @flags.unsafe = opts.host == 'localhost' or opts.host == '127.0.0.1'
+      @flags.unsafe = not @flags.rw or opts.host == 'localhost' or opts.host == '127.0.0.1'
 
     export UNSAFE
     UNSAFE = @flags.unsafe
@@ -173,7 +173,7 @@ class Server
 -- moon server.moon [FLAGS] [STORE] [host] [port]
 -- * FLAGS - any of the following:
 --   --[no-]rw     - enable/disable POST?PUT/DELETE operations                     (default: on if local)
---   --[no-]unsafe - enable/disable server-side code execution when writable is on (default: on if local)
+--   --[no-]unsafe - enable/disable server-side code execution when writable is on (default: on if local or --no-rw)
 -- * STORE - see mmm/mmmfs/stores/init.moon:get_store
 -- * host  - interface to bind to (default localhost, set to 0.0.0.0 for public hosting)
 -- * port  - port to serve from, default 8000
