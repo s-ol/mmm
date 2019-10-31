@@ -10,7 +10,7 @@ add '?/init.server'
 require 'mmm'
 
 import dir_base, Key, Fileder from require 'mmm.mmmfs.fileder'
-import convert from require 'mmm.mmmfs.conversion'
+import convert, MermaidDebugger from require 'mmm.mmmfs.conversion'
 import get_store from require 'mmm.mmmfs.stores'
 import render from require 'mmm.mmmfs.layout'
 import Browser from require 'mmm.mmmfs.browser'
@@ -88,6 +88,11 @@ class Server
       end)
     </script>"
 
+  handle_debug: (fileder, facet) =>
+    debugger = MermaidDebugger!
+    fileder\find facet, nil, nil, nil, debugger
+    convert 'text/mermaid-graph', 'text/html', debugger\render!, fileder, facet.name
+
   handle: (method, path, facet, value) =>
     fileder = Fileder @store, path
 
@@ -111,6 +116,9 @@ class Server
           else
             if facet.type == 'text/html+interactive'
               @handle_interactive fileder, facet
+            else if base = facet.type\match '^DEBUG %-> (.*)'
+              facet.type = base
+              @handle_debug fileder, facet
             else if not fileder\has_facet facet.name
               404, "facet '#{facet.name}' not found in fileder '#{path}'"
             else

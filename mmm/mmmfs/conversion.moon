@@ -7,12 +7,51 @@ escape_inp = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
 
 local print_conversions
 
+class MermaidDebugger
+  new: =>
+    nextid = 0
+    @type_id = setmetatable {}, __index: (t, k) ->
+      nextid += 1
+      with val = "type-#{nextid}"
+        t[k] = val
+
+    @cost = {}
+    @buf = "graph TD\n"
+
+  append: (line) =>
+    @buf ..= "  #{line}\n"
+
+  found_type: (type) =>
+    type_id = @type_id[type]
+
+  type_cost: (type, cost) =>
+    if old_cost = @cost[type]
+      cost = math.min old_cost, cost
+    @cost[type] = cost
+
+  type_class: (type, klass) =>
+    @append "class #{@type_id[type]} #{klass}"
+
+  found_link: (frm, to, cost) =>
+    @append "#{@type_id[frm]} -- cost: #{cost} --> #{@type_id[to]}"
+
+  render: =>
+    for type, id in pairs @type_id
+      cost = @cost[type] or -1
+      @append "#{id}[\"#{type} [#{cost}]\"]"
+
+    @append "classDef have fill:#ada"
+    @append "classDef want fill:#add"
+
+    @buf
+
 -- attempt to find a conversion path from 'have' to 'want'
 -- * have - start type string or list of type strings
 -- * want - stop type pattern
 -- * limit - limit conversion amount
+-- * debug - a table with debug hooks
 -- returns a list of conversion steps
-get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5) ->
+get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5, debug) ->
   assert have, 'need starting type(s)'
   assert converts,  'need to pass list of converts'
 
@@ -29,6 +68,11 @@ get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5) -
   for start in *have
     return {}, start if want\match start
     queue\add { :start, rest: start, conversions: {} }, 0, start
+
+    if debug
+      debug\found_type start
+      debug\type_cost start, 0
+      debug\type_class start, 'have'
 
   best = Queue!
 
@@ -53,11 +97,16 @@ get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5) -
         conversions: { { :convert, from: rest, to: result }, table.unpack conversions }
       }
 
+      if debug
+        debug\found_type result
+        debug\type_cost result, next_entry.cost
+        debug\found_link rest, result, convert.cost
+
       if result\match want
+        debug\type_class result, 'want' if debug
         best\add next_entry, next_entry.cost
       else
         queue\add next_entry, next_entry.cost, result
-
 
   if solution = best\pop!
     -- print "BEST: (#{solution.cost})"
@@ -106,6 +155,8 @@ convert = (have, want, value, ...) ->
   apply_conversions conversions, value, ...
 
 {
+  :MermaidDebugger
+
   :get_conversions
   :apply_conversions
   :convert
