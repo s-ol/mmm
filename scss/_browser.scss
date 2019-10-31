@@ -42,6 +42,14 @@
         flex: 1;
       }
     }
+
+    .children {
+      margin: 0;
+      padding: 1em;
+
+      align-self: stretch;
+      background: $gray-darker;
+    }
   }
 
   nav {

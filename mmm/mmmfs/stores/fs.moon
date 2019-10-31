@@ -50,8 +50,8 @@ class FSStore extends Store
         coroutine.yield path
 
   create_fileder: (parent, name) =>
-    @log "creating fileder #{path}"
     path = "#{parent}/#{name}"
+    @log "creating fileder #{path}"
     assert lfs.mkdir @root .. path
     path
 

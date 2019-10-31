@@ -2,7 +2,8 @@ require = relative ..., 1
 import Key from require '.fileder'
 import get_conversions, apply_conversions from require '.conversion'
 import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
-import pre, div, nav, span, button, a, code, option from elements
+import pre, div, nav, span, button, a, code, select, option from elements
+import link_to from (require '.util') elements
 import languages from require 'mmm.highlighting'
 
 keep = (var) ->
@@ -166,7 +167,10 @@ class Browser
 
   -- rerender main content
   refresh: (facet=@facet\get!) =>
-    @content\set @get_content facet
+    if facet == true -- deep refresh
+      @fileder\transform (i) -> i
+    else
+      @content\set @get_content facet
 
   -- render #browser-content
   get_content: (prop, err=@error, convert=default_convert) =>
@@ -220,8 +224,7 @@ class Browser
             return if facet == ''
             @inspect_prop\set Key facet
 
-          with elements.select :onchange
-            \append option '(none)', value: '', disabled: true, selected: not value
+          with select :onchange \append option '(none)', value: '', disabled: true, selected: not value
             if fileder
               for value in pairs fileder.facet_keys
                 \append option value, :value, selected: value == current
@@ -230,7 +233,7 @@ class Browser
           if window\confirm "continuing will permanently remove the facet '#{@inspect_prop\get!}'."
             fileder = @fileder\get!
             fileder\set @inspect_prop\get!, nil
-            @fileder\set fileder -- trigger re-selection of active facet & inspector
+            @refresh true
 
         button 'add', class: 'tight', onclick: (_, e) ->
           facet = window\prompt "please enter the facet string ('name: type' or 'type'):", 'text/markdown'
@@ -254,6 +257,41 @@ class Browser
             conversions = get_conversions 'mmm/dom', key.type, get_casts!
             assert conversions, "cannot cast '#{key.type}'"
             apply_conversions conversions, value, @, prop
+
+      \append nav {
+        span 'children'
+        button 'add', onclick: (_, e) ->
+          name = window\prompt "please enter the name of the child fileder:", 'unnamed_fileder'
+          return if not name or name == '' or name == js.null
+          child = @fileder\get!\add_child name
+          @refresh true
+      }
+      \append @fileder\map (fileder) ->
+        with div class: 'children'
+          num = #fileder.children
+          for i, child in ipairs fileder.children
+            name = child\gett 'name: alpha'
+            \append div {
+              style:
+                display: 'flex'
+                'justify-content': 'space-between'
+
+              span '- ', (link_to child, code name), style: flex: 1
+
+              button '↑', disabled: i == 1, onclick: (_, e) ->
+                fileder\reorder_child name, i - 1
+                @refresh true
+
+              button '↓', disabled: i == num, onclick: (_, e) ->
+                fileder\reorder_child name, i + 1
+                @refresh true
+
+              button 'rm', onclick: (_, e) ->
+                if window\confirm "continuing will permanently remove all content in '#{child.path}'."
+                  fileder\remove_child i
+                  @refresh true
+            }
+
 
   default_convert = (key) => @get key.name, 'mmm/dom'
 

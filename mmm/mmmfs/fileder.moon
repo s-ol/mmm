@@ -306,6 +306,18 @@ class Fileder
 
     @facets[key] = value
 
+  -- add a child fileder with given name
+  add_child: (name) =>
+    new_path = @store\create_fileder @path, name
+    with new_child = Fileder @store, new_path
+      table.insert @children, new_child
+
+  -- remove a child with given index
+  remove_child: (i) =>
+    removed = table.remove @children, i
+    assert removed, "no such child fileder"
+    @store\remove_fileder removed.path
+
   __tostring: => "Fileder:#{@path}"
 
 {

@@ -94,17 +94,16 @@ class Server
     convert 'text/mermaid-graph', 'text/html', debugger\render!, fileder, facet.name
 
   handle: (method, path, facet, value) =>
-    fileder = Fileder @store, path
-
-    if not fileder
-      -- fileder not found
-      404, "fileder '#{path}' not found"
-
     if not @flags.rw and method != 'GET' and method != 'HEAD'
       return 403, 'editing not allowed'
 
     switch method
       when 'GET', 'HEAD'
+        fileder = Fileder @store, path
+        if not fileder
+          -- fileder not found
+          return 404, "fileder '#{path}' not found"
+
         val = switch facet.name
           when '?index', '?tree'
             -- serve fileder index
@@ -129,13 +128,22 @@ class Server
         else
           406, "cant convert facet '#{facet.name}' to '#{facet.type}'"
       when 'POST'
-        @store\create_facet path, facet.name, facet.type, value
-        200, 'ok'
+        if facet
+          @store\create_facet path, facet.name, facet.type, value
+          200, 'ok'
+        else
+          200, @store\create_fileder dir_base path
       when 'PUT'
-        @store\update_facet path, facet.name, facet.type, value
-        200, 'ok'
+        if facet
+          @store\update_facet path, facet.name, facet.type, value
+          200, 'ok'
+        else
+          501, "not implemented"
       when 'DELETE'
-        @store\remove_facet path, facet.name, facet.type
+        if facet
+          @store\remove_facet path, facet.name, facet.type
+        else
+          @store\remove_fileder path
         200, 'ok'
       else
         501, "not implemented"
@@ -151,9 +159,12 @@ class Server
     path_facet or= path
     path, facet = path_facet\match '(.*)/([^/]*)'
 
-    type or= 'text/html+interactive'
-    type = type\match '%s*(.*)'
-    facet = Key facet, type
+    facet = if facet == '' and method ~= 'GET' and method ~= 'HEAD'
+      nil
+    else
+      type or= 'text/html+interactive'
+      type = type\match '%s*(.*)'
+      Key facet, type
 
     value = stream\get_body_as_string!
     ok, status, body = xpcall @.handle, err_and_trace, @, method, path, facet, value

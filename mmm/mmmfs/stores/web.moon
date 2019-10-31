@@ -61,12 +61,13 @@ class WebStore extends Store
         coroutine.yield child.path
 
   create_fileder: (parent, name) =>
+    path = "#{parent}/#{name}"
     @log "creating fileder #{path}"
-    error "not implemented"
+    req 'POST', "#{@host .. path}/"
 
   remove_fileder: (path) =>
     @log "removing fileder #{path}"
-    error "not implemented"
+    req 'DELETE', "#{@host .. path}/"
 
   rename_fileder: (path, next_name) =>
     @log "renaming fileder #{path} -> '#{next_name}'"
