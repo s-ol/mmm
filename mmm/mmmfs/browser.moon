@@ -213,8 +213,10 @@ class Browser
     @inspect_err = ReactiveVar!
 
     with div class: 'view inspector'
+      -- nav
       \append nav {
         span 'inspector'
+
         @inspect_prop\map (current) ->
           current = current and current\tostring!
           fileder = @fileder\get!
@@ -224,7 +226,8 @@ class Browser
             return if facet == ''
             @inspect_prop\set Key facet
 
-          with select :onchange \append option '(none)', value: '', disabled: true, selected: not value
+          with select :onchange
+            \append option '(none)', value: '', disabled: true, selected: not value
             if fileder
               for value in pairs fileder.facet_keys
                 \append option value, :value, selected: value == current
@@ -245,6 +248,8 @@ class Browser
 
         button 'close', onclick: (_, e) -> @inspect\set false
       }
+
+      -- error / content
       \append with div class: @inspect_err\map (e) -> if e then 'error-wrap' else 'error-wrap empty'
         \append span "an error occured while rendering this view:"
         \append @inspect_err
@@ -258,7 +263,10 @@ class Browser
             assert conversions, "cannot cast '#{key.type}'"
             apply_conversions conversions, value, @, prop
 
+      -- children
       \append nav {
+        class: 'thing'
+
         span 'children'
         button 'add', onclick: (_, e) ->
           name = window\prompt "please enter the name of the child fileder:", 'unnamed_fileder'

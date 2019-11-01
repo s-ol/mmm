@@ -77,6 +77,10 @@
       white-space: nowrap;
     }
 
+    &.thin > * {
+      margin: 0.5em 1em;
+    }
+
     > .inspect-btn {
       @include media-small() { display: none; }
     }
