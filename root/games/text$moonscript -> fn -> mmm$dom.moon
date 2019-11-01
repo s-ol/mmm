@@ -11,7 +11,7 @@ import ropairs from require 'mmm.ordered'
       children = for k, child in ropairs games
         desc = child\gett 'description: mmm/dom'
         jam = if link = child\get 'jam: mmm/dom'
-          span '[', link, ']', style: { float: 'right', color: 'var(--gray-dark)' }
+          span '[', link, ']', style: float: 'right', clear: 'right', color: 'var(--gray-dark)'
 
         li (link_to child), ': ', desc, jam
 
