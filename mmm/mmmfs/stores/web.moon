@@ -77,6 +77,9 @@ class WebStore extends Store
     @log "moving fileder #{path} -> #{next_parent}/"
     error "not implemented"
 
+  swap_fileders: (parent, child_a, child_b) =>
+    req 'PUT', "#{@host .. parent}/", "swap\n#{child_a}\n#{child_b}"
+
   -- facets
   list_facets: (path) =>
     coroutine.wrap ->

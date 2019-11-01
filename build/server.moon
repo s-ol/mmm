@@ -138,7 +138,18 @@ class Server
           @store\update_facet path, facet.name, facet.type, value
           200, 'ok'
         else
-          501, "not implemented"
+          cmd, args = value\match '^([^\n]+)\n(.*)'
+          switch cmd
+            when 'swap'
+              child_a, child_b = args\match '^([^\n]+)\n([^\n]+)$'
+              assert child_a and child_b, "invalid arguments"
+
+              @store\swap_fileders path, child_a, child_b
+              200, 'ok'
+            when nil
+              400, "invalid request"
+            else
+              501, "unknown command #{cmd}"
       when 'DELETE'
         if facet
           @store\remove_facet path, facet.name, facet.type
@@ -175,8 +186,9 @@ class Server
 
     res = headers.new!
     response_type = if status > 299 then 'text/plain'
-    else if facet.type == 'text/html+interactive' then 'text/html'
-    else facet.type
+    else if facet and facet.type == 'text/html+interactive' then 'text/html'
+    else if facet then facet.type
+    else 'text/plain'
     res\append ':status', tostring status
     res\append 'content-type', response_type
 

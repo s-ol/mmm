@@ -279,11 +279,11 @@ class Browser
               span '- ', (link_to child, code name), style: flex: 1
 
               button '↑', disabled: i == 1, onclick: (_, e) ->
-                fileder\reorder_child name, i - 1
+                fileder\swap_children i, i - 1
                 @refresh true
 
               button '↓', disabled: i == num, onclick: (_, e) ->
-                fileder\reorder_child name, i + 1
+                fileder\swap_children i, i + 1
                 @refresh true
 
               button 'rm', onclick: (_, e) ->

@@ -79,6 +79,7 @@ class Fileder
 
       __newindex: (t, k, child) ->
         rawset t, k, child
+        return if child.path
 
         if @path == '/'
           child\mount '/'
@@ -317,6 +318,11 @@ class Fileder
     removed = table.remove @children, i
     assert removed, "no such child fileder"
     @store\remove_fileder removed.path
+
+  swap_children: (ia, ib) =>
+    a, b = @children[ia], @children[ib]
+    @store\swap_fileders @path, (a\gett 'name: alpha'), (b\gett 'name: alpha')
+    @children[ia], @children[ib] = b, a
 
   __tostring: => "Fileder:#{@path}"
 
