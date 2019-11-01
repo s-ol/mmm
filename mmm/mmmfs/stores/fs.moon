@@ -21,38 +21,63 @@ class FSStore extends Store
     @log "opening '#{opts.root}'..."
 
   -- fileders
-  list_fileders_in: (path='') =>
+  get_order: (path, forgiving=false) =>
     entries = {}
-    for entry_name in lfs.dir @root .. path
-      continue if '.' == entry_name\sub 1, 1
-      entry_path = @root .. "#{path}/#{entry_name}"
+    for name in lfs.dir @root .. path
+      continue if '.' == name\sub 1, 1
+      entry_path = @root .. "#{path}/#{name}"
       if 'directory' ~= lfs.attributes entry_path, 'mode'
         continue
 
-      entries[entry_name] = "#{path}/#{entry_name}"
+      entries[name] = :name, path: "#{path}/#{name}"
 
     sorted = {}
-
     order_file = @root .. "#{path}/$order"
     if 'file' == lfs.attributes order_file, 'mode'
       for line in io.lines order_file
-        path = assert entries[line], "entry in $order but not on disk: #{line}"
-        table.insert sorted, path
+        entry = entries[line]
+        if not entry
+          if forgiving
+            @log "removed stale entry '#{line}' from #{path}/$order"
+            continue
+          error "entry in $order but not on disk: #{line}"
+
+        table.insert sorted, entry
         sorted[line] = true
 
-    entries = [path for entry, path in pairs entries when not sorted[entry]]
-    table.sort entries
-    for path in *entries
-      table.insert sorted, path
+    unsorted = [entry for name, entry in pairs entries when not sorted[entry.name]]
+    if forgiving
+      for entry in *unsorted
+        @log "adding new entry '#{entry.name}' in #{path}/$order"
+        table.insert sorted, entry
+    else
+      assert #unsorted == 0, unsorted[1] and "entry on disk but not in $order: #{unsorted[1].path}"
+
+    sorted
+
+  write_order: (path, order=@get_order path, true) =>
+    order_file = @root .. "#{path}/$order"
+    if #order == 0
+      os.remove order_file
+      return
+
+    file = assert io.open order_file, 'w'
+    for { :name } in *order
+      file\write "#{name}\n"
+    file\close!
+
+  list_fileders_in: (path='') =>
+    sorted = @get_order path
 
     coroutine.wrap ->
-      for path in *sorted
+      for { :path } in *sorted
         coroutine.yield path
 
   create_fileder: (parent, name) =>
     path = "#{parent}/#{name}"
     @log "creating fileder #{path}"
     assert lfs.mkdir @root .. path
+    @write_order parent
     path
 
   remove_fileder: (path) =>
@@ -73,6 +98,9 @@ class FSStore extends Store
 
     rmdir @root .. path
 
+    parent = dir_base path
+    @write_order parent
+
   rename_fileder: (path, next_name) =>
     @log "renaming fileder #{path} -> '#{next_name}'"
     parent, name = dir_base path
@@ -82,6 +110,22 @@ class FSStore extends Store
     @log "moving fileder #{path} -> #{next_parent}/"
     parent, name = dir_base path
     assert os.rename @root .. path, @root .. "#{next_parent}/#{name}"
+
+  -- swap two childrens' order
+  swap_fileders: (parent, name_a, name_b) =>
+    @log "swapping #{name_a} and #{name_b} in #{parent}"
+    order = @get_order parent
+    local a, b
+    for i, entry in ipairs order
+      a = i if entry.name == name_a
+      b = i if entry.name == name_b
+      break if a and b
+
+    assert a, "couldn't find #{parent}/#{name_a} in $order"
+    assert b, "couldn't find #{parent}/#{name_b} in $order"
+
+    order[a], order[b] = order[b], order[a]
+    @write_order parent, order
 
   -- facets
   list_facets: (path) =>
@@ -160,6 +204,14 @@ class FSStore extends Store
     file = assert (io.open filepath, 'wb'), "couldn't open facet file '#{filepath}'"
     file\write blob
     file\close!
+
+  -- fsck
+  fsck: (path='') =>
+    order = @get_order path, true
+    @write_order path, order
+
+    for { :path } in *order
+      @fsck path
 
 {
   :FSStore

@@ -42,13 +42,14 @@ class Store
     @remove_facet path, name, type  update_facet: => error "not implemented"
 
   close: =>
+  fsck: =>
 
   log: (...) =>
     print "[#{@@__name}]", ...
 
 -- instantiate a store from a CLI arg
 -- e.g.: sql, fs:/path/to/root, sql:MEMORY, sql:db.sqlite3
-get_store = (args='sql', opts={verbose: true}) ->
+get_store = (args='sql', opts={}) ->
   type, arg = args\match '(%w+):(.*)'
   type = args unless type
 
