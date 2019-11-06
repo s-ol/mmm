@@ -170,7 +170,7 @@ class Server
     path_facet or= path
     path, facet = path_facet\match '(.*)/([^/]*)'
 
-    facet = if facet == '' and method ~= 'GET' and method ~= 'HEAD'
+    facet = if facet == '' and type == '' and method ~= 'GET' and method ~= 'HEAD'
       nil
     else
       type or= 'text/html+interactive'
