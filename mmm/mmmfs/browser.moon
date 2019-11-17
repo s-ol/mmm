@@ -99,7 +99,7 @@ class Browser
         .node.innerHTML = ''
         \append span 'path: ', @path\map (path) -> with div class: 'path', style: { display: 'inline-block' }
           path_segment = (name, href) ->
-            a name, :href, onclick: (_, e) ->
+            a name, href: "#{href}/", onclick: (_, e) ->
               e\preventDefault!
               @navigate href
 
