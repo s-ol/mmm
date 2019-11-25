@@ -189,31 +189,6 @@ converts = {
   }
   {
     inp: 'table',
-    out: 'text/json',
-    cost: 2
-    transform: do
-      tojson = (obj) ->
-        switch type obj
-          when 'string'
-            string.format '%q', obj
-          when 'table'
-            if obj[1] or not next obj
-              "[#{table.concat [tojson c for c in *obj], ','}]"
-            else
-              "{#{table.concat ["#{tojson k}: #{tojson v}" for k,v in pairs obj], ', '}}"
-          when 'number'
-            tostring obj
-          when 'boolean'
-            tostring obj
-          when 'nil'
-            'null'
-          else
-            error "unknown type '#{type obj}'"
-
-      (val) => tojson val
-  }
-  {
-    inp: 'table',
     out: 'mmm/dom',
     cost: 5
     transform: do
@@ -258,6 +233,7 @@ add_converts = (module) ->
       table.insert editors, editor
 
 add_converts 'code'
+add_converts 'json'
 add_converts 'markdown'
 add_converts 'mermaid'
 add_converts 'twitter'
