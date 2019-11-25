@@ -7,7 +7,7 @@ In the last two days I implemented the remaining features for full editing suppo
 
 Here is a short demo video of these features:
 
-<mmm-embed path="demo"></mmm-embed>
+<mmm-embed nolink path="demo"></mmm-embed>
 
 As usual, this can be tried out immediately at [`sandbox.s-ol.nu`](//sandbox.s-ol.nu)
 
