@@ -42,13 +42,21 @@ You can do this with the following command:
     $ tup monitor -f -a
 
 ### Dependencies
-You will need:
+
+Required dependencies:
 
 - [MoonScript][moonscript]: `luarocks install moonscript`
-- [lua-sqlite3](https://luarocks.org/modules/moteus/sqlite3): `luarocks install sqlite3`
 - [lua-http](https://github.com/daurnimator/lua-http): `luarocks install http`
-- [discount](https://luarocks.org/modules/craigb/discount): `luarocks install discount` (requires libmarkdown2)
-- [busted](https://olivinelabs.com/busted/): `luarocks install busted` (for testing only)
+ 
+For unit tests:
+
+- [busted](https://olivinelabs.com/busted/): `luarocks install busted`
+
+Not required but recommended:
+
+- [lua-sqlite3](https://luarocks.org/modules/moteus/sqlite3): `luarocks install sqlite3` (for SQLite3 backend)
+- [lua-cjson](https://www.kyne.com.au/~mark/software/lua-cjson.php): `luarocks install lua-cjson 2.1.0-1` (for server-side JSON support)
+- [discount](https://luarocks.org/modules/craigb/discount): `luarocks install discount` (requires libmarkdown2, for Markdown support)
 
 ### Live Reloading (during development)
 [entr][entr] is useful for reloading the dev server when code outside the root changes:
