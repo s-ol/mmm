@@ -42,7 +42,7 @@ The problem with this is that it simply doesn't look very good.  When the ratio 
 but otherwise the empty space makes the screen look empty (especially if there are system UI elements next to it).
 
 ## step two: `perforate`
-So how can this be imroved? We would like to use the unused space on the x or y axis, but we can't just scale everything up,
+So how can this be improved? We would like to use the unused space on the x or y axis, but we can't just scale everything up,
 or we would start cropping important pieces of UI. Stretching the game to fill the screen also doesn't work for obvious reasons.
 
 To proceed, the UI has to be 'perforated' into different sections that are independent from each other.
