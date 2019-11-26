@@ -7,9 +7,10 @@ RUN apt-get update && \
       build-essential m4 tup sassc \
       libmarkdown2-dev libsqlite3-dev libssl-dev
 RUN luarocks install discount DISCOUNT_INCDIR=/usr/include/x86_64-linux-gnu
-RUN luarocks install moonscript
-RUN luarocks install sqlite3
-RUN luarocks install http
+RUN luarocks install sqlite3 && \
+    luarocks install moonscript && \
+    luarocks install http && \
+    luarocks install lua-cjson 2.1.0-1
 
 COPY . /code
 WORKDIR /code
