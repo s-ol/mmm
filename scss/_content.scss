@@ -7,6 +7,10 @@
   .markdown {
     max-width: 640px;
     position: relative;
+
+    &.fullwidth {
+      max-width: max-content;
+    }
   }
 
   .markdown,

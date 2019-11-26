@@ -241,6 +241,11 @@ do
       out: 'text/html',
       transform: (md) -> "<div class=\"markdown\">#{markdown md}</div>"
     }
+    table.insert converts, {
+      inp: 'text/markdown%+fullwidth',
+      out: 'text/html',
+      transform: (md) -> "<div class=\"markdown fullwidth\">#{markdown md}</div>"
+    }
 
     table.insert converts, {
       inp: 'text/markdown%+span',
