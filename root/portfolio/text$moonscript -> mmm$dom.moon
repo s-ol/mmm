@@ -15,7 +15,7 @@ projects = {
     {
       name: 'Vectronom / Ludopium'
       desc: 'Technical Artist, Game Development'
-      extra: 'July - Decemer 2019'
+      extra: 'July 2018 - Decemer 2019'
       content: padded_ul {
         li text 'Unity/C# development (gameplay, UI, tools)'
         li {
