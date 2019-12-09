@@ -9,28 +9,15 @@ class Editor
         for k,v in pairs(tbl)
           obj[k] = v
 
+  EDITOR: true
+
   new: (value, mode, @fileder, @key) =>
-    @node = div {
-      class: 'editor'
-      style:
-        display: 'flex'
-        'flex-direction': 'column'
-        'justify-content': 'space-around'
+    @node = div class: 'editor'
 
-      div {
-        style:
-          display: 'flex'
-          flex: '0'
-          'justify-content': 'flex-end'
-          'border-bottom': '2px solid var(--gray-dark)'
-          'padding-bottom': '0.5em'
-          'margin': '-0.5em 0 0.5em'
+    @saveBtn = with button 'save'
+      .disabled = true
+      .onclick = (_, e) -> @save e
 
-        with @saveBtn = button 'save changes'
-          .disabled = true
-          .onclick = (_, e) -> @save e
-      }
-    }
     @cm = window\CodeMirror @node, o {
       :value
       :mode

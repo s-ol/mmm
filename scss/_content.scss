@@ -5,8 +5,12 @@
   }
 
   .markdown {
-    max-width: 640px;
     position: relative;
+    max-width: 640px;
+
+    &.wide {
+      max-width: max-content;
+    }
   }
 
   .markdown,

@@ -126,7 +126,7 @@ print_conversions = (conversions) ->
 -- * value - value
 -- * ... - other transform parameters (fileder, key)
 -- returns converted value
-err_and_trace = (msg) -> debug.traceback msg, 2
+err_and_trace = (msg) -> debug.traceback msg, 1
 apply_conversions = (conversions, value, ...) ->
   for i=#conversions,1,-1
     step = conversions[i]

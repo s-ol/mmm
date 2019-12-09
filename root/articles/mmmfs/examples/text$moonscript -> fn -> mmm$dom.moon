@@ -28,5 +28,9 @@
       },
     }
 
-  div for child in *@children
+  content = for child in *@children
     preview child
+
+  table.insert content, 1, (@gett 'intro: mmm/dom')
+
+  div content

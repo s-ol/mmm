@@ -211,11 +211,24 @@ class Browser
       key
 
     @inspect_err = ReactiveVar!
+    @editor = ReactiveVar!
 
     with div class: 'view inspector'
       -- nav
       \append nav {
         span 'inspector'
+
+        button 'close', onclick: (_, e) -> @inspect\set false
+      }
+
+      \append div {
+        class: 'subnav'
+
+        ondrop: ->
+          print "dropped"
+
+        onpaste: ->
+          print "pasted"
 
         @inspect_prop\map (current) ->
           current = current and current\tostring!
@@ -246,7 +259,9 @@ class Browser
           @inspect_prop\set Key facet
           @refresh!
 
-        button 'close', onclick: (_, e) -> @inspect\set false
+        div style: flex: '1'
+
+        @editor\map (e) -> e and e.saveBtn
       }
 
       -- error / content
@@ -255,13 +270,14 @@ class Browser
         \append @inspect_err
       \append with pre class: 'content'
         \append keep @inspect_prop\map (prop, old) ->
-          @get_content prop, @inspect_err, (prop) =>
-            value, key = @get prop
+          @get_content prop, @inspect_err, (fileder, prop) ->
+            value, key = fileder\get prop
             assert key, "couldn't @get #{prop}"
 
             conversions = get_conversions 'mmm/dom', key.type, get_casts!
             assert conversions, "cannot cast '#{key.type}'"
-            apply_conversions conversions, value, @, prop
+            with res = apply_conversions conversions, value, fileder, prop
+              @editor\set if res.EDITOR then res
 
       -- children
       \append nav {

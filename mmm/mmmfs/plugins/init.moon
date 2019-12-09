@@ -116,6 +116,7 @@ converts = {
             desc = js_fix element.innerText
             desc = nil if desc == ''
 
+            embedded = embed path or '', facet or '', fileder, { :nolink, :inline, :desc }
             element\replaceWith embed path or '', facet or '', fileder, { :nolink, :inline, :desc }
 
           embeds = \getElementsByTagName 'mmm-link'
@@ -181,6 +182,27 @@ converts = {
   --   out: 'mmm/dom',
   --   transform: single code
   -- }
+  {
+    inp: 'URL -> (.+)',
+    out: '%1',
+    cost: 4,
+    transform: do
+      if MODE == 'CLIENT'
+        (uri) =>
+          request = js.new js.global.XMLHttpRequest
+          request\open 'GET', uri, false
+          request\send js.null
+
+          assert request.status == 200, "unexpected status code: #{request.status}"
+          request.responseText
+      else
+        (uri) =>
+          print "URI", uri
+          request = require 'http.request'
+          req = request.new_from_uri uri
+          headers, stream = req\go 8
+          assert stream\get_body_as_string!
+  }
   {
     inp: '(.+)',
     out: 'URL -> %1',

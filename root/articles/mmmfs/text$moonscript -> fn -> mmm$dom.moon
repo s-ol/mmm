@@ -28,9 +28,8 @@
         table.insert args, style: { 'list-style': 'none', 'font-size': '0.8em' }
         ol table.unpack args
 
-    -- @TODO: s/filesystem/a way of organizing files/g
-    append h1 'mmmfs', style: { 'margin-bottom': 0 }
-    append p "a file and operating system to live in", style: { 'margin-top': 0, 'padding-bottom': '0.2em', 'border-bottom': '1px solid black' }
+    append h1 'Empowered End-User Computing', style: { 'margin-bottom': 0 }
+    append p "A Historical Investigation and Development of a File-System-Based Environment", style: { 'margin-top': 0, 'padding-bottom': '0.2em', 'border-bottom': '1px solid black' }
 
     -- render a preview block
     do_section = (child) ->

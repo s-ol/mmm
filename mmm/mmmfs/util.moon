@@ -53,6 +53,7 @@ tourl = (path) ->
     ok, node = pcall fileder.gett, fileder, name, 'mmm/dom'
 
     if not ok
+      warn "couldn't embed #{fileder} #{name}: #{node}"
       return span "couldn't embed #{fileder} #{name}",
           (pre node),
           class: 'embed'
