@@ -95,6 +95,7 @@ converts = {
               when 'facet' then facet = val
               when 'nolink' then opts.nolink = true
               when 'inline' then opts.inline = true
+              when 'raw' then opts.raw = true
               else warn "unkown attribute '#{key}=\"#{val}\"' in <mmm-embed>"
 
           embed path, facet, fileder, opts
@@ -113,10 +114,12 @@ converts = {
             facet = js_fix element\getAttribute 'facet'
             nolink = js_fix element\getAttribute 'nolink'
             inline = js_fix element\getAttribute 'inline'
+            raw = js_fix element\getAttribute 'raw'
             desc = js_fix element.innerText
             desc = nil if desc == ''
 
-            element\replaceWith embed path or '', facet or '', fileder, { :nolink, :inline, :desc }
+            opts = :nolink, :inline, :raw, :desc
+            element\replaceWith embed path or '', facet or '', fileder, opts
 
           embeds = \getElementsByTagName 'mmm-link'
           embeds = [embeds[i] for i=0, embeds.length - 1]
@@ -182,6 +185,26 @@ converts = {
   --   transform: single code
   -- }
   {
+    inp: 'URL -> (.+)',
+    out: '%1',
+    cost: 4,
+    transform: do
+      if MODE == 'CLIENT'
+        (uri) =>
+          request = js.new js.global.XMLHttpRequest
+          request\open 'GET', uri, false
+          request\send js.null
+
+          assert request.status == 200, "unexpected status code: #{request.status}"
+          request.responseText
+      else
+        (uri) =>
+          request = require 'http.request'
+          req = request.new_from_uri uri
+          headers, stream = req\go 8
+          assert stream\get_body_as_string!
+  }
+  {
     inp: '(.+)',
     out: 'URL -> %1',
     cost: 5
@@ -238,6 +261,7 @@ add_converts 'markdown'
 add_converts 'mermaid'
 add_converts 'twitter'
 add_converts 'youtube'
+add_converts 'cites'
 
 if MODE == 'SERVER'
   ok, moon = pcall require, 'moonscript.base'

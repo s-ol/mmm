@@ -12,14 +12,34 @@ tourl = (path) ->
 (elements) ->
   import a, div, span, pre from elements
 
-  find_fileder = (fileder, origin) ->
+  find_fileder = (fileder, origin) ->  
     if 'string' == type fileder
-      if '/' == fileder\sub 1, 1
+      if '/' ~= fileder\sub 1, 1
+        assert origin, "cannot resolve relative path '#{fileder}' without origin!"
+        fileder = "#{origin.path}/#{fileder}"
+
+      fileder = fileder\gsub '/([^/]-)/%.%./', '/'
+      if origin.path == fileder\sub 1, #origin.path   
+        assert (origin\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
+      else
         assert BROWSER and BROWSER.root, "cannot resolve absolute path '#{fileder}' without BROWSER and root set!"
         assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}'"
-      else
-        assert origin, "cannot resolve relative path '#{fileder}' without origin!"
-        assert (origin\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
+
+    -- if 'string' == type fileder
+    --   if '/' == fileder\sub 1, 1
+    --     fileder = fileder\gsub '/([^/]-)/%.%./', '/'
+    --     assert BROWSER and BROWSER.root, "cannot resolve absolute path '#{fileder}' without BROWSER and root set!"
+    --     assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}'"
+    --   else
+    --     assert origin, "cannot resolve relative path '#{fileder}' without origin!"
+    --     fileder = "#{origin.path}/#{fileder}"
+    --     fileder = fileder\gsub '/([^/]-)/%.%./', '/'
+    --     if origin.path == fileder\sub 1, #origin.path
+    --       assert (origin\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
+    --     else
+    --       assert BROWSER and BROWSER.root, "cannot resolve absolute path '#{fileder}' without BROWSER and root set!"
+    --       assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}'"
+
     else
       assert fileder, "no fileder passed."
 
@@ -53,13 +73,18 @@ tourl = (path) ->
     ok, node = pcall fileder.gett, fileder, name, 'mmm/dom'
 
     if not ok
-      return span "couldn't embed #{fileder} #{name}",
-          (pre node),
-          class: 'embed'
-          style: {
-            background: 'var(--gray-fail)',
-            padding: '1em',
-          }
+      warn "couldn't embed #{fileder} #{name}: #{node}"
+      return span {
+        class: 'embed'
+        style:
+          background: 'var(--gray-fail)'
+          padding: '1em'
+
+        "couldn't embed #{fileder} #{name}"
+        (pre node)
+      }
+
+    return node if opts.raw
 
     klass = 'embed'
     klass ..= ' desc' if opts.desc

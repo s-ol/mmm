@@ -99,7 +99,11 @@ class Server
 
     switch method
       when 'GET', 'HEAD'
-        fileder = Fileder @store, path
+        root = Fileder @store
+        export BROWSER
+        BROWSER = :root
+        fileder = root\walk path -- Fileder @store, path
+
         if not fileder
           -- fileder not found
           return 404, "fileder '#{path}' not found"

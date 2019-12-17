@@ -7,6 +7,19 @@
   .markdown {
     max-width: 640px;
     position: relative;
+
+    &.wide {
+      max-width: max-content;
+    }
+
+    > blockquote {
+      @include left-border;
+
+      margin: 1rem var(--margin-wide);
+      padding: 1rem;
+      background: $gray-bright;
+      border-color: $gray-neutral;
+    }
   }
 
   .markdown,
@@ -57,7 +70,6 @@
     border-color: $gray-dark;
 
     display: block;
-    border-radius: 6px;
     margin: 0 var(--margin-wide);
     padding: 1em;
     white-space: pre-wrap;
