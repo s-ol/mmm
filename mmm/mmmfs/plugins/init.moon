@@ -18,6 +18,23 @@ loadwith = (_load) -> (val, fileder, key) =>
   func = assert _load val, "#{fileder}##{key}"
   func!
 
+string.yieldable_gsub = (str, pat, f) ->
+  -- escape percent signs
+  str = str\gsub '%%', '%%|'
+
+  matches = {}
+  str\gsub pat, (...) ->
+    table.insert matches, { ... }
+    "%#{#matches}"
+
+  for match in *matches
+    match.replacement = f table.unpack match
+
+  str\gsub '%%(%d+)', (i) -> matches[i].replacement
+
+  -- unescape escaped percent signs
+  str\gsub '%%|', '%%'
+
 -- list of converts, editors
 -- converts each have
 -- * inp - input type. can capture subtypes using `(.+)`
@@ -59,7 +76,7 @@ converts = {
     cost: 0.1
     transform: if MODE == 'SERVER'
       (html, fileder) =>
-        html = html\gsub '<mmm%-link%s+(.-)>(.-)</mmm%-link>', (attrs, text) ->
+        html = html\yieldable_gsub '<mmm%-link%s+(.-)>(.-)</mmm%-link>', (attrs, text) ->
           text = nil if #text == 0
           path = ''
           while attrs and attrs != ''
@@ -76,7 +93,7 @@ converts = {
 
           link_to path, text, fileder
 
-        html = html\gsub '<mmm%-embed%s+(.-)>(.-)</mmm%-embed>', (attrs, desc) ->
+        html = html\yieldable_gsub '<mmm%-embed%s+(.-)>(.-)</mmm%-embed>', (attrs, desc) ->
           path, facet = '', ''
           opts = {}
           if #desc != 0
@@ -137,7 +154,7 @@ converts = {
     out: '%1',
     cost: 1
     transform: (source, fileder) =>
-      source\gsub '{{(.-)}}', (expr) ->
+      source\yieldable_gsub '{{(.-)}}', (expr) ->
         path, facet = expr\match '^([%w%-_%./]*)%+(.*)'
         assert path, "couldn't match TPL expression '#{expr}'"
 
@@ -201,7 +218,8 @@ converts = {
         (uri) =>
           request = require 'http.request'
           req = request.new_from_uri uri
-          headers, stream = req\go 8
+          req.headers\upsert 'origin', 'null'
+          headers, stream = assert req\go 8
           assert stream\get_body_as_string!
   }
   {

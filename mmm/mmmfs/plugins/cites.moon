@@ -8,7 +8,11 @@ import div, i from require 'mmm.dom'
       cost: 0.5
       transform: (url) =>
         id = assert (url\match '//dl%.acm%.org/citation%.cfm%?id=(%d+)'), "couldn't parse cite/acm URL: '#{url}'"
-        "https://cors-anywhere.herokuapp.com/https://dl.acm.org/exportformats.cfm?id=#{id}&expformat=bibtex"
+        uri = "https://dl.acm.org/downformats.cfm?id=#{id}&parent_id=&expformat=bibtex"
+        if MODE == 'CLIENT'
+          "https://cors-anywhere.herokuapp.com/#{uri}"
+        else
+          uri
     }
     {
       inp: 'text/bibtex'
@@ -20,7 +24,7 @@ import div, i from require 'mmm.dom'
         for key, val in kv\gmatch '([a-z]-)%s*=%s*{(.-)}'
           info[key] = val
 
-        div "#{info.author} (#{info.year}),", (i info.title), ". #{info.publisher}"
+        div "#{info.author} (#{info.year}), ", (i info.title), ". #{info.publisher}"
     }
   }
 }
