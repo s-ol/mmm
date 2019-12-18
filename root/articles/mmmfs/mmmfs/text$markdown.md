@@ -18,14 +18,16 @@ Some metadata, such as file size and access permissions, is associated with each
 but notably the type of data is generally not actually stored in the filesystem,
 but determined loosely based on multiple heuristics depending on the system and context.
 Some notable mechanism are:
+
+
 - Suffixes in the name are often used to indicate what kind of data a file should contain.
   However there is no standardization over this, and often a suffix is used for multiple incompatible versions of a file-format.
 - Many file-formats specify a specific data-pattern either at the very beginning or very end of a given file.
   On unix systems the `libmagic` database and library of these so-called *magic constants* is commonly used to guess the file-type based on
   these fragments of data.
-- on UNIX systems files to be executed are checked by a variety of methods to determine which format would fit.
+- <div class="sidenote"><mmm-embed raw path="../references/linux-exec"></mmm-embed></div>
+  on UNIX systems files to be executed are checked by a variety of methods to determine which format would fit.
   for script files, the "shebang" (`#!`) can be used to specify the program that should parse this file in the first line of the file.
-  [@TODO: src: https://stackoverflow.com/questions/23295724/how-does-linux-execute-a-file]
  
 It should be clear already from this short list that to mainstream operating systems, as well as the applications running on them,
 the format of a file is almost completely unknown and at best educated guesses can be made.

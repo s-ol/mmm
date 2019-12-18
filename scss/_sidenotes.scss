@@ -18,6 +18,7 @@ $sidenote-width: 14rem;
     color: $gray-dark;
     border-top: 1px solid $gray-dark;
     font-size: 0.8em;
+    word-break: break-word;
 
     @include media-medium {
       width: initial;

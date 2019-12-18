@@ -1,4 +1,12 @@
-import div, i from require 'mmm.dom'
+import div, a, i, b from require 'mmm.dom'
+
+title = (info) ->
+  assert info.title, "cite doesn't have title"
+  inner = i info.title
+  if info.url
+    a inner, href: info.url
+  else
+    b inner
 
 {
   converts: {
@@ -24,7 +32,16 @@ import div, i from require 'mmm.dom'
         for key, val in kv\gmatch '([a-z]-)%s*=%s*{(.-)}'
           info[key] = val
 
-        div "#{info.author} (#{info.year}), ", (i info.title), ". #{info.publisher}"
+        tt = title info
+        dot, com = if info.title\match '[.?!]$' then '', '' else '.', ','
+        switch type
+          when 'book', 'article'
+            div "#{info.author} (#{info.year}), ", tt, "#{dot} #{info.publisher}"
+          when 'web'
+            -- note = if info.note then ", #{info.note}" else ''
+            div tt, "#{com} #{info.url} from #{info.visited}"
+          else
+            div "#{info.author} (#{info.year}), ", tt, "#{dot} #{info.publisher}"
     }
   }
 }
