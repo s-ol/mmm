@@ -1,14 +1,15 @@
 export MODE, print, warn, relative
 MODE = 'SERVER'
 
-deep_tostring = (tbl, space='') ->
+deep_tostring = (tbl, space='', recur={}) ->
   buf = space .. tostring tbl
 
-  return buf unless 'table' == (type tbl) and not tbl.__tostring
+  return buf unless 'table' == (type tbl) and not tbl.__tostring and not recur[tbl]
 
+  recur[tbl] = true
   buf = buf .. ' {\n'
   for k,v in pairs tbl
-    buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  '}\n"
+    buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  ', recur}\n"
   buf = buf .. "#{space}}"
   buf
 
