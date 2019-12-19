@@ -53,6 +53,9 @@ tourl = (path) ->
   link_to = (fileder, name, origin, attr) ->
     fileder = find_fileder fileder, origin
 
+    link = fileder\get 'mmm/dom+link'
+    return link if link
+
     name or= fileder\get 'title: mmm/dom'
     name or= fileder\gett 'name: alpha'
 

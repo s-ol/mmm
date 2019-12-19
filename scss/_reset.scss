@@ -13,6 +13,11 @@ body, html, h1, h2, h3, h4, h5, h6 {
 }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; }
+h1 { font-size: 1.6em; }
+h2 { font-size: 1.4em; }
+h3 { font-size: 1.17em; }
+h4, h5, h6 { font-size: 1em; }
+
 input, select, button {
   color: initial;
   &:disabled {
@@ -23,9 +28,15 @@ tt, code, kbd, samp { font-family: monospace; }
 code { font-size: 0.8em; }
 b, strong { font-weight: bold; }
 em, i { font-style: italic; }
-a { font-size: 1em; cursor: pointer; }
 hr { clear: both; }
 ul { margin: 0; }
+
+sup, sub {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+}
+sub { top: 0.4em; }
 
 body {
   display: flex;
@@ -40,11 +51,12 @@ body {
 
 a {
   display: inline-block;
-
+  font-size: 1em;
   font-weight: bold;
   text-decoration: underline;
   text-decoration-color: transparent;
 
+  cursor: pointer;
   &:hover {
     filter: invert(40%);
     text-decoration-color: currentColor;

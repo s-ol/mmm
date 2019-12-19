@@ -20,6 +20,30 @@ $sidenote-width: 14rem;
     font-size: 0.8em;
     word-break: break-word;
 
+    .hook {
+      position: absolute;
+      top: -4rem;
+      width: 0;
+      height: 0;
+
+      @media print {
+        top: 0;
+      }
+    }
+
+    .ref {
+      display: block;
+      position: absolute;
+
+      width: 1rem;
+      margin-left: -1.2rem;
+      text-align: right;
+    }
+
+    a {
+      display: inline;
+    }
+
     @include media-medium {
       width: initial;
       position: initial;
