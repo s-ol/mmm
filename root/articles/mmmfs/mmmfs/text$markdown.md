@@ -1,9 +1,10 @@
+# mmmfs
 `mmmfs` seeks to improve on two fronts.
 
 One of the main driving ideas of the mmmfs is to help data portability and use by making it simpler to inter-operate with different data formats.
 This is accomplished using two major components, the *Type System and Coercion Engine* and the *Fileder Unified Data Model* for unified data storage and access.
 
-# The Fileder Unified Data Model
+## the fileder unified data model
 The Fileder Model is the underlying unified data storage model.
 Like many data storage models it is based fundamentally on the concept of a hierarchical tree-structure.
 
@@ -20,31 +21,30 @@ but determined loosely based on multiple heuristics depending on the system and 
 Some notable mechanism are:
 
 
-- Suffixes in the name are often used to indicate what kind of data a file should contain.
-  However there is no standardization over this, and often a suffix is used for multiple incompatible versions of a file-format.
+- Suffixes in the name are often used to indicate what kind of data a file should contain. However there is no standardization
+- over this, and often a suffix is used for multiple incompatible versions of a file-format.
 - Many file-formats specify a specific data-pattern either at the very beginning or very end of a given file.
-  On unix systems the `libmagic` database and library of these so-called *magic constants* is commonly used to guess the file-type based on
-  these fragments of data.
-- <div class="sidenote"><mmm-embed raw path="../references/linux-exec"></mmm-embed></div>
-  on UNIX systems files to be executed are checked by a variety of methods to determine which format would fit.
-  for script files, the "shebang" (`#!`) can be used to specify the program that should parse this file in the first line of the file.
+  On unix systems the `libmagic` database and library of these so-called *magic constants* is commonly used to guess
+  the file-type based on these fragments of data.
+- on UNIX systems, files to be executed are checked by a variety of methods<mmm-link path="../references/linux-exec">
+  </mmm-link> in order to determine which format would fit. For example, script files, the "shebang" symbol, `#!`, can
+  be used to specify the program that should parse this file in the first line of the file.
  
-It should be clear already from this short list that to mainstream operating systems, as well as the applications running on them,
-the format of a file is almost completely unknown and at best educated guesses can be made.
+It should be clear already from this short list that to mainstream operating systems, as well as the applications
+running on them, the format of a file is almost completely unknown and at best educated guesses can be made.
 
 Because these various mechanisms are applied at different times by the operating system and applications,
 it is possible for files to be labelled as or considered as being in different formats at the same time by different components of the system.
-This leads to confusion about the factual format of data among users (e.g. making unclear the difference between changing a file extension
-and converting a file between formats [TODO: quote below]), but can also pose a serious security risk.
-It is for example possible, under some circumstances,
-that a file contains maliciously-crafted code and is treated as an executable by one software component,
-while a security mechanism meant to detect such code determines the same file to be a legitimate image
-(the file may in fact be valid in both formats).
-[TODO: quote: "Abusing file formats; or, Corkami, the Novella", Ange Albertini, PoC||GTFO 7]
-
-Users renaming extensions:
-  https://askubuntu.com/questions/166602/why-is-it-possible-to-convert-a-file-just-by-renaming-its-extension
-  https://www.quora.com/What-happens-when-you-rename-a-jpg-to-a-png-file
+<div class="sidenote" style="margin-top: -5rem;">
+The difference between changing a file extension and converting a file between two formats is commonly unclear to users,
+for example: see <a href="https://askubuntu.com/questions/166602/why-is-it-possible-to-convert-a-file-just-by-renaming-its-extension">
+Why is it possible to convert a file just by renaming it?</a>, https://askubuntu.com/q/166602 
+<!-- https://www.quora.com/What-happens-when-you-rename-a-jpg-to-a-png-file --> from 2019-12-18
+</div>
+This leads to confusion about the factual format of data among users, but can also pose a serious security risk:
+Under some circumstances it is possible that a file contains maliciously-crafted code and is treated as an executable
+by one software component, while a security mechanism meant to detect such code determines the same file to be a
+legitimate image<mmm-link path="../references/poc-or-gtfo"></mmm-link> (the file may in fact be valid in both formats).
 
 In mmmfs, the example above might look like this instead:  
 <mmm-embed path="tree_mmmfs">schematic view of an example mmmfs tree</mmm-embed>
@@ -69,7 +69,7 @@ Semantically a *fileder*, like a *directory*, also encompasses all the other *fi
 Since *fileders* are the primary unit of data to be operated upon, *fileder* nesting emerges as a natural way of structuring complex data,
 both for access by the system and applications, as well as the user themself.
 
-# The Type System & Coercion Engine
+## the type system & coercion engine
 As mentioned above, *facets* store data alongside its *type*, and when applications require data from a *fileder*,
 they specify the *type* (or the list of *types*) that they require the type to be in.
 

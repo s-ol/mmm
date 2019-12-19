@@ -1,4 +1,53 @@
 # motivation
+
+The majority of users interacts with modern computing systems in the form of smartphones, laptops or desktop PCs,
+using the mainstream operating systems Apple iOS and Mac OS X, Microsoft Windows or Android.
+
+All of these operating systems share the concept of *Applications* (or *Apps*) as one of the core pieces of their interaction model.
+Functionality and capabilities of the digital devices are bundled in, marketed, sold and distributed as *Applications*.
+
+In addition, a lot of functionality is nowadays delivered in the form of *Web Apps*, which are used inside a *Browser* (which is an *Application* itself).
+*Web Apps* often offer similar functionality to other *Applications*, but are subject to some limitations:
+In most cases, they are only accessible or functional in the presence of a stable internet connection,
+and they have very limited access to the resources of the physical computer they are running on.
+For example, they usually cannot interact directly with the file system, hardware peripherals or other applications,
+other than through a standardized set of interactions (e.g. selecting a file via a visual menu, capturing audio and video from a webcam, opening another website).
+
+On the two Desktop Operating Systems (Mac OS X and Windows), file management and the concepts of *Documents* are still central
+elements of interactions with the system. The two prevalent smartphone systems deemphasize this concept by only allowing access to the 
+data actually stored on the device through an app itself.
+
+This focus on *Applications* as the primary unit of systems can be seen as the root cause of multiple problems:
+Because applications are the products companies produce, and software represents a market of users,
+developers compete on features integrated into their applications.
+
+However this lack of control over data access is not the only problem the application-centric approach induces:
+A consequence of this is that interoperability between applications and data formats is rare.
+To stay relevant, monlithic software or software suites are designed to 
+As a result applications tend to accrete features rather then modularise and delegate to other software [P Chiusano].
+Because applications are incentivised to keep customers, they make use of network effects to keep customers locked-in.
+This often means re-implementing services and functinality that is already available
+and integrating it directly in other applications produced by the same organisation.
+
+This leads to massively complex file formats,
+such as for example the .docx format commonly used for storing mostly
+textual data enriched with images and videos on occasion.
+The docx format is in fact an archive that can contain many virtual files internally,
+such as the images and videos referenced before.
+However this is completely unknown to the operating system,
+and so users are unable to access the contents in this way.
+As a result, editing an image contained in a word document is far from a trivial task:
+first the document has to be opened in a word processing application,
+then the image has to be exported from it and saved in its own, temporary file.
+This file can then be edited and saved back to disk.
+Once updated, the image may be reimported into the .docx document.
+If the word-processing application supports this,
+the old image may be replaced directly, otherwise the user may have to remove the old image,
+insert the new one and carefully ensure that the positioning in the document remains intact.
+
+https://www.theverge.com/2019/10/7/20904030/adobe-venezuela-photoshop-behance-us-sanctions
+
+
 The application-centric computing paradigm common today is harmful to users,
 because it leaves behind "intert" data as D. Cragg calls it:
 
@@ -18,31 +67,6 @@ Additionally, many cloud software solutions and ecosystems store the users' data
 where they are subject to foreign laws and privacy concerns are intransparently handled by the companies.
 Should the company, for any reason, be unable or unwanting to continue servicing a customer,
 the data may be irrecoverably lost (or access prevented).
-
-However this lack of control over data access is not the only problem the application-centric approach induces:
-Another consequence is that interoperability between applications and data formats is hindered.
-Because applications are incentivised to keep customers, they make use of network effects to keep customers locked-in.
-As a result applications tend to accrete features rather then modularise and delegate to other software [P Chiusano].
-
-This leads to massively complex file formats,
-such as for example the .docx format commonly used for storing mostly
-textual data enriched with images and videos on occasion.
-The docx format is in fact an archive that can contain many virtual files internally,
-such as the images and videos referenced before.
-However this is completely unknown to the operating system,
-and so users are unable to access the contents in this way.
-As a result, editing an image contained in a word document is far from a trivial task:
-first the document has to be opened in a word processing application,
-then the image has to be exported from it and saved in its own, temporary file.
-This file can then be edited and saved back to disk.
-Once updated, the image may be reimported into the .docx document.
-If the word-processing application supports this,
-the old image may be replaced directly, otherwise the user may have to remove the old image,
-insert the new one and carefully ensure that the positioning in the document remains intact.
-
-In fact all of this is unnecessary, since the image had been stored in a compatible format on disk in the first place:
-The system was simply unaware of this because the word document had to be archived into a single file
-for ease of use by the word processor, and this single file is opaque to the system.
 
 Data rarely really fits the metaphora of files very well,
 and even when it does it is rarely exposed to the user that way:
@@ -69,10 +93,7 @@ composable pieces of software that naturally lend themselves to, or outrightly c
 integration into the users' other systems and customization,
 rather than lure into the walled-gardens of corporate ecosystems using network-effects.
  
-Services like this are 
-
-not even directly accessible to end-users anymore
-Data is inert ko[Cragg 2016]
+Data is inert [Cragg 2016]
 
 Key points:
 - data ownership  
@@ -100,3 +121,8 @@ word documents are capable of containing texts and images, but when the files ar
 contained data is lost. It is for example a non-trivial and unenjoyable task to edit an image file contained
 in a word document in another application and have the changes apply to the document. In the same way,
 text contained in a photoshop document cannot be edited in a text editor of your choice.
+
+Creative use of computer technology is limited to programmers, since applications constrain their users to the
+paths and abilities that the developers anticipated and deemed useful.
+Note that 'creative' here does not only encompass 'artistic': this applies to any field and means
+that innovative use of technology is unlikely to happen as a result of practice by domain experts.
