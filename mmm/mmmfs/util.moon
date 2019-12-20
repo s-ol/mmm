@@ -18,27 +18,14 @@ tourl = (path) ->
         assert origin, "cannot resolve relative path '#{fileder}' without origin!"
         fileder = "#{origin.path}/#{fileder}"
 
-      fileder = fileder\gsub '/([^/]-)/%.%./', '/'
+      while fileder\match '/([^/]-)/%.%./'
+        fileder = fileder\gsub '/([^/]-)/%.%./', '/'
+
       if origin.path == fileder\sub 1, #origin.path   
         assert (origin\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
       else
         assert BROWSER and BROWSER.root, "cannot resolve absolute path '#{fileder}' without BROWSER and root set!"
         assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}'"
-
-    -- if 'string' == type fileder
-    --   if '/' == fileder\sub 1, 1
-    --     fileder = fileder\gsub '/([^/]-)/%.%./', '/'
-    --     assert BROWSER and BROWSER.root, "cannot resolve absolute path '#{fileder}' without BROWSER and root set!"
-    --     assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}'"
-    --   else
-    --     assert origin, "cannot resolve relative path '#{fileder}' without origin!"
-    --     fileder = "#{origin.path}/#{fileder}"
-    --     fileder = fileder\gsub '/([^/]-)/%.%./', '/'
-    --     if origin.path == fileder\sub 1, #origin.path
-    --       assert (origin\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
-    --     else
-    --       assert BROWSER and BROWSER.root, "cannot resolve absolute path '#{fileder}' without BROWSER and root set!"
-    --       assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}'"
 
     else
       assert fileder, "no fileder passed."
