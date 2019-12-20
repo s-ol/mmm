@@ -7,6 +7,11 @@ $sidenote-width: 14rem;
     margin: auto;
   }
 
+  .sidenote-container & {
+    margin-right: initial;
+    margin: initial;
+  }
+
   .sidenote {
     position: absolute;
     box-sizing: border-box;
