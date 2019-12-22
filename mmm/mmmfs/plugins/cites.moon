@@ -6,27 +6,41 @@ parse_bibtex = (src) ->
     for key, val in kv\gmatch '([a-z]-)%s*=%s*{(.-)}'
       info[key] = val
 
-title = (info) ->
-  assert info.title, "cite doesn't have title"
-  inner = i info.title
-  if info.url
-    a inner, href: info.url, style: display: 'inline'
+title = () =>
+  assert @title, "cite doesn't have title"
+  inner = i @title
+  if @url
+    a inner, href: @url, style: display: 'inline'
   else
     b inner
 
-format_full = (info) ->
-  tt = title info
-  dot, com = if info.title\match '[.?!]$' then '', '' else '.', ','
-  switch info._type
+format_full = () =>
+  tt = title @
+  dot, com = if @title\match '[.?!]$' then '', '' else '.', ','
+  switch @_type
     when 'book', 'article'
-      span "#{info.author} (#{info.year}), ", tt, "#{dot} #{info.publisher}"
-    when 'web'
-      -- note = if info.note then ", #{info.note}" else ''
-      visited = if info.visited then " from #{info.visited}" else ""
-      span tt, "#{com} #{info.url}#{visited}"
+      span with setmetatable {}, __index: table
+        \insert "#{@author} (#{@year}), "
+        \insert tt
+        if @journal
+          \insert "#{dot} "
+          \insert i @journal
+          \insert ", volume #{@volume}" if @volume
+        \insert ", pages #{@pages}" if @pages
+        \insert "#{dot} #{@publisher}" if @publisher
+    when 'web', 'online'
+      span with setmetatable {}, __index: table
+        \insert "#{@author} (#{@year}), " if @author and @year
+        \insert tt
+        \insert " (#{@year})" if @year and not @author
+        \insert "#{com} #{@url}"
+        \insert " from #{@visited}" if @visited
     else
-      span "#{info.author} (#{info.year}), ", tt, "#{dot} #{info.publisher}"
-
+      span with setmetatable {}, __index: table
+        \insert "#{@author} (#{@year}), "
+        \insert tt
+        \insert "#{dot} #{@publisher}" if @publisher
+      span tbl
 {
   converts: {
     {

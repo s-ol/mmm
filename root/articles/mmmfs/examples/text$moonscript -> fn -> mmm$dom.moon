@@ -4,7 +4,8 @@
 -- resolves to a value of type mmm/dom
 =>
   html = require 'mmm.dom'
-  import h4, div, a, span from html
+  import h4, div, a, span, ul, li from html
+  import link_to from (require 'mmm.mmmfs.util') html
 
   -- render a preview block
   preview = (child) ->
@@ -14,23 +15,26 @@
     -- get 'preview' as a DOM description (nil if no value or conversion possible)
     content = child\get 'preview', 'mmm/dom'
 
-    div {
-      h4 title, style: { margin: 0, cursor: 'pointer' }, onclick: -> BROWSER\navigate child.path
-      content or span '(no renderable content)', style: { color: 'red' },
-      style: {
-        display: 'inline-block',
-        width: '300px',
-        height: '200px',
-        padding: '4px',
-        margin: '8px',
-        border: '4px solid #eeeeee',
-        overflow: 'hidden',
-      },
-    }
+    -- div {
+    --   h4 title, style: { margin: 0, cursor: 'pointer' }, onclick: -> BROWSER\navigate child.path
+    --   content or span '(no renderable content)', style: { color: 'red' },
+    --   style: {
+    --     display: 'inline-block',
+    --     width: '300px',
+    --     height: '200px',
+    --     padding: '4px',
+    --     margin: '8px',
+    --     border: '4px solid #eeeeee',
+    --     overflow: 'hidden',
+    --   },
+    -- }
 
-  content = for child in *@children
+    li link_to child
+
+  content = ul for child in *@children
     preview child
 
-  table.insert content, 1, (@gett 'intro: mmm/dom')
+  -- table.insert content, 1, (@gett 'intro: mmm/dom')
+  -- div content
 
-  div content
+  div (@gett 'intro: mmm/dom'), content

@@ -1,10 +1,10 @@
-import div, h3, ul, li from require 'mmm.dom'
+import div, h1, ul, li from require 'mmm.dom'
 import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import ropairs from require 'mmm.ordered'
 
 =>
   div {
-    h3 link_to @
+    h1 link_to @, "appendix: project log"
     ul do
       posts = for post in *@children
         continue if post\get 'hidden: bool'

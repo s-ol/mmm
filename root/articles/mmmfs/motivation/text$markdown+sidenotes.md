@@ -1,4 +1,5 @@
-# motivation
+motivation
+==========
 
 The majority of users interacts with modern computing systems in the form of smartphones, laptops or desktop PCs,
 using the mainstream operating systems Apple iOS and Mac OS X, Microsoft Windows or Android.
@@ -45,11 +46,20 @@ If the word-processing application supports this,
 the old image may be replaced directly, otherwise the user may have to remove the old image,
 insert the new one and carefully ensure that the positioning in the document remains intact.
 
+Let us take as an example the simple task of collecting and arranging a mixed collection of images, videos
+and texts in order to brainstorm. To create an assemblage of pictures and text, many might be tempted to open an
+Application like Microsoft Word or Adobe Photoshop and create a new document there. Both photoshop files and
+word documents are capable of containing texts and images, but when the files are saved, direct access to the
+contained data is lost. It is for example a non-trivial and unenjoyable task to edit an image file contained
+in a word document in another application and have the changes apply to the document. In the same way,
+text contained in a photoshop document cannot be edited in a text editor of your choice.
+
+
 https://www.theverge.com/2019/10/7/20904030/adobe-venezuela-photoshop-behance-us-sanctions
 
 
 The application-centric computing paradigm common today is harmful to users,
-because it leaves behind "intert" data as D. Cragg calls it:
+because it leaves behind "inert" data, as D. Cragg calls it:
 
 [Cragg 2016]
 D. Cragg coins the term "inert data" for the data created, and left behind, by apps and applications in the computing model that is currently prevalent:
@@ -75,17 +85,12 @@ in a separate 'file' (as the metaphora may have initially suggested),
 but rather keeps this database hidden away from the user.
 Consequently, access to the information contained in the database is only enabled through the contacts applications GUI.
 
+<div class="sidenote">Note that 'creative' here does not only mean 'artistic': this applies to any field, and it limits the
+ability of domain experts to push the boundaries of practice by using technology in innovative ways.</div>
+Creative use of computer technology is limited to programmers, since applications constrain their users to the
+paths and abilities that the developers anticipated and deemed useful.
+
 --
-
-According to some researchers in the field of Human-Computer-Interaction, the state of computing is rather dire.
-
-It seems that a huge majority of daily computer users have silently accepted
-that real control over their most important everyday tool will be forever out of reach,
-and surrendered it to the relatively small group of 'programmers' curating their experience.
-
-- Applications are bad
-- Services are worse
-
 
 Chiusano blames these issues on the metaphor of the *machine*, and likens apps and applications to appliances.
 According to him, what should really be provided are *tools*:
@@ -113,16 +118,3 @@ experience to give control back to and empower users.
 mmmfs tries to provide a filesystem that is powerful enough to let you use it as your canvas for thinking,
 and working at the computer.  mmmfs is made for more than just storing information. Files in mmmfs can interact
 and morph to create complex behaviours.
-
-Let us take as an example the simple task of collecting and arranging a mixed collection of images, videos
-and texts in order to brainstorm. To create an assemblage of pictures and text, many might be tempted to open an
-Application like Microsoft Word or Adobe Photoshop and create a new document there. Both photoshop files and
-word documents are capable of containing texts and images, but when the files are saved, direct access to the
-contained data is lost. It is for example a non-trivial and unenjoyable task to edit an image file contained
-in a word document in another application and have the changes apply to the document. In the same way,
-text contained in a photoshop document cannot be edited in a text editor of your choice.
-
-Creative use of computer technology is limited to programmers, since applications constrain their users to the
-paths and abilities that the developers anticipated and deemed useful.
-Note that 'creative' here does not only encompass 'artistic': this applies to any field and means
-that innovative use of technology is unlikely to happen as a result of practice by domain experts.

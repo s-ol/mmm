@@ -2,6 +2,9 @@ evaluation
 ==========
 
 ## examples
+In this section I will take a look at the implementations of the example for the use cases outlined above,
+and evaluate them with regard to the framework derived in the corresponding section above.
+
 ### publishing and blogging
 Since mmmfs has grown out of the need for a versatile CMS for a personal publishing website, it is not surprising to
 to see that it is still up to that job. Nevertheless it is worth taking a look at its strengths and weaknesses in this
@@ -159,8 +162,8 @@ The content editor is wholly separate from the visible representation, and only 
 fileder can be edited. This means that content cannot be edited in its context, which is particularily annoying
 due to the fragmentation of content that mmmfs encourages. 
 
-As a result, the experiences of interacting with the system at large is still a very different experience than 
-editing content (and thereby extending the system) in it. This is expected to represent a major hurdle for users
-getting started with the system, and is a major shortcoming in enabling end-user programming as set as a goal for
+As a result, interacting with the system at large is still a very different experience than  editing content (and
+thereby extending the system) in it. This is expected to represent a major hurdle for users getting started with the
+system, and is a major shortcoming in enabling end-user programming as set as a goal for
 this project. A future iteration should take care to reconsider how editing can be integrated more holistically
 with the other core concepts of the design.

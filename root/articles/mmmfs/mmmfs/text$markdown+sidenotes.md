@@ -1,8 +1,17 @@
-# mmmfs
-`mmmfs` seeks to improve on two fronts.
+mmmfs
+=====
 
-One of the main driving ideas of the mmmfs is to help data portability and use by making it simpler to inter-operate with different data formats.
-This is accomplished using two major components, the *Type System and Coercion Engine* and the *Fileder Unified Data Model* for unified data storage and access.
+`mmmfs` is a newly developed personal data storage and processing system. It was developed first as a tool for
+generating static websites, but has been extended with live interaction and introspection, as well as embedded
+editing capabilities as part of this work.
+
+mmmfs has been designed with a focus on data ownership for users. One of the main driving ideas is to unlock data
+from external data silos and file formats by making data available uniformly across different storage systems and
+formats. Secondly, computation and interactive elements are also integrated in the paradigm, so that mmmfs can be
+seemlessly extended and molded to the users needs.
+
+The abstraction of data types is accomplished using two major components, the *Type System and Coercion Engine* and
+the *Fileder Unified Data Model* for unified data storage and access.
 
 ## the fileder unified data model
 The Fileder Model is the underlying unified data storage model.
@@ -20,7 +29,6 @@ but notably the type of data is generally not actually stored in the filesystem,
 but determined loosely based on multiple heuristics depending on the system and context.
 Some notable mechanism are:
 
-
 - Suffixes in the name are often used to indicate what kind of data a file should contain. However there is no standardization
 - over this, and often a suffix is used for multiple incompatible versions of a file-format.
 - Many file-formats specify a specific data-pattern either at the very beginning or very end of a given file.
@@ -37,9 +45,9 @@ Because these various mechanisms are applied at different times by the operating
 it is possible for files to be labelled as or considered as being in different formats at the same time by different components of the system.
 <div class="sidenote" style="margin-top: -5rem;">
 The difference between changing a file extension and converting a file between two formats is commonly unclear to users,
-for example: see <a href="https://askubuntu.com/questions/166602/why-is-it-possible-to-convert-a-file-just-by-renaming-its-extension">
-Why is it possible to convert a file just by renaming it?</a>, https://askubuntu.com/q/166602 
-<!-- https://www.quora.com/What-happens-when-you-rename-a-jpg-to-a-png-file --> from 2019-12-18
+see for example <a href="https://askubuntu.com/questions/166602/why-is-it-possible-to-convert-a-file-just-by-renaming-its-extension">
+Why is it possible to convert a file just by renaming it?</a>, https://askubuntu.com/q/166602 from 2019-12-18
+<!-- https://www.quora.com/What-happens-when-you-rename-a-jpg-to-a-png-file -->
 </div>
 This leads to confusion about the factual format of data among users, but can also pose a serious security risk:
 Under some circumstances it is possible that a file contains maliciously-crafted code and is treated as an executable
@@ -161,9 +169,7 @@ Cost is defined in this way to make sure that the result of a type-coercion oper
 It is also important to prevent some nonsensical results from occuring, such as displaying a link to content instead of the content itself because
 the link requires less steps to create than completely converting the content does.
 
-***
-
-Type coercion is implemented using a general pathfinding algorithm, similar to A*.
+Type coercion is implemented using a general pathfinding algorithm, similar to A\*.
 First, the set of given *types* is found by selecting all *facets* of the *fileder* that match the *name* given in the query.
 The set of given *types* is marked in green in the following example graph.
 
