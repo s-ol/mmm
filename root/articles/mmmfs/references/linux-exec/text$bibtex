@@ -1,4 +1,4 @@
-@web{linux:exec,
+@online{linux:exec,
   title = {How does Linux execute a file?},
   url = {https://stackoverflow.com/a/23295724/1598293},
   publisher = {stackoverflow.com},
