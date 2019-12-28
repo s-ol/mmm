@@ -51,7 +51,7 @@ Apple's *iOS* already started out as such so-called *walled gardens*.
 cloud computing
 ---------------
 
-*Web Apps* often offer similar functionality to other *Applications*, but are subject to additional limitations:
+*Web Apps* often offer similar functionality to other applications, but are subject to additional limitations:
 In most cases, they are only accessible or functional in the presence of a stable internet connection,
 and they have very limited access to the resources of the physical computer they are running on.
 For example, they usually cannot interact directly with the file system, hardware peripherals or other applications,
@@ -116,6 +116,16 @@ embedding options are limited, while tools better suited to these tasks lack nua
 Rather than face this dilemma, a more sensible system could leave the task of positioning and aggregating content of
 different types to one software component, while multiple different software components can be responsible for editing
 the individual pieces of content, so that the most appropriate one can be chosen for each element.
+
+<div style="height: 2rem;"></div>
+
+To summarize, for various reasons, the metaphors and interfaces of computing interfaces today prevent users from deeply
+understanding the software they use and the data they own, from customizing and improving their experience and
+interactions, and from properly owning, contextualising and connecting their data.
+
+Interestingly, these deficits do not appear throughout the history of todays computing systems, but are based in rather
+recent developments in the field. In fact the most influental systems in the past aspired to the polar opposites, as i
+will show in the next section.
 
 <!--
 Chiusano blames these issues on the metaphor of the *machine*, and likens apps and applications to appliances.

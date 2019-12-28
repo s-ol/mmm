@@ -104,4 +104,8 @@
     background: $gray-bright;
     border-color: $gray-neutral;
   }
+
+  .well-warning {
+    border-color: $gray-fail;
+  }
 }
