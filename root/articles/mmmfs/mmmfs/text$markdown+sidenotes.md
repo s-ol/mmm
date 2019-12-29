@@ -44,12 +44,7 @@ running on them, the format of a file is almost completely unknown and at best e
 Because these various mechanisms are applied at different times by the operating system and applications,
 it is possible for files to be labelled as or considered as being in different formats at the same time by different
 components of the system.
-<div class="sidenote" style="margin-top: -5rem;">
-The difference between changing a file extension and converting a file between two formats is commonly unclear to users,
-see for example <a href="https://askubuntu.com/questions/166602/why-is-it-possible-to-convert-a-file-just-by-renaming-its-extension">
-Why is it possible to convert a file just by renaming it?</a>, https://askubuntu.com/q/166602 from 2019-12-18
-<!-- https://www.quora.com/What-happens-when-you-rename-a-jpg-to-a-png-file -->
-</div>
+<mmm-embed path="confusion" wrap="marginnote" style="margin-top: -5rem;"></mmm-embed>
 This leads to confusion about the factual format of data among users, but can also pose a serious security risk:
 Under some circumstances it is possible that a file contains maliciously-crafted code and is treated as an executable
 by one software component, while a security mechanism meant to detect such code determines the same file to be a

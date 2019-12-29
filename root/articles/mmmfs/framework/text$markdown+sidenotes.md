@@ -56,9 +56,10 @@ content transclusion
 The strengths of modular architectures should similarily also extend into the way the system will be used by users.
 If users are to store their information and customized behaviour in such an architecture, then powerful tools need to be
 present in order to assemble more complex solutions out of such parts. Therefore static content should be able to be
-linked to (as envisioned for the *Memex*, see above), but also to be <span class="sidenote">The term <i>transclusion</i>
-refers to the concept of including content from a separate document, possibly stored remotely, by reference rather than
-by duplication. See also <mmm-embed wrap="raw" path="../references/transclusion"></mmm-embed></span>*transcluded*,
+linked to (as envisioned for the *Memex*, see above), but also to be <mmm-embed wrap="marginnote"
+path="../references/transclusion">The term <i>transclusion</i> refers to the concept of including content from a
+separate document, possibly stored remotely, by reference rather than by duplication. See also
+</mmm-embed>*transcluded*,
 to facilitate the creation of flexible data formats and interactions, such that e.g. a slideshow slide can include
 content in a variety other formats (such as images and text) from anywhere else in the system. Behaviours also should be
 able to be transcluded and reused to facilitate the creation of ad-hoc sytems and applets based on user needs. For

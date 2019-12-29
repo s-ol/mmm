@@ -93,9 +93,9 @@ This way, *converts* can be added locally if they only make sense within a given
 Additionally it could be made possible to use this mechanism to locally override *converts* inherited from
 further up in the tree, for example to specialize types based on their context in the system.
 
-<div class="sidenote">see also <mmm-embed wrap="raw" path="../references/alternatives-to-trees"></mmm-embed>
-</div>The biggest downside to this approach would be that it  presents another pressure factor for, while also
-reincforcing, the hierarchical organization of data, thereby exacerbating the limits of hierarchical structures.
+<mmm-embed wrap="marginnote" path="../references/alternatives-to-trees">See also </mmm-embed>
+The biggest downside to this approach would be that it  presents another pressure factor for, while also reincforcing,
+the hierarchical organization of data, thereby exacerbating the limits of hierarchical structures.
 
 ### code outside of the system
 At the moment, a large part of the mmmfs codebase is still separate from the content, and developed outside of mmmfs

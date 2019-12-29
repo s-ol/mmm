@@ -31,12 +31,8 @@ system (the objects being anything from files to characters or paragraphs). Thes
 labelled with a name and persistently stored, providing a mechanism to store metadata such as user preference for
 ordering or the defaut view mode of a folder for example.
 
-<div class="sidenote" style="margin-top: 1rem;">
-<p><i>How systems influenced later systems. This graph summarizes how various systems related to Star have influenced
-one another over the years. Time progresses downwards. Double arrows indicate direct successors (i.e.,
-follow-on versions). [...]</i></p>
-<mmm-embed wrap="raw" path="../references/xerox-star"></mmm-embed></div>
-<mmm-embed nolink path="star-graph"></mmm-embed>
+<mmm-embed path="star-graph" facet="note" wrap="marginnote" style="margin-top: 1rem;"></mmm-embed>
+<mmm-embed path="star-graph" nolink></mmm-embed>
 
 The earliest indirect influence for the Xerox Alto and many other systems of its time, was the *Memex*.
 The *Memex* is a hypothetical device and system for knowledge management. Proposed by Vannevar Bush in 1945<mmm-embed

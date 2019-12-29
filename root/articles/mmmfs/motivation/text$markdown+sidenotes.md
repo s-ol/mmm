@@ -11,12 +11,15 @@ All of these operating systems share the concept of *Applications* (or *Apps*) a
 interaction model. Functionality and capabilities of the digital devices are bundled in, marketed, sold and distributed
 as applications.
 
+<!-- native vs other vs new ?? -->
+<!-- limitations not mentioned yet -->
 In addition, a lot of functionality is nowadays delivered in the form of *Web Apps* or *Cloud Services*, which share the 
 limitations of native applications in addition to more specific issues that will be discussed in a separate section
 below.
 
 This focus on applications as the primary unit of systems can be seen as the root cause of multiple problems.
 
+<!--                                                                           rephrase vvv -->
 For one, since applications are the products companies produce, and software represents a market of users,
 developers compete on features integrated into their applications. To stay relevant, monlithic software or software
 suites tend to accrete features rather then modularise and delegate to other software<mmm-embed wrap="sidenote"
@@ -37,8 +40,7 @@ developed by experts in application development, rather than experts in the doma
 solicit feedback, advice and ideas from domain experts, communication is a barrier. Additionally, domain experts are
 generally unfamiliar with the technical possibilities, and may therefore not be able to express feedback that would lead
 to more significant advances.
-<div class="sidenote">Note that 'creative' here does not only mean 'artistic': this applies to any field, and limits
-the ability of domain experts to push the boundaries of practice by using technology in innovative ways.</div>
+<mmm-embed path="creative" wrap="marginnote"></mmm-embed>
 As a result, creative use of computer technology is limited to programmers, since applications constrain their users to
 the paths and abilities that the developers anticipated and deemed useful.
 

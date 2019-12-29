@@ -1,6 +1,6 @@
 refs = require 'mmm.refs'
 
-merge = (orig={}, extra) ->
+merge = (orig={}, extra={}) ->
   with attr = {k,v for k,v in pairs orig}
     for k,v in pairs extra
       attr[k] = v
@@ -106,16 +106,27 @@ tourl = (path) ->
 
         intext = sup a key, href: "##{id}"
 
+        print "STYLE IS '#{opts.style}'"
         span intext, div {
             class: 'sidenote'
-            style:
-              'margin-top': '-1rem'
+            style: opts.style or 'margin-top: -1rem;'
 
             div :id, class: 'hook'
             b key, class: 'ref'
             ' '
+            opts.desc or ''
             node
           }
+
+      when 'marginnote'
+        div {
+          class: 'sidenote'
+          style: opts.style
+
+          opts.desc or ''
+          node
+        }
+
       else
         error "unknown embed 'wrap': '#{opts.wrap}'"
 

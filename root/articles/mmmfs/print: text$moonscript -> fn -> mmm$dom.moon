@@ -7,7 +7,7 @@
   import article, h1, h2, h3, section, p, div, a, sup, ol, li, span, code, pre, br from html
   import moon from (require 'mmm.highlighting').languages
 
-  article with _this = class: 'sidenote-container', style: { 'max-width': '640px' }
+  article with _this = class: 'sidenote-container', style: { 'max-width': '640px', 'line-height': '1.5' }
     append = (a) -> table.insert _this, a
 
     footnote, getnotes = do

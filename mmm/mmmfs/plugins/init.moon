@@ -8,6 +8,7 @@ import tohtml from require 'mmm.component'
 js_fix = if MODE == 'CLIENT'
   (arg) ->
     return if arg == js.null
+    return if arg == ''
     arg
 
 -- fix JS bool values
@@ -121,6 +122,7 @@ converts = {
               when 'path' then path = val
               when 'facet' then facet = val
               when 'wrap' then opts.wrap = val
+              when 'style' then opts.style = val
               when 'nolink' then opts.nolink = true
               when 'inline' then opts.inline = true
 
@@ -143,6 +145,7 @@ converts = {
             path = js_fix element\getAttribute 'path'
             facet = js_fix element\getAttribute 'facet'
             wrap = js_fix element\getAttribute 'wrap'
+            style = js_fix element\getAttribute 'style'
             nolink = js_bool element\getAttribute 'nolink'
             inline = js_bool element\getAttribute 'inline'
             desc = js_fix element.innerText
@@ -150,7 +153,7 @@ converts = {
 
             raw = js_bool element\getAttribute 'raw' -- deprecated
 
-            opts = :wrap, :nolink, :inline, :desc, :raw
+            opts = :wrap, :style, :nolink, :inline, :desc, :raw
             element\replaceWith embed path or '', facet or '', fileder, opts
 
           embeds = \getElementsByTagName 'mmm-link'

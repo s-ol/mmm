@@ -22,9 +22,10 @@ $sidenote-width: 14rem;
 
     color: $gray-dark;
     border-top: 1px solid $gray-dark;
-    font-size: 0.8em;
     word-break: break-word;
 
+    font-size: 0.8em;
+    line-height: 1.1;
     text-align: initial;
 
     .hook {
@@ -45,6 +46,10 @@ $sidenote-width: 14rem;
       width: 1rem;
       margin-left: -1.2rem;
       text-align: right;
+    }
+
+    > .markdown > p:first-child {
+      margin-top: 0;
     }
 
     a {

@@ -2,8 +2,10 @@
   html = require 'mmm.dom'
   import div, h1, ol, li from html
 
+  refs = for ref in *@children
+    li ref\gett 'mmm/dom'
   div {
     h1 "references"
-    ol for ref in *@children
-      li ref\gett 'mmm/dom'
+    ol with refs
+      refs.style = 'line-height': 'normal'
   }

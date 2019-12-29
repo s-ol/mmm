@@ -17,6 +17,7 @@
     > blockquote {
       @include left-border;
 
+      line-height: normal;
       margin: 1rem var(--margin-wide);
       padding: 1rem;
       background: $gray-bright;
@@ -46,6 +47,8 @@
     width: inherit;
     height: inherit;
     max-width: inherit;
+
+    line-height: normal;
 
     .description {
       text-align: center;
@@ -77,6 +80,7 @@
     white-space: pre-wrap;
     overflow-x: auto;
 
+    line-height: normal;
     background: #1d1f21;
     color: #c5c8c6;
   }
@@ -103,6 +107,7 @@
 
     margin: 1rem var(--margin-wide);
     padding: 1rem;
+    line-height: normal;
     background: $gray-bright;
     border-color: $gray-neutral;
   }
