@@ -30,17 +30,20 @@ string.yieldable_gsub = (str, pat, f) ->
   str = str\gsub '%%', '%%|'
 
   matches = {}
-  str\gsub pat, (...) ->
+  str, cnt = str\gsub pat, (...) ->
     table.insert matches, { ... }
     "%#{#matches}"
 
   for match in *matches
     match.replacement = f table.unpack match
 
-  str\gsub '%%(%d+)', (i) -> matches[i].replacement
+  str = str\gsub '%%(%d+)', (i) ->
+    i = tonumber i
+    matches[i].replacement
 
   -- unescape escaped percent signs
-  str\gsub '%%|', '%%'
+  str = str\gsub '%%|', '%%'
+  str, cnt
 
 -- list of converts, editors
 -- converts each have
