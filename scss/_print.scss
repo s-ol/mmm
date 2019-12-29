@@ -4,8 +4,6 @@
   }
 
   .view {
-    flex: 1 0 auto;
-
     .content {
       flex: 1 0 auto;
     }
@@ -20,12 +18,3 @@
   size: a4;
   margin: 2.5cm 0 2.5cm;
 }
-
-@page :first {
-  margin-top: 0;
-}
-
-@page :last {
-  margin-bottom: 0;
-}
-

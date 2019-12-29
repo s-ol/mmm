@@ -47,6 +47,7 @@
     width: inherit;
     height: inherit;
     max-width: inherit;
+    break-inside: avoid-page;
 
     line-height: normal;
 
@@ -78,6 +79,7 @@
     margin: 0 var(--margin-wide);
     padding: 1em;
     white-space: pre-wrap;
+    break-inside: avoid-page;
     overflow-x: auto;
 
     line-height: normal;
@@ -110,6 +112,7 @@
     line-height: normal;
     background: $gray-bright;
     border-color: $gray-neutral;
+    break-inside: avoid-page;
   }
 
   .well-warning {
