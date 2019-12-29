@@ -13,7 +13,7 @@ context:
 The system has proven itself perfect for publishing small- and medium-size articles and blog posts, especially for its
 ability to flexibly transclude content from any source. This includes diagrams (such as in this thesis),
 videos (as in the documentation in the appendix), but also less conventional media such as
-interactive diagrams <mmm-link path="../references/aspect-ratios"></mmm-link> or twitter postings.
+interactive diagrams<mmm-embed path="../references/aspect-ratios" wrap="sidenote"></mmm-embed> or twitter postings.
 
 On the other hand, the development of the technical framework for this very thesis has posed greater challenges.
 In particular, the implementation of the reference and sidenote systems are brittle and uninspiring.
@@ -93,7 +93,7 @@ This way, *converts* can be added locally if they only make sense within a given
 Additionally it could be made possible to use this mechanism to locally override *converts* inherited from
 further up in the tree, for example to specialize types based on their context in the system.
 
-<div class="sidenote">see also <mmm-embed raw path="../references/alternatives-to-trees"></mmm-embed>
+<div class="sidenote">see also <mmm-embed wrap="raw" path="../references/alternatives-to-trees"></mmm-embed>
 </div>The biggest downside to this approach would be that it  presents another pressure factor for, while also
 reincforcing, the hierarchical organization of data, thereby exacerbating the limits of hierarchical structures.
 
@@ -106,7 +106,7 @@ experience developed for them. All of the code that lives outside of the mmmfs t
 to them, actively limiting their understanding, and thereby the customizability, of the system.
 
 This weakness represents a failure to (fully) implement the quality of a "Living System" as proposed by
-*Ink and Switch*<mmm-link path="../references/inkandswitch"></mmm-link>.
+*Ink and Switch*<mmm-embed path="../references/inkandswitch" wrap="sidenote"></mmm-embed>.
 
 In general however, some portion of code may always have to be left outside of the system.
 This also wouldn't necessarily represent a problem, but in this case it is particularily relevant

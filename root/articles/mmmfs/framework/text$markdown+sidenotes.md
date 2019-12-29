@@ -9,7 +9,7 @@ qualities
 ---------
 
 *Ink and Switch* suggest three qualities for tools striving to support
-end-user programming<mmm-link path="../references/inkandswitch"></mmm-link>:
+end-user programming<mmm-embed path="../references/inkandswitch" wrap="sidenote"></mmm-embed>:
 
 - *Embodiment*, i.e. reifying central concepts of the programming model as more concrete, tangible objects
   in the digital space (for example through visual representation),
@@ -29,8 +29,8 @@ thoughts in.
 modularity
 ----------
 
-The *UNIX Philosophy* <mmm-link path="../references/unix"></mmm-link> describes the software design paradigm
-pioneered in the creation of the Unix operating system at the AT&T Bell Labs research center in the 1960s. The
+The *UNIX Philosophy*<mmm-embed path="../references/unix" wrap="sidenote"></mmm-embed> describes the software design
+paradigm pioneered in the creation of the Unix operating system at the AT&T Bell Labs research center in the 1960s. The
 concepts are considered quite influental and are still notably applied in the Linux community. Many attempts at
 summaries exist, but the following includes the pieces that are especially relevant even today:
 
@@ -58,7 +58,7 @@ If users are to store their information and customized behaviour in such an arch
 present in order to assemble more complex solutions out of such parts. Therefore static content should be able to be
 linked to (as envisioned for the *Memex*, see above), but also to be <span class="sidenote">The term <i>transclusion</i>
 refers to the concept of including content from a separate document, possibly stored remotely, by reference rather than
-by duplication. See also <mmm-embed raw path="../references/transclusion"></mmm-embed></span>*transcluded*,
+by duplication. See also <mmm-embed wrap="raw" path="../references/transclusion"></mmm-embed></span>*transcluded*,
 to facilitate the creation of flexible data formats and interactions, such that e.g. a slideshow slide can include
 content in a variety other formats (such as images and text) from anywhere else in the system. Behaviours also should be
 able to be transcluded and reused to facilitate the creation of ad-hoc sytems and applets based on user needs. For
@@ -84,7 +84,7 @@ in other words: be able to program.
 
 While there is an ongoing area of research focusing on the development of new programming paradigms, 
 methodologies and tools that are more accessible and cater to the wide
-range of end-users<mmm-link path="../references/subtext"></mmm-link>,
+range of end-users<mmm-embed path="../references/subtext" wrap="sidenote"></mmm-embed>,
 in order to keep the scope of this work appropriate,
 conventional programming languages are used for the time being.
 Confidence is placed in the fact that eventually more user-friendly languages will be available and,

@@ -19,9 +19,9 @@ This focus on applications as the primary unit of systems can be seen as the roo
 
 For one, since applications are the products companies produce, and software represents a market of users,
 developers compete on features integrated into their applications. To stay relevant, monlithic software or software
-suites tend to accrete features rather then modularise and delegate to other software<mmm-link
-path="../references/appliances"></mmm-link>. This makes many software packages more complex and unintuitive than they
-need to be, and also cripples interoperability between applications and data formats.
+suites tend to accrete features rather then modularise and delegate to other software<mmm-embed wrap="sidenote"
+path="../references/appliances"></mmm-embed>. This makes many software packages more complex and unintuitive than
+they need to be, and also cripples interoperability between applications and data formats.
 
 Because applications are incentivised to keep customers, they make use of network effects to keep customers locked-in.
 This often means re-implementing services and functionality that is already available to users,
@@ -45,8 +45,8 @@ the paths and abilities that the developers anticipated and deemed useful.
 The application-centric computing metaphor treats applications as black boxes, and provides no means to understand,
 customize or modify the behaviour of apps, intentionally obscuring the inner-workings of applications and
 completely cutting users off from this type of ownership over their technology. While the trend seems to be to further
-hide the way desktop operating systems work <mmm-link path="../references/osx-files"></mmm-link>, mobile systems like
-Apple's *iOS* already started out as such so-called *walled gardens*.
+hide the way desktop operating systems work<mmm-embed path="../references/osx-files" wrap="sidenote"></mmm-embed>,
+mobile systems like Apple's *iOS* already started out as such so-called *walled gardens*.
 
 cloud computing
 ---------------
@@ -63,18 +63,18 @@ to license changes, updates modifiying, restricting or simply removing past func
 software solutions and ecosystems store the users' data in the cloud, often across national borders, where legal and
 privacy concerns are intransparently handled by the companies. If a company, for any reason, is unable or unwanting to
 continue servicing a customer, the users data may be irrecoverably lost (or access prevented). This can have serious
-consequences<mmm-link path="../references/adobe"></mmm-link>, especially for professional users, for whom an inability
-to access their tools or their cloud-stored data can pose an existential threat.
+consequences<mmm-embed path="../references/adobe" wrap="sidenote"></mmm-embed>, especially for professional users, for
+whom an inability to access their tools or their cloud-stored data can pose an existential threat.
 
 inert data (formats)
 --------------------
 
-Cragg coins the term "inert data"<mmm-link path="../references/super-powers"></mmm-link> for the data created, and
-left behind, by apps and applications in the computing model that is currently prevalent: Most data today is either
-intrinsically linked to one specific application, that controls and limits access to the actual information, or even
-worse, stored in the cloud where users have no direct access at all and depend soley on online tools that require a
-stable network connection and a modern browser, and that could be modified, removed or otherwise negatively impacted
-at any moment.
+Cragg coins the term "inert data"<mmm-embed path="../references/super-powers" wrap="sidenote"></mmm-embed> for the data
+created, and left behind, by apps and applications in the computing model that is currently prevalent: Most data today
+is either intrinsically linked to one specific application, that controls and limits access to the actual information,
+or even worse, stored in the cloud where users have no direct access at all and depend soley on online tools that
+require a stable network connection and a modern browser, and that could be modified, removed or otherwise negatively
+impacted at any moment.
 
 Aside from being inaccesible to users, the resulting complex proprietary formats are also opaque and useless to other
 applications and the operating system, which often is a huge missed opportunity: 

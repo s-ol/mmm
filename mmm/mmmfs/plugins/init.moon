@@ -10,6 +10,13 @@ js_fix = if MODE == 'CLIENT'
     return if arg == js.null
     arg
 
+-- fix JS bool values
+js_bool = if MODE == 'CLIENT'
+  (arg) ->
+    return nil if arg == js.null
+    return false if arg == 'false'
+    true
+
 -- limit function to one argument
 single = (func) -> (val) => func val
 
@@ -110,9 +117,12 @@ converts = {
             switch key
               when 'path' then path = val
               when 'facet' then facet = val
+              when 'wrap' then opts.wrap = val
               when 'nolink' then opts.nolink = true
               when 'inline' then opts.inline = true
-              when 'raw' then opts.raw = true
+
+              when 'raw' then opts.raw = true -- deprecated
+
               else warn "unkown attribute '#{key}=\"#{val}\"' in <mmm-embed>"
 
           embed path, facet, fileder, opts
@@ -129,13 +139,15 @@ converts = {
           for element in *embeds
             path = js_fix element\getAttribute 'path'
             facet = js_fix element\getAttribute 'facet'
-            nolink = js_fix element\getAttribute 'nolink'
-            inline = js_fix element\getAttribute 'inline'
-            raw = js_fix element\getAttribute 'raw'
+            wrap = js_fix element\getAttribute 'wrap'
+            nolink = js_bool element\getAttribute 'nolink'
+            inline = js_bool element\getAttribute 'inline'
             desc = js_fix element.innerText
             desc = nil if desc == ''
 
-            opts = :nolink, :inline, :raw, :desc
+            raw = js_bool element\getAttribute 'raw' -- deprecated
+
+            opts = :wrap, :nolink, :inline, :desc, :raw
             element\replaceWith embed path or '', facet or '', fileder, opts
 
           embeds = \getElementsByTagName 'mmm-link'

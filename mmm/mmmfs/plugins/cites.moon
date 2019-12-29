@@ -61,29 +61,5 @@ format_full = () =>
       cost: 1
       transform: (bib) => format_full parse_bibtex bib
     }
-    {
-      inp: 'text/bibtex'
-      out: 'mmm/dom+link'
-      cost: 1
-      transform: (bib) =>
-        info = parse_bibtex bib
-        note = format_full info
-
-        key = tostring 1
-        id = "sideref-#{key}"
-
-        intext = sup a key, href: "##{id}"
-
-        span intext, div {
-            class: 'sidenote'
-            style:
-              'margin-top': '-1rem'
-
-            div :id, class: 'hook'
-            b key, class: 'ref'
-            ' '
-            note
-          }
-    }
   }
 }

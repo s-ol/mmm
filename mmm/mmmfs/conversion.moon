@@ -1,4 +1,5 @@
 require = relative ..., 1
+refs = require 'mmm.refs'
 import Queue from require '.queue'
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
@@ -129,8 +130,10 @@ print_conversions = (conversions) ->
 err_and_trace = (msg) -> debug.traceback msg, 2
 apply_conversions = (conversions, value, ...) ->
   for i=#conversions,1,-1
+    refs\push!
     step = conversions[i]
     ok, value = xpcall step.convert.transform, err_and_trace, step, value, ...
+    refs\pop!
     if not ok
       f, k = ...
       error "error while converting #{f} #{k} from '#{step.from}' to '#{step.to}':\n#{value}"

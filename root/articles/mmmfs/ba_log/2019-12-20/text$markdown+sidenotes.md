@@ -25,7 +25,7 @@ For example the following BibTeX is rendered like this:
 
 <mmm-embed nolink path="../../references/inkandswitch" facet="markdown"></mmm-embed>
 
-> <mmm-embed raw path="../../references/inkandswitch"></mmm-embed>
+> <mmm-embed wrap="raw" path="../../references/inkandswitch"></mmm-embed>
 
 I also added a special override that links to 
 BibTeX files by placing the citation in a sidenote, and adding a footnote indicator in-text.

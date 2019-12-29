@@ -1,3 +1,5 @@
+refs = require 'mmm.refs'
+
 merge = (orig={}, extra) ->
   with attr = {k,v for k,v in pairs orig}
     for k,v in pairs extra
@@ -10,7 +12,7 @@ tourl = (path) ->
     path .. '/'
 
 (elements) ->
-  import a, div, span, pre from elements
+  import a, div, span, sup, b, pre from elements
 
   find_fileder = (fileder, origin) ->  
     if 'string' == type fileder
@@ -40,9 +42,6 @@ tourl = (path) ->
   link_to = (fileder, name, origin, attr) ->
     fileder = find_fileder fileder, origin
 
-    link = fileder\get 'mmm/dom+link'
-    return link if link
-
     name or= fileder\get 'title: mmm/dom'
     name or= fileder\gett 'name: alpha'
 
@@ -57,6 +56,12 @@ tourl = (path) ->
       }
 
   embed = (fileder, name='', origin, opts={}) ->
+    if opts.raw
+      warn "deprecated option 'raw' set on embed"
+      assert not opts.wrap, "raw and wrap cannot both be set on embed"
+      opts.wrap = 'raw'
+    opts.wrap or= 'well'
+    
     fileder = find_fileder fileder, origin
 
     -- node = fileder\gett name, 'mmm/dom'
@@ -74,21 +79,45 @@ tourl = (path) ->
         (pre node)
       }
 
-    return node if opts.raw
-
     klass = 'embed'
     klass ..= ' desc' if opts.desc
     klass ..= ' inline' if opts.inline
 
-    node = span {
-      class: klass
-      node
-      if opts.desc
-        div opts.desc, class: 'description'
-    }
+    switch opts.wrap
+      when 'raw'
+        node
 
-    return node if opts.nolink
-    link_to fileder, node, nil, opts.attr
+      when 'well'
+        node = span {
+          class: klass
+          node
+          if opts.desc
+            div opts.desc, class: 'description'
+        }
+
+        if opts.nolink
+          node
+        else
+          link_to fileder, node, nil, opts.attr
+
+      when 'sidenote'
+        key = opts.desc or tostring refs\get!
+        id = "sideref-#{key}"
+
+        intext = sup a key, href: "##{id}"
+
+        span intext, div {
+            class: 'sidenote'
+            style:
+              'margin-top': '-1rem'
+
+            div :id, class: 'hook'
+            b key, class: 'ref'
+            ' '
+            node
+          }
+      else
+        error "unknown embed 'wrap': '#{opts.wrap}'"
 
   {
     :find_fileder

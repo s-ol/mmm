@@ -34,15 +34,16 @@ Some notable mechanism are:
 - Many file-formats specify a specific data-pattern either at the very beginning or very end of a given file.
   On unix systems the `libmagic` database and library of these so-called *magic constants* is commonly used to guess
   the file-type based on these fragments of data.
-- on UNIX systems, files to be executed are checked by a variety of methods<mmm-link path="../references/linux-exec">
-  </mmm-link> in order to determine which format would fit. For example, script files, the "shebang" symbol, `#!`, can
-  be used to specify the program that should parse this file in the first line of the file.
+- on UNIX systems, files to be executed are checked by a variety of methods<mmm-embed path="../references/linux-exec"
+  wrap="sidenote"></mmm-embed> in order to determine which format would fit. For example, script files, the "shebang"
+  symbol, `#!`, can be used to specify the program that should parse this file in the first line of the file.
  
 It should be clear already from this short list that to mainstream operating systems, as well as the applications
 running on them, the format of a file is almost completely unknown and at best educated guesses can be made.
 
 Because these various mechanisms are applied at different times by the operating system and applications,
-it is possible for files to be labelled as or considered as being in different formats at the same time by different components of the system.
+it is possible for files to be labelled as or considered as being in different formats at the same time by different
+components of the system.
 <div class="sidenote" style="margin-top: -5rem;">
 The difference between changing a file extension and converting a file between two formats is commonly unclear to users,
 see for example <a href="https://askubuntu.com/questions/166602/why-is-it-possible-to-convert-a-file-just-by-renaming-its-extension">
@@ -52,7 +53,8 @@ Why is it possible to convert a file just by renaming it?</a>, https://askubuntu
 This leads to confusion about the factual format of data among users, but can also pose a serious security risk:
 Under some circumstances it is possible that a file contains maliciously-crafted code and is treated as an executable
 by one software component, while a security mechanism meant to detect such code determines the same file to be a
-legitimate image<mmm-link path="../references/poc-or-gtfo"></mmm-link> (the file may in fact be valid in both formats).
+legitimate image<mmm-embed path="../references/poc-or-gtfo" wrap="sidenote"></mmm-embed> (the file may in fact be valid
+in both formats).
 
 In mmmfs, the example above might look like this instead:  
 <mmm-embed path="tree_mmmfs">schematic view of an example mmmfs tree</mmm-embed>

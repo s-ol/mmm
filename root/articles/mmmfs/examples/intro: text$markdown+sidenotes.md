@@ -42,7 +42,7 @@ type to convert to a full reference format (to `mmm/dom`) and to an inline side-
 (`mmm/dom+link`) that can be transcluded using the `<mmm-link>` pseudo-tag.
 
 For convenience, a convert from the `URL -> cite/acm` type has been provided to `URL -> text/bibtex`,
-which generates links to the ACM Digital Library<mmm-link path="../references/acm-dl"></mmm-link>
+which generates links to the ACM Digital Library<mmm-embed path="../references/acm-dl" wrap="sidenote"></mmm-embed>
 API for accessing BibTeX citations for documents in the library.
 This means that it is enough to store the link to the ACM DL entry in mmmfs,
 and the reference will automatically be fetched (and track potential remote corrections).
