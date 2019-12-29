@@ -1,0 +1,31 @@
+@media print {
+  h1, h2, h3 {
+    break-after: avoid-page;
+  }
+
+  .view {
+    flex: 1 0 auto;
+
+    .content {
+      flex: 1 0 auto;
+    }
+  }
+
+  body {
+    background: $white;
+  }
+}
+
+@page {
+  size: a4;
+  margin: 2.5cm 0 2.5cm;
+}
+
+@page :first {
+  margin-top: 0;
+}
+
+@page :last {
+  margin-bottom: 0;
+}
+
