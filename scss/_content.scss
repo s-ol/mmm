@@ -4,13 +4,15 @@
     height: inherit;
   }
 
+  .wide.markdown,
+  .wide .markdown {
+    max-width: max-content;
+  }
+
   .markdown {
     position: relative;
     max-width: 640px;
-
-    &.wide {
-      max-width: max-content;
-    }
+    text-align: justify;
 
     > blockquote {
       @include left-border;
