@@ -210,12 +210,6 @@ converts = {
     cost: 2
     transform: single code
   }
-  -- this one needs a higher cost
-  -- {
-  --   inp: 'URL -> .+',
-  --   out: 'mmm/dom',
-  --   transform: single code
-  -- }
   {
     inp: 'URL -> (.+)',
     out: '%1',

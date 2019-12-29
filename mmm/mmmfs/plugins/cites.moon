@@ -3,7 +3,10 @@ import div, span, sup, a, i, b from require 'mmm.dom'
 parse_bibtex = (src) ->
   type, key, kv = src\match '@(%w+){(.-),(.*)}'
   with info = { _type: type, _key: key }
-    for key, val in kv\gmatch '([a-z]-)%s*=%s*{(.-)}'
+    for key, val in kv\gmatch '([a-z]-)%s*=%s*(%b{})'
+     val\sub 2, -2
+     info[key] = val\gsub '[{}]', ''
+    for key, val in kv\gmatch '([a-z]-)%s*=%s*(%d+)'
       info[key] = val
 
 title = () =>
@@ -17,6 +20,10 @@ title = () =>
 format_full = () =>
   tt = title @
   dot, com = if @title\match '[.?!]$' then '', '' else '.', ','
+
+  -- @author = deandify @author if @author
+  -- @editor = deandify @editor if @editor
+  
   switch @_type
     when 'book', 'article'
       span with setmetatable {}, __index: table
@@ -44,16 +51,12 @@ format_full = () =>
 {
   converts: {
     {
-      inp: 'URL -> cite/acm'
+      inp: 'cite/doi'
       out: 'URL -> text/bibtex'
-      cost: 0.5
-      transform: (url) =>
-        id = assert (url\match '//dl%.acm%.org/citation%.cfm%?id=(%d+)'), "couldn't parse cite/acm URL: '#{url}'"
-        uri = "https://dl.acm.org/downformats.cfm?id=#{id}&parent_id=&expformat=bibtex"
-        if MODE == 'CLIENT'
-          "https://cors-anywhere.herokuapp.com/#{uri}"
-        else
-          uri
+      cost: 0.1
+      transform: (doi) =>
+        doi = doi\match '(10%.%d%d%d%d%d?%d?%d?%d?%d?/[%d%w%.%-_:;%(%)]+)'
+        "http://api.crossref.org/works/#{doi}/transform/application/x-bibtex"
     }
     {
       inp: 'text/bibtex'
