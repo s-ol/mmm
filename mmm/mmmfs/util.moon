@@ -16,6 +16,10 @@ tourl = (path) ->
 
   find_fileder = (fileder, origin) ->  
     if 'string' == type fileder
+      if fileder == ''
+        assert origin, "cannot resolve empty path without origin!"
+        return origin
+
       if '/' ~= fileder\sub 1, 1
         assert origin, "cannot resolve relative path '#{fileder}' without origin!"
         fileder = "#{origin.path}/#{fileder}"
@@ -28,7 +32,6 @@ tourl = (path) ->
       else
         assert BROWSER and BROWSER.root, "cannot resolve absolute path '#{fileder}' without BROWSER and root set!"
         assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}'"
-
     else
       assert fileder, "no fileder passed."
 
@@ -106,10 +109,9 @@ tourl = (path) ->
 
         intext = sup a key, href: "##{id}"
 
-        print "STYLE IS '#{opts.style}'"
         span intext, div {
             class: 'sidenote'
-            style: opts.style or 'margin-top: -1rem;'
+            style: opts.style or 'margin-top: -1.25rem;'
 
             div :id, class: 'hook'
             b key, class: 'ref'

@@ -1,7 +1,7 @@
 historical approaches
 =====================
 
-Two of the earliest wholistic computing systems, the Xerox Alto and Xerox Star, both developed at Xerox PARC and
+Two of the earliest holistic computing systems, the Xerox Alto and Xerox Star, both developed at Xerox PARC and
 introduced in the 70s and early 80s, pioneered not only graphical user-interfaces, but also the "Desktop Metaphor".
 The desktop metaphor presents information as stored in "Documents" that can be organized in folders and on the
 "Desktop". It invokes a strong analogy to physical tools. One of the differences between the Xerox Star system and
@@ -39,19 +39,21 @@ The *Memex* is a hypothetical device and system for knowledge management. Propos
 path="../references/memex" wrap="sidenote"></mmm-embed>, the concept predates much of the technology that later was used
 to implement many parts of the vision.
 
+<!--
 While the article extrapolates from existing technology at the time, describing at times
 very concrete machinery based on microfilm and mechanical contraptions, many of the conceptual predictions became
 true or inspired  ....
+-->
 
 One of the most innovative elements of Bush's predictions is the idea of technologically cross-referenced and
 connected information, which would later be known and created as *hypertext*. While hypertext powers the majority of
 today's internet, many of the advantages that Bush imagined have not carried over into the personal use of computers.
-There are very few tools for creating personal, highly-interconnected knowledgebases, even though this is technically
-feasible, and a proven concept (exemplified for example by the massively successful online encyclopedia
+There are very few tools for creating personal, highly-interconnected knowledgebases, even though it is technologically
+feasible and a proven concept (exemplified for example by the massively successful online encyclopedia
 *Wikipedia*<mmm-embed path="../references/wikipedia" wrap="sidenote"></mmm-embed>).
 
 While there are little such tools available today, one of the systems that could be said to have come closest to a
-practical implementation of such a Memex-inspired system for personal use might be Apple's *HyperCard*.
+practical implementation of a Memex-inspired system for personal use might be Apple's *HyperCard*.
 
 In a live demonstration<mmm-embed path="../references/hypercard" wrap="sidenote"></mmm-embed>, the creators of the
 software showcase a system of stacks of cards that together implement, amongst others, a calendar (with yearly and
@@ -62,8 +64,8 @@ automatically looking up the card corresponding to a person's first name from a 
 different card.
 
 Alongside Spreadsheets, *HyperCard* remains one of the most successful implementations of end-user programming, even
-today. While it's technical abilities have been long matched and surpassed by other software (such as the ubiquitous
-*Hypertext Markup Language*, HTML), these technical successors have failed the legacy of *HyperCard* as an end-user
-tool: while it is easier than ever to publish content on the web (through various social media and microblogging
-services), the benefits of hypermedia as a customizable medium for personal management have nearly vanished.
-End-users do not create hypertext anymore.
+today. While its technical abilities have been long matched and surpassed by other software (such as the ubiquitous
+*Hypertext Markup Language*, HTML and the associated programming language *JavaScript*), these technical successors have
+failed the legacy of *HyperCard* as an end-user tool: While it is easier than ever to publish content on the web
+(through various social media and microblogging services), the benefits of hypermedia as a customizable medium for
+personal management have nearly vanished. End-users do not create hypertext anymore.

@@ -7,37 +7,29 @@ application-centric design
 The majority of users interact with modern computing systems in the form of smartphones, laptops or desktop PCs,
 using the mainstream operating systems Apple iOS and Mac OS X, Microsoft Windows or Android.
 
+<mmm-embed path="app-types" wrap="marginnote"></mmm-embed>
 All of these operating systems share the concept of *Applications* (or *Apps*) as one of the core pieces of their
 interaction model. Functionality and capabilities of the digital devices are bundled in, marketed, sold and distributed
-as applications.
+as applications. This focus on applications as the primary unit of systems can be seen as the root cause of multiple problems.
 
-<!-- native vs other vs new ?? -->
-<!-- limitations not mentioned yet -->
-In addition, a lot of functionality is nowadays delivered in the form of *Web Apps* or *Cloud Services*, which share the 
-limitations of native applications in addition to more specific issues that will be discussed in a separate section
-below.
-
-This focus on applications as the primary unit of systems can be seen as the root cause of multiple problems.
-
-<!--                                                                           rephrase vvv -->
-For one, since applications are the products companies produce, and software represents a market of users,
+For one, since applications are produced by private companies on the software market,
 developers compete on features integrated into their applications. To stay relevant, monlithic software or software
 suites tend to accrete features rather then modularise and delegate to other software<mmm-embed wrap="sidenote"
 path="../references/appliances"></mmm-embed>. This makes many software packages more complex and unintuitive than
 they need to be, and also cripples interoperability between applications and data formats.
 
-Because applications are incentivised to keep customers, they make use of network effects to keep customers locked-in.
-This often means re-implementing services and functionality that is already available to users,
+Because (private) software developers are incentivised to keep customers, they make use of network effects to keep
+customers locked-in. This often means re-implementing services and functionality that is already available to users,
 and integrating it directly in other applications or as a new product by the same organisation.
-While this strategy helps big software companies retain customers, it harms the users, who have to navigate a complex
+While this strategy helps big software companies retain customers, it harms users, who have to navigate a complex
 landscape of multiple incompatible, overlapping and competing software ecosystems.
 Data of the same kind, a rich-text document for example, can be shared easily within the software systems of a certain
-manufacturer, and with other users of the same, but sharing with users of a competing system, even if it has almost the
+manufacturer and with other users of the same, but sharing with users of a competing system, even if it has almost the
 exact same capabilities, can often be problematic.
 
-Another issue is that due to the technical challenges of building tools in this system, applications are designed and
+Another issue is that due to the technical challenges of development in the this paradigm, applications are designed and
 developed by experts in application development, rather than experts in the domain of the tool. While developers may
-solicit feedback, advice and ideas from domain experts, communication is a barrier. Additionally, domain experts are
+solicit feedback, advice, and ideas from domain experts, communication is a barrier. Additionally, domain experts are
 generally unfamiliar with the technical possibilities, and may therefore not be able to express feedback that would lead
 to more significant advances.
 <mmm-embed path="creative" wrap="marginnote"></mmm-embed>
@@ -48,7 +40,7 @@ The application-centric computing metaphor treats applications as black boxes, a
 customize or modify the behaviour of apps, intentionally obscuring the inner-workings of applications and
 completely cutting users off from this type of ownership over their technology. While the trend seems to be to further
 hide the way desktop operating systems work<mmm-embed path="../references/osx-files" wrap="sidenote"></mmm-embed>,
-mobile systems like Apple's *iOS* already started out as such so-called *walled gardens*.
+mobile systems like Apple's *iOS* already started out as such *walled gardens*.
 
 cloud computing
 ---------------
@@ -68,15 +60,15 @@ continue servicing a customer, the users data may be irrecoverably lost (or acce
 consequences<mmm-embed path="../references/adobe" wrap="sidenote"></mmm-embed>, especially for professional users, for
 whom an inability to access their tools or their cloud-stored data can pose an existential threat.
 
-inert data (formats)
---------------------
+inert data (and data formats)
+-----------------------------
 
 Cragg coins the term "inert data"<mmm-embed path="../references/super-powers" wrap="sidenote"></mmm-embed> for the data
-created, and left behind, by apps and applications in the computing model that is currently prevalent: Most data today
+created and left behind by apps and applications in the computing model that is currently prevalent: Most data today
 is either intrinsically linked to one specific application, that controls and limits access to the actual information,
-or even worse, stored in the cloud where users have no direct access at all and depend soley on online tools that
-require a stable network connection and a modern browser, and that could be modified, removed or otherwise negatively
-impacted at any moment.
+or, even worse, stored in the cloud where users have no direct access at all. In the latter case users depend soley on
+online tools that require a stable network connection and a modern browser and could be modified, removed, or otherwise
+negatively impacted at any moment.
 
 Aside from being inaccesible to users, the resulting complex proprietary formats are also opaque and useless to other
 applications and the operating system, which often is a huge missed opportunity: 
@@ -98,9 +90,9 @@ individual file stands for itself. Grouping of files in folders is allowed as a 
 applications only ever concern themselves with a single file at a time, independent of the context the file is stored in
 in the filesystem.
 
-Data rarely really fits this metaphora of individual files very well, and even when it does, it is rarely exposed to
+Data rarely really fits this concept of individual files very well, and even when it does, it is rarely exposed to
 the user that way: The 'Contacts' app on a mobile phone for example does not store each contacts's information in a
-separate 'file' (as the metaphora may suggest initially), but rather keeps all information in a single database file,
+separate 'file' (as the word may suggest initially), but rather keeps all information in a single database file,
 which is hidden away from the user. Consequently, access to the information contained in the database is only enabled
 through the contacts application's graphical interface, and not through other applications that generically operate on
 files.
@@ -111,21 +103,25 @@ brainstorm, many might be tempted to open an application like *Microsoft Word* o
 document there. Both *Photoshop* files and *Word* documents are capable of containing texts and images, but when such
 content is copied into them from external sources, such as other files on the same computer, or quotes and links from
 the internet, these relationships are irrevocably lost. As illustrated above, additionally, it becomes a lot harder to
-edit the content once it is aggregated as well. To choose an application for this task is a trade-off, because in
-applications primarily designed for word processing, arranging content visually is harder and image editing and video
-embedding options are limited, while tools better suited to these tasks lack nuance when working with text.
+edit the content once it is aggregated. To choose an application for this task is a hard trade-off to make, because in
+applications primarily designed for word processing, arranging content visually is hard to do, and image editing and
+video embedding options are limited, while tools better suited to these tasks lack nuance when working with text.
 
-Rather than face this dilemma, a more sensible system could leave the task of positioning and aggregating content of
-different types to one software component, while multiple different software components can be responsible for editing
-the individual pieces of content, so that the most appropriate one can be chosen for each element.
+To avoid facing this dilemma, a more sensible system could leave the task of positioning and aggregating content of
+different types to one software component, while multiple different software components could be responsible for editing
+the individual pieces of content, so that the most appropriate one can be chosen for each element. While creating the
+technological interface between these components is certainly a challenge, the resulting system would greatly benefit
+from the exponentially-growing capabilties resulting from the modular reuse of components across many contexts: A rich
+text editor component could be used for example not just in a mixed media collection as proposed above, but also for
+an email editor or the input fields in a browser.
 
 <div style="height: 2rem;"></div>
 
-To summarize, for various reasons, the metaphors and interfaces of computing interfaces today prevent users from deeply
-understanding the software they use and the data they own, from customizing and improving their experience and
+To summarize, for various reasons, the metaphors and driving concepts of computing interfaces today prevent users from
+deeply understanding the software they use and the data they own, from customizing and improving their experience and
 interactions, and from properly owning, contextualising and connecting their data.
 
-Interestingly, these deficits do not appear throughout the history of todays computing systems, but are based in rather
+Interestingly, these deficits do not appear throughout the history of today's computing systems, but are based in rather
 recent developments in the field. In fact the most influental systems in the past aspired to the polar opposites, as i
 will show in the next section.
 

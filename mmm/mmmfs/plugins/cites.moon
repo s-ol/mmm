@@ -33,6 +33,10 @@ format_full = () =>
           \insert "#{dot} "
           \insert i @journal
           \insert ", volume #{@volume}" if @volume
+        else if @series
+          \insert "#{dot} "
+          \insert i @series
+          \insert ", No. #{@number}" if @number
         \insert ", pages #{@pages}" if @pages
         \insert "#{dot} #{@publisher}" if @publisher
     when 'web', 'online'

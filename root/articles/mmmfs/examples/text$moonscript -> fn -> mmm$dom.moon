@@ -13,7 +13,7 @@
     title = child\gett 'title', 'text/plain'
 
     -- get 'preview' as a DOM description (nil if no value or conversion possible)
-    content = child\get 'preview', 'mmm/dom'
+    -- content = child\get 'preview', 'mmm/dom'
 
     -- div {
     --   h4 title, style: { margin: 0, cursor: 'pointer' }, onclick: -> BROWSER\navigate child.path
@@ -31,10 +31,15 @@
 
     li link_to child
 
-  content = ul for child in *@children
-    preview child
+  examples = div {
+    style:
+      position: 'relative'
+      'margin-top': '4rem'
 
-  -- table.insert content, 1, (@gett 'intro: mmm/dom')
-  -- div content
+    div "The online version is available at ", (a "s-ol.nu/ba", href: 'https://s-ol.nu/ba'), ".", class: 'sidenote'
+    "The following examples can be viewed and inspected in the interactive version online:"
+    ul for child in *@children
+      preview child
+  }
 
-  div (@gett 'intro: mmm/dom'), content
+  div (@gett 'intro: mmm/dom'), examples

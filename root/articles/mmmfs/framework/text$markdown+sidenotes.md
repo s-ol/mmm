@@ -22,16 +22,16 @@ end-user programming<mmm-embed path="../references/inkandswitch" wrap="sidenote"
   use of the tools and general 'passive' use of containing system at large. 
 
 These serve as guiding principles for the design and evaluation of computer systems for end-users, but are by nature
-very abstract. The following properties are therefore derived as more concrete proposals based on some more specific
+very abstract. The following properties are therefore derived as more concrete proposals based on more specific
 constraints: namely the construction of a system for end-users to keep, structure and display personal information and
-thoughts in.
+thoughts.
 
 modularity
 ----------
 
 The *UNIX Philosophy*<mmm-embed path="../references/unix" wrap="sidenote"></mmm-embed> describes the software design
 paradigm pioneered in the creation of the Unix operating system at the AT&T Bell Labs research center in the 1960s. The
-concepts are considered quite influental and are still notably applied in the Linux community. Many attempts at
+concepts are considered quite influential and are still notably applied in the Linux community. Many attempts at
 summaries exist, but the following includes the pieces that are especially relevant even today:
 
 > Even though the UNIX system introduces a number of innovative programs and techniques, no single program or idea makes
@@ -47,13 +47,13 @@ in such a way that it is easy to integrate for the user later. Assembling the sy
 interacting pieces also enables future growth and customization, since pieces may be swapped out with customized or
 alternate software at any time.
 
-Settling on a specific modular design model, and reifying other components of a system in terms of it also corresponds
+Settling on a specific modular design model, and reifying other components of a system in terms of it, also corresponds
 directly to the concept of *Embodiment* described by Ink & Switch.
 
 content transclusion
 --------------------
 
-The strengths of modular architectures should similarily also extend into the way the system will be used by users.
+The strengths of modular architectures should similarily extend also into the way the system will be used by users.
 If users are to store their information and customized behaviour in such an architecture, then powerful tools need to be
 present in order to assemble more complex solutions out of such parts. Therefore static content should be able to be
 linked to (as envisioned for the *Memex*, see above), but also to be <mmm-embed wrap="marginnote"

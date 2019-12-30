@@ -16,16 +16,17 @@ and doesn't render as a paragraph but rather just a line of text.
 This makes it suitable for denoting formatted-text titles and other small strings of text. 
 
 The problem of embedding other content together with text comfortably is also solved easily,
-becase Markdown allows embedding arbitrary HTML in the document.
+because Markdown allows embedding arbitrary HTML in the document.
 This made it possible to define a set of pseudo-HTML elements in the Markdown-convert,
 `<mmm-embed>` and `<mmm-link>`, which respectively embed and link to other content native to mmm.
 
 ### scientific publishing
-<div class="sidenote">
+<div class="sidenote" style="margin-top: 1.25rem">
 One of the 'standard' solutions, <a href="https://www.latex-project.org/">LaTeX</a>,
 is arguably at least as complex as the mmm system proposed here, but has a much narrower scope,
 since it does not support interaction.
 </div>
+
 Scientific publishing is notoriously complex, involving not only the transclusion of diagrams
 and other media, but generally requiring precise and consistent control over formatting and layout.
 Some of these complexities are tedious to manage, but present good opportunities for programmatic
@@ -43,9 +44,9 @@ type to convert to a full reference format (to `mmm/dom`) and to an inline side-
 
 For convenience, a convert from the `URL -> cite/acm` type has been provided to `URL -> text/bibtex`,
 which generates links to the ACM Digital Library<mmm-embed path="../references/acm-dl" wrap="sidenote"></mmm-embed>
-API for accessing BibTeX citations for documents in the library.
-This means that it is enough to store the link to the ACM DL entry in mmmfs,
-and the reference will automatically be fetched (and track potential remote corrections).
+API for accessing BibTeX citations for documents in the library. This means that it is enough to store the link to the
+ACM DL entry in mmmfs, and the reference will automatically be fetched, and therefore stay up to date with potential
+remote corrections.
 
 ## pinwall
 In many situations, in particular for creative work, it is often useful to compile resources of
@@ -62,14 +63,14 @@ which enumerates the list of children, wraps each in such a rectangular containe
 and outputs the list of containers as DOM elements.
 
 The position and size of each panel are stored in an ad-hoc facet, encoded in the JSON data format:
-`pinwall_info: text/json`. This facet can then set on each child and accessed whenever the script is called
+`pinwall_info: text/json`. Such a facet is set on each child and read whenever the script is called
 to render the children, plugging the values within the facet into the visual styling of the document.
 
 The script can also set event handlers that react to user input while the document is loaded,
 and allow the user to reposition and resize the individual pinwall items by clicking and dragging
 on the upper border or lower right-hand corner respectively.
 Whenever a change is made the event handler can then update the value in the `pinwall_info` facet,
-so that the script places the content at the updated position and size next time it is invoked.
+so that the updated position and size are stored for the next time the pinwall is opened.
 
 ## slideshow
 Another common use of digital documents is as aids in a verbal presentation.
@@ -84,8 +85,10 @@ It also allows putting the browser into fullscreen mode to maximise screenspace 
 of the website that may distract from the presentation, and register an event handler for keyboard accelerators
 for moving through the presentation.
 
-Finally the script simply embeds the first of its child-fileders into the viewport rect.
-One the current slide is changed, the next embedded child is simply chosen.
+Finally the script simply embeds the first of its child-fileders into the viewport rectangle.
+Once the current slide is changed, the next embedded child is simply chosen.
 
+<!--
 ## code documentation
 /meta/mmm.dom/:%20text/html+interactive
+-->

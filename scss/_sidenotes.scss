@@ -1,5 +1,9 @@
 $sidenote-width: 14rem;
 
+:root {
+  --sidenote-width: #{$sidenote-width};
+}
+
 .sidenote-container {
   margin-right: $sidenote-width + 1rem;
 

@@ -7,7 +7,7 @@ and evaluate them with regard to the framework derived in the corresponding sect
 
 ### publishing and blogging
 Since mmmfs has grown out of the need for a versatile CMS for a personal publishing website, it is not surprising to
-to see that it is still up to that job. Nevertheless it is worth taking a look at its strengths and weaknesses in this
+see that it is still up to that job. Nevertheless it is worth taking a look at its strengths and weaknesses in this
 context:
 
 The system has proven itself perfect for publishing small- and medium-size articles and blog posts, especially for its
@@ -15,13 +15,14 @@ ability to flexibly transclude content from any source. This includes diagrams (
 videos (as in the documentation in the appendix), but also less conventional media such as
 interactive diagrams<mmm-embed path="../references/aspect-ratios" wrap="sidenote"></mmm-embed> or twitter postings.
 
-On the other hand, the development of the technical framework for this very thesis has posed greater challenges.
+<!-- @TODO -->
+On the other hand, the development of the technical framework for this thesis has posed greater challenges.
 In particular, the implementation of the reference and sidenote systems are brittle and uninspiring.
 
 This is mostly due to the approach of splitting up the thesis into a multitude of fileders, and the current lack of
 mechanisms to re-capture information spread throughout the resulting history effectively.
 Another issue is that the system is currently based on the presumption that content can and should be interpreted
-separate from its parent and context in most cases. This has made the implementation of sidenotes less idiomatic
+separately from its parent and context in most cases. This has made the implementation of sidenotes less idiomatic
 than initially anticipated.
 
 ### pinwall
@@ -71,20 +72,20 @@ The parts of the code dealing with the content are essentially identical, except
 more general `mmm/dom` type-interface, allowing for a greater variety of types of content to be used as slides.
 
 ## general concerns
-While the system has proven pretty successfuly and moldable to the different use-cases that it has been tested in,
+While the system has proven pretty successful and moldable to the different use-cases that it has been tested in,
 there are also limitations in the proposed system that have become obvious in developing and working with the system.
 Some of these have been anticipated for some time and concrete research directions for solutions are apparent,
 while others may be intrinsic limitations in the approach taken.
 
 ### global set of converts
-In the current system, there exists only a single, global set of *converts* that can be potentially applied
-to facets anywhere in the system.
+In the current system, there is only a single, global set of *converts* that can be potentially applied to facets
+anywhere in the system.
 Therefore it is necessary to encode behaviour directly (as code) in facets wherever exceptional behaviour is required.
 For example if a fileder conatining multiple images wants to provide custom UI for each image when viewed independently,
 this code has to either be attached to every image individually (and redundantly), or added as a global convert.
 To make sure this convert does not interfere with images elsewhere in the system, it would be necessary to introduce
-a new type and change the images to use it, which may present more problems yet and works against the principle of
-compatibility the system has been constructed for.
+a new type and change the images to use it, which may present even more problems, and works against the principle of
+compatibility that the system has been constructed for.
 
 A potential direction of research in the future is to allow specifying *converts* as part of the fileder tree.
 Application of *converts* could then be scoped to their fileders' subtrees, such that for any facet only the *converts*
@@ -100,7 +101,7 @@ the hierarchical organization of data, thereby exacerbating the limits of hierar
 ### code outside of the system
 At the moment, a large part of the mmmfs codebase is still separate from the content, and developed outside of mmmfs
 itself. This is a result of the development process of mmmfs and was necessary to start the project as the filesystem
-itself matured, but has become a limitation of the user experience now: Potential users of mmmfs would generally start
+itself matured, but has now become a limitation of the user experience: potential users of mmmfs would generally start
 by becoming familiar with the operation of mmmfs from within the system, as this is the expected (and designated)
 experience developed for them. All of the code that lives outside of the mmmfs tree is therefore invisible and opaque
 to them, actively limiting their understanding, and thereby the customizability, of the system.
@@ -110,8 +111,8 @@ This weakness represents a failure to (fully) implement the quality of a "Living
 
 In general however, some portion of code may always have to be left outside of the system.
 This also wouldn't necessarily represent a problem, but in this case it is particularily relevant
-for the global set of *converts* (see above), as well as the layout used to render the web view, 
-both of which are expected to undergo changes as users adapt the system to their own content types and
+for the global set of *converts* (see above), as well as the layout used to render the web view. 
+Both of these are expected to undergo changes as users adapt the system to their own content types and
 domains of interest, as well as their visual identity, respectively.
 
 ### type system
@@ -134,35 +135,32 @@ In much the same way that the application-centric paradigm alienates users from 
 and feeling of ownership of their data by overemphasizing the tools in between,
 the automagical coercion of data types introduces distance between the user and
 an understanding of the data in the system.
-This poses a threat to the transparency of the system, and a potential lack of the quality of "Embodiment" (see above).
+This poses a threat to the transparency of the system, and potentially a lack of the "Embodiment" quality (see above).
 
 Potential solutions could be to communicate the conversion path clearly and explicitly together with the content,
 as well as making this display interactive to encourage experimentation with custom conversion queries.
-Emphasising the conversion process more strongly in this way might be able to turn this feature from an opaque
-hindrance into a transparent tool using careful UX and UI design.
+Emphasising the conversion process more strongly in this way might be a way to turn this feature from an opaque
+hindrance into a transparent tool. This should represent a challenge mostly in terms of UX and UI design.
 
 ### editing
-Because many *converts* are not necessarily reversible,
-it is very hard to implement generic ways of editing stored data in the same format it is viewed.
-For example, the system trivially converts markdown-formatted text sources into viewable HTML markup,
-but it is hardly possible to propagate changes to the viewable HTML back to the markdown source.
-This particular instance of the problem might be solvable using a Rich-Text editor, but the general problem
-worsens when the conversion path becomes more complex:
-If the markdown source was fetched via HTTP from a remote URL (e.g. if the facet's type was `URL -> text/markdown`),
-it is not possible to edit the content at all, since the only data owned by the system is the URL string itself,
-which is not part of the viewable representation at all.
-Similarily, when viewing output that is generated by code (e.g. `text/moonscript -> mmm/dom`),
-the code itself is not visible to the user when interacting with the viewable representation,
-and if the user wishes to change parts of the representation the system is unable to relate these changes to elements
-of the code or assist the user in doing so.
+Because many *converts* are not necessarily reversible, it is very hard to implement generic ways of editing stored data
+in the same format it is viewed. For example, the system trivially converts markdown-formatted text sources into
+viewable HTML markup, but it is hardly possible to propagate changes to the viewable HTML back to the markdown source.
+This particular instance of the problem might be solvable using a Rich-Text editor, but the general problem worsens when
+the conversion path becomes more complex: If the markdown source was fetched via HTTP from a remote URL (e.g. if the
+facet's type was `URL -> text/markdown`), it is not possible to edit the content at all, since the only data owned by
+the system is the URL string itself, which is not part of the viewable representation. Similarily, when viewing output
+that is generated by code (e.g. `text/moonscript -> mmm/dom`), the code itself is not visible to the user, and if the
+user wishes to change parts of the representation, the system is unable to relate these changes to elements of the code
+or assist the user in doing so.
 
-However even where plain text is used and edited, a shortcoming of the current approach to editing is evident:
-The content editor is wholly separate from the visible representation, and only facets of the currently viewed
-fileder can be edited. This means that content cannot be edited in its context, which is particularily annoying
-due to the fragmentation of content that mmmfs encourages. 
+However, even where plain text is used and edited, a shortcoming of the current approach to editing is evident:
+The content editor is wholly separate from the visible representation, and only facets of the currently viewed fileder
+can be edited. This means that content cannot be edited in its context, which is exacerbated by the extreme
+fragmentation of content that mmmfs encourages. 
 
-As a result, interacting with the system at large is still a very different experience than  editing content (and
+As a result, interacting with the system at large is still a very different experience from editing content (and
 thereby extending the system) in it. This is expected to represent a major hurdle for users getting started with the
-system, and is a major shortcoming in enabling end-user programming as set as a goal for
-this project. A future iteration should take care to reconsider how editing can be integrated more holistically
-with the other core concepts of the design.
+system, and is a major shortcoming in enabling end-user programming, as set as a goal for this project.
+A future iteration should carefully reconsider how editing could be integrated more holistically with the other core
+concepts of the design.

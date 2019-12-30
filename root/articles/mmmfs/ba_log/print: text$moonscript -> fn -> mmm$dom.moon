@@ -4,6 +4,8 @@ import ropairs from require 'mmm.ordered'
 
 =>
   div {
+    class: 'print-ownpage'
+
     h1 link_to @, "appendix: project log"
     table.unpack for post in *@children
       continue if post\get 'hidden: bool'
