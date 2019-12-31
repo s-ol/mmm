@@ -1,4 +1,4 @@
-Today i implemented updating/saving content in the server, and bridged the feature to the client.
+Today I implemented updating/saving content in the server, and bridged the feature to the client.
 In the inspector there is now a `save changes` button that (attempts to) save the content on
 the server's filesystem \[[`4b8d9be`][4b8d9be]\].
 

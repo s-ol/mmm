@@ -21,8 +21,7 @@ format_full = () =>
   tt = title @
   dot, com = if @title\match '[.?!]$' then '', '' else '.', ','
 
-  -- @author = deandify @author if @author
-  -- @editor = deandify @editor if @editor
+  @author or= 'N. N.'
   
   switch @_type
     when 'book', 'article'
@@ -41,9 +40,10 @@ format_full = () =>
         \insert "#{dot} #{@publisher}" if @publisher
     when 'web', 'online'
       span with setmetatable {}, __index: table
-        \insert "#{@author} (#{@year}), " if @author and @year
+        \insert "#{@author}"
+        \insert " (#{@year})" if @year
+        \insert ", "
         \insert tt
-        \insert " (#{@year})" if @year and not @author
         \insert "#{com} #{@url}"
         \insert " from #{@visited}" if @visited
     else

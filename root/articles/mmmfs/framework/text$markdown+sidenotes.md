@@ -17,7 +17,7 @@ end-user programming<mmm-embed path="../references/inkandswitch" wrap="sidenote"
   and in particular the ability to make changes at different levels of depth in the system with
   very short feedback loops and a feeling of direct experience.
 - *In-place toolchain*, denoting the availability of tools to customize and author the experience,
-  as well as a certain accesibility of these tools, granted by a conceptual affinity between the
+  as well as a certain accessibility of these tools, granted by a conceptual affinity between the
   use of the tools and general 'passive' use of containing system at large. 
 
 These serve as guiding principles for the design and evaluation of computer systems for end-users, but are by nature
@@ -33,6 +33,7 @@ paradigm pioneered in the creation of the Unix operating system at the AT&T Bell
 concepts are considered quite influential and are still notably applied in the Linux community. Many attempts at
 summaries exist, but the following includes the pieces that are especially relevant even today:
 
+<mmm-embed path="../references/unix" wrap="marginnote"></mmm-embed>
 > Even though the UNIX system introduces a number of innovative programs and techniques, no single program or idea makes
 > it work well. Instead, what makes it effective is the approach to programming, a philosophy of using the computer.
 > Although that philosophy can't be written down in a single sentence, at its heart is the idea that the power of a
@@ -52,7 +53,7 @@ directly to the concept of *Embodiment* described by Ink & Switch.
 3.3 content transclusion
 ------------------------
 
-The strengths of modular architectures should similarily extend also into the way the system will be used by users.
+The strengths of modular architectures should similarly extend also into the way the system will be used by users.
 If users are to store their information and customized behaviour in such an architecture, then powerful tools need to be
 present in order to assemble more complex solutions out of such parts. Therefore static content should be able to be
 linked to (as envisioned for the *Memex*, see above), but also to be <mmm-embed wrap="marginnote"
@@ -61,7 +62,7 @@ separate document, possibly stored remotely, by reference rather than by duplica
 </mmm-embed>*transcluded*,
 to facilitate the creation of flexible data formats and interactions, such that e.g. a slideshow slide can include
 content in a variety other formats (such as images and text) from anywhere else in the system. Behaviours also should be
-able to be transcluded and reused to facilitate the creation of ad-hoc sytems and applets based on user needs. For
+able to be transcluded and reused to facilitate the creation of ad-hoc systems and applets based on user needs. For
 example a user-created todo list should be able to take advantage of a sketching tool the user already has access to.
 
 By forming the immediately user-visible layer of the system out of the same abstractions that the deeper levels of the

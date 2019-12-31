@@ -12,22 +12,22 @@ This makes it suitable for denoting formatted-text titles and other small string
 The problem of embedding other content together with text comfortably is also solved easily,
 because Markdown allows embedding arbitrary HTML in the document.
 This made it possible to define a set of pseudo-HTML elements in the Markdown-convert,
-`<mmm-embed>` and `<mmm-link>`, which respectively embed and link to other content native to mmm.
+`<mmm-embed>` and `<mmm-link>`, which respectively embed and link to other content native to mmmfs.
 
-### 5.1.2 scientific publishing
+### 5.1.2 academic publishing
 <div class="sidenote" style="margin-top: 1.25rem">
 One of the 'standard' solutions, <a href="https://www.latex-project.org/">LaTeX</a>,
 is arguably at least as complex as the mmm system proposed here, but has a much narrower scope,
 since it does not support interaction.
 </div>
 
-Scientific publishing is notoriously complex, involving not only the transclusion of diagrams
+Academic publishing is notoriously complex, involving not only the transclusion of diagrams
 and other media, but generally requiring precise and consistent control over formatting and layout.
 Some of these complexities are tedious to manage, but present good opportunities for programmatic
 systems and media to do work for the writer.
 
 One such topic is the topic of references.
-References appear in various formats at multiple positions in a scientific document;
+References appear in various formats at multiple positions in a academic document;
 usually they are referenced via a reduced visual form within the text of the document,
 and then shown again with full details at the end of the document.
 
@@ -44,9 +44,9 @@ remote corrections.
 
 ## 5.2 pinwall
 In many situations, in particular for creative work, it is often useful to compile resources of
-different types for reference or inspiration, and arrange them spacially so that they can be viewed
+different types for reference or inspiration, and arrange them spatially so that they can be viewed
 at a glance or organized into different contexts etc.
-Such a pinwall could serve for example to organise references to articles,
+Such a pinwall could serve for example to organize references to articles,
 to collect visual inspiration for a moodboard etc.
 
 As a collection, the Pinwall is primarily mapped to a Fileder in the system.
@@ -75,7 +75,7 @@ advanced (and rewound) one by one using keypresses.
 The implementation of this is rather straightforward as well.
 The slideshow as a whole becomes a fileder with a script that generates a designated viewport rectangle,
 as well as a control interface with keys for advancing the active slide.
-It also allows putting the browser into fullscreen mode to maximise screenspace and remove  visual elements
+It also allows putting the browser into fullscreen mode to maximize screen space and remove  visual elements
 of the website that may distract from the presentation, and register an event handler for keyboard accelerators
 for moving through the presentation.
 

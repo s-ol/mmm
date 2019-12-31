@@ -1,4 +1,4 @@
-# 4. mmmfs
+# 4. system description
 
 `mmmfs` is a newly developed personal data storage and processing system. It was developed first as a tool for
 generating static websites, but has been extended with live interaction and introspection, as well as embedded
@@ -7,12 +7,12 @@ editing capabilities as part of this work.
 mmmfs has been designed with a focus on data ownership for users. One of the main driving ideas is to unlock data
 from external data silos and file formats by making data available uniformly across different storage systems and
 formats. Secondly, computation and interactive elements are also integrated in the paradigm, so that mmmfs can be
-seemlessly extended and molded to the users needs.
+seamlessly extended and molded to the users needs.
 
 The abstraction of data types is accomplished using two major components, the *Type System and Coercion Engine* and
 the *Fileder Unified Data Model* for unified data storage and access.
 
-## 4.1 the fileder unified data model
+## 4.1 data storage model
 The Fileder Model is the underlying unified data storage model.
 Like many data storage models it is based fundamentally on the concept of a hierarchical tree-structure.
 
@@ -59,7 +59,7 @@ In mmmfs, the example above might look like this instead:
 
 Superficially, this may look quite similar: there is still only two types of nodes (referred to as *fileders* and
 *facets*), and again one of them, the *fileders* are used only to hierarchically organize *facets*. Unlike *files*,
-*factes* don't only store a freeform *name*, there is also a dedicated *type* field associated with every *facet*, that
+*facets* don't only store a freeform *name*, there is also a dedicated *type* field associated with every *facet*, that
 is explicitly designed to be understood and used by the system.
 
 Despite the similarities, the semantics of this system are very different: In mainstream filesystems, each *file* stands
@@ -77,7 +77,7 @@ Semantically a *fileder*, like a *directory*, also encompasses all the other *fi
 (recursively). Since *fileders* are the primary unit of data to be operated upon, *fileder* nesting emerges as a natural
 way of structuring complex data, both for access by the system and its components, as well as the user themself.
 
-## 4.2 the type system & coercion engine
+## 4.2 type system and coercion engine
 As mentioned above, *facets* store data alongside its *type*, and when a component of the system requires data from a
 *fileder*, it has to specify the *expected type* (or a list of these) that it requires the data to be in. The system
 then attempts to coerce one of the existing facets into the *expected type*, if possible. This process can involve many
@@ -95,7 +95,7 @@ Here are some common MIME-types that are also used in mmmfs:
 - `image/png`
 - `image/jpeg`
 
-While these types allow some amount of specifity, they fall short of describing their content especially in cases where
+While these types allow some amount of specificity, they fall short of describing their content especially in cases where
 formats overlap: Source code for example is often distributed in `.tar.gz` archive files (directory-trees that are first
 bundled into an `application/x-tar` archive, and then compressed into an `application/gzip` archive). Using either of
 these two types is respectively incorrect or insufficient information to properly treat and extract the contained data.
@@ -148,7 +148,7 @@ they return depend on the input type, as is required often when nested types are
     }
 
 This *convert* accepts an `application/gzip` *type* wrapping any other *type*, and captures that nested type in a
-pattern group. It then uses the substituion syntax to specify that nested type as the output of the conversion.
+pattern group. It then uses the substitution syntax to specify that nested type as the output of the conversion.
 For an input *type* of `application/gzip -> image/png` this *convert* would therefore generate the type `image/png`. 
 
 This last example further demonstrates the flexibility of this approach:
@@ -166,11 +166,11 @@ In addition to the attributes shown above, every *convert* is also rated with a 
 roughly estimate both the cost (in terms of computing power) of the conversion, as well as the accuracy or immediacy of
 the conversion. For example, resizing an image to a lower size should have a high cost, because the process is
 computationally expensive, but also because a smaller image represents the original image to a lesser degree.
-Similarily, an URL to a piece of content is a less immediate representation than the content itself, so the cost of a
+Similarly, an URL to a piece of content is a less immediate representation than the content itself, so the cost of a
 *convert* that simply generates the URL to a piece of data should be high even if the process is very cheap to compute.
 
 Cost is defined in this way to make sure that the result of a type-coercion operation reflects the content that was
-present as accurately as possible. It is also important to prevent some nonsensical results from occuring, such as
+present as accurately as possible. It is also important to prevent some nonsensical results from occurring, such as
 displaying a link to content instead of the content itself because the link is cheaper to create than completely
 converting the content does.
 

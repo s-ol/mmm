@@ -30,7 +30,7 @@ That means that when the root fileder is rendered, currently 120MB of data have 
 Now that the client can render content within the web browser again, that would be even worse due to the network delay.
 
 To solve this, the Fileder implementation now lazy-loads \[[`9632233`][9632233]\].
-When a Fileder is created, it initially knows only its path, but doesn't know which factes or children it contains.
+When a Fileder is created, it initially knows only its path, but doesn't know which facets or children it contains.
 As soon as that data is attempted to be accessed, the fileder loads in the list of its children and facets from the datastore.
 The facet contents are loaded only when they are actually needed to fulfill a data request or conversion.
 

@@ -4,7 +4,7 @@
 ------------------------------
 
 The majority of users interact with modern computing systems in the form of smartphones, laptops or desktop PCs,
-using the mainstream operating systems Apple iOS and Mac OS X, Microsoft Windows or Android.
+using the mainstream operating systems Apple iOS and Mac&nbsp;OS&nbsp;X, Microsoft&nbsp;Windows or Android.
 
 <mmm-embed path="app-types" wrap="marginnote"></mmm-embed>
 All of these operating systems share the concept of *Applications* (or *Apps*) as one of the core pieces of their
@@ -12,8 +12,8 @@ interaction model. Functionality and capabilities of the digital devices are bun
 as applications. This focus on applications as the primary unit of systems can be seen as the root cause of multiple problems.
 
 For one, since applications are produced by private companies on the software market,
-developers compete on features integrated into their applications. To stay relevant, monlithic software or software
-suites tend to accrete features rather then modularise and delegate to other software<mmm-embed wrap="sidenote"
+developers compete on features integrated into their applications. To stay relevant, monolithic software or software
+suites tend to accrete features rather then modularize and delegate to other software<mmm-embed wrap="sidenote"
 path="../references/appliances"></mmm-embed>. This makes many software packages more complex and unintuitive than
 they need to be, and also cripples interoperability between applications and data formats.
 
@@ -52,9 +52,9 @@ other than through a standardized set of interactions (e.g. selecting a file via
 video from a webcam, opening another website).
 
 Cloud software, as well as subscription-model software with online-verification mechanisms, are additionally subject
-to license changes, updates modifiying, restricting or simply removing past functionality etc. Additionally, many cloud
+to license changes, updates modifying, restricting or simply removing past functionality etc. Additionally, many cloud
 software solutions and ecosystems store the users' data in the cloud, often across national borders, where legal and
-privacy concerns are intransparently handled by the companies. If a company, for any reason, is unable or unwanting to
+privacy concerns are intransparently handled by the companies. If a company, for any reason, is unable or unwilling to
 continue servicing a customer, the users data may be irrecoverably lost (or access prevented). This can have serious
 consequences<mmm-embed path="../references/adobe" wrap="sidenote"></mmm-embed>, especially for professional users, for
 whom an inability to access their tools or their cloud-stored data can pose an existential threat.
@@ -65,11 +65,11 @@ whom an inability to access their tools or their cloud-stored data can pose an e
 Cragg coins the term "inert data"<mmm-embed path="../references/super-powers" wrap="sidenote"></mmm-embed> for the data
 created and left behind by apps and applications in the computing model that is currently prevalent: Most data today
 is either intrinsically linked to one specific application, that controls and limits access to the actual information,
-or, even worse, stored in the cloud where users have no direct access at all. In the latter case users depend soley on
+or, even worse, stored in the cloud where users have no direct access at all. In the latter case users depend solely on
 online tools that require a stable network connection and a modern browser and could be modified, removed, or otherwise
 negatively impacted at any moment.
 
-Aside from being inaccesible to users, the resulting complex proprietary formats are also opaque and useless to other
+Aside from being inaccessible to users, the resulting complex proprietary formats are also opaque and useless to other
 applications and the operating system, which often is a huge missed opportunity: 
 The .docx format for example, commonly used for storing mostly textual data enriched with images and on occasion videos,
 is in fact a type of archive that can contain many virtual files internally, such as the various media files contained
@@ -110,7 +110,7 @@ To avoid facing this dilemma, a more sensible system could leave the task of pos
 different types to one software component, while multiple different software components could be responsible for editing
 the individual pieces of content, so that the most appropriate one can be chosen for each element. While creating the
 technological interface between these components is certainly a challenge, the resulting system would greatly benefit
-from the exponentially-growing capabilties resulting from the modular reuse of components across many contexts: A rich
+from the exponentially-growing capabilities resulting from the modular reuse of components across many contexts: A rich
 text editor component could be used for example not just in a mixed media collection as proposed above, but also for
 an email editor or the input fields in a browser.
 
@@ -121,7 +121,7 @@ deeply understanding the software they use and the data they own, from customizi
 interactions, and from properly owning, contextualising and connecting their data.
 
 Interestingly, these deficits do not appear throughout the history of today's computing systems, but are based in rather
-recent developments in the field. In fact the most influental systems in the past aspired to the polar opposites, as i
+recent developments in the field. In fact the most influential systems in the past aspired to the polar opposites, as I
 will show in the next section.
 
 <!--

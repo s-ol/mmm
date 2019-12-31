@@ -8,9 +8,10 @@ other systems at the time, as well as the systems we use currently, is that the 
 directly known to the system.
 
 In a retrospective analysis of the Xerox Star's impact on the computer
-industry<mmm-embed path="../references/xerox-star" wrap="sidenote"></mmm-embed>, the desktop metaphor is described as
+industry, the desktop metaphor is described as
 follows:
 
+<mmm-embed path="../references/xerox-star" wrap="marginnote"></mmm-embed>
 > In a Desktop metaphor system, users deal mainly with data files, oblivious to the existence of programs.
 > They do not "invoke a text editor", they "open a document".
 > The system knows the type of each file and notifies the relevant application program when one is opened.
@@ -28,7 +29,7 @@ surely been lost.
 Another design detail of the Star system is the concept of "properties" that are stored for "objects" throughout the
 system (the objects being anything from files to characters or paragraphs). These typed pieces of information are
 labelled with a name and persistently stored, providing a mechanism to store metadata such as user preference for
-ordering or the defaut view mode of a folder for example.
+ordering or the default view mode of a folder for example.
 
 <mmm-embed path="star-graph" facet="note" wrap="marginnote" style="margin-top: 1rem;"></mmm-embed>
 <mmm-embed path="star-graph" nolink></mmm-embed>
@@ -47,7 +48,7 @@ true or inspired  ....
 One of the most innovative elements of Bush's predictions is the idea of technologically cross-referenced and
 connected information, which would later be known and created as *hypertext*. While hypertext powers the majority of
 today's internet, many of the advantages that Bush imagined have not carried over into the personal use of computers.
-There are very few tools for creating personal, highly-interconnected knowledgebases, even though it is technologically
+There are very few tools for creating personal, highly-interconnected knowledge bases, even though it is technologically
 feasible and a proven concept (exemplified for example by the massively successful online encyclopedia
 *Wikipedia*<mmm-embed path="../references/wikipedia" wrap="sidenote"></mmm-embed>).
 
