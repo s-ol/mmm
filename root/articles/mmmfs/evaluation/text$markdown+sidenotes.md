@@ -1,11 +1,10 @@
-evaluation
-==========
+# 6. evaluation
 
-## examples
+## 6.1 examples
 In this section I will take a look at the implementations of the example for the use cases outlined above,
 and evaluate them with regard to the framework derived in the corresponding section above.
 
-### publishing and blogging
+### 6.1.1 publishing and blogging
 Since mmmfs has grown out of the need for a versatile CMS for a personal publishing website, it is not surprising to
 see that it is still up to that job. Nevertheless it is worth taking a look at its strengths and weaknesses in this
 context:
@@ -25,7 +24,7 @@ Another issue is that the system is currently based on the presumption that cont
 separately from its parent and context in most cases. This has made the implementation of sidenotes less idiomatic
 than initially anticipated.
 
-### pinwall
+### 6.1.2 pinwall
 The pinwall example shows some strenghts of the mmmfs system pretty convincingly.
 The type coercion layer completely abstracts away the complexities of transcluding different types of content,
 and only positioning and sizing the content, as well as enabling interaction, remain to handle in the pinwall fileder.
@@ -40,7 +39,7 @@ take care of capturing and handling JS events. The bulk of complexity is therefo
 UI layer (in this case the browser), which could feasibly be simplified through a custom abstraction layer or the use of
 output means other than the web.
 
-### slideshow
+### 6.1.3 slideshow
 A simplified image slideshow example consists of only 20 lines of code and demonstrates how the reactive component
 framework simplifies the generation of ad-hoc UI dramatically:
 
@@ -71,13 +70,13 @@ such as the fullscreen API and sizing content proportionally to the viewport siz
 The parts of the code dealing with the content are essentially identical, except that content is transcluded via the
 more general `mmm/dom` type-interface, allowing for a greater variety of types of content to be used as slides.
 
-## general concerns
+## 6.2 general concerns
 While the system has proven pretty successful and moldable to the different use-cases that it has been tested in,
 there are also limitations in the proposed system that have become obvious in developing and working with the system.
 Some of these have been anticipated for some time and concrete research directions for solutions are apparent,
 while others may be intrinsic limitations in the approach taken.
 
-### global set of converts
+### 6.2.1 global set of converts
 In the current system, there is only a single, global set of *converts* that can be potentially applied to facets
 anywhere in the system.
 Therefore it is necessary to encode behaviour directly (as code) in facets wherever exceptional behaviour is required.
@@ -98,7 +97,7 @@ further up in the tree, for example to specialize types based on their context i
 The biggest downside to this approach would be that it  presents another pressure factor for, while also reincforcing,
 the hierarchical organization of data, thereby exacerbating the limits of hierarchical structures.
 
-### code outside of the system
+### 6.2.2 code outside of the system
 At the moment, a large part of the mmmfs codebase is still separate from the content, and developed outside of mmmfs
 itself. This is a result of the development process of mmmfs and was necessary to start the project as the filesystem
 itself matured, but has now become a limitation of the user experience: potential users of mmmfs would generally start
@@ -115,7 +114,7 @@ for the global set of *converts* (see above), as well as the layout used to rend
 Both of these are expected to undergo changes as users adapt the system to their own content types and
 domains of interest, as well as their visual identity, respectively.
 
-### type system
+### 6.2.3 type system
 The currently used type system based on strings and pattern matching has been largely satisfactory,
 but has proven problematic for some anticipated use cases.
 It should be considered to switch to a more intricate,
@@ -127,7 +126,7 @@ but others could use this information to generate lower-resolution 'thumbnails' 
 Using these mechanisms for example images could be requested with a maximum-resolution constraint to save on bandwidth
 when embedded in other documents.
 
-### type-coercion
+### 6.2.4 type-coercion
 By giving the system more information about the data it is dealing with,
 and then relying on the system to automatically transform between data-types,
 it is easy to lose track of which format data is concretely stored in.
@@ -142,7 +141,7 @@ as well as making this display interactive to encourage experimentation with cus
 Emphasising the conversion process more strongly in this way might be a way to turn this feature from an opaque
 hindrance into a transparent tool. This should represent a challenge mostly in terms of UX and UI design.
 
-### editing
+### 6.2.5 in-system editing
 Because many *converts* are not necessarily reversible, it is very hard to implement generic ways of editing stored data
 in the same format it is viewed. For example, the system trivially converts markdown-formatted text sources into
 viewable HTML markup, but it is hardly possible to propagate changes to the viewable HTML back to the markdown source.

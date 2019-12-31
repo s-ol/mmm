@@ -1,5 +1,4 @@
-historical approaches
-=====================
+# 2. historical approaches
 
 Two of the earliest holistic computing systems, the Xerox Alto and Xerox Star, both developed at Xerox PARC and
 introduced in the 70s and early 80s, pioneered not only graphical user-interfaces, but also the "Desktop Metaphor".

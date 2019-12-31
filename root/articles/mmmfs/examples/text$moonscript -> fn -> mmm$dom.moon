@@ -31,15 +31,7 @@
 
     li link_to child
 
-  examples = div {
-    style:
-      position: 'relative'
-      'margin-top': '4rem'
+  examples = ul for child in *@children
+    preview child
 
-    div "The online version is available at ", (a "s-ol.nu/ba", href: 'https://s-ol.nu/ba'), ".", class: 'sidenote'
-    "The following examples can be viewed and inspected in the interactive version online:"
-    ul for child in *@children
-      preview child
-  }
-
-  div (@gett 'intro: mmm/dom'), examples
+  div (@gett 'intro: mmm/dom'), examples, (@gett 'implementation: mmm/dom')

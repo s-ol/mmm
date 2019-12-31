@@ -1,5 +1,4 @@
-mmmfs
-=====
+# 4. mmmfs
 
 `mmmfs` is a newly developed personal data storage and processing system. It was developed first as a tool for
 generating static websites, but has been extended with live interaction and introspection, as well as embedded
@@ -13,7 +12,7 @@ seemlessly extended and molded to the users needs.
 The abstraction of data types is accomplished using two major components, the *Type System and Coercion Engine* and
 the *Fileder Unified Data Model* for unified data storage and access.
 
-## the fileder unified data model
+## 4.1 the fileder unified data model
 The Fileder Model is the underlying unified data storage model.
 Like many data storage models it is based fundamentally on the concept of a hierarchical tree-structure.
 
@@ -42,16 +41,18 @@ Some notable mechanism are:
 It should be clear already from this short list that to mainstream operating systems, as well as the applications
 running on them, the format of a file is almost completely unknown and at best educated guesses can be made.
 
-<mmm-embed path="confusion" wrap="marginnote" style="margin-top: -3rem;"></mmm-embed>
 Because these various mechanisms are applied at different times by the operating system and applications, it is possible
 for files to be labelled or considered as being in different formats at the same time by different components of the
 system.
 
-This leads to confusion about the factual format of data among users, but can also pose a serious security risk:
+This leads to confusion about the factual format of data among users<mmm-embed path="../references/renaming"
+wrap="sidenote" style="margin-top: -3rem;">For example, the difference between changing a file extension and converting
+a file between two formats is often unclear to users, as evident from questions like this:  </mmm-embed>, but can
+also pose a serious security risk:
 Under some circumstances it is possible that a file contains maliciously-crafted code and is treated as an executable
 by one software component, while a security mechanism meant to detect such code determines the same file to be a
-legitimate image<mmm-embed path="../references/poc-or-gtfo" wrap="sidenote"></mmm-embed> (the file may in fact be valid
-in both formats).
+legitimate image<mmm-embed path="../references/poc-or-gtfo" wrap="sidenote" style="margin-top: 2rem"></mmm-embed>
+(the file may in fact be valid in both formats).
 
 In mmmfs, the example above might look like this instead:
 <mmm-embed path="tree_mmmfs">schematic view of an example mmmfs tree</mmm-embed>
@@ -76,7 +77,7 @@ Semantically a *fileder*, like a *directory*, also encompasses all the other *fi
 (recursively). Since *fileders* are the primary unit of data to be operated upon, *fileder* nesting emerges as a natural
 way of structuring complex data, both for access by the system and its components, as well as the user themself.
 
-## the type system & coercion engine
+## 4.2 the type system & coercion engine
 As mentioned above, *facets* store data alongside its *type*, and when a component of the system requires data from a
 *fileder*, it has to specify the *expected type* (or a list of these) that it requires the data to be in. The system
 then attempts to coerce one of the existing facets into the *expected type*, if possible. This process can involve many

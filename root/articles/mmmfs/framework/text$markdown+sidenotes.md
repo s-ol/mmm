@@ -1,12 +1,11 @@
-evaluation framework
-====================
+# 3. evaluation framework
 
 In the following section, I will collect approaches and reviews of different end-user software systems from current
 literature, as well as derive and present my own requirements and guiding principles for the development of a new
 system.
 
-qualities
----------
+3.1 qualities of successful end-user computing
+----------------------------------------------
 
 *Ink and Switch* suggest three qualities for tools striving to support
 end-user programming<mmm-embed path="../references/inkandswitch" wrap="sidenote"></mmm-embed>:
@@ -26,8 +25,8 @@ very abstract. The following properties are therefore derived as more concrete p
 constraints: namely the construction of a system for end-users to keep, structure and display personal information and
 thoughts.
 
-modularity
-----------
+3.2 modularity
+--------------
 
 The *UNIX Philosophy*<mmm-embed path="../references/unix" wrap="sidenote"></mmm-embed> describes the software design
 paradigm pioneered in the creation of the Unix operating system at the AT&T Bell Labs research center in the 1960s. The
@@ -50,8 +49,8 @@ alternate software at any time.
 Settling on a specific modular design model, and reifying other components of a system in terms of it, also corresponds
 directly to the concept of *Embodiment* described by Ink & Switch.
 
-content transclusion
---------------------
+3.3 content transclusion
+------------------------
 
 The strengths of modular architectures should similarily extend also into the way the system will be used by users.
 If users are to store their information and customized behaviour in such an architecture, then powerful tools need to be
@@ -76,8 +75,8 @@ This ability should be integrated deeply into the system, so that data can be tr
 storage conditions, with as little caveats as possible. In particular, the interactions of remote data access and
 content transclusion should be paid attention to and taken into consideration for a system's design.
 
-end-user programming
---------------------
+3.4 end-user programming
+------------------------
 
 In order to provide users full access to their information as well as the computational infrastructure,
 users need to be able to finely customize and reorganize the smallest pieces to suit their own purposes,

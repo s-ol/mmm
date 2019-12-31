@@ -11,7 +11,6 @@
     append = (a) -> table.insert _this, a
 
     append div {
-      class: 'screen-only'
       h1 'Empowered End-User Computing', style: { 'margin-bottom': 0 }
       p {
         style:

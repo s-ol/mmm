@@ -1,8 +1,7 @@
-motivation
-==========
+# 1. motivation
 
-application-centric design
---------------------------
+1.1 application-centric design
+------------------------------
 
 The majority of users interact with modern computing systems in the form of smartphones, laptops or desktop PCs,
 using the mainstream operating systems Apple iOS and Mac OS X, Microsoft Windows or Android.
@@ -42,8 +41,8 @@ completely cutting users off from this type of ownership over their technology. 
 hide the way desktop operating systems work<mmm-embed path="../references/osx-files" wrap="sidenote"></mmm-embed>,
 mobile systems like Apple's *iOS* already started out as such *walled gardens*.
 
-cloud computing
----------------
+1.2 cloud computing
+-------------------
 
 *Web Apps* often offer similar functionality to other applications, but are subject to additional limitations:
 In most cases, they are only accessible or functional in the presence of a stable internet connection,
@@ -60,8 +59,8 @@ continue servicing a customer, the users data may be irrecoverably lost (or acce
 consequences<mmm-embed path="../references/adobe" wrap="sidenote"></mmm-embed>, especially for professional users, for
 whom an inability to access their tools or their cloud-stored data can pose an existential threat.
 
-inert data (and data formats)
------------------------------
+1.3 inert data (and data formats)
+---------------------------------
 
 Cragg coins the term "inert data"<mmm-embed path="../references/super-powers" wrap="sidenote"></mmm-embed> for the data
 created and left behind by apps and applications in the computing model that is currently prevalent: Most data today
@@ -82,8 +81,8 @@ into the .docx document. If the word-processing application supports this, the o
 otherwise the user may have to remove the old image, insert the new one and carefully ensure that the positioning in
 the document remains intact.
 
-disjointed filesystems
-----------------------
+1.4 disjointed filesystems
+--------------------------
 
 The filesystems and file models used on modern computing devices generally operate on the assumption that every
 individual file stands for itself. Grouping of files in folders is allowed as a convenience for users, but most

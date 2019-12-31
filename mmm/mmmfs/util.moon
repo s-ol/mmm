@@ -104,7 +104,7 @@ tourl = (path) ->
           link_to fileder, node, nil, opts.attr
 
       when 'sidenote'
-        key = opts.desc or tostring refs\get!
+        key = tostring refs\get!
         id = "sideref-#{key}"
 
         intext = sup a key, href: "##{id}"
