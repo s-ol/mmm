@@ -1,5 +1,9 @@
 # 1. motivation
 
+The project that this thesis accompanies was created out of a frustration with the computing systems that are currently
+popular and widely available to end-users. The following sections document and exemplify the perceived shortcomings that
+these systems exhibit, as attributed to specific concepts or paradigms that the systems seem to be designed around. 
+
 1.1 application-centric design
 ------------------------------
 
@@ -9,7 +13,8 @@ using the mainstream operating systems Apple iOS and Mac&nbsp;OS&nbsp;X, Microso
 <mmm-embed path="app-types" wrap="marginnote"></mmm-embed>
 All of these operating systems share the concept of *Applications* (or *Apps*) as one of the core pieces of their
 interaction model. Functionality and capabilities of the digital devices are bundled in, marketed, sold and distributed
-as applications. This focus on applications as the primary unit of systems can be seen as the root cause of multiple problems.
+as applications. This focus on applications as the primary unit of systems can be seen as the root cause of multiple
+problems.
 
 For one, since applications are produced by private companies on the software market,
 developers compete on features integrated into their applications. To stay relevant, monolithic software or software

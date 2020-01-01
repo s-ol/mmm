@@ -1,8 +1,10 @@
 # 3. evaluation framework
 
-In the following section, I will collect approaches and reviews of different end-user software systems from current
-literature, as well as derive and present my own requirements and guiding principles for the development of a new
-system.
+In this section, I will collect approaches and reviews of different end-user software systems from current literature,
+as well as derive and present my own requirements and guiding principles for the development of a new system.
+
+Firstly, I will take a look at a framework for evaluating end-user computing systems from literature, before presenting
+three concrete design principles and components for a new system.
 
 3.1 qualities of successful end-user computing
 ----------------------------------------------

@@ -1,16 +1,18 @@
 # 4. system description
 
-`mmmfs` is a newly developed personal data storage and processing system. It was developed first as a tool for
-generating static websites, but has been extended with live interaction and introspection, as well as embedded
-editing capabilities as part of this work.
+Alongside this thesis a new end-user computing system has been developed together with the framework presented above.
+The system, `mmmfs`, is a personal data storage and processing system that was initially developed as a tool for
+generating static websites, but has now been extended with capabilities for live interaction and introspection, as well
+as embedded editing, as part of this work.
 
 mmmfs has been designed with a focus on data ownership for users. One of the main driving ideas is to unlock data
 from external data silos and file formats by making data available uniformly across different storage systems and
-formats. Secondly, computation and interactive elements are also integrated in the paradigm, so that mmmfs can be
-seamlessly extended and molded to the users needs.
+formats. Secondly, computation and interactive elements are also integrated in this paradigm, so that mmmfs can be
+seamlessly extended and molded to the user's needs.
 
 The abstraction of data types is accomplished using two major components, the *Type System and Coercion Engine* and
-the *Fileder Unified Data Model* for unified data storage and access.
+the *Fileder Unified Data Model* for unified data storage and access. In the next sections the design and implementation
+of these two components will be described in detail.
 
 ## 4.1 data storage model
 The Fileder Model is the underlying unified data storage model.

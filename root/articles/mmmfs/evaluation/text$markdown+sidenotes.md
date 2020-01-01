@@ -1,28 +1,24 @@
 # 6. evaluation
+In this section I will first take a look at the implementations of the examples for the use cases outlined above,
+and evaluate them with regard to the framework derived in the corresponding section above. After that, some general
+concerns and insights that have become apparent while developing the system and working with it will be reviewed.
 
 ## 6.1 examples
-In this section I will take a look at the implementations of the example for the use cases outlined above,
-and evaluate them with regard to the framework derived in the corresponding section above.
-
 ### 6.1.1 publishing and blogging
-Since mmmfs has grown out of the need for a versatile CMS for a personal publishing website, it is not surprising to
-see that it is still up to that job. Nevertheless it is worth taking a look at its strengths and weaknesses in this
-context:
+Since mmmfs has grown out of the need for a versatile content-management system for a personal website and blog, it is
+not surprising to see that it is still up to that job. Nevertheless it is worth taking a look at its strengths and
+weaknesses in this context:
 
 The system has proven itself perfect for publishing small- and medium-size articles and blog posts, especially for its
 ability to flexibly transclude content from any source. This includes diagrams (such as in this thesis),
 videos (as in the documentation in the appendix), but also less conventional media such as
 interactive diagrams<mmm-embed path="../references/aspect-ratios" wrap="sidenote"></mmm-embed> or twitter postings.
 
-<!-- @TODO -->
 On the other hand, the development of the technical framework for this thesis has posed greater challenges.
-In particular, the implementation of the reference and sidenote systems are brittle and uninspiring.
-
+While the reference and sidenote systems integrated well with the rest of the system, some features like automated
+table-of-contents and section numbering were less obvious to tackle and finally completed manually.
 This is mostly due to the approach of splitting up the thesis into a multitude of fileders, and the current lack of
-mechanisms to re-capture information spread throughout the resulting history effectively.
-Another issue is that the system is currently based on the presumption that content can and should be interpreted
-separately from its parent and context in most cases. This has made the implementation of sidenotes less idiomatic
-than initially anticipated.
+mechanisms to re-capture information spread throughout the resulting hierarchy effectively.
 
 ### 6.1.2 pinwall
 The pinwall example shows some strengths of the mmmfs system pretty convincingly.
@@ -73,8 +69,8 @@ more general `mmm/dom` type-interface, allowing for a greater variety of types o
 ## 6.2 general concerns
 While the system has proven pretty successful and moldable to the different use-cases that it has been tested in,
 there are also limitations in the proposed system that have become obvious in developing and working with the system.
-Some of these have been anticipated for some time and concrete research directions for solutions are apparent,
-while others may be intrinsic limitations in the approach taken.
+In this section these limitations will be discussed individually, and directions for further research and solutions will
+be given where apparent.
 
 ### 6.2.1 global set of converts
 In the current system, there is only a single, global set of *converts* that can be potentially applied to facets
