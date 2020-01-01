@@ -24,22 +24,12 @@ You can build the static content with:
     $ tup init
     $ tup
 
-Next you can render a sqlite3 mmmfs database using
+Then you can run the interactive server (`build/server.moon`):
 
-    $ moon build/render_all.moon db.sqlite3
-
-Then, run some kind of HTTP server from within `out`, e.g. with python 3 installed:
-
-    $ cd root
-    $ python -m http.server
+    $ moon build/server.moon fs
 
 You can then view the website in your browser.
-The example above will provide it at `http://localhost:8000`.
-
-During development you may want to automatically rebuild the project as files are changed.
-You can do this with the following command:
-
-    $ tup monitor -f -a
+It should be availabe at `http://localhost:8000`.
 
 ### Dependencies
 
@@ -59,9 +49,14 @@ Not required but recommended:
 - [discount](https://luarocks.org/modules/craigb/discount): `luarocks install discount` (requires libmarkdown2, for Markdown support)
 
 ### Live Reloading (during development)
-[entr][entr] is useful for reloading the dev server when code outside the root changes:
+During development you may want to automatically rebuild the project as files are changed.
+You can let tup automatically rebuild the client runtime and stylesheet with the following command:
 
-    $ ls build/**.moon mmm/**.moon | entr -r moon build/server.moon fs
+    $ tup monitor -f -a
+
+[entr][entr] is useful for reloading the realtime server when code outside the root changes:
+
+    $ ls {build,mmm}/**.moon | entr -r moon build/server.moon fs
 
 [moonscript]: https://moonscript.org/
 [mmm]: https://mmm.s-ol.nu/
