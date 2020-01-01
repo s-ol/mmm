@@ -1,8 +1,8 @@
-@article{memex,
+@online{memex,
   author = {Bush, Vannevar},
   title = {As we may think},
   journal = {Atlantic Monthly},
   year = {1945},
-  volume = {176},
-  pages = {101-108},
+  visited = {2019-12-18},
+  url = {https://www.theatlantic.com/magazine/archive/1945/07/as-we-may-think/303881/}
 }

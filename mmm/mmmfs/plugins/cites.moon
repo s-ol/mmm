@@ -38,6 +38,9 @@ format_full = () =>
           \insert ", No. #{@number}" if @number
         \insert ", pages #{@pages}" if @pages
         \insert "#{dot} #{@publisher}" if @publisher
+        if @doi
+          \insert "#{dot} "
+          \insert a "doi:#{@doi}", href: "https://doi.org/#{@doi}"
     when 'web', 'online'
       span with setmetatable {}, __index: table
         \insert "#{@author}"

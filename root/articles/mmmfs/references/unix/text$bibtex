@@ -1,6 +1,6 @@
 @book{10.5555/577766,
   author = {Kernighan, Brian W. and Pike, Rob},
-  title = {The  UNIX Programming Environment},
+  title = {The UNIX Programming Environment},
   year = {1983},
   isbn = {0139376992},
   publisher = {Prentice Hall Professional Technical Reference}
