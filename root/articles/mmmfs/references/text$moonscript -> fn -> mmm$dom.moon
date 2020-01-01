@@ -5,6 +5,8 @@
   refs = for ref in *@children
     li ref\gett 'mmm/dom'
   div {
+    class: 'print-ownpage'
+
     h1 "references", id: 'references'
     ol with refs
       refs.style = 'line-height': 'normal'

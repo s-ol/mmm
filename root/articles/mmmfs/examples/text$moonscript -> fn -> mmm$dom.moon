@@ -34,4 +34,11 @@
   examples = ul for child in *@children
     preview child
 
-  div (@gett 'intro: mmm/dom'), examples, (@gett 'implementation: mmm/dom')
+  div {
+    style:
+      'break-after': 'page'
+
+    (@gett 'intro: mmm/dom')
+    examples
+    (@gett 'implementation: mmm/dom')
+  }

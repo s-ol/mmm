@@ -4,7 +4,7 @@ import ropairs from require 'mmm.ordered'
 
 =>
   div {
-    h1 (link_to @, "appendix: project log"), id: 'ba-log'
+    h1 (link_to @, "appendix: project log"), id: 'ba-log'
     @gett 'intro: mmm/dom'
     ul do
       posts = for post in *@children

@@ -1,20 +1,20 @@
-## 5.1 publishing and blogging
-### 5.1.1 blogging
-Blogging is pretty straightforward, since it generally just involves publishing lightly-formatted text,
+## 6.1&emsp;publishing and blogging
+### 6.1.1&emsp;blogging
+Blogging is pretty straightforward since it generally just involves publishing lightly-formatted text,
 interspersed with media such as images and videos or perhaps social media posts.
-Markdown is a great tool for this job, and has been integrated in the system to much success:
+Markdown is a great tool for this job, and has been integrated into the system to much success:
 There are two different types registered with *converts*: `text/markdown` and `text/markdown+span`.
 They both render to HTML (and DOM nodes), so they are immediately viewable as part of the system.
 The only difference for `text/markdown+span` is that it is limited to a single line,
 and doesn't render as a paragraph but rather just a line of text.
 This makes it suitable for denoting formatted-text titles and other small strings of text. 
 
-The problem of embedding other content together with text comfortably is also solved easily,
+The problem of embedding other content together with text comfortably is also solved easily
 because Markdown allows embedding arbitrary HTML in the document.
 This made it possible to define a set of pseudo-HTML elements in the Markdown-convert,
 `<mmm-embed>` and `<mmm-link>`, which respectively embed and link to other content native to mmmfs.
 
-### 5.1.2 academic publishing
+### 6.1.2&emsp;academic publishing
 <div class="sidenote" style="margin-top: 1.25rem">
 One of the 'standard' solutions, <a href="https://www.latex-project.org/">LaTeX</a>,
 is arguably at least as complex as the mmm system proposed here, but has a much narrower scope,
@@ -22,13 +22,13 @@ since it does not support interaction.
 </div>
 
 Academic publishing is notoriously complex, involving not only the transclusion of diagrams
-and other media, but generally requiring precise and consistent control over formatting and layout.
-Some of these complexities are tedious to manage, but present good opportunities for programmatic
+and other media but generally requiring precise and consistent control over formatting and layout.
+Some of these complexities are tedious to manage but present good opportunities for programmatic
 systems and media to do work for the writer.
 
 One such topic is the topic of references.
-References appear in various formats at multiple positions in a academic document;
-usually they are referenced via a reduced visual form within the text of the document,
+References appear in various formats at multiple positions in an academic document;
+usually, they are referenced via a reduced visual form within the text of the document
 and then shown again with full details at the end of the document.
 
 For the sake of this thesis, referencing has been implemented using a subset of the popular
@@ -42,18 +42,18 @@ API for accessing BibTeX citations for documents in the library. This means that
 ACM DL entry in mmmfs, and the reference will automatically be fetched, and therefore stay up to date with potential
 remote corrections.
 
-## 5.2 pinwall
-In many situations, in particular for creative work, it is often useful to compile resources of
-different types for reference or inspiration, and arrange them spatially so that they can be viewed
-at a glance or organized into different contexts etc.
+## 6.2&emsp;pinwall
+In many situations, and particularly for creative work, it is often useful to compile resources of
+different types for reference or inspiration and arrange them spatially so that they can be viewed
+at a glance or organized into different contexts, etc.
 Such a pinwall could serve for example to organize references to articles,
-to collect visual inspiration for a moodboard etc.
+to collect visual inspiration for a mood board, etc.
 
 As a collection, the Pinwall is primarily mapped to a Fileder in the system.
 Any content that is placed within can then be rendered by the Pinwall,
 which can constrain every piece of content to a rectangular piece on its canvas.
 This is possible through a simple script, e.g. of the type `text/moonscript -> fn -> mmm/dom`,
-which enumerates the list of children, wraps each in such a rectangular container,
+which enumerates the list of children, wraps each in such a rectangular container
 and outputs the list of containers as DOM elements.
 
 The position and size of each panel are stored in an ad-hoc facet, encoded in the JSON data format:
@@ -66,7 +66,7 @@ on the upper border or lower right-hand corner respectively.
 Whenever a change is made the event handler can then update the value in the `pinwall_info` facet,
 so that the updated position and size are stored for the next time the pinwall is opened.
 
-## 5.3 slideshow
+## 6.3&emsp;slideshow
 Another common use of digital documents is as aids in a verbal presentation.
 These often take the form of slideshows, for the creation of which a number of established applications exist.
 In simple terms, a slideshow is simply a linear series of screen-sized documents, that can be
@@ -79,7 +79,7 @@ It also allows putting the browser into fullscreen mode to maximize screen space
 of the website that may distract from the presentation, and register an event handler for keyboard accelerators
 for moving through the presentation.
 
-Finally the script simply embeds the first of its child-fileders into the viewport rectangle.
+Finally, the script simply embeds the first of its child-fileders into the viewport rectangle.
 Once the current slide is changed, the next embedded child is simply chosen.
 
 <!--

@@ -1,14 +1,11 @@
-# 7. conclusion
+# 8&emsp;conclusion
 
-<div class="well well-warning">[section under construction]</div>
+The historical analysis and the evaluation of the proposed system show that many of the limitations of current
+mainstream operating systems can be worked around effectively. The flaws can also be attributed in part to some
+concrete design paradigms, which future system designers may seek to avoid. To this end, the framework provided for
+evaluation may also be useful.
 
-In the beginning of this thesis multiple downsides of the most widely used end-user computing systems have been
-demonstrated and attributed to an over-reliance on a set of design paradigms that do not align well with the goal of
-empowering users. On the other hand, it has been shown that many well-recognized historic systems were designed with
-this goal in mind.
-
-Based on the aspirations and appraoches of these historic systems, a framework for the evaluation of empowering end-user
-computing systems was developed alongside one such system itself. While the proposed system has been shown to have many
-flaws and limitations of its own, and is not currently viable as a tool for end-users, it serves to demonstrate the
-feasiblity of type coercion and the file system as a focus point for new end-user computing systems, and provides a
-reference point for further research.
+The system proposed and developed in the project corresponding to this thesis has been shown to successfully implement
+many of the properties were hoped to be achieved, such as a modular and consistent architecture and strong support for
+mixed-content transclusions. On the other hand, some limitations in the design are apparent. Many of these limitations
+constitute candidate topics for further research, and most can be attributed to trade-offs made in the development process.

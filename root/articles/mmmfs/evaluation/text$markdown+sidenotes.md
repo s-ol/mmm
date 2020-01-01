@@ -1,12 +1,12 @@
-# 6. evaluation
-In this section I will first take a look at the implementations of the examples for the use cases outlined above,
+# 7&emsp;evaluation
+In this section, I will first take a look at the implementations of the examples for the use cases outlined above,
 and evaluate them with regard to the framework derived in the corresponding section above. After that, some general
 concerns and insights that have become apparent while developing the system and working with it will be reviewed.
 
-## 6.1 examples
-### 6.1.1 publishing and blogging
-Since mmmfs has grown out of the need for a versatile content-management system for a personal website and blog, it is
-not surprising to see that it is still up to that job. Nevertheless it is worth taking a look at its strengths and
+## 7.1&emsp;examples
+### 7.1.1&emsp;publishing and blogging
+Since mmmfs has grown out of the need for a versatile content management system for a personal website and blog, it is
+not surprising to see that it is still up to that job. Nevertheless, it is worth taking a look at its strengths and
 weaknesses in this context:
 
 The system has proven itself perfect for publishing small- and medium-size articles and blog posts, especially for its
@@ -20,12 +20,12 @@ table-of-contents and section numbering were less obvious to tackle and finally 
 This is mostly due to the approach of splitting up the thesis into a multitude of fileders, and the current lack of
 mechanisms to re-capture information spread throughout the resulting hierarchy effectively.
 
-### 6.1.2 pinwall
+### 7.1.2&emsp;pinwall
 The pinwall example shows some strengths of the mmmfs system pretty convincingly.
 The type coercion layer completely abstracts away the complexities of transcluding different types of content,
 and only positioning and sizing the content, as well as enabling interaction, remain to handle in the pinwall fileder.
 
-A great benefit of the use of mmmfs versus other technology for realising this example is that the example can
+A great benefit of the use of mmmfs versus other technology for realizing this example is that the example can
 seamlessly embed not only plain text, markdown, images, videos, and interactive widgets, but also follow links to all
 of these types of content, and display them meaningfully. Accomplishing this with traditional frameworks would take
 great effort, where mmmfs benefits from the reuse of these conversions across the whole system.
@@ -35,7 +35,7 @@ take care of capturing and handling JS events. The bulk of complexity is therefo
 UI layer (in this case the browser), which could feasibly be simplified through a custom abstraction layer or the use of
 output means other than the web.
 
-### 6.1.3 slideshow
+### 7.1.3&emsp;slideshow
 A simplified image slideshow example consists of only 20 lines of code and demonstrates how the reactive component
 framework simplifies the generation of ad-hoc UI dramatically:
 
@@ -66,17 +66,17 @@ such as the fullscreen API and sizing content proportionally to the viewport siz
 The parts of the code dealing with the content are essentially identical, except that content is transcluded via the
 more general `mmm/dom` type-interface, allowing for a greater variety of types of content to be used as slides.
 
-## 6.2 general concerns
+## 7.2&emsp;general concerns
 While the system has proven pretty successful and moldable to the different use-cases that it has been tested in,
 there are also limitations in the proposed system that have become obvious in developing and working with the system.
-In this section these limitations will be discussed individually, and directions for further research and solutions will
+In this section, these limitations will be discussed individually, and directions for further research and solutions will
 be given where apparent.
 
-### 6.2.1 global set of converts
+### 7.2.1&emsp;global set of converts
 In the current system, there is only a single, global set of *converts* that can be potentially applied to facets
 anywhere in the system.
-Therefore it is necessary to encode behaviour directly (as code) in facets wherever exceptional behaviour is required.
-For example if a fileder containing multiple images wants to provide custom UI for each image when viewed independently,
+Therefore it is necessary to encode behavior directly (as code) in facets wherever exceptional behavior is required.
+For example, if a fileder containing multiple images wants to provide custom UI for each image when viewed independently,
 this code has to either be attached to every image individually (and redundantly), or added as a global convert.
 To make sure this convert does not interfere with images elsewhere in the system, it would be necessary to introduce
 a new type and change the images to use it, which may present even more problems, and works against the principle of
@@ -86,15 +86,15 @@ A potential direction of research in the future is to allow specifying *converts
 Application of *converts* could then be scoped to their fileders' subtrees, such that for any facet only the *converts*
 stored in the chain of its parents upwards are considered.
 This way, *converts* can be added locally if they only make sense within a given context.
-Additionally it could be made possible to use this mechanism to locally override *converts* inherited from
-further up in the tree, for example to specialize types based on their context in the system.
+Additionally, it could be made possible to use this mechanism to locally override *converts* inherited from
+further up in the tree, for example, to specialize types based on their context in the system.
 
 <mmm-embed wrap="marginnote" path="../references/alternatives-to-trees">See also </mmm-embed>
 The biggest downside to this approach would be that it  presents another pressure factor for, while also reinforcing,
 the hierarchical organization of data, thereby exacerbating the limits of hierarchical structures.
 
-### 6.2.2 code outside of the system
-At the moment, a large part of the mmmfs codebase is still separate from the content, and developed outside of mmmfs
+### 7.2.2&emsp;code outside of the system
+At the moment, a large part of the mmmfs codebase is still separate from the content and developed outside of mmmfs
 itself. This is a result of the development process of mmmfs and was necessary to start the project as the filesystem
 itself matured, but has now become a limitation of the user experience: potential users of mmmfs would generally start
 by becoming familiar with the operation of mmmfs from within the system, as this is the expected (and designated)
@@ -104,25 +104,27 @@ to them, actively limiting their understanding, and thereby the customizability,
 This weakness represents a failure to (fully) implement the quality of a "Living System" as proposed by
 *Ink and Switch*<mmm-embed path="../references/inkandswitch" wrap="sidenote"></mmm-embed>.
 
-In general however, some portion of code may always have to be left outside of the system.
+In general, however, some portion of code may always have to be left outside of the system.
 This also wouldn't necessarily represent a problem, but in this case it is particularly relevant
 for the global set of *converts* (see above), as well as the layout used to render the web view. 
 Both of these are expected to undergo changes as users adapt the system to their own content types and
 domains of interest, as well as their visual identity, respectively.
 
-### 6.2.3 type system
-The currently used type system based on strings and pattern matching has been largely satisfactory,
+### 7.2.3&emsp;type system
+The currently used type system based on strings and pattern matching has been largely satisfactory
 but has proven problematic for some anticipated use cases.
 It should be considered to switch to a more intricate,
 structural type system that allows encoding more concrete meta-data alongside the type,
 and to match *converts* based on a more flexible scheme of pattern matching.
-For example it is envisaged to store the resolution of an image file in its type.
+For example, it is envisaged to store the resolution of an image file in its type.
 Many *converts* might choose to ignore this additional information,
 but others could use this information to generate lower-resolution 'thumbnails' of images automatically.
 Using these mechanisms for example images could be requested with a maximum-resolution constraint to save on bandwidth
 when embedded in other documents.
 
-### 6.2.4 type-coercion
+<div style="break-before: page;"></div>
+
+### 7.2.4&emsp;type-coercion
 By giving the system more information about the data it is dealing with,
 and then relying on the system to automatically transform between data-types,
 it is easy to lose track of which format data is concretely stored in.
@@ -134,10 +136,10 @@ This poses a threat to the transparency of the system, and potentially a lack of
 
 Potential solutions could be to communicate the conversion path clearly and explicitly together with the content,
 as well as making this display interactive to encourage experimentation with custom conversion queries.
-Emphasising the conversion process more strongly in this way might be a way to turn this feature from an opaque
+Emphasizing the conversion process more strongly in this way might be a way to turn this feature from an opaque
 hindrance into a transparent tool. This should represent a challenge mostly in terms of UX and UI design.
 
-### 6.2.5 in-system editing
+### 7.2.5&emsp;in-system editing
 Because many *converts* are not necessarily reversible, it is very hard to implement generic ways of editing stored data
 in the same format it is viewed. For example, the system trivially converts markdown-formatted text sources into
 viewable HTML markup, but it is hardly possible to propagate changes to the viewable HTML back to the markdown source.
@@ -156,6 +158,16 @@ fragmentation of content that mmmfs encourages.
 
 As a result, interacting with the system at large is still a very different experience from editing content (and
 thereby extending the system) in it. This is expected to represent a major hurdle for users getting started with the
-system, and is a major shortcoming in enabling end-user programming, as set as a goal for this project.
+system and is a major shortcoming in enabling end-user programming, as set as a goal for this project.
 A future iteration should carefully reconsider how editing could be integrated more holistically with the other core
 concepts of the design.
+
+<div style="break-before: page;"></div>
+
+### 7.2.6&emsp;end-user adoption
+As mentioned above, a conscious choice was made to exclude the implementation of a dedicated end-user programming
+facility in the system, and instead conventional programming languages and mechanisms were relied upon as the central
+way of customizing the system and experience. While this was a crucial choice to make in order to proceed with the
+project as a whole, it means that the system currently can not be adopted and used to its full extent by
+end-users. This also means that a full evaluation of the system with regard to end-user empowerment has to be left open
+until this can be changed by further work.
