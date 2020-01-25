@@ -17,9 +17,12 @@ and the noise heard when the ball is lost is visible as a glitch on the oscillos
 
 <mmm-embed nolink path="video"></mmm-embed>
 
+## Awards and Exhibitions
+*Plonat Atek* was awarded first place in the *Innovation* category, 8th in *Audio* and 24th overall at the *Ludum Dare 38 Compo* in 2017.
+The project has been exhibited at *A MAZE. Berlin 2018* and *Maker Faire Rome 2019*.
+
 ## History
 *Plonat Atek* was originally developed in 48 hours for the *Ludum Dare 38 Compo* in June 2017.
-It was awarded first place in the *Innovation* category and was placed 8th in *Audio* and 24th overall.
 You can find the original submission [here][ld] and documentation on how to download and run the jam version on the [itch.io page][itch].
 
 Articles on the game accompanied by the video recording above have been published by [Hackaday][hackaday], [VICE Motherboard][motherboard] and others.

@@ -7,6 +7,7 @@ import embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
       style: {
         height: '15em'
         margin: '0 .5em'
+        flex: '1 0 auto'
       }
     }
 

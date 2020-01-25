@@ -37,7 +37,7 @@ projects = {
         li text 'HLSL shader palette system'
       }
       href: 'https://vectronom.arte.tv'
-      media: embed_vid '/portfolio/vectronom/media:%20video$webm.webm'
+      media: embed_vid '/portfolio/vectronom/media:video/webm'
       tags: :cs, :professional, :js, :shader, :game
     }
     {
@@ -92,7 +92,7 @@ projects = {
         }
       }
       href: 'https://rise.tech'
-      media: embed_img '/portfolio/rise/media:%20image$png.png'
+      media: embed_img '/portfolio/rise/media:image/png'
       tags: :professional, :js, :tool
     }
     {
@@ -119,7 +119,7 @@ projects = {
         }
       }
       href: 'https://loremipsum.s-ol.nu/'
-      media: embed_img '/portfolio/lorem_ipsum/media:%20image$jpeg.jpg'
+      media: embed_img '/portfolio/lorem_ipsum/media:image/jpeg'
       tags: :professional, :js, :collab, :game
     }
     {
@@ -132,8 +132,8 @@ projects = {
         'communication via OSC/USB'
         'individually programmable daughterboards'
       }
-      href: '/projects/btrktrl'
-      media: embed_img '/projects/btrktrl/pcb_glamour_top/image$jpeg.jpg'
+      href: '/projects/btrktrl/'
+      media: embed_img '/projects/btrktrl/pcb_glamour_top/:image/jpeg'
       tags: :hardware, :tool, :cpp
     }
     {
@@ -144,8 +144,8 @@ projects = {
         'block-based language for MIDI-music reactivity'
         'implemented in openFrameworks/C++'
       }
-      href: '/projects/VJmidiKit'
-      media: embed_vid '/portfolio/VJmidiKit/media:%20video$mp4.mp4'
+      href: '/projects/VJmidiKit/'
+      media: embed_vid '/portfolio/VJmidiKit/media:video/mp4'
       tags: :tool, :cpp, :shader
     }
     {
@@ -156,8 +156,8 @@ projects = {
         'touch-panel UI and control software with node, electron and react'
         'interfaces with analog potentiometers, keypad matrix, switches'
       }
-      href: '/games/IYNX'
-      media: embed_img '/games/IYNX/pictures/ui_menu/image$jpeg.jpg'
+      href: '/games/IYNX/'
+      media: embed_img '/games/IYNX/pictures/ui_menu/:image/jpeg'
       tags: :collab, :game, :js, :hardware
     }
     {
@@ -169,8 +169,8 @@ projects = {
         'runs on a Raspberry Pi Zero in a custom case with hardware controls'
         "1st place in Innovation, LudumDare 38 Compo"
       }
-      href: '/games/plonat_atek'
-      media: embed_img '/games/plonat_atek/pictures/amaze/image$jpeg.jpg'
+      href: '/games/plonat_atek/'
+      media: embed_img '/games/plonat_atek/pictures/amaze/:image/jpeg'
       tags: :artistic, :game, :hardware
     }
     {
@@ -186,8 +186,8 @@ projects = {
           }
         }
       }
-      href: '/projects/iii-telefoni'
-      media: embed_img '/projects/iii-telefoni/heads/image$jpeg.jpg'
+      href: '/projects/iii-telefoni/'
+      media: embed_img '/projects/iii-telefoni/heads/:image/jpeg'
       tags: :artistic, :game, :js
     }
     {
@@ -199,7 +199,7 @@ projects = {
         "8 encoders with RGB lighting"
         "digtally controls a 8x8 switching matrix and 8 channels of volume modulation"
       }
-      media: embed_img '/portfolio/1u-mod/media:%20image$jpeg.jpg'
+      media: embed_img '/portfolio/1u-mod/media:image/jpeg'
       tags: :collab, :hardware, :cpp
     }
     {
@@ -213,8 +213,8 @@ projects = {
         li text 'client/server polymorphic UI framework'
         li text 'built-in server-side rendering and interactive editing support'
       }
-      -- href: '/articles/mmmfs'
-      media: embed_img '/portfolio/mmm/media:%20image$png.png'
+      href: '/articles/mmmfs/'
+      media: embed_img '/portfolio/mmm/media:image/png'
       tags: :tool, :lua
     }
     {
@@ -226,7 +226,7 @@ projects = {
         "interactive MIDI controls for the effect for performing it on stage"
       }
       href: 'https://chimpanzeebukkaque.bandcamp.com/releases'
-      media: embed_img '/portfolio/visualist/media:%20image$jpeg.jpg'
+      media: embed_img '/portfolio/visualist/media:image/jpeg'
       tags: :collab, :artistic, :cpp, :hardware, :shader
     }
   }
