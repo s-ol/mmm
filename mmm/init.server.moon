@@ -1,14 +1,15 @@
-export MODE, print, warn, relative, on_client
+export MODE, print, warn, relative
 MODE = 'SERVER'
 
-deep_tostring = (tbl, space='') ->
+deep_tostring = (tbl, space='', recur={}) ->
   buf = space .. tostring tbl
 
-  return buf unless 'table' == type tbl
+  return buf unless 'table' == (type tbl) and not tbl.__tostring and not recur[tbl]
 
+  recur[tbl] = true
   buf = buf .. ' {\n'
   for k,v in pairs tbl
-    buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  '}\n"
+    buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  ', recur}\n"
   buf = buf .. "#{space}}"
   buf
 
@@ -29,11 +30,15 @@ relative = do
   _require = require
 
   (base, sub) ->
-    sub = 0 unless 'number' == type sub
+    sub = sub or 0
 
     for i=1, sub
       base = base\match '^(.*)%.%w+$'
 
     (name, x) ->
-      name = base .. name if '.' == name\sub 1, 1
+      if name == '.'
+        name = base
+      else if '.' == name\sub 1, 1
+        name = base .. name
+
       _require name

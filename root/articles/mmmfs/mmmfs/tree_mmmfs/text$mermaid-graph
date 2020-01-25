@@ -1,0 +1,21 @@
+graph TD
+  Documents --> Movies --> m1[A Movie.mp4]
+  m1 --> m1.f{{video/mp4}}
+
+  Documents --> Pictures --> vacation[Summer Vacation]
+  vacation --> slideshow{{slideshow: script -> UI}}
+  vacation --> gallery{{gallery: script -> UI}}
+  vacation --> v1[1.jpg]
+  vacation --> v2[2.jpg]
+  v1 --> v1.f{{image/jpeg}}
+  v2 --> v2.f{{image/jpeg}}
+
+  Pictures --> Projects
+  Projects --> p1[1.jpg]
+  Projects --> p2[2.jpg]
+  p1 --> p1.f{{image/jpeg}}
+  p2 --> p2.f{{image/jpeg}}
+
+  classDef default fill:#f00,stroke:#333,stroke-width:4px;
+  classDef file fill:#f9f;
+  class slideshow,gallery,m1.f,v1.f,v2.f,p1.f,p2.f file;

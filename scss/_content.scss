@@ -4,18 +4,45 @@
     height: inherit;
   }
 
-  .markdown {
-    max-width: 640px;
-    position: relative;
+  ul, ol {
+    break-before: avoid-page;
+    break-inside: avoid-page;
+  }
 
-    &.fullwidth {
-      max-width: max-content;
+  .wide.markdown,
+  .wide .markdown {
+    max-width: max-content;
+  }
+
+  .markdown {
+    position: relative;
+    max-width: 640px;
+    text-align: justify;
+
+    > blockquote {
+      @include left-border;
+
+      line-height: normal;
+      margin: 1rem var(--margin-wide);
+      padding: 1rem;
+      background: $gray-bright;
+      border-color: $gray-neutral;
     }
+  }
+
+  p {
+    orphans: 6;
+    widows: 6;
   }
 
   .markdown,
   .markdown > p,
-  .markdown > a {
+  .markdown > p > a {
+
+    p, a {
+      max-width: 100%;
+    }
+
     > img, > video {
       display: block;
       max-width: 100%;
@@ -48,6 +75,10 @@
     display: block;
     width: inherit;
     height: inherit;
+    max-width: inherit;
+    break-inside: avoid-page;
+
+    line-height: normal;
 
     .description {
       text-align: center;
@@ -74,12 +105,13 @@
     border-color: $gray-dark;
 
     display: block;
-    border-radius: 6px;
     margin: 0 var(--margin-wide);
     padding: 1em;
     white-space: pre-wrap;
+    break-inside: avoid-page;
     overflow-x: auto;
 
+    line-height: normal;
     background: #1d1f21;
     color: #c5c8c6;
   }
@@ -106,7 +138,24 @@
 
     margin: 1rem var(--margin-wide);
     padding: 1rem;
+    line-height: normal;
     background: $gray-bright;
     border-color: $gray-neutral;
+    break-inside: avoid-page;
+  }
+
+  .well-warning {
+    border-color: $gray-fail;
+  }
+
+  .spacious {
+    h1, h2, h3 {
+      margin-top: 1.7em;
+    }
+
+    h1 + h2,
+    h2 + h3 {
+      margin-top: 0;
+    }
   }
 }

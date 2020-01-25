@@ -13,21 +13,37 @@ body, html, h1, h2, h3, h4, h5, h6 {
 }
 
 h1, h2, h3, h4, h5, h6 { font-weight: bold; }
-input, select, button { color: initial; }
+h1 { font-size: 1.6em; }
+h2 { font-size: 1.4em; }
+h3 { font-size: 1.17em; }
+h4, h5, h6 { font-size: 1em; }
+
+input, select, button {
+  color: initial;
+  &:disabled {
+    color: graytext;
+  }
+}
 tt, code, kbd, samp { font-family: monospace; }
 code { font-size: 0.8em; }
-b { font-weight: bold; }
+b, strong { font-weight: bold; }
 em, i { font-style: italic; }
-a { font-size: 1em; cursor: pointer; }
 hr { clear: both; }
 ul { margin: 0; }
+
+sup, sub {
+  vertical-align: baseline;
+  position: relative;
+  top: -0.4em;
+}
+sub { top: 0.4em; }
 
 body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 
-  background: var(--gray-bright);
+  background: $gray-bright;
   font-family: sans-serif;
 
   min-height: 100vh;
@@ -35,17 +51,13 @@ body {
 
 a {
   display: inline-block;
-
+  font-size: 1em;
   font-weight: bold;
   text-decoration: underline;
   text-decoration-color: transparent;
+  cursor: pointer;
 
-  cursor: default;
-  &[href] {
-    cursor: pointer;
-  }
-
-  &[href]:hover {
+  &:hover {
     filter: invert(40%);
     text-decoration-color: currentColor;
   }

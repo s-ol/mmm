@@ -1,15 +1,9 @@
 include_rules
 
-!download = |> ^ DOWNLOAD %O^ curl -L https://github.com/fengari-lua/fengari-web/releases/download/@(FENGARI_VERSION)/`basename %o` > %o |>
-!sassc    = |> ^ SCSS %b^ sassc @(SASS_ARGS) %f %o |> | %o.map
-
-# download fengari dependencies
-: |> !download |> root/fengari-web.js
-: |> !download |> root/fengari-web.js.map
-: static/* |> cp %f root/ |> root/%b
+!sassc    = |> ^ SCSS %b^ sassc @(SASS_ARGS) %f '%o' |>
 
 # render stylesheet
-: scss/main.scss |> !sassc |> root/main.css
+: scss/main.scss |> !sassc |> root/static/style/text$css.css
 
 # bundle for client loading
-: mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon &(build)/bundle_module.moon %o --wrap %f |> root/mmm.bundle.lua
+: mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon &(build)/bundle_module.moon '%o' --wrap %f |> root/static/mmm/text$lua.lua

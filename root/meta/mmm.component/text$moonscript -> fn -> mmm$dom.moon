@@ -16,10 +16,6 @@ source = do
 
     div the_code, div demo, class: 'example'
 
-raw_find = (fileder, key_pat) ->
-  for key, val in pairs fileder.facets
-    return val if key\tostring!\match key_pat
-
 =>
   example = (name) ->
     for child in *@children

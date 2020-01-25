@@ -24,31 +24,41 @@ You can build the static content with:
     $ tup init
     $ tup
 
-Next you can render a sqlite3 mmmfs database using
+Then you can run the interactive server (`build/server.moon`):
 
-    $ moon build/render_all.moon db.sqlite3
-
-Then, run some kind of HTTP server from within `out`, e.g. with python 3 installed:
-
-    $ cd root
-    $ python -m http.server
+    $ moon build/server.moon fs
 
 You can then view the website in your browser.
-The example above will provide it at `http://localhost:8000`.
+It should be availabe at `http://localhost:8000`.
 
+### Dependencies
+
+Required dependencies:
+
+- [MoonScript][moonscript]: `luarocks install moonscript`
+- [lua-http](https://github.com/daurnimator/lua-http): `luarocks install http`
+ 
+For unit tests:
+
+- [busted](https://olivinelabs.com/busted/): `luarocks install busted`
+
+Not required but recommended:
+
+- [lua-sqlite3](https://luarocks.org/modules/moteus/sqlite3): `luarocks install sqlite3` (for SQLite3 backend)
+- [lua-cjson](https://www.kyne.com.au/~mark/software/lua-cjson.php): `luarocks install lua-cjson 2.1.0-1` (for server-side JSON support)
+- [discount](https://luarocks.org/modules/craigb/discount): `luarocks install discount` (requires libmarkdown2, for Markdown support)
+
+### Live Reloading (during development)
 During development you may want to automatically rebuild the project as files are changed.
-You can do this with the following command:
+You can let tup automatically rebuild the client runtime and stylesheet with the following command:
 
     $ tup monitor -f -a
 
-### Dependencies
-You will need:
+[entr][entr] is useful for reloading the realtime server when code outside the root changes:
 
-- [MoonScript][moonscript]: `luarocks install moonscript`
-- [lua-sqlite3](https://luarocks.org/modules/moteus/sqlite3): `luarocks install sqlite3`
-- [discount](https://luarocks.org/modules/craigb/discount): `luarocks install discount` (requires libmarkdown2)
-- [busted](https://olivinelabs.com/busted/): `luarocks install busted` (for testing only)
+    $ ls {build,mmm}/**.moon | entr -r moon build/server.moon fs
 
 [moonscript]: https://moonscript.org/
 [mmm]: https://mmm.s-ol.nu/
 [tup]: https://gittup.org/tup
+[entr]: http://eradman.com/entrproject/

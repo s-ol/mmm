@@ -1,12 +1,20 @@
-FROM nickblah/lua:5.3-luarocks-stretch AS build-env
-RUN echo "deb http://ppa.launchpad.net/jonathonf/tup/ubuntu xenial main" >/etc/apt/sources.list.d/tup.list
-RUN apt-get update
-RUN apt-get install -y --allow-unauthenticated build-essential tup sassc libmarkdown2-dev
-RUN luarocks install moonscript
-RUN luarocks install discount DISCOUNT_INCDIR=/usr/include/x86_64-linux-gnu
-COPY . /build
-RUN cd /build && tup init && tup generate --config tup.docker.config build.sh && ./build.sh
+FROM nickblah/lua:5.3-luarocks-stretch
 
-FROM nginx:alpine
-COPY --from=build-env /build/root /usr/share/nginx/html
-RUN chmod 555 -R /usr/share/nginx/html
+RUN echo "deb http://ppa.launchpad.net/jonathonf/tup/ubuntu xenial main" \
+      >/etc/apt/sources.list.d/tup.list
+RUN apt-get update && \
+    apt-get install -y --allow-unauthenticated \
+      build-essential m4 tup sassc \
+      libmarkdown2-dev libsqlite3-dev libssl-dev
+RUN luarocks install discount DISCOUNT_INCDIR=/usr/include/x86_64-linux-gnu
+RUN luarocks install sqlite3 && \
+    luarocks install moonscript && \
+    luarocks install http && \
+    luarocks install lua-cjson 2.1.0-1
+
+COPY . /code
+WORKDIR /code
+RUN tup init && tup generate --config tup.docker.config build-static.sh && ./build-static.sh
+
+EXPOSE 8000
+ENTRYPOINT ["moon", "build/server.moon", "fs", "0.0.0.0", "8000"]

@@ -1,0 +1,45 @@
+.print-only {
+  display: none;
+
+  @media print {
+    display: block;
+  }
+}
+
+.screen-only {
+  @media print {
+    display: none;
+  }
+}
+
+@media print {
+  h1, h2, h3, h4, h5 {
+    break-after: avoid-page;
+
+    + * {
+      break-before: avoid-page;
+    }
+  }
+
+  .view {
+    flex: 1 0 auto;
+
+    .content {
+      flex: 1 0 auto;
+    }
+  }
+
+  body {
+    background: $white;
+  }
+}
+
+.print-ownpage {
+  break-before: page;
+  break-after: page;
+}
+
+@page {
+  size: a4;
+  margin: 2.5cm 0 2.5cm;
+}

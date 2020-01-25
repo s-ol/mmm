@@ -1,0 +1,73 @@
+$sidenote-width: 14rem;
+
+:root {
+  --sidenote-width: #{$sidenote-width};
+}
+
+.sidenote-container {
+  margin-right: $sidenote-width + 1rem;
+
+  @include media-medium {
+    margin: auto;
+  }
+
+  .sidenote-container & {
+    margin-right: initial;
+    margin: initial;
+  }
+
+  .sidenote {
+    position: absolute;
+    box-sizing: border-box;
+
+    width: $sidenote-width;
+    right: -$sidenote-width - 2rem;
+    padding: 0 1rem;
+
+    color: $gray-dark;
+    border-top: 1px solid $gray-dark;
+    word-break: break-word;
+
+    font-size: 0.8em;
+    line-height: 1.1;
+    text-align: initial;
+    break-inside: avoid-page;
+
+    .hook {
+      position: absolute;
+      top: -4rem;
+      width: 0;
+      height: 0;
+
+      @media print {
+        top: 0;
+      }
+    }
+
+    .ref {
+      display: block;
+      position: absolute;
+
+      width: 1rem;
+      margin-left: -1.2rem;
+      text-align: right;
+    }
+
+    > .markdown > p:first-child {
+      margin-top: 0;
+    }
+
+    a {
+      display: inline;
+    }
+
+    @include media-medium {
+      width: initial;
+      position: initial;
+      right: initial;
+
+      border-bottom: 1px solid $gray-dark;
+      margin: 0.5rem 0;
+    }
+  }
+}

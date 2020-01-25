@@ -1,8 +1,9 @@
 require = relative ..., 1
 import Key from require '.fileder'
-import converts, get_conversions, apply_conversions from require '.conversion'
-import ReactiveVar, get_or_create, text, elements from require 'mmm.component'
-import pre, div, nav, span, button, a, select, option from elements
+import get_conversions, apply_conversions from require '.conversion'
+import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
+import pre, div, nav, span, button, a, code, select, option from elements
+import link_to from (require '.util') elements
 import languages from require 'mmm.highlighting'
 
 keep = (var) ->
@@ -11,41 +12,48 @@ keep = (var) ->
     last = val or last
     last
 
-code_cast = (lang) ->
-  {
-    inp: "text/#{lang}.*",
-    out: 'mmm/dom',
-    transform: (val) -> languages[lang] val
-  }
+combine = (...) ->
+  res = {}
+  lists = {...}
+  for list in *lists
+    for val in *list
+      table.insert res, val
+
+  res
 
 casts = {
-  code_cast 'javascript',
-  code_cast 'moonscript',
-  code_cast 'lua',
-  code_cast 'markdown',
-  code_cast 'html',
-  {
-    inp: 'text/plain'
-    out: 'mmm/dom'
-    transform: (val) -> text val
-  },
   {
     inp: 'URL.*'
     out: 'mmm/dom'
-    transform: (href) -> span a href, :href
-  },
+    cost: 0
+    transform: (href) => span a (code href), :href
+  }
 }
+get_casts = -> combine casts, PLUGINS.converts, PLUGINS.editors
 
-for convert in *converts
-  table.insert casts, convert
-
+export BROWSER
 class Browser
-  new: (@root, path='', rehydrate=false) =>
+  new: (@root, path, facet, rehydrate=false) =>
+    BROWSER = @
+
     -- root fileder
     assert @root, 'root fileder is nil'
 
     -- active path
-    @path = ReactiveVar path
+    @path = ReactiveVar path or ''
+
+    -- active fileder
+    -- (re)set every time @path changes
+    @fileder = @path\map @root\walk
+
+    -- currently active facet
+    -- (re)set to default when @fileder changes
+    @facet = ReactiveVar Key facet, 'mmm/dom'
+    if MODE == 'CLIENT'
+      @fileder\subscribe (fileder) ->
+        return unless fileder
+        last = @facet and @facet\get!
+        @facet\set Key if last then last.type else 'mmm/dom'
 
     -- update URL bar
     if MODE == 'CLIENT'
@@ -54,33 +62,31 @@ class Browser
         logo.classList\add 'spin'
         logo.parentElement.offsetWidth
         logo.classList\remove 'spin'
-      @path\subscribe (path) ->
+
+      @facet\subscribe (facet) ->
         document.body.classList\add 'loading'
         spin!
 
         return if @skip
-        vis_path = path .. (if '/' == path\sub -1 then '' else '/')
-        window.history\pushState path, '', vis_path
+
+        path = @path\get!
+        state = js.global\eval 'new Object()'
+        state.path = path
+        state.name = facet.name
+        state.type = facet.type
+
+        window.history\pushState state, '', "#{path}/#{(Key facet.name, 'text/html+interactive')\tostring true}"
 
       window.onpopstate = (_, event) ->
-        if event.state and not event.state == js.null
+        state = event.state
+        if state != js.null
           @skip = true
-          @path\set event.state
+          @path\set state.path
+          @facet\set Key state.name, state.type
           @skip = nil
 
-    -- active fileder
-    -- (re)set every time @path changes
-    @active = @path\map @root\walk
-
-    -- currently active facet
-    -- (re)set to default when @active changes
-    @facet = @active\map (fileder) ->
-      return unless fileder
-      last = @facet and @facet\get!
-      Key if last then last.type else 'mmm/dom'
-
     -- whether inspect tab is active
-    @inspect = ReactiveVar (MODE == 'CLIENT' and window.location.search\match '[?&]inspect')
+    @inspect = ReactiveVar (MODE == 'CLIENT' and window.location.hash == '#inspect')
 
     -- retrieve or create the wrapper and main elements
     main = get_or_create 'div', 'browser-root', class: 'main view'
@@ -93,7 +99,7 @@ class Browser
         .node.innerHTML = ''
         \append span 'path: ', @path\map (path) -> with div class: 'path', style: { display: 'inline-block' }
           path_segment = (name, href) ->
-            a name, :href, onclick: (_, e) ->
+            a name, href: "#{href}/", onclick: (_, e) ->
               e\preventDefault!
               @navigate href
 
@@ -114,20 +120,20 @@ class Browser
             \append path_segment name, href
 
         \append span 'view facet:', style: { 'margin-right': '0' }
-        \append @active\map (fileder) ->
-            onchange = (_, e) ->
-              { :type } = @facet\get!
-              @facet\set Key name: e.target.value, :type
+        \append @fileder\map (fileder) ->
+          onchange = (_, e) ->
+            { :type } = @facet\get!
+            @facet\set Key name: e.target.value, :type
 
-            current = @facet\get!
-            current = current and current.name
-            with select :onchange, disabled: not fileder
-              has_main = fileder and fileder\find current.name, '.*'
-              \append option '(main)', value: '', disabled: not has_main, selected: current == ''
-              if fileder
-                for i, value in ipairs fileder\get_facets!
-                  continue if value == ''
-                  \append option value, :value, selected: value == current
+          current = @facet\get!
+          current = current and current.name
+          with elements.select :onchange, disabled: not fileder, value: @facet\map (f) -> f and f.name
+            has_main = fileder and fileder\has_facet ''
+            \append option '(main)', value: '', disabled: not has_main, selected: current == ''
+            if fileder
+              for i, value in ipairs fileder\get_facets!
+                continue if value == ''
+                \append option value, :value, selected: value == current
         \append @inspect\map (enabled) ->
           if not enabled
             button 'inspect', onclick: (_, e) -> @inspect\set true
@@ -139,11 +145,11 @@ class Browser
 
     -- append or patch #browser-content
     main\append with get_or_create 'div', 'browser-content', class: 'content'
-      content = ReactiveVar if rehydrate then .node.lastChild else @get_content @facet\get!
-      \append keep content
+      @content = ReactiveVar if rehydrate then .node.lastChild else @get_content @facet\get!
+      \append keep @content
       if MODE == 'CLIENT'
         @facet\subscribe (p) ->
-          window\setTimeout (-> content\set @get_content p), 150
+          window\setTimeout (-> @refresh p), 150
 
     if rehydrate
       -- force one rerender to set onclick handlers etc
@@ -156,8 +162,15 @@ class Browser
     @node = wrapper.node
     @render = wrapper\render
 
-  err_and_trace = (msg) -> { :msg, trace: debug.traceback! }
+  err_and_trace = (msg) -> debug.traceback msg, 2
   default_convert = (key) => @get key.name, 'mmm/dom'
+
+  -- rerender main content
+  refresh: (facet=@facet\get!) =>
+    if facet == true -- deep refresh
+      @fileder\transform (i) -> i
+    else
+      @content\set @get_content facet
 
   -- render #browser-content
   get_content: (prop, err=@error, convert=default_convert) =>
@@ -167,9 +180,9 @@ class Browser
       if MODE == 'CLIENT'
         err\set pre msg
       warn "ERROR rendering content: #{msg}"
-      nil
+      div!
 
-    active = @active\get!
+    active = @fileder\get!
 
     return disp_error "fileder not found!" unless active
     return disp_error "facet not found!" unless prop
@@ -183,62 +196,133 @@ class Browser
       res
     elseif ok
       div "[no conversion path to #{prop.type}]"
-    elseif res and res.msg.match and res.msg\match '%[nossr%]$'
+    elseif res and res\match '%[nossr%]'
       div "[this page could not be pre-rendered on the server]"
     else
-      res = "#{res.msg}\n#{res.trace}"
       disp_error res
 
   get_inspector: =>
     -- active facet in inspect tab
     -- (re)set to match when @facet changes
     @inspect_prop = @facet\map (prop) ->
-      active = @active\get!
+      active = @fileder\get!
       key = active and active\find prop
       key = key.original if key and key.original
       key
 
     @inspect_err = ReactiveVar!
+    @editor = ReactiveVar!
 
     with div class: 'view inspector'
+      -- nav
       \append nav {
         span 'inspector'
+
+        button 'close', onclick: (_, e) -> @inspect\set false
+      }
+
+      \append div {
+        class: 'subnav'
+
+        ondrop: ->
+          print "dropped"
+
+        onpaste: ->
+          print "pasted"
+
         @inspect_prop\map (current) ->
           current = current and current\tostring!
-          fileder = @active\get!
+          fileder = @fileder\get!
 
           onchange = (_, e) ->
-            return if e.target.value == ''
-            { :name } = @facet\get!
-            @inspect_prop\set Key e.target.value
+            facet = e.target.value
+            return if facet == ''
+            @inspect_prop\set Key facet
 
           with select :onchange
             \append option '(none)', value: '', disabled: true, selected: not value
             if fileder
-              for key, _ in pairs fileder.facets
-                value = key\tostring!
+              for value in pairs fileder.facet_keys
                 \append option value, :value, selected: value == current
-        @inspect\map (enabled) ->
-          if enabled
-            button 'close', onclick: (_, e) -> @inspect\set false
+
+        button 'rm', class: 'tight', onclick: (_, e) ->
+          if window\confirm "continuing will permanently remove the facet '#{@inspect_prop\get!}'."
+            fileder = @fileder\get!
+            fileder\set @inspect_prop\get!, nil
+            @refresh true
+
+        button 'add', class: 'tight', onclick: (_, e) ->
+          facet = window\prompt "please enter the facet string ('name: type' or 'type'):", 'text/markdown'
+          return if not facet or facet == '' or facet == js.null
+          fileder = @fileder\get!
+          fileder\set facet, ''
+          @inspect_prop\set Key facet
+          @refresh!
+
+        div style: flex: '1'
+
+        @editor\map (e) -> e and e.saveBtn
       }
+
+      -- error / content
       \append with div class: @inspect_err\map (e) -> if e then 'error-wrap' else 'error-wrap empty'
         \append span "an error occured while rendering this view:"
         \append @inspect_err
       \append with pre class: 'content'
         \append keep @inspect_prop\map (prop, old) ->
-          @get_content prop, @inspect_err, (prop) =>
-            value, key = @get prop
+          @get_content prop, @inspect_err, (fileder, prop) ->
+            value, key = fileder\get prop
             assert key, "couldn't @get #{prop}"
 
-            conversions = get_conversions 'mmm/dom', key.type, casts
+            conversions = get_conversions 'mmm/dom', key.type, get_casts!
             assert conversions, "cannot cast '#{key.type}'"
-            apply_conversions conversions, value, @, prop
+            with res = apply_conversions conversions, value, fileder, prop
+              @editor\set if res.EDITOR then res
+
+      -- children
+      \append nav {
+        class: 'thing'
+
+        span 'children'
+        button 'add', onclick: (_, e) ->
+          name = window\prompt "please enter the name of the child fileder:", 'unnamed_fileder'
+          return if not name or name == '' or name == js.null
+          child = @fileder\get!\add_child name
+          @refresh true
+      }
+      \append @fileder\map (fileder) ->
+        with div class: 'children'
+          num = #fileder.children
+          for i, child in ipairs fileder.children
+            name = child\gett 'name: alpha'
+            \append div {
+              style:
+                display: 'flex'
+                'justify-content': 'space-between'
+
+              span '- ', (link_to child, code name), style: flex: 1
+
+              button '↑', disabled: i == 1, onclick: (_, e) ->
+                fileder\swap_children i, i - 1
+                @refresh true
+
+              button '↓', disabled: i == num, onclick: (_, e) ->
+                fileder\swap_children i, i + 1
+                @refresh true
+
+              button 'rm', onclick: (_, e) ->
+                if window\confirm "continuing will permanently remove all content in '#{child.path}'."
+                  fileder\remove_child i
+                  @refresh true
+            }
+
 
   default_convert = (key) => @get key.name, 'mmm/dom'
 
   navigate: (new) =>
     @path\set new
+
+  todom: => tohtml @
 
 {
   :Browser

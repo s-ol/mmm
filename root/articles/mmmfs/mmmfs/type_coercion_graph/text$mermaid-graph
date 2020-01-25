@@ -1,0 +1,22 @@
+graph LR
+  md_lua[text/lua -> text/markdown]
+  md[text/markdown]
+  moon[text/moonscript -> fn -> mmm/dom]
+  lua[text/lua -> fn -> mmm/dom]
+  fn[fn -> mmm/dom]
+  dom[mmm/dom]
+  moon_url[URL -> text/moonscript -> fn -> mmm/dom]
+  lua_url[URL -> text/lua -> fn -> mmm/dom]
+
+  md_lua -- cost: 1 --> md -- cost: 2 --> dom
+  moon -- cost: 5 --> moon_url
+  moon -- cost: 1 --> fn -- cost: 2 --> dom
+  moon -- cost: 2 --> lua -- cost: 5 --> lua_url
+  lua -- cost: 1 --> fn
+  moon_url -- cost: 10 --> dom
+  lua_url -- cost: 10 -->dom
+
+  classDef given fill:#ada;
+  classDef path stroke:#ada;
+  linkStyle 3,1,0,4 stroke:#8d8,stroke-width:2px
+  class md_lua,moon given

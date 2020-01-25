@@ -1,20 +1,21 @@
-export MODE, print, warn, relative, on_load
+export MODE, UNSAFE, print, warn, relative, on_load
 export window, document
 
 window = js.global
 { :document, :console } = window
 
 MODE = 'CLIENT'
+UNSAFE = true
 
-deep_tostring = (tbl, space='') ->
-  return tbl if 'userdata' == type tbl
-
+deep_tostring = (tbl, space='', recur={}) ->
   buf = space .. tostring tbl
-  return buf unless 'table' == type tbl
 
+  return buf unless 'table' == (type tbl) and not tbl.__tostring and not recur[tbl]
+
+  recur[tbl] = true
   buf = buf .. ' {\n'
   for k,v in pairs tbl
-    buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  '}\n"
+    buf = buf .. "#{space} [#{k}]: #{deep_tostring v, space .. '  ', recur}\n"
   buf = buf .. "#{space}}"
   buf
 
@@ -40,7 +41,11 @@ relative = do
       base = base\match '^(.*)%.%w+$'
 
     (name, x) ->
-      name = base .. name if '.' == name\sub 1, 1
+      if name == '.'
+        name = base
+      else if '.' == name\sub 1, 1
+        name = base .. name
+
       _require name
 
 if on_load

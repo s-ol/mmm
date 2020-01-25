@@ -1,9 +1,4 @@
-require = relative ...
-import Key, Fileder from require '.fileder'
-import Browser from require '.browser'
+require = relative ..., 0
 
-{
-  :Key
-  :Fileder
-  :Browser
-}
+export ^
+PLUGINS = require '.plugins'

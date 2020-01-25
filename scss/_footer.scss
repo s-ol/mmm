@@ -1,9 +1,15 @@
 footer {
   display: flex;
   padding: 1rem 2rem;
+  height: 1rem;
 
   position: sticky;
   bottom: 0;
+  
+  @media print {
+    position: absolute;
+    display: none;
+  }
 
   color: $gray-bright;
   background: $gray-dark;

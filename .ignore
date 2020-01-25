@@ -3,3 +3,4 @@ index.html
 $bundle.lua
 *.js
 *.js.map
+*.lua
