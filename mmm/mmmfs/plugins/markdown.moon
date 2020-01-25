@@ -50,6 +50,12 @@ assert markdown, "no markdown implementation found"
       transform: (md) => "<div class=\"markdown sidenote-container\">#{markdown md}</div>"
     }
     {
+      inp: 'text/markdown%+wide'
+      out: 'text/html+frag'
+      cost: 1
+      transform: (md) => "<div class=\"markdown wide\">#{markdown md}</div>"
+    }
+    {
       inp: 'text/markdown%+span'
       out: 'text/html+frag'
       cost: 1
