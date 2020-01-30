@@ -6,10 +6,10 @@ merge = (orig={}, extra={}) ->
       attr[k] = v
 
 tourl = (path) ->
-  if STATIC
-    path .. '/'
-  else
-    path .. '/'
+  path ..= '/'
+  if STATIC and STATIC.root
+    path = STATIC.root .. path
+  path
 
 (elements) ->
   import a, div, span, sup, b, pre from elements

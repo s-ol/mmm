@@ -8,8 +8,8 @@ add '?/init'
 add '?/init.server'
 
 -- usage:
--- moon render_all.moon [STORE] [output] [startpath]
-{ store, output, startpath } = arg
+-- moon render_all.moon [STORE] [output] [URL-prefix]
+{ store, output, prefix } = arg
 
 require 'mmm'
 import Fileder, dir_base from require 'mmm.mmmfs.fileder'
@@ -25,6 +25,8 @@ STATIC = {
     with io.open path, 'w'
       \write val
       \close!
+
+  root: prefix
 }
 
 require 'mmm.mmmfs'
