@@ -7,26 +7,49 @@ add '?.server'
 add '?/init'
 add '?/init.server'
 
-require 'mmm'
-import Fileder from require 'mmm.mmmfs.fileder'
-import get_store from require 'mmm.mmmfs.stores'
-import render from require 'mmm.mmmfs.layout'
-
 -- usage:
--- moon render_all.moon [STORE] [startpath]
-{ store, startpath } = arg
+-- moon render_all.moon [STORE] [output] [startpath]
+{ store, output, startpath } = arg
 
-export STATIC
-STATIC = true
+require 'mmm'
+import Fileder, dir_base from require 'mmm.mmmfs.fileder'
+import get_store from require 'mmm.mmmfs.stores'
+
+export UNSAFE, STATIC, BROWSER
+
+UNSAFE = true
+STATIC = {
+  spit: (path, val) ->
+    path = "#{output}/#{path}"
+    os.execute "mkdir -p '#{dir_base path}'"
+    with io.open path, 'w'
+      \write val
+      \close!
+}
+
+require 'mmm.mmmfs'
 
 store = get_store store
-tree = Fileder store
-tree = tree\walk startpath if startpath
+root = Fileder store
+BROWSER = :root
+
+print "rendering to #{output}"
+
+style_url = (root\walk '/static/style')\gett 'URL -> text/css'
+hljs_url = (root\walk '/static/highlight-pack')\gett 'URL -> text/javascript'
+STATIC.style = "<link rel=\"stylesheet\" type=\"text/css\" href=\"#{style_url}\" />"
+STATIC.scripts = "
+    <script type=\"text/javascript\" src=\"#{hljs_url}\"></script>
+    <script type=\"text/javascript\">hljs.initHighlighting()</script>"
+
+tree = root\walk startpath or ''
 
 for fileder in coroutine.wrap tree\iterate
   print "rendering '#{fileder.path}'..."
-  os.execute "mkdir -p 'out/#{fileder.path}'"
 
-  with io.open "out/#{fileder.path}/index.html", 'w'
-    \write render (fileder\get 'text/html'), fileder
-    \close!
+  ok, val = pcall fileder.gett, fileder, 'text/html'
+  if not ok
+    warn "WARN: couldn't render #{fileder}:"
+    warn val
+
+  STATIC.spit "#{fileder.path}/index.html", val

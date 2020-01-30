@@ -129,9 +129,9 @@ render = (content, fileder, opts={}) ->
   buf = [[
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" type="text/css" href="/static/style/:text/css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />]]
+  <head>]]
+  buf ..= STATIC.style or [[<link rel="stylesheet" type="text/css" href="/static/style/:text/css" />]]
+  buf ..= [[<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />]]
   buf ..= "
     #{get_meta fileder}
   </head>
@@ -141,12 +141,13 @@ render = (content, fileder, opts={}) ->
     #{content}
 
     #{footer}"
-  buf ..= [[
+  buf ..= if STATIC then '' else [[
     <script type="text/javascript" src="/static/highlight-pack/:text/javascript"></script>
     <script type="text/javascript">hljs.initHighlighting()</script>
     <script type="text/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>]]
 
   buf ..= opts.scripts
+  buf ..= if STATIC then STATIC.scripts else ''
   buf ..= "
   </body>
 </html>"

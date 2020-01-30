@@ -235,12 +235,6 @@ converts = {
           assert stream\get_body_as_string!
   }
   {
-    inp: '(.+)',
-    out: 'URL -> %1',
-    cost: 5
-    transform: (_, fileder, key) => "#{fileder.path}/#{key.name}:#{@from}"
-  }
-  {
     inp: 'table',
     out: 'mmm/dom',
     cost: 5
@@ -292,6 +286,16 @@ add_converts 'mermaid'
 add_converts 'twitter'
 add_converts 'youtube'
 add_converts 'cites'
+
+if STATIC
+  add_converts 'static'
+else
+  table.insert converts, {
+    inp: '(.+)',
+    out: 'URL -> %1',
+    cost: 5
+    transform: (_, fileder, key) => "#{fileder.path}/#{key.name}:#{@from}"
+  }
 
 if MODE == 'SERVER'
   ok, moon = pcall require, 'moonscript.base'

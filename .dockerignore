@@ -1,4 +1,9 @@
+db.sqlite3
+root/static/style/text$css.css
+root/static/mmm/text$lua.lua
+
 .tup
 Dockerfile
 $bundle.lua
 .bundle.lua
+mmm/**/*.lua
