@@ -131,8 +131,9 @@ class FSStore extends Store
   list_facets: (path) =>
     coroutine.wrap ->
       for entry_name in lfs.dir @root .. path
-        entry_path = "#{@root .. path}/#{entry_name}"
+        continue if '.' == entry_name\sub 1, 1
         continue if entry_name == '$order'
+        entry_path = "#{@root .. path}/#{entry_name}"
         if 'file' == lfs.attributes entry_path, 'mode'
           entry_name = (entry_name\match '(.*)%.%w+') or entry_name
           entry_name = entry_name\gsub '%$', '/'
@@ -158,6 +159,7 @@ class FSStore extends Store
 
     local file_name
     for entry_name in lfs.dir @root .. path
+      continue if '.' == entry_name\sub 1, 1
       if (entry_name\match "^#{name}$") or entry_name\match "^#{name}%.%w+$"
         if file_name
           error "two files match #{name}: #{file_name} and #{entry_name}!"
