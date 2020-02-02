@@ -13,4 +13,9 @@ import ropairs from require 'mmm.ordered'
         li (link_to post, os.date '%F', date), ' - ', post\gett 'title: mmm/dom'
 
       posts
+    p {
+      "also check out my weekly posts for the 2020 FabAcademy on my "
+      a "fabcloud page", href: 'https://fabacademy.org/2020/labs/opendot/students/sol-bekic/'
+      "."
+    }
   }
