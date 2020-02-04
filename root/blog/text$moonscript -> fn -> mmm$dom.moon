@@ -1,4 +1,4 @@
-import div, h3, ul, li from require 'mmm.dom'
+import div, h3, a, p, ul, li from require 'mmm.dom'
 import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
 import ropairs from require 'mmm.ordered'
 
