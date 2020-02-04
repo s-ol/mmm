@@ -78,5 +78,12 @@ class Editor
         mode = @from\match @convert.inp
         Editor value, mode, fileder, key
     }
+    {
+      inp: 'URL.*'
+      out: 'mmm/dom'
+      cost: 0
+      transform: (value, fileder, key) =>
+        Editor value, nil, fileder, key
+    }
   }
 }

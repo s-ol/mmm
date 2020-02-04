@@ -29,7 +29,7 @@ code { font-size: 0.8em; }
 b, strong { font-weight: bold; }
 em, i { font-style: italic; }
 hr { clear: both; }
-ul { margin: 0; }
+ul { margin: 0; padding-inline-start: 2em; }
 
 sup, sub {
   vertical-align: baseline;
