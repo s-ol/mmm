@@ -117,6 +117,20 @@ class Server
             index = @store\get_index path, depth
             convert 'table', facet.type, index, fileder, facet.name
           else
+            if facet.type == '?'
+              facet.type = 'text/html'
+              current = fileder
+              while current
+                if type = current\get '_web_view: type'
+                  facet.type = type\match '^%s*(.-)%s*$'
+                  break
+
+                if current.path == ''
+                  break
+
+                path, _ = dir_base current.path
+                current = root\walk path
+
             if facet.type == 'text/html+interactive'
               @handle_interactive fileder, facet
             else if base = facet.type\match '^DEBUG %-> (.*)'
@@ -177,7 +191,7 @@ class Server
     facet = if facet == '' and (not type or type == '') and method ~= 'GET' and method ~= 'HEAD'
       nil
     else
-      type or= 'text/html+interactive'
+      type or= '?'
       type = type\match '%s*(.*)'
       Key facet, type
 

@@ -5,6 +5,7 @@ import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
   div {
     h3 link_to @
     ul for child in *@children
+      continue if child\get 'hidden: bool'
       desc = child\gett 'description: mmm/dom'
       li (link_to child), ': ', desc
   }
