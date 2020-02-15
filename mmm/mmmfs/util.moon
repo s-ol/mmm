@@ -5,10 +5,12 @@ merge = (orig={}, extra={}) ->
     for k,v in pairs extra
       attr[k] = v
 
-tourl = (path) ->
+tourl = (path, _view) ->
   path ..= '/'
   if STATIC and STATIC.root
     path = STATIC.root .. path
+  if _view
+    path ..= _view
   path
 
 (elements) ->
@@ -42,7 +44,7 @@ tourl = (path) ->
       BROWSER\navigate path
     a name, opts
 
-  link_to = (fileder, name, origin, attr) ->
+  link_to = (fileder, name, origin, attr, _view) ->
     fileder = find_fileder fileder, origin
 
     name or= fileder\get 'title: mmm/dom'
@@ -52,11 +54,17 @@ tourl = (path) ->
       a name, merge attr, :href, target: '_blank'
     else
       a name, merge attr, {
-        href: tourl fileder.path
+        href: tourl fileder.path, _view
         onclick: if MODE == 'CLIENT' then (e) =>
           e\preventDefault!
           BROWSER\navigate fileder.path
       }
+
+  interactive_link = (text, view=':text/html+interactive') ->
+    assert MODE == 'SERVER'
+    path = BROWSER.path
+    path = table.concat path, '/' if 'table' == type BROWSER.path
+    a text, href: tourl path, view
 
   embed = (fileder, name='', origin, opts={}) ->
     if opts.raw
@@ -135,6 +143,7 @@ tourl = (path) ->
   {
     :find_fileder
     :link_to
+    :interactive_link
     :navigate_to
     :embed
   }

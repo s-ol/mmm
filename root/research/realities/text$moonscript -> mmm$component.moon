@@ -1,5 +1,6 @@
 import elements from require 'mmm.component'
 import h1, h2, p, a, i, div, ol, li, br, hr, span, button, section, article from elements
+import interactive_link from (require 'mmm.mmmfs.util') elements
 
 _content = div!
 append = _content\append
@@ -11,7 +12,9 @@ if MODE == 'SERVER'
       display: 'inline-block',
       width: '150px',
       height: '80px',
-      'line-height': '80px',
+      padding: '12px'
+      'line-height': '20px',
+      'box-sizing': 'border-box'
       color: '#fff',
       background: '#666',
     }
@@ -23,7 +26,7 @@ if MODE == 'SERVER'
 
     render: =>
       rplc = with div id: @id, :style
-        \append '(diagram goes here)'
+        \append interactive_link 'click for interactive version'
         -- \append "<script type=\"text/lua\">
         --   local rplc = js.global.document:getElementById('#{@id}');
         --   local fn = #{compile @func}

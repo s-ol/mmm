@@ -101,7 +101,7 @@ class Server
       when 'GET', 'HEAD'
         root = Fileder @store
         export BROWSER
-        BROWSER = :root
+        BROWSER = :root, :path
         fileder = root\walk path -- Fileder @store, path
 
         if not fileder

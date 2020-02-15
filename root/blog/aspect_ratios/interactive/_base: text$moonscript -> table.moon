@@ -1,22 +1,27 @@
-import div from require 'mmm.dom'
+import div, a from require 'mmm.dom'
+import interactive_link from (require 'mmm.mmmfs.util') require 'mmm.dom'
 
 if MODE ~= 'CLIENT'
   class Dummy
     render: =>
-      div 'Interactive Example not available with Server-Side rendering', style:
-        position: 'relative'
-        resize: 'horizontal'
-        overflow: 'hidden'
+      div {
+        style:
+          position: 'relative'
+          resize: 'horizontal'
+          overflow: 'hidden'
 
-        width: '480px'
-        height: '270px'
-        'min-width': '270px'
-        'max-width': '100%'
+          width: '480px'
+          height: '270px'
+          'min-width': '270px'
+          'max-width': '100%'
 
-        margin: 'auto'
-        padding: '10px'
-        boxSizing: 'border-box'
-        background: 'var(--gray-bright)'
+          margin: 'auto'
+          padding: '10px'
+          boxSizing: 'border-box'
+          background: 'var(--gray-bright)'
+
+        interactive_link '(click here for the interactive version of this article)'
+      }
 
   return {
     UIDemo: Dummy
