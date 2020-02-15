@@ -48,7 +48,7 @@ tourl = (path) ->
     name or= fileder\get 'title: mmm/dom'
     name or= fileder\gett 'name: alpha'
 
-    if href = fileder\get 'link: URL.*'
+    if href = fileder\get 'link: URL*'
       a name, merge attr, :href, target: '_blank'
     else
       a name, merge attr, {

@@ -20,8 +20,8 @@ source = do
   example = (name) ->
     for child in *@children
       if name == child\gett 'name: alpha'
-        moon_src = child\get 'text/moonscript.*'
-        lua_src = child\get 'text/lua.*'
+        moon_src = child\gett 'text/moonscript*'
+        lua_src = child\gett 'text/lua*'
         dom = child\gett 'mmm/dom'
 
         return source moon_src, lua_src, dom

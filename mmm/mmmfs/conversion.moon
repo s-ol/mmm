@@ -3,7 +3,12 @@ refs = require 'mmm.refs'
 import Queue from require '.queue'
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
-escape_pattern = (inp) -> "^#{inp\gsub '([^%w])', '%%%1'}$"
+escape_pattern = (inp) ->
+  if '*' == inp\sub -1
+    inp = inp\sub 1, -2
+    "^#{inp\gsub '([^%w])', '%%%1'}"
+  else
+    "^#{inp\gsub '([^%w])', '%%%1'}$"
 escape_inp = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
 
 local print_conversions
@@ -67,7 +72,7 @@ get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5, d
   had = {}
   queue = Queue!
   for start in *have
-    return {}, start if want\match start
+    return {}, start if start\match want
     queue\add { :start, rest: start, conversions: {} }, 0, start
 
     if debug
