@@ -21,7 +21,7 @@ import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
     '.'
     br!
     'Most of the inner-workings of this page are documented in '
-    link_to @walk 'articles/mmmfs'
+    link_to @walk 'research/mmmfs'
     '.'
   }
 

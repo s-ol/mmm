@@ -1,4 +1,4 @@
 what is an oscilloscope?
 ========================
 
-![](/articles/xy-workshop/08/image/:image/png)
+![](/workshops/xy-music/08/image/:image/png)

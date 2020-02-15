@@ -213,7 +213,7 @@ projects = {
         li text 'client/server polymorphic UI framework'
         li text 'built-in server-side rendering and interactive editing support'
       }
-      href: '/articles/mmmfs/'
+      href: '/research/mmmfs/'
       media: embed_img '/portfolio/mmm/media:image/png'
       tags: :tool, :lua
     }
