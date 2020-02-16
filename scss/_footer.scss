@@ -5,6 +5,13 @@ footer {
 
   position: sticky;
   bottom: 0;
+
+  @include media-medium() {
+    position: initial;
+  }
+  @include media-small() {
+    position: initial;
+  }
   
   @media print {
     position: absolute;

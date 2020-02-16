@@ -30,6 +30,11 @@ header {
         height: 5rem;
       }
 
+      @include media-small() {
+        font-size: 2rem;
+        line-height: 5rem
+      }
+
       .sun {
         height: 100%;
         stroke: currentColor;
