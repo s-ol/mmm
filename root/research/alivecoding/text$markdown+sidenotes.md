@@ -123,18 +123,20 @@ that are no longer referenced in the code are destroyed.
 this approach combines the benefits of dataflow programming for livecoding with
 those of a textual representation and the user-controlled evaluation moment.
 
-dataflow:
+from visual dataflow programming, the following benefits over common textual,
+REPL-based livecoding systems are inherited:
 
 - direct manipulation of individual parameters of a system without disturbing
   the system at large
 - execution and dataflow are aligned and evident in the editable representation
-- state is isolated and compartmentalized in locally 
+- state is isolated and compartmentalized in local elements
 - opportunity to visualize dataflow and local state<span class="sidenote">
   visualizing state of individual *op*s in editor-dependent and editor-agnostic
   ways that integrate with the textual representation is an ongoing research
   direction of this project</span>
 
-textual representation and user-controlled evaluation moment:
+on the other hand, the following advantages from such textual systems are
+preserved, that are generally absent in visual dataflow environments:
 
 - high information density
 - fast editing experience
