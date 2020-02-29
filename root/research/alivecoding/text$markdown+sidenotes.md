@@ -1,5 +1,5 @@
 # alivecoding: <mmm-embed wrap="raw" facet="description"></mmm-embed>
-Peristant expressions are an approach to livecoding that unifies direct
+Persistent expressions are an approach to livecoding that unifies direct
 manipulation of a dataflow engine with a textual representation and
 lisp-based programming language.
 
