@@ -87,8 +87,8 @@ get_meta = =>
   title = (@get 'title: text/plain') or @gett 'name: alpha'
 
   l = (str) ->
-    str = str\gsub '[%s\\n]+$', ''
-    str\gsub '\\n', ' '
+    str = str\gsub '[%s\n]+$', ''
+    str\gsub '\n', ' '
   e = (str) -> string.format '%q', l str
 
   meta = "
