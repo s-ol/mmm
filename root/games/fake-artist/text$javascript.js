@@ -232,6 +232,7 @@ const words = [
 ];
 
 const main = document.getElementById('main');
+const head = document.getElementById('head');
 const players = document.getElementById('players');
 const spies = document.getElementById('spies');
 const name = document.getElementById('name');
@@ -252,9 +253,9 @@ const infect = a => {
 };
 
 const genSeed = rng => (
-          words[Math.floor(rng() * words.length)].replace(' ', '-')
-  + '_' + words[Math.floor(rng() * words.length)].replace(' ', '-')
-  + '_' + words[Math.floor(rng() * words.length)].replace(' ', '-')
+          words[Math.floor(rng() * words.length)].replace(' ', '-').toLowerCase()
+  + '_' + words[Math.floor(rng() * words.length)].replace(' ', '-').toLowerCase()
+  + '_' + words[Math.floor(rng() * words.length)].replace(' ', '-').toLowerCase()
 );
 
 const update = (hash) => {
@@ -265,7 +266,14 @@ const update = (hash) => {
   while (main.lastChild)
     main.removeChild(main.lastChild);
 
+  while (head.lastChild)
+    head.removeChild(head.lastChild);
+
   if (mode === '#link') {
+    const code = document.createElement('code');
+    code.innerText = seed;
+    head.append(code);
+
     document.body.className = '';
     names.forEach((name, i) => {
       const a = document.createElement('a');
@@ -286,6 +294,10 @@ const update = (hash) => {
     main.append(document.createElement('br'));
     main.append(a);
   } else if (mode === '#play') {
+    const code = document.createElement('code');
+    code.innerText = seed;
+    head.append(code);
+
     document.body.className = '';
     const i = names.pop();
 
@@ -293,25 +305,36 @@ const update = (hash) => {
     const list = names.map((x, i) => i < +n);
     shuffle(list, rng);
 
+    const div = document.createElement('div');
+    div.className = 'sensitive';
+
     if (list[+i]) {
-      main.append("you are a");
-      main.append(document.createElement('br'));
-      const span = document.createElement('span');
+      const span = document.createElement('pre');
       span.className = 'spy';
       span.innerText = 'SPY!';
-      main.append(span);
+      div.append("you are a");
+      div.append(document.createElement('br'));
+      div.append(span);
     } else {
-      main.append("the word is");
-      main.append(document.createElement('br'));
-      const span = document.createElement('span');
+      const span = document.createElement('pre');
       span.innerText = word;
-      main.append(span);
+      div.append("the word is");
+      div.append(document.createElement('br'));
+      div.append(span);
     }
+
+    const cover = document.createElement('div');
+    cover.className = 'cover';
+    cover.innerText = '(hover here)';
+    cover.innerText = `${names[i]}, please hover here to read.`;
+    div.append(cover);
 
     const a = document.createElement('a');
     a.innerText = 'next round';
     a.href = `#play,${nextSeed},${n},${names.join(',')},${i}`;
     infect(a);
+
+    main.append(div);
     main.append(document.createElement('br'));
     main.append(a);
   } else {
@@ -325,6 +348,9 @@ const update = (hash) => {
     infect(a);
 
     add.onclick = () => {
+      if (!name.value)
+        return;
+
       const li = document.createElement('li');
       li.innerText = name.value;
       players.append(li);
