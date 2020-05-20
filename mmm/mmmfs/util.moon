@@ -101,6 +101,7 @@ tourl = (path, _view) ->
       when 'well'
         node = span {
           class: klass
+          style: opts.style
           node
           if opts.desc
             div opts.desc, class: 'description'
