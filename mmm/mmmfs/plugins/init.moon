@@ -194,6 +194,13 @@ converts = {
     transform: (src, fileder) => img :src
   }
   {
+    inp: 'URL -> video/.+%+gif',
+    out: 'mmm/dom',
+    cost: 0.99
+    transform: (src) =>
+      video (source :src), controls: 'auto', loop: true, autoplay: true, muted: true
+  }
+  {
     inp: 'URL -> video/.+',
     out: 'mmm/dom',
     cost: 1
