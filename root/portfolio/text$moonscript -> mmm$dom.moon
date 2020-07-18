@@ -43,7 +43,7 @@ projects = {
     {
       name: 'Harold Halibut / Slow Bros'
       desc: 'Tool & Game Development'
-      extra: 'April - Decemer 2019 (consulting)'
+      extra: 'April 2019 - ongoing (consulting)'
       content: padded_ul {
         li {
           text 'Unity/C# development'
@@ -303,8 +303,8 @@ tohtml with article!
       "software programming"
       ul {
         li (taglink "JavaScript", js), ": react, nodejs, electron, meteor"
-        li (taglink "C++", cpp), ": openFrameworks, raymarching, SDFs"
-        li (taglink "GLSL & HLSL", shader), ": openFrameworks, intermediate openGL"
+        li (taglink "C++", cpp), ": openFrameworks, intermediate openGL"
+        li (taglink "GLSL & HLSL", shader), ": animated shaders, raymarching, SDFs"
         li taglink "C# and Unity", cs
         li "Python"
         li "Lua/MoonScript"
