@@ -36,19 +36,19 @@ gen_header = ->
       h1 {
         navigate_to '', logo
         span {
-          span 'mmm', class: 'bold'
-          '&#8203;'
-          '.s&#8209;ol.nu'
+          span 's-ol', class: 'bold'
+          ' '
+          'bekic'
         }
       }
       -- span "fun stuff with code and wires"
-      table.concat {
-        pick 'fun', 'cool', 'weird', 'interesting', 'new', 'pleasant'
-        pick 'stuff', 'things', 'projects', 'experiments', 'visuals', 'ideas'
-        pick "with", 'and'
-        pick 'mostly code', 'code and wires', 'silicon', 'electronics', 'shaders',
-             'oscilloscopes', 'interfaces', 'hardware', 'FPGAs'
-      }, ' '
+      -- table.concat {
+      --   pick 'fun', 'cool', 'weird', 'interesting', 'new', 'pleasant'
+      --   pick 'stuff', 'things', 'projects', 'experiments', 'visuals', 'ideas'
+      --   pick "with", 'and'
+      --   pick 'mostly code', 'code and wires', 'silicon', 'electronics', 'shaders',
+      --        'oscilloscopes', 'interfaces', 'hardware', 'FPGAs'
+      -- }, ' '
     }
     aside {
       navigate_to '/about', 'about me'
