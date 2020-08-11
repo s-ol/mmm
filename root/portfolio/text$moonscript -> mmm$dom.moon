@@ -1,5 +1,5 @@
 import ReactiveVar, tohtml, text, elements from require 'mmm.component'
-import article, a, video, img, h1, div, p, ul, li, br from elements
+import article, a, b, span, video, img, h1, div, p, ul, li, br from elements
 import embed, link_to from (require 'mmm.mmmfs.util') elements
 
 embed_img = (src) -> (style) -> img :src, :style
@@ -123,6 +123,19 @@ projects = {
       tags: :professional, :js, :collab, :game
     }
     {
+      name: 'alv'
+      desc: 'an innovative realtime programming language'
+      entries: {
+        'designed to be edited while running'
+        'whole program is reloaded on evaluation, but state is guaranteed to be retained'
+        'Atom plugin for realtime state visualisation'
+        'integrates with soft- & hardware for performances (MIDI, OSC, SuperCollider)'
+      }
+      href: 'https://alv.s-ol.nu/master/'
+      media: embed_vid '/portfolio/alv/media:video/mp4'
+      tags: :tool, :lua, :javascript
+    }
+    {
       name: 'btrktrl'
       desc: 'a custom MIDI/OSC control surface'
       entries: {
@@ -148,18 +161,18 @@ projects = {
       media: embed_vid '/portfolio/VJmidiKit/media:video/mp4'
       tags: :tool, :cpp, :shader
     }
-    {
-      name: 'IYNX'
-      desc: 'a narrative, tangible, physical puzzle incorporating digital elements'
-      entries: {
-        'powered by a raspberry pi 3 and two arduino nanos'
-        'touch-panel UI and control software with node, electron and react'
-        'interfaces with analog potentiometers, keypad matrix, switches'
-      }
-      href: '/games/IYNX/'
-      media: embed_img '/games/IYNX/pictures/ui_menu/:image/jpeg'
-      tags: :collab, :game, :js, :hardware
-    }
+--    {
+--      name: 'IYNX'
+--      desc: 'a narrative, tangible, physical puzzle incorporating digital elements'
+--      entries: {
+--        'powered by a raspberry pi 3 and two arduino nanos'
+--        'touch-panel UI and control software with node, electron and react'
+--        'interfaces with analog potentiometers, keypad matrix, switches'
+--      }
+--      href: '/games/IYNX/'
+--      media: embed_img '/games/IYNX/pictures/ui_menu/:image/jpeg'
+--      tags: :collab, :game, :js, :hardware
+--    }
     {
       name: 'Plonat Atek'
       desc: 'a sound-only breakout game, displayable on an oscilloscope'
@@ -175,7 +188,7 @@ projects = {
     }
     {
       name: 'tre telefoni'
-      desc: 'experimental interactive installation piece about communication'
+      desc: 'an experimental interactive installation piece about communication'
       content: padded_ul {
         li text 'realtime voice chat between three participants, in an unusual configuration'
         li {
@@ -192,7 +205,7 @@ projects = {
     }
     {
       name: '1u matrix mixer'
-      desc: 'Embedded Software Development'
+      desc: 'a eurorack module'
       entries: {
         "embedded programming for a Eurorack module"
         "C++, targetting Teensy 3.5"
@@ -204,7 +217,7 @@ projects = {
     }
     {
       name: 'mmm'
-      desc: 'experimental file-system/CMS/digital working space'
+      desc: 'an experimental file-system/CMS/digital working space'
       content: padded_ul {
         style: padding: '0 2em 1em'
         li text 'powers this website'
@@ -219,7 +232,7 @@ projects = {
     }
     {
       name: 'Toy Box Orchestra'
-      desc: 'interactive audio-visual performance project'
+      desc: 'an interactive audio-visual performance project'
       entries: {
         "circuit bent childrens' toys"
         "developed a realtime video effect inspired by analog video synthesisers in openframeworks and GLSL"
@@ -300,14 +313,22 @@ tohtml with article!
 
   \append ul {
     li {
+      "spoken languages"
+      ul {
+        li "excellent english"
+        li "native german"
+        li "good italian"
+      }
+    }
+    li {
       "software programming"
       ul {
         li (taglink "JavaScript", js), ": react, nodejs, electron, meteor"
-        li (taglink "C++", cpp), ": openFrameworks, intermediate openGL"
-        li (taglink "GLSL & HLSL", shader), ": animated shaders, raymarching, SDFs"
+        li (taglink "C and C++", cpp), ": openFrameworks, intermediate openGL"
+        li (taglink "GLSL and HLSL", shader), ": animated shaders, raymarching, SDFs"
         li taglink "C# and Unity", cs
+        li taglink "Lua/MoonScript", lua
         li "Python"
-        li "Lua/MoonScript"
       }
     }
     li {
@@ -329,9 +350,21 @@ tohtml with article!
   }
 
   \append with h1 "selected projects", style: 'margin-top': '1em'
-    \append a "show all", href: '#', style: { 'font-size': '0.7em', 'margin-left': '1.5em' }, onclick: (e) =>
-      e\preventDefault!
-      filter\set!
+    \append filter\map (tag) ->
+      return unless tag
+      span {
+        style:
+          'font-size': '0.7em'
+          'font-weight': 'normal'
+          'margin-left': '2em'
+
+        "showing only "
+        b text tag
+        " projects - "
+        a "reset filter", href: '#', style: { 'font-weight': 'bold' }, onclick: (e) =>
+          e\preventDefault!
+          filter\set!
+      }
   \append filter\map => project_row @, professional
 
   \append h1 "professional work", style: 'margin-top': '1em'
