@@ -126,6 +126,7 @@ projects = {
       name: 'alv'
       desc: 'an innovative realtime programming language'
       entries: {
+        'Lisp syntax, dataflow semantics'
         'designed to be edited while running'
         'whole program is reloaded on evaluation, but state is guaranteed to be retained'
         'Atom plugin for realtime state visualisation'
