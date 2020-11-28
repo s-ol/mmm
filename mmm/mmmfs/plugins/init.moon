@@ -297,6 +297,7 @@ add_plugin 'mermaid'
 add_plugin 'twitter'
 add_plugin 'youtube'
 add_plugin 'cites'
+add_plugin 'gltf'
 
 if STATIC
   add_plugin 'static'
