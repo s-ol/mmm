@@ -142,6 +142,7 @@ tourl = (path, _view) ->
         error "unknown embed 'wrap': '#{opts.wrap}'"
 
   {
+    :tourl
     :find_fileder
     :link_to
     :interactive_link

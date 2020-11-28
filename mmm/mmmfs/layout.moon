@@ -115,7 +115,7 @@ get_meta = =>
 
 render = (content, fileder, opts={}) ->
   opts.meta or= get_meta fileder
-  opts.scripts or= ''
+  opts.scripts or= PLUGINS.scripts
 
   unless opts.noview
     content = [[
@@ -143,8 +143,7 @@ render = (content, fileder, opts={}) ->
     #{footer}"
   buf ..= if STATIC then '' else [[
     <script type="text/javascript" src="/static/highlight-pack/:text/javascript"></script>
-    <script type="text/javascript">hljs.initHighlighting()</script>
-    <script type="text/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>]]
+    <script type="text/javascript">hljs.initHighlighting()</script>]]
 
   buf ..= opts.scripts
   buf ..= if STATIC then STATIC.scripts else ''

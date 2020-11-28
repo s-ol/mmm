@@ -46,7 +46,7 @@ string.yieldable_gsub = (str, pat, f) ->
   str = str\gsub '%%|', '%%'
   str, cnt
 
--- list of converts, editors
+-- list of converts, editors, scripts
 -- converts each have
 -- * inp - input type. can capture subtypes using `(.+)`
 -- * out - output type. can substitute subtypes from inp with %1, %2 etc.
@@ -54,6 +54,7 @@ string.yieldable_gsub = (str, pat, f) ->
 -- * transform - function (val: inp, fileder) => val: out
 --               @convert, @from, @to contain the convert and the concrete types
 editors = {}
+scripts = ''
 converts = {
   {
     inp: 'fn -> (.+)',
@@ -269,7 +270,7 @@ if MODE == 'CLIENT' or UNSAFE
     transform: loadwith load or loadstring
   }
 
-add_converts = (module) ->
+add_plugin = (module) ->
   ok, plugin = pcall require, ".plugins.#{module}"
 
   if not ok
@@ -286,16 +287,19 @@ add_converts = (module) ->
     for editor in *plugin.editors
       table.insert editors, editor
 
-add_converts 'code'
-add_converts 'json'
-add_converts 'markdown'
-add_converts 'mermaid'
-add_converts 'twitter'
-add_converts 'youtube'
-add_converts 'cites'
+  if plugin.scripts
+    scripts ..= plugin.scripts
+
+add_plugin 'code'
+add_plugin 'json'
+add_plugin 'markdown'
+add_plugin 'mermaid'
+add_plugin 'twitter'
+add_plugin 'youtube'
+add_plugin 'cites'
 
 if STATIC
-  add_converts 'static'
+  add_plugin 'static'
 else
   table.insert converts, {
     inp: '(.+)',
@@ -335,4 +339,5 @@ else
 {
   :converts
   :editors
+  :scripts
 }

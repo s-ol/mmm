@@ -8,6 +8,8 @@ extensions = {
 
   'text/javascript': 'js'
   'text/css': 'css'
+
+  'model/gltf-binary': 'glb'
 }
 
 {

@@ -19,4 +19,7 @@ import div, blockquote, a from require 'mmm.dom'
           }
     }
   }
+  scripts: [[
+    <script type="text/javascript" src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  ]]
 }
