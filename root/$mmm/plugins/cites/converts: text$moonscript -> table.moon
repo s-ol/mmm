@@ -56,20 +56,18 @@ format_full = () =>
         \insert "#{dot} #{@publisher}" if @publisher
       span tbl
 {
-  converts: {
-    {
-      inp: 'cite/doi'
-      out: 'URL -> text/bibtex'
-      cost: 0.1
-      transform: (doi) =>
-        doi = doi\match '(10%.%d%d%d%d%d?%d?%d?%d?%d?/[%d%w%.%-_:;%(%)]+)'
-        "http://api.crossref.org/works/#{doi}/transform/application/x-bibtex"
-    }
-    {
-      inp: 'text/bibtex'
-      out: 'mmm/dom'
-      cost: 1
-      transform: (bib) => format_full parse_bibtex bib
-    }
+  {
+    inp: 'cite/doi'
+    out: 'URL -> text/bibtex'
+    cost: 0.1
+    transform: (doi) =>
+      doi = doi\match '(10%.%d%d%d%d%d?%d?%d?%d?%d?/[%d%w%.%-_:;%(%)]+)'
+      "http://api.crossref.org/works/#{doi}/transform/application/x-bibtex"
+  }
+  {
+    inp: 'text/bibtex'
+    out: 'mmm/dom'
+    cost: 1
+    transform: (bib) => format_full parse_bibtex bib
   }
 }

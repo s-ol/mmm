@@ -43,7 +43,7 @@ class Editor
     if @lastPreview and doc\isClean @lastPreview
       -- no changes since last event
       return
-
+    
     @lastPreview = doc\changeGeneration!
     value = doc\getValue!
 
@@ -57,8 +57,7 @@ class Editor
     @fileder\set @key, doc\getValue!
     @lastSave = doc\changeGeneration true
 
--- syntax-highlighted code
-{
+[[
   editors: if MODE == 'CLIENT' then {
     {
       inp: 'text/([^ ]*).*'
@@ -76,11 +75,16 @@ class Editor
         Editor value, nil, fileder, key
     }
   }
-  scripts: [[
-    <link rel="stylesheet" type="text/css" href="//unpkg.com/codemirror@5.49.2/lib/codemirror.css" />
-    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/lib/codemirror.js"></script>
-    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/mode/lua/lua.js"></script>
-    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/mode/markdown/markdown.js"></script>
-    <script type="text/javascript" src="//unpkg.com/codemirror@5.49.2/addon/display/autorefresh.js"></script>
-  ]]
+]]
+
+-- syntax-highlighted code
+{
+  {
+    inp: 'text/([^ ]*).*'
+    out: 'mmm/dom'
+    cost: 5
+    transform: (val) =>
+      lang = @from\match @convert.inp
+      pre languages[lang] val
+  }
 }

@@ -21,18 +21,24 @@ class FSStore extends Store
     @log "opening '#{opts.root}'..."
 
   -- fileders
-  get_order: (path, forgiving=false) =>
+  get_order: (path, forgiving=false, include_meta=false) =>
     entries = {}
+    sorted = {}
     for name in lfs.dir @root .. path
-      continue if '.' == name\sub 1, 1
-      entry_path = @root .. "#{path}/#{name}"
+      continue if '.' == name\sub(1, 1)
+      continue if '$' == name\sub(1, 1) and not include_meta
+      entry_path = "#{@root}#{path}/#{name}"
       if 'directory' ~= lfs.attributes entry_path, 'mode'
         continue
 
-      entries[name] = :name, path: "#{path}/#{name}"
+      entry = :name, path: "#{path}/#{name}"
+      entries[name] = entry
 
-    sorted = {}
-    order_file = @root .. "#{path}/$order"
+      if '$' == name\sub 1, 1
+        table.insert sorted, entry
+        sorted[name] = true
+
+    order_file = "#{@root}#{path}/$order"
     if 'file' == lfs.attributes order_file, 'mode'
       for line in io.lines order_file
         entry = entries[line]
@@ -44,6 +50,8 @@ class FSStore extends Store
 
         table.insert sorted, entry
         sorted[line] = true
+    else
+      forgiving = true
 
     unsorted = [entry for name, entry in pairs entries when not sorted[entry.name]]
     if forgiving
@@ -56,7 +64,7 @@ class FSStore extends Store
     sorted
 
   write_order: (path, order=@get_order path, true) =>
-    order_file = @root .. "#{path}/$order"
+    order_file = "#{@root}#{path}/$order"
     if #order == 0
       os.remove order_file
       return
@@ -67,7 +75,7 @@ class FSStore extends Store
     file\close!
 
   list_fileders_in: (path='') =>
-    sorted = @get_order path
+    sorted = @get_order path, nil, true
 
     coroutine.wrap ->
       for { :path } in *sorted
@@ -104,12 +112,12 @@ class FSStore extends Store
   rename_fileder: (path, next_name) =>
     @log "renaming fileder #{path} -> '#{next_name}'"
     parent, name = dir_base path
-    assert os.rename path, @root .. "#{parent}/#{next_name}"
+    assert os.rename path, "#{@root}#{parent}/#{next_name}"
 
   move_fileder: (path, next_parent) =>
     @log "moving fileder #{path} -> #{next_parent}/"
     parent, name = dir_base path
-    assert os.rename @root .. path, @root .. "#{next_parent}/#{name}"
+    assert os.rename @root .. path, "#{@root}#{next_parent}/#{name}"
 
   -- swap two childrens' order
   swap_fileders: (parent, name_a, name_b) =>
@@ -164,7 +172,6 @@ class FSStore extends Store
         if file_name
           error "two files match #{name}: #{file_name} and #{entry_name}!"
         file_name = entry_name
-
 
     file_name and @root .. "#{path}/#{file_name}"
 

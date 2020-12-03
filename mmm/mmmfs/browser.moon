@@ -274,7 +274,7 @@ class Browser
             value, key = fileder\get prop
             assert key, "couldn't @get #{prop}"
 
-            conversions = get_conversions 'mmm/dom', key.type, get_casts!
+            conversions = get_conversions fileder, 'mmm/dom', key.type, get_casts!
             assert conversions, "cannot cast '#{key.type}'"
             with res = apply_conversions conversions, value, fileder, prop
               @editor\set if res.EDITOR then res

@@ -11,8 +11,6 @@ escape_pattern = (inp) ->
     "^#{inp\gsub '([^%w])', '%%%1'}$"
 escape_inp = (inp) -> "^#{inp\gsub '([-/])', '%%%1'}$"
 
-local print_conversions
-
 class MermaidDebugger
   new: =>
     nextid = 0
@@ -55,15 +53,43 @@ class MermaidDebugger
 
     "graph TD\n" .. @buf
 
+get_converts = (fileder) ->
+  assert PLUGINS
+  assert BROWSER.root
+  converts = [c for c in *PLUGINS.converts]
+
+  -- search until closest non-meta ancestor
+  local guard_self
+  max_path = fileder.path
+  if closest = max_path\match('(.-)/$mmm')
+    max_path = closest
+    guard_self = true
+
+  for ancestor in coroutine.wrap -> BROWSER.root\walk_co max_path
+    if guard_self and ancestor.path == max_path
+      break
+
+    ancestor\load! if not ancestor.loaded
+
+    if meta = ancestor.meta
+      for plugin in *meta\walk('plugins').children
+        for c in *(plugin\get('converts: table') or {})
+          table.insert converts, c
+
+  converts
+
 -- attempt to find a conversion path from 'have' to 'want'
+-- * fileder - fileder to start with
 -- * have - start type string or list of type strings
 -- * want - stop type pattern
 -- * limit - limit conversion amount
 -- * debug - a table with debug hooks
 -- returns a list of conversion steps
-get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5, debug) ->
+get_conversions = (fileder, want, have, converts, limit=5, debug) ->
+  converts or= get_converts fileder
+
   assert have, 'need starting type(s)'
-  assert converts,  'need to pass list of converts'
+  assert converts, 'need to pass list of converts'
 
   if 'string' == type have
     have = { have }
@@ -143,15 +169,14 @@ print_conversions = (conversions) ->
 -- * ... - other transform parameters (fileder, key)
 -- returns converted value
 err_and_trace = (msg) -> debug.traceback msg, 2
-apply_conversions = (conversions, value, ...) ->
+apply_conversions = (fileder, conversions, value, key) ->
   for i=#conversions,1,-1
     refs\push!
     step = conversions[i]
-    ok, value = xpcall step.convert.transform, err_and_trace, step, value, ...
+    ok, value = xpcall step.convert.transform, err_and_trace, step, value, fileder, key
     refs\pop!
     if not ok
-      f, k = ...
-      error "error while converting #{f} #{k} from '#{step.from}' to '#{step.to}':\n#{value}"
+      error "error while converting #{fileder} #{key} from '#{step.from}' to '#{step.to}':\n#{value}"
 
   value
 
@@ -160,8 +185,8 @@ apply_conversions = (conversions, value, ...) ->
 -- * want - stop type pattern
 -- * value - value or map from have-types to values
 -- returns converted value
-convert = (have, want, value, ...) ->
-  conversions, start = get_conversions want, have
+convert = (have, want, value, fileder, key) ->
+  conversions, start = get_conversions fileder, want, have
 
   if not conversions
     warn "couldn't convert from '#{have}' to '#{want}'"
@@ -170,7 +195,7 @@ convert = (have, want, value, ...) ->
   if 'string' ~= type have
      value = value[start]
 
-  apply_conversions conversions, value, ...
+  apply_conversions fileder, conversions, value, key
 
 {
   :MermaidDebugger

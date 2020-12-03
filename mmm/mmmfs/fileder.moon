@@ -160,16 +160,20 @@ class Fileder
 
   -- load fact/children contents
   -- called automatically by metamethods set up in constructor
-  -- can take an index instance if it is already available,
+  -- can take an index instance if it is already available
   load: (index) =>
     assert not @loaded, "already loaded!"
     @loaded = true
 
-    if not index
-      index = @store\get_index @path
+    index or= @store\get_index @path
 
     for path_or_index in *index.children
-      table.insert @children, Fileder @store, path_or_index
+      child = Fileder @store, path_or_index
+      name = child\get 'name: alpha'
+      if '$' != name\sub 1, 1
+        table.insert @children, child
+      elseif name == '$mmm'
+        @meta = child
 
     for key in *index.facets
       key = Key key
@@ -201,6 +205,22 @@ class Fileder
     for child in *@children
       if match = child\walk path
         return match
+
+    if match = @meta and @meta\walk path
+      return match
+
+  -- like :walk but yield all ancestors of path
+  -- * path - the path to walk to
+  walk_co: (path) =>
+    path = "#{@path}/#{path}" if '/' != path\sub 1, 1
+
+    return unless @path == path\sub 1, #@path
+    return if #path == #@path
+
+    coroutine.yield @
+
+    for child in *@children
+      child\walk_co path
 
   -- recursively mount fileder and children at path
   -- * path - the path to mount at
@@ -257,7 +277,7 @@ class Fileder
     return unless #matching > 0
 
     -- get shortest conversion path
-    shortest_path, start = get_conversions want.type, [ key.type for key in *matching ], ...
+    shortest_path, start = get_conversions @, want.type, [ key.type for key in *matching ], ...
 
     if start
       for key in *matching
@@ -279,7 +299,7 @@ class Fileder
     key, conversions = @find want
 
     if key
-      value = apply_conversions conversions, @facets[key], @, key
+      value = apply_conversions @, conversions, @facets[key], key
       value, key
 
   -- like @get, throw if no value or conversion path

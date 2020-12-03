@@ -38,19 +38,17 @@ else
 
 
 {
-  converts: {
-    {
-      inp: 'table',
-      out: 'text/json',
-      cost: 2
-      transform: (val) => encode val
-    }
-    if decode
-      {
-        inp: 'text/json'
-        out: 'table'
-        cost: 1
-        transform: (val) => decode val
-      }
+  {
+    inp: 'table',
+    out: 'text/json',
+    cost: 2
+    transform: (val) => encode val
   }
+  if decode
+    {
+      inp: 'text/json'
+      out: 'table'
+      cost: 1
+      transform: (val) => decode val
+    }
 }

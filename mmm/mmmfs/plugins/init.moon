@@ -291,17 +291,11 @@ add_plugin = (module) ->
     scripts ..= plugin.scripts
 
 add_plugin 'code'
-add_plugin 'json'
 add_plugin 'markdown'
 add_plugin 'mermaid'
-add_plugin 'twitter'
-add_plugin 'youtube'
-add_plugin 'cites'
 add_plugin 'gltf'
 
-if STATIC
-  add_plugin 'static'
-else
+if not STATIC
   table.insert converts, {
     inp: '(.+)',
     out: 'URL -> %1',
