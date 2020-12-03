@@ -191,20 +191,20 @@ converts = {
   {
     inp: 'URL -> image/.+',
     out: 'mmm/dom',
-    cost: 1
+    cost: -4
     transform: (src, fileder) => img :src
   }
   {
     inp: 'URL -> video/.+%+gif',
     out: 'mmm/dom',
-    cost: 0.99
+    cost: -4.01
     transform: (src) =>
       video (source :src), controls: 'auto', loop: true, autoplay: true, muted: true
   }
   {
     inp: 'URL -> video/.+',
     out: 'mmm/dom',
-    cost: 1
+    cost: -4
     transform: (src) =>
       -- @TODO: add parsed MIME type
       video (source :src), controls: true, loop: true

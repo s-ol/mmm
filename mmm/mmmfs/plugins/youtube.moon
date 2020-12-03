@@ -5,7 +5,7 @@ import iframe from require 'mmm.dom'
     {
       inp: 'URL -> youtube/video'
       out: 'mmm/dom'
-      cost: 1
+      cost: -4
       transform: (link) =>
         id = link\match 'youtu%.be/([^/]+)'
         id or= link\match 'youtube.com/watch.*[?&]v=([^&]+)'

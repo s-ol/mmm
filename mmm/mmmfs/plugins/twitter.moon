@@ -5,7 +5,7 @@ import div, blockquote, a from require 'mmm.dom'
     {
       inp: 'URL -> twitter/tweet'
       out: 'mmm/dom'
-      cost: 1
+      cost: -4
       transform: (href) =>
         id = assert (href\match 'twitter.com/[^/]-/status/(%d*)'), "couldn't parse twitter/tweet URL: '#{href}'"
         if MODE == 'CLIENT'
