@@ -22,7 +22,10 @@ class MermaidDebugger
         t[k] = val
 
     @cost = {}
-    @buf = "graph TD\n"
+    @buf = ""
+
+  prepend: (line) =>
+    @buf = "  #{line}\n" .. @buf
 
   append: (line) =>
     @buf ..= "  #{line}\n"
@@ -39,17 +42,18 @@ class MermaidDebugger
     @append "class #{@type_id[type]} #{klass}"
 
   found_link: (frm, to, cost) =>
-    @append "#{@type_id[frm]} -- cost: #{cost} --> #{@type_id[to]}"
+    @prepend "#{@type_id[frm]} -- cost: #{cost} --> #{@type_id[to]}"
 
   render: =>
     for type, id in pairs @type_id
       cost = @cost[type] or -1
-      @append "#{id}[\"#{type} [#{cost}]\"]"
+      @prepend "#{id}[\"#{type} [#{cost}]\"]"
 
     @append "classDef have fill:#ada"
     @append "classDef want fill:#add"
+    @append "classDef cant fill:#daa"
 
-    @buf
+    "graph TD\n" .. @buf
 
 -- attempt to find a conversion path from 'have' to 'want'
 -- * have - start type string or list of type strings
@@ -68,6 +72,10 @@ get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5, d
 
   want = escape_pattern want
   limit = limit + 3 * math.max table.unpack [count type for type in *have]
+  if debug
+    debug\found_type want
+    debug\type_cost want, limit
+    debug\type_class want, 'want'
 
   had = {}
   queue = Queue!
@@ -84,7 +92,11 @@ get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5, d
 
   while true
     entry, cost = queue\pop!
-    if not entry or cost > limit
+    if not entry
+      break
+
+    if cost > limit
+      debug\type_class entry.rest, 'cant' if debug
       break
 
     { :start, :rest, :conversions } = entry
@@ -109,14 +121,12 @@ get_conversions = (want, have, converts=PLUGINS and PLUGINS.converts, limit=5, d
         debug\found_link rest, result, convert.cost
 
       if result\match want
-        debug\type_class result, 'want' if debug
         best\add next_entry, next_entry.cost
+        debug\found_link result, want, 0 if debug
       else
         queue\add next_entry, next_entry.cost, result
 
   if solution = best\pop!
-    -- print "BEST: (#{solution.cost})"
-    -- print_conversions solution.conversions
     solution.conversions, solution.start if solution
 
 -- stringify conversions for debugging
