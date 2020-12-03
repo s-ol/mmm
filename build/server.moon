@@ -61,7 +61,7 @@ class Server
     <script type=\"text/javascript\" src=\"/static/fengari-web/:text/javascript\"></script>
     <script type=\"text/lua\" src=\"/static/mmm/:text/lua\"></script>
     <script type=\"text/lua\">
-      require 'lmm'
+      require 'mmm'
       require 'mmm.mmmfs'
       on_load = on_load or {}
       table.insert(on_load, function()
