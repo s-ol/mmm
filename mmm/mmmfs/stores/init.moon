@@ -49,7 +49,7 @@ class Store
 
 -- instantiate a store from a CLI arg
 -- e.g.: sql, fs:/path/to/root, sql:MEMORY, sql:db.sqlite3
-get_store = (args='sql', opts={}) ->
+get_store = (args='fs', opts={}) ->
   type, arg = args\match '(%w+):(.*)'
   type = args unless type
 
