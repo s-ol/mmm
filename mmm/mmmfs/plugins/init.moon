@@ -1,7 +1,6 @@
-require = relative ..., 1
 import div, pre, code, img, video, span, source  from require 'mmm.dom'
 import find_fileder, link_to, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
-import render from require '.layout'
+import render from require 'mmm.mmmfs.layout'
 import tohtml from require 'mmm.component'
 
 -- fix JS null values
@@ -271,7 +270,7 @@ if MODE == 'CLIENT' or UNSAFE
   }
 
 add_plugin = (module) ->
-  ok, plugin = pcall require, ".plugins.#{module}"
+  ok, plugin = pcall require, "mmm.mmmfs.plugins.#{module}"
 
   if not ok
     print "[Plugins] couldn't load plugins.#{module}: #{plugin}"

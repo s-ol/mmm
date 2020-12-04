@@ -1,5 +1,3 @@
-require = relative ..., 0
-
 class Store
   new: (opts) =>
     opts.verbose or= false
@@ -55,7 +53,7 @@ get_store = (args='fs', opts={}) ->
 
   switch type\lower!
     when 'sql'
-      import SQLStore from require '.sql'
+      import SQLStore from require 'mmm.mmmfs.stores.sql'
 
       if arg == 'MEMORY'
         opts.memory = true
@@ -65,7 +63,7 @@ get_store = (args='fs', opts={}) ->
       SQLStore opts
 
     when 'fs'
-      import FSStore from require '.fs'
+      import FSStore from require 'mmm.mmmfs.stores.fs'
 
       opts.root = arg
 

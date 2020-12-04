@@ -1,6 +1,5 @@
-require = relative ..., 1
 lfs = require 'lfs'
-import Store from require '.'
+import Store from require 'mmm.mmmfs.stores'
 
 -- split filename into dirname + basename
 dir_base = (path) ->

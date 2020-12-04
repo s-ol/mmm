@@ -1,5 +1,4 @@
-require = relative ..., 1
-import Store from require '.'
+import Store from require 'mmm.mmmfs.stores'
 { :location, :XMLHttpRequest, :JSON, :Object, :Array } = js.global
 
 -- split filename into dirname + basename

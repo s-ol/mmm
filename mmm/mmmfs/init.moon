@@ -1,4 +1,2 @@
-require = relative ..., 0
-
 export ^
-PLUGINS = require '.plugins'
+PLUGINS = require 'mmm.mmmfs.plugins'

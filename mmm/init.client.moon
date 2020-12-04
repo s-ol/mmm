@@ -30,24 +30,6 @@ warn = (...) ->
 -- package.path = '/?.client.moon.lua;/?.moon.lua;/?/init.moon.lua;/?.lua;/?/init.lua'
 package.path = '/?.lua;/?/init.lua'
 
--- relative imports
-relative = do
-  _require = require
-
-  (base, sub) ->
-    sub = 0 unless 'number' == type sub
-
-    for i=1, sub
-      base = base\match '^(.*)%.%w+$'
-
-    (name, x) ->
-      if name == '.'
-        name = base
-      else if '.' == name\sub 1, 1
-        name = base .. name
-
-      _require name
-
 if on_load
   for f in *on_load do f!
 

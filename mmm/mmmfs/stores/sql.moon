@@ -1,6 +1,5 @@
-require = relative ..., 1
 sqlite = require 'sqlite3'
-import Store from require '.'
+import Store from require 'mmm.mmmfs.stores'
 
 class SQLStore extends Store
   new: (opts = {}) =>

@@ -90,8 +90,6 @@ test_store = (ts) ->
 
       assert.are.same root_index, ts\get_index '', -1
 
-  it "can get indexes recursively", ->
-
   it "can load facets", ->
     assert.are.equal 'hello', ts\load_facet '/hello', 'name', 'alpha'
     assert.are.equal 'world', ts\load_facet '/hello/world', 'name', 'alpha'

@@ -1,9 +1,8 @@
-require = relative ..., 1
-import Key from require '.fileder'
-import get_conversions, apply_conversions from require '.conversion'
+import Key from require 'mmm.mmmfs.fileder'
+import get_conversions, apply_conversions from require 'mmm.mmmfs.conversion'
 import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
 import pre, div, nav, span, button, a, code, select, option from elements
-import link_to from (require '.util') elements
+import link_to from (require 'mmm.mmmfs.util') elements
 import languages from require 'mmm.highlighting'
 
 keep = (var) ->
@@ -270,13 +269,13 @@ class Browser
         \append @inspect_err
       \append with pre class: 'content'
         \append keep @inspect_prop\map (prop, old) ->
-          @get_content prop, @inspect_err, (fileder, prop) ->
-            value, key = fileder\get prop
-            assert key, "couldn't @get #{prop}"
+          @get_content facet, @inspect_err, (fileder, facet) ->
+            value, key = fileder\get facet
+            assert key, "couldn't @get #{facet}"
 
             conversions = get_conversions fileder, 'mmm/dom', key.type, get_casts!
             assert conversions, "cannot cast '#{key.type}'"
-            with res = apply_conversions conversions, value, fileder, prop
+            with res = apply_conversions fileder, conversions, value, facet
               @editor\set if res.EDITOR then res
 
       -- children

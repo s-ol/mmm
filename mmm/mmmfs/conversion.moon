@@ -1,7 +1,6 @@
-require = relative ..., 1
 refs = require 'mmm.refs'
-import Queue from require '.queue'
-import get_plugins from require '.meta'
+import Queue from require 'mmm.mmmfs.queue'
+import get_plugins from require 'mmm.mmmfs.meta'
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
 escape_pattern = (inp) ->

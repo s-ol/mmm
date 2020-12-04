@@ -1,5 +1,4 @@
-require = relative ..., 1
-import get_conversions, apply_conversions from require '.conversion'
+import get_conversions, apply_conversions from require 'mmm.mmmfs.conversion'
 
 -- split filename into dirname + basename
 dir_base = (path) ->
