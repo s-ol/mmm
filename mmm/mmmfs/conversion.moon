@@ -1,6 +1,7 @@
 require = relative ..., 1
 refs = require 'mmm.refs'
 import Queue from require '.queue'
+import get_plugins from require '.meta'
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
 escape_pattern = (inp) ->
@@ -55,26 +56,11 @@ class MermaidDebugger
 
 get_converts = (fileder) ->
   assert PLUGINS
-  assert BROWSER.root
   converts = [c for c in *PLUGINS.converts]
 
-  -- search until closest non-meta ancestor
-  local guard_self
-  max_path = fileder.path
-  if closest = max_path\match('(.-)/$mmm')
-    max_path = closest
-    guard_self = true
-
-  for ancestor in coroutine.wrap -> BROWSER.root\walk_co max_path
-    if guard_self and ancestor.path == max_path
-      break
-
-    ancestor\load! if not ancestor.loaded
-
-    if meta = ancestor.meta
-      for plugin in *meta\walk('plugins').children
-        for c in *(plugin\get('converts: table') or {})
-          table.insert converts, c
+  for plugin in get_plugins fileder
+    for c in *(plugin\get('converts: table') or {})
+      table.insert converts, c
 
   converts
 

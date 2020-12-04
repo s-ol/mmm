@@ -209,19 +209,6 @@ class Fileder
     if match = @meta and @meta\walk path
       return match
 
-  -- like :walk but yield all ancestors of path
-  -- * path - the path to walk to
-  walk_co: (path) =>
-    path = "#{@path}/#{path}" if '/' != path\sub 1, 1
-
-    return unless @path == path\sub 1, #@path
-    return if #path == #@path
-
-    coroutine.yield @
-
-    for child in *@children
-      child\walk_co path
-
   -- recursively mount fileder and children at path
   -- * path - the path to mount at
   -- * mount_as - dont append own name to path

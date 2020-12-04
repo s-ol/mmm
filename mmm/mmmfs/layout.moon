@@ -1,6 +1,6 @@
-require = relative ..., 1
 import header, aside, footer, div, svg, script, g, circle, h1, span, b, a, img from require 'mmm.dom'
 import navigate_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
+import get_plugins from require 'mmm.mmmfs.meta'
 
 pick = (...) ->
   num = select '#', ...
@@ -83,7 +83,7 @@ footer = footer {
   }
 }
 
-get_meta = =>
+get_header_tags = =>
   title = (@get 'title: text/plain') or @gett 'name: alpha'
 
   l = (str) ->
@@ -113,9 +113,17 @@ get_meta = =>
 
   meta
 
+get_scripts = =>
+  scripts = ''
+  for plugin in get_plugins @
+    if snippet = plugin\get 'scripts: text/html+frag'
+      scripts ..= snippet
+
+  scripts
+
 render = (content, fileder, opts={}) ->
-  opts.meta or= get_meta fileder
-  opts.scripts or= PLUGINS.scripts
+  opts.meta or= get_header_tags fileder
+  opts.scripts or= get_scripts fileder
 
   unless opts.noview
     content = [[
@@ -133,7 +141,7 @@ render = (content, fileder, opts={}) ->
   buf ..= if STATIC then STATIC.style else [[<link rel="stylesheet" type="text/css" href="/static/style/:text/css" />]]
   buf ..= [[<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />]]
   buf ..= "
-    #{get_meta fileder}
+    #{opts.meta}
   </head>
   <body>
     #{gen_header!}
@@ -146,7 +154,7 @@ render = (content, fileder, opts={}) ->
     <script type="text/javascript">hljs.initHighlighting()</script>]]
 
   buf ..= opts.scripts
-  buf ..= if STATIC then STATIC.scripts else ''
+  buf ..= STATIC.scripts if STATIC
   buf ..= "
   </body>
 </html>"
