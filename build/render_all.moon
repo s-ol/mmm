@@ -11,10 +11,6 @@ add '?/init.server'
 -- moon render_all.moon [STORE] [output] [URL-prefix]
 { store, output, prefix } = arg
 
-require 'mmm'
-import Fileder, dir_base from require 'mmm.mmmfs.fileder'
-import get_store from require 'mmm.mmmfs.stores'
-
 export UNSAFE, STATIC
 
 UNSAFE = true
@@ -29,7 +25,9 @@ STATIC = {
   root: prefix
 }
 
-require 'mmm.mmmfs'
+require 'mmm'
+import Fileder, dir_base from require 'mmm.mmmfs.fileder'
+import get_store from require 'mmm.mmmfs.stores'
 
 store = get_store store
 root = Fileder store

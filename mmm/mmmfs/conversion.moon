@@ -1,6 +1,7 @@
 refs = require 'mmm.refs'
 import Queue from require 'mmm.mmmfs.queue'
 import get_plugins from require 'mmm.mmmfs.meta'
+builtins = require 'mmm.mmmfs.builtins'
 
 count = (base, pattern='->') -> select 2, base\gsub pattern, ''
 escape_pattern = (inp) ->
@@ -54,8 +55,7 @@ class MermaidDebugger
     "graph TD\n" .. @buf
 
 get_converts = (fileder) ->
-  assert PLUGINS
-  converts = [c for c in *PLUGINS.converts]
+  converts = [c for c in *builtins.converts]
 
   for plugin in get_plugins fileder
     for c in *(plugin\get('converts: table') or {})

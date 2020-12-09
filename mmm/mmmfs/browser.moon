@@ -1,4 +1,5 @@
 import Key from require 'mmm.mmmfs.fileder'
+import converts from require 'mmm.mmmfs.builtins'
 import get_conversions, apply_conversions from require 'mmm.mmmfs.conversion'
 import ReactiveVar, get_or_create, text, elements, tohtml from require 'mmm.component'
 import pre, div, nav, span, button, a, code, select, option from elements
@@ -28,7 +29,7 @@ casts = {
     transform: (href) => span a (code href), :href
   }
 }
-get_casts = -> combine casts, PLUGINS.converts, PLUGINS.editors
+get_casts = -> combine casts, converts --, PLUGINS.editors
 
 export BROWSER
 class Browser

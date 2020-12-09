@@ -123,7 +123,7 @@ get_scripts = =>
 
 render = (content, fileder, opts={}) ->
   opts.meta or= get_header_tags fileder
-  opts.scripts or= get_scripts fileder
+  opts.scripts or= ''
 
   unless opts.noview
     content = [[
@@ -142,6 +142,7 @@ render = (content, fileder, opts={}) ->
   buf ..= [[<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />]]
   buf ..= "
     #{opts.meta}
+    #{get_scripts fileder}
   </head>
   <body>
     #{gen_header!}

@@ -9,6 +9,9 @@ add '?/init.server'
 
 require 'mmm'
 
+export UNSAFE
+UNSAFE = true
+
 import dir_base, Key, Fileder from require 'mmm.mmmfs.fileder'
 import convert, MermaidDebugger from require 'mmm.mmmfs.conversion'
 import get_store from require 'mmm.mmmfs.stores'
@@ -38,9 +41,8 @@ class Server
     if @flags.unsafe == nil
       @flags.unsafe = not @flags.rw or opts.host == 'localhost' or opts.host == '127.0.0.1'
 
-    export UNSAFE
+    -- @TODO: fix UNSAFE!
     UNSAFE = @flags.unsafe
-    require 'mmm.mmmfs'
 
   listen: =>
     assert @server\listen!
@@ -56,13 +58,12 @@ class Server
     root = Fileder @store
     browser = Browser root, fileder.path, facet.name
 
-    render browser\todom!, fileder, noview: true, scripts: PLUGINS.scripts .. "
+    render browser\todom!, fileder, noview: true, scripts: "
     <script type=\"text/javascript\" src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
     <script type=\"text/javascript\" src=\"/static/fengari-web/:text/javascript\"></script>
     <script type=\"text/lua\" src=\"/static/mmm/:text/lua\"></script>
     <script type=\"text/lua\">
       require 'mmm'
-      require 'mmm.mmmfs'
       on_load = on_load or {}
       table.insert(on_load, function()
         local path = #{string.format '%q', fileder.path}
@@ -83,6 +84,7 @@ class Server
   handle_debug: (fileder, facet) =>
     debugger = MermaidDebugger!
     fileder\find facet, nil, nil, nil, debugger
+    print debugger\render!
     convert 'text/mermaid-graph', 'text/html', debugger\render!, fileder, facet.name
 
   handle: (method, path, facet, value) =>
@@ -93,8 +95,8 @@ class Server
       when 'GET', 'HEAD'
         root = Fileder @store
         export BROWSER
-        BROWSER = :root, :path
-        fileder = root\walk path -- Fileder @store, path
+        BROWSER = :path
+        fileder = root\walk path
 
         if not fileder
           -- fileder not found

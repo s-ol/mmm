@@ -52,8 +52,6 @@ string.yieldable_gsub = (str, pat, f) ->
 -- * cost - conversion cost
 -- * transform - function (val: inp, fileder) => val: out
 --               @convert, @from, @to contain the convert and the concrete types
-editors = {}
-scripts = ''
 converts = {
   {
     inp: 'fn -> (.+)',
@@ -269,39 +267,6 @@ if MODE == 'CLIENT' or UNSAFE
     transform: loadwith load or loadstring
   }
 
-add_plugin = (module) ->
-  ok, plugin = pcall require, "mmm.mmmfs.plugins.#{module}"
-
-  if not ok
-    print "[Plugins] couldn't load plugins.#{module}: #{plugin}"
-    return
-
-  print "[Plugins] loaded plugins.#{module}"
-
-  if plugin.converts
-    for convert in *plugin.converts
-      table.insert converts, convert
-
-  if plugin.editors
-    for editor in *plugin.editors
-      table.insert editors, editor
-
-  if plugin.scripts
-    scripts ..= plugin.scripts
-
-add_plugin 'code'
-add_plugin 'markdown'
-add_plugin 'mermaid'
-add_plugin 'gltf'
-
-if not STATIC
-  table.insert converts, {
-    inp: '(.+)',
-    out: 'URL -> %1',
-    cost: 5
-    transform: (_, fileder, key) => "#{fileder.path}/#{key.name}:#{@from}"
-  }
-
 if MODE == 'SERVER'
   ok, moon = pcall require, 'moonscript.base'
   if ok
@@ -320,18 +285,69 @@ if MODE == 'SERVER'
       cost: 2
       transform: single moon.to_lua
     }
+  else
+    table.insert converts, {
+      inp: 'text/javascript -> (.+)',
+      out: '%1',
+      cost: 1
+      transform: (source) =>
+        f = js.new window.Function, source
+        f!
+    }
+
+json_encode = (obj) ->
+  switch type obj
+    when 'string'
+      string.format '%q', obj
+    when 'table'
+      if obj[1] or not next obj
+        "[#{table.concat [json_encode c for c in *obj], ','}]"
+      else
+        "{#{table.concat ["#{json_encode k}: #{json_encode v}" for k,v in pairs obj], ', '}}"
+    when 'number'
+      tostring obj
+    when 'boolean'
+      tostring obj
+    when 'nil'
+      'null'
+    else
+      error "unknown type '#{type obj}'"
+
+json_decode = if MODE == 'CLIENT'
+  import Array, Object, JSON from js.global
+
+  fix = (val) ->
+    switch type val
+      when 'userdata'
+        if Array\isArray val
+          [fix x for x in js.of val]
+        else
+          {(fix e[0]), (fix e[1]) for e in js.of Object\entries(val)}
+      else
+        val
+
+  (str) -> fix JSON\parse str
+else if cjson = require 'cjson'
+  cjson.decode
 else
+  warn 'only partial JSON support, please install cjson'
+  nil
+
+table.insert converts, {
+  inp: 'table',
+  out: 'text/json',
+  cost: 2
+  transform: (val) => json_encode val
+}
+
+if json_decode
   table.insert converts, {
-    inp: 'text/javascript -> (.+)',
-    out: '%1',
+    inp: 'text/json',
+    out: 'table',
     cost: 1
-    transform: (source) =>
-      f = js.new window.Function, source
-      f!
+    transform: (val) => json_decode val
   }
 
 {
   :converts
-  :editors
-  :scripts
 }
