@@ -15,8 +15,6 @@ yield_ancestors = do
   (path) => coroutine.wrap -> step @, path
 
 get_meta = (fileder, path) ->
-  assert BROWSER.root
-
   if path
     path = "$mmm/#{path}"
   else
@@ -28,9 +26,11 @@ get_meta = (fileder, path) ->
     max_path = closest
     guard_self = true
 
+  assert fileder.root, "'#{fileder}' has no root!"
+
   coroutine.wrap ->
     -- search until closest non-meta ancestor
-    for ancestor in yield_ancestors BROWSER.root, max_path
+    for ancestor in yield_ancestors fileder.root, max_path
       break if guard_self and ancestor.path == max_path
 
       if result = ancestor\walk path

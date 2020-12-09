@@ -15,7 +15,7 @@ require 'mmm'
 import Fileder, dir_base from require 'mmm.mmmfs.fileder'
 import get_store from require 'mmm.mmmfs.stores'
 
-export UNSAFE, STATIC, BROWSER
+export UNSAFE, STATIC
 
 UNSAFE = true
 STATIC = {
@@ -33,7 +33,6 @@ require 'mmm.mmmfs'
 
 store = get_store store
 root = Fileder store
-BROWSER = :root
 
 print "rendering to #{output}"
 

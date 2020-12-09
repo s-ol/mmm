@@ -53,7 +53,7 @@ inext = (tbl, i) ->
 -- * @facets - Facet Map (Key to Value)
 -- * @children - Children Array
 class Fileder
-  new: (@store, @path='') =>
+  new: (@store, @path='', @root=@) =>
     @loaded = false
 
     -- lazy-load children,
@@ -70,20 +70,13 @@ class Fileder
 
       __index: (t, k) ->
         @load! unless @loaded
-
-        if 'string' == type k
+        if 'string' == type(k) and '$' != k\sub(1,1)
           @walk "#{@path}/#{k}"
-        else
-          rawget t, k
 
       __newindex: (t, k, child) ->
         rawset t, k, child
         return if child.path
-
-        if @path == '/'
-          child\mount '/'
-        elseif @path
-          child\mount @path .. '/'
+        child\mount @path .. '/'
     }
 
     -- lazy-load facets,
@@ -167,12 +160,12 @@ class Fileder
     index or= @store\get_index @path
 
     for path_or_index in *index.children
-      child = Fileder @store, path_or_index
+      child = Fileder @store, path_or_index, @root
       name = child\get 'name: alpha'
       if '$' != name\sub 1, 1
         table.insert @children, child
-      elseif name == '$mmm'
-        @meta = child
+      else
+        @children[name] = child
 
     for key in *index.facets
       key = Key key
@@ -201,12 +194,14 @@ class Fileder
     -- gotcha
     return @ if #path == #@path
 
+    @load! unless @loaded
+
+    if match = @children['$mmm'] and @children['$mmm']\walk path
+      return match
+
     for child in *@children
       if match = child\walk path
         return match
-
-    if match = @meta and @meta\walk path
-      return match
 
   -- recursively mount fileder and children at path
   -- * path - the path to mount at
@@ -316,7 +311,7 @@ class Fileder
   -- add a child fileder with given name
   add_child: (name) =>
     new_path = @store\create_fileder @path, name
-    with new_child = Fileder @store, new_path
+    with new_child = Fileder @store, new_path, @root
       table.insert @children, new_child
 
   -- remove a child with given index

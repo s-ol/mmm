@@ -16,26 +16,25 @@ tourl = (path, _view) ->
 (elements) ->
   import a, div, span, sup, b, pre from elements
 
-  find_fileder = (fileder, origin) ->  
-    if 'string' == type fileder
-      if fileder == ''
+  find_fileder = (path, origin) ->
+    if 'string' == type path
+      if path == ''
         assert origin, "cannot resolve empty path without origin!"
         return origin
 
-      if '/' ~= fileder\sub 1, 1
-        assert origin, "cannot resolve relative path '#{fileder}' without origin!"
-        fileder = "#{origin.path}/#{fileder}"
+      if '/' ~= path\sub 1, 1
+        assert origin, "cannot resolve relative path '#{path}' without origin!"
+        path = "#{origin.path}/#{path}"
 
-      while fileder\match '/([^/]-)/%.%./'
-        fileder = fileder\gsub '/([^/]-)/%.%./', '/'
+      while path\match '/([^/]-)/%.%./'
+        path = path\gsub '/([^/]-)/%.%./', '/'
 
-      if origin.path == fileder\sub 1, #origin.path   
-        assert (origin\walk fileder), "couldn't resolve path '#{fileder}' from #{origin}"
+      if origin.path == path\sub 1, #origin.path
+        assert (origin\walk path), "couldn't resolve path '#{path}' from #{origin}"
       else
-        assert BROWSER and BROWSER.root, "cannot resolve absolute path '#{fileder}' without BROWSER and root set!"
-        assert (BROWSER.root\walk fileder), "couldn't resolve path '#{fileder}'"
+        assert (origin.root\walk path), "couldn't resolve path '#{path}'"
     else
-      assert fileder, "no fileder passed."
+      assert path, "no path passed."
 
   navigate_to = (path, name, opts={}) ->
     opts.href = tourl path
@@ -62,7 +61,7 @@ tourl = (path, _view) ->
 
   interactive_link = (text, view=':text/html+interactive') ->
     assert MODE == 'SERVER'
-    path = BROWSER.path
+    path = BROWSER.path -- @TODO
     path = table.concat path, '/' if 'table' == type BROWSER.path
     a text, href: tourl path, view
 
@@ -72,7 +71,7 @@ tourl = (path, _view) ->
       assert not opts.wrap, "raw and wrap cannot both be set on embed"
       opts.wrap = 'raw'
     opts.wrap or= 'well'
-    
+
     fileder = find_fileder fileder, origin
 
     -- node = fileder\gett name, 'mmm/dom'
