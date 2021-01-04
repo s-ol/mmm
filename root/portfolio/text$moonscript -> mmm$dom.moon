@@ -270,18 +270,18 @@ projects = {
       media: embed_img '/projects/iii-telefoni/heads/:image/jpeg'
       tags: :artistic, :game, :js
     }
-    {
-      name: '1u matrix mixer'
-      desc: 'a eurorack module'
-      entries: {
-        "embedded programming for a Eurorack module"
-        "C++, targetting Teensy 3.5"
-        "8 encoders with RGB lighting"
-        "digtally controls a 8x8 switching matrix and 8 channels of volume modulation"
-      }
-      media: embed_img '/portfolio/1u-mod/media:image/jpeg'
-      tags: :collab, :hardware, :cpp
-    }
+--    {
+--      name: '1u matrix mixer'
+--      desc: 'a eurorack module'
+--      entries: {
+--        "embedded programming for a Eurorack module"
+--        "C++, targetting Teensy 3.5"
+--        "8 encoders with RGB lighting"
+--        "digtally controls a 8x8 switching matrix and 8 channels of volume modulation"
+--      }
+--      media: embed_img '/portfolio/1u-mod/media:image/jpeg'
+--      tags: :collab, :hardware, :cpp
+--    }
     {
       name: 'mmm'
       desc: 'an experimental file-system/CMS/digital working space'
