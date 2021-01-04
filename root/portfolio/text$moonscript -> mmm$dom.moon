@@ -86,8 +86,27 @@ projects = {
         li text 'porting (various consoles)'
       }
       href: 'http://haroldhalibut.com/'
-      media: embed_img 'http://haroldhalibut.com/wp-content/uploads/2016/07/AgoraArcades2.png'
+      media: embed_img '/portfolio/harold-halibut/media:image/png'
       tags: :cs, :professional, :game
+    }
+    {
+      name: 'Earthrise One / Playreactive'
+      desc: 'Electronics Design, Escape Room Gadgets'
+      extra: 'September - December 2018 (consulting)'
+      content: padded_ul {
+        li text 'developed and implemented circuits for various portable and fixed devices in an escape room'
+        li {
+          text 'interfaced MCUs with various I/O devices'
+          ul {
+            li text 'controllable LED lighting'
+            li text 'maglocks'
+            li text 'piezo buzzers'
+          }
+        }
+      }
+      href: 'https://www.playreactive.com/earthrise-one'
+      media: embed_img '/portfolio/playreactive/media:image/png'
+      tags: :hardware, :professional, :game
     }
     {
       name: 'rise technologies'
