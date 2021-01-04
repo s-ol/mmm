@@ -12,10 +12,40 @@ padded_ul = (tbl) ->
     .style = padding: '0 2rem 0.5rem'
 
 projects = {
+		{
+      name: 'Spline'
+      desc: 'Full-Stack Development, Web & App'
+      extra: 'September 2020 - ongoing'
+      content: padded_ul {
+        li {
+          text 'graphics programming'
+          ul {
+            li text 'mesh generation'
+            li text 'parametric primitives'
+            li text 'geometry datastructures'
+          }
+        }
+        li text 'front-end development'
+        li text 'migration to TS and module system'
+      }
+      href: 'https://spline.design'
+      media: (style) ->
+ 				icon = (embed_img '/portfolio/spline/media:image/png') {
+ 					'object-fit': 'contain'
+ 					'width': '100%'
+ 					'height': '100%'
+				}
+ 				style.position = 'relative'
+ 				style.padding = '2em'
+ 				style.background = '#232323'
+ 				style.overflow = 'hidden'
+ 				div icon, :style
+      tags: :professional, :js, :tool, :shader
+    }
     {
       name: 'Vectronom / Ludopium'
       desc: 'Technical Artist, Game Development'
-      extra: 'July 2018 - Decemer 2019'
+      extra: 'July 2018 - December 2019'
       content: padded_ul {
         li text 'Unity/C# development (gameplay, UI, tools)'
         li {
@@ -43,7 +73,7 @@ projects = {
     {
       name: 'Harold Halibut / Slow Bros'
       desc: 'Tool & Game Development'
-      extra: 'April 2019 - ongoing (consulting)'
+      extra: 'April 2019 - December 2020'
       content: padded_ul {
         li {
           text 'Unity/C# development'
