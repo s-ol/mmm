@@ -171,6 +171,23 @@ projects = {
       media: embed_img '/portfolio/lorem_ipsum/media:image/jpeg'
       tags: :professional, :js, :collab, :game
     }
+
+
+    {
+      name: '0xC.pad'
+      desc: 'a hexagonal macropad'
+      entries: {
+        'custom designed and machined keycaps'
+        'per-key RGB backlighting'
+        'low-profile mechanical keyswitches'
+        'machined aluminum case'
+        'ESD-protected USB-C port'
+        'ATMega32U2 MCU with QMK firmware support'
+      }
+      href: 'https://docs.google.com/forms/d/e/1FAIpQLSccvUj4WobsxLP0yTdObMYbdXgTbWaAEnlu7WoOhmo262PaQA/viewform'
+      media: embed_img '/portfolio/hex-pad/media:image/jpeg'
+      tags: :hardware, :tool
+    }
     {
       name: 'alv'
       desc: 'an innovative realtime programming language'
