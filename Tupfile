@@ -1,9 +1,4 @@
 include_rules
 
-!sassc    = |> ^ SCSS %b^ sassc @(SASS_ARGS) %f '%o' |>
-
-# render stylesheet
-: scss/main.scss |> !sassc |> root/static/style/text$css.css
-
 # bundle for client loading
 : mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon &(build)/bundle_module.moon '%o' --wrap %f |> root/static/mmm/text$lua.lua
