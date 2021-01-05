@@ -10,6 +10,7 @@ RUN luarocks install discount DISCOUNT_INCDIR=/usr/include/x86_64-linux-gnu
 RUN luarocks install sqlite3 && \
     luarocks install moonscript && \
     luarocks install http && \
+    luarocks install luaposix && \
     luarocks install lua-cjson 2.1.0-1
 
 COPY . /code
