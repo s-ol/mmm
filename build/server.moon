@@ -17,6 +17,7 @@ import convert, MermaidDebugger from require 'mmm.mmmfs.conversion'
 import get_store from require 'mmm.mmmfs.stores'
 import render from require 'mmm.mmmfs.layout'
 import Browser from require 'mmm.mmmfs.browser'
+import init_cache from require 'mmm.mmmfs.cache'
 import decodeURI from require 'http.util'
 
 lfs = require 'lfs'
@@ -41,6 +42,11 @@ class Server
     if @flags.unsafe == nil
       @flags.unsafe = not @flags.rw or opts.host == 'localhost' or opts.host == '127.0.0.1'
 
+    if @flags.cache
+      assert not @flags.rw, "--rw and --cache are incompatible"
+      @root = Fileder @store
+      init_cache!
+
     -- @TODO: fix UNSAFE!
     UNSAFE = @flags.unsafe
 
@@ -55,7 +61,7 @@ class Server
     assert @server\loop!
 
   handle_interactive: (fileder, facet) =>
-    root = Fileder @store
+    root = @root or Fileder @store
     browser = Browser root, fileder.path, facet.name
 
     render browser\todom!, fileder, noview: true, scripts: "
@@ -93,7 +99,7 @@ class Server
 
     switch method
       when 'GET', 'HEAD'
-        root = Fileder @store
+        root = @root or Fileder @store
         export BROWSER
         BROWSER = :path
         fileder = root\walk path
@@ -217,6 +223,7 @@ class Server
 -- * FLAGS - any of the following:
 --   --[no-]rw     - enable/disable POST?PUT/DELETE operations                     (default: on if local)
 --   --[no-]unsafe - enable/disable server-side code execution when writable is on (default: on if local or --no-rw)
+--   --[no-]cache  - cache all fileder contents                                    (default: off)
 -- * STORE - see mmm/mmmfs/stores/init.moon:get_store
 -- * host  - interface to bind to (default localhost, set to 0.0.0.0 for public hosting)
 -- * port  - port to serve from, default 8000

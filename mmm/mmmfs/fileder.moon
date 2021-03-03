@@ -276,11 +276,15 @@ class Fileder
     if val = @facets[want]
       return val, want
 
+    if val = CACHE and CACHE\get @, want
+      return val, want
+
     -- find matching key and shortest conversion path
     key, conversions = @find want
 
     if key
       value = apply_conversions @, conversions, @facets[key], key
+      CACHE\set @, want, value if CACHE
       value, key
 
   -- like @get, throw if no value or conversion path
