@@ -20,7 +20,6 @@ import Browser from require 'mmm.mmmfs.browser'
 import init_cache from require 'mmm.mmmfs.cache'
 import decodeURI from require 'http.util'
 
-lfs = require 'lfs'
 server = require 'http.server'
 headers = require 'http.headers'
 

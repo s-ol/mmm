@@ -1,4 +1,0 @@
-include_rules
-
-: foreach *.moon |> ^ MOON %f^ moonc -p > %o %f |> %B.lua <modules>
-: <modules> |> ^ BNDL %d^ moon &(build)/bundle_module.moon %o %d %<modules> |> .bundle.lua ../<modules>

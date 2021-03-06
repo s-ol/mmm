@@ -1,4 +1,0 @@
-include_rules
-
-# bundle for client loading
-: mmm/.bundle.lua | <modules> |> ^ WRAP %d^ moon &(build)/bundle_module.moon '%o' --wrap %f |> root/static/mmm/text$lua.lua

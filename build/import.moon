@@ -34,7 +34,6 @@ with SQLStore :file, verbose: true
   import_fileder = (fileder, dirpath) ->
     for file in lfs.dir dirpath
       continue if '.' == file\sub 1, 1
-      continue if file == 'Tupdefault.lua'
       continue if file == 'index.html'
       continue if file == '$order'
 
