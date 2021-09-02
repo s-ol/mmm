@@ -16,20 +16,35 @@ This repo is roughly split into three parts:
   authored using a mix of Moonscript, Markdown and HTML, thanks to the power of `mmmfs`.
   \[[data: `root`](root), but you might want to read a bit about mmmfs before you jump in.]
 
-Building & Viewing
-------------------
-mmm is built using [tup][tup].
-You can build the static content with:
-
-    $ tup init
-    $ tup
-
-Then you can run the interactive server (`build/server.moon`):
+Running or Building
+-------------------
+You can run the interactive server (`build/server.moon`):
 
     $ moon build/server.moon fs
 
 You can then view the website in your browser.
 It should be availabe at `http://localhost:8000`.
+
+Alternatively, `build/render_all.moon` can be used to generate a static HTML version of a tree:
+
+    $ moon build/render_all.moon fs output-dir /root/path
+
+The `/root/path/` argument is optional and needs to be set if the generated HTML will not be
+served from the root `/` of a server (which is assumed per default).
+
+### Storage
+The `fs` argument in the commands above specifies where and how the content is to be found.
+The argument consists first of the type of storage,
+and then optionally extra arguments separated by a colon (`:`).
+The following types are available:
+
+- `fs:[path]`: load a directory from the filesystem. +
+   `path` is the path of the root directory, relative to the current directory.
+   If omitted, defaults to `root`.
+- `sql:[path]`: load a SQLite3 database. +
+   `path` is the path to the sqlite database file.
+   If omitted, defaults to `db.sqlite3`.
+- `sql:MEMORY`: create an emptry in-memory SQLite3 database.
 
 ### Dependencies
 
@@ -50,16 +65,10 @@ Not required but recommended:
 - [luaposix](https://luarocks.org/modules/gvvaughan/luaposix): `luarocks install luaposix` (for SASS support)
 
 ### Live Reloading (during development)
-During development you may want to automatically rebuild the project as files are changed.
-You can let tup automatically rebuild the client runtime and stylesheet with the following command:
-
-    $ tup monitor -f -a
-
-[entr][entr] is useful for reloading the realtime server when code outside the root changes:
+[entr][entr] is useful for reloading the realtime server when code outside the `root` changes:
 
     $ ls {build,mmm}/**.moon | entr -r moon build/server.moon fs
 
 [moonscript]: https://moonscript.org/
 [mmm]: https://mmm.s-ol.nu/
-[tup]: https://gittup.org/tup
 [entr]: http://eradman.com/entrproject/

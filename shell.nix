@@ -47,7 +47,7 @@ let
 in pkgs.mkShell {
   name = "mmm-env";
   buildInputs = with pkgs; [
-    tup sassc entr
+    sassc entr
     (lua5_3.withPackages (p: with p; [ moonscript http cjson discount busted luaposix ]))
   ];
   shellHook = ''
