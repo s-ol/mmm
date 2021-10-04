@@ -1,6 +1,0 @@
-demo
-----
-
-<br />
-
-- (this presentation)

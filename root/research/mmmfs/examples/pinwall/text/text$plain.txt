@@ -1,4 +1,0 @@
-This is a pinwall example.
-Every box is a separate fileder.
-The boxes can be rearranged and resized freely.
-If the server is in read-write mode, the changes are saved persistently in real time.

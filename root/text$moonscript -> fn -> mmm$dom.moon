@@ -19,10 +19,6 @@ import link_to from (require 'mmm.mmmfs.util') require 'mmm.dom'
     'You can find the source code of everything '
     a { 'here', href: 'https://git.s-ol.nu/mmm' }
     '.'
-    br!
-    'Most of the inner-workings of this page are documented in '
-    link_to @walk 'research/mmmfs'
-    '.'
   }
 
   for child in *@children
