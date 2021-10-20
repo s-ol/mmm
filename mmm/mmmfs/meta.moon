@@ -22,7 +22,7 @@ get_meta = (fileder, path) ->
 
   local guard_self
   max_path = fileder.path
-  if closest = max_path\match('(.-)/$mmm')
+  if closest = max_path\match '(.-)/$mmm'
     max_path = closest
     guard_self = true
 
@@ -35,6 +35,9 @@ get_meta = (fileder, path) ->
 
       if result = ancestor\walk path
         coroutine.yield result
+
+    if result = not guard_self and fileder\walk path
+      coroutine.yield result
 
 get_plugins = (fileder) ->
   coroutine.wrap ->

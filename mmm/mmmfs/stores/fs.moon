@@ -45,7 +45,7 @@ class FSStore extends Store
           if forgiving
             @log "removed stale entry '#{line}' from #{path}/$order"
             continue
-          error "entry in $order but not on disk: #{line}"
+          error "entry in $order but not on disk: #{line} (at #{path})"
 
         table.insert sorted, entry
         sorted[line] = true
@@ -58,7 +58,7 @@ class FSStore extends Store
         @log "adding new entry '#{entry.name}' in #{path}/$order"
         table.insert sorted, entry
     else
-      assert #unsorted == 0, unsorted[1] and "entry on disk but not in $order: #{unsorted[1].path}"
+      assert #unsorted == 0, unsorted[1] and "entry on disk but not in $order: #{unsorted[1].path} (at #{path})"
 
     sorted
 

@@ -305,33 +305,15 @@ if MODE == 'CLIENT' or UNSAFE
     transform: loadwith load or loadstring
   }
 
-if MODE == 'SERVER'
-  ok, moon = pcall require, 'moonscript.base'
-  if ok
-    _load = moon.load or moon.loadstring
-    if UNSAFE
-      table.insert converts, {
-        inp: 'text/moonscript -> (.+)',
-        out: '%1',
-        cost: 1
-        transform: loadwith moon.load or moon.loadstring
-      }
-
-    table.insert converts, {
-      inp: 'text/moonscript -> (.+)',
-      out: 'text/lua -> %1',
-      cost: 2
-      transform: single moon.to_lua
-    }
-  else
-    table.insert converts, {
-      inp: 'text/javascript -> (.+)',
-      out: '%1',
-      cost: 1
-      transform: (source) =>
-        f = js.new window.Function, source
-        f!
-    }
+if MODE == 'CLIENT'
+  table.insert converts, {
+    inp: 'text/javascript -> (.+)',
+    out: '%1',
+    cost: 1
+    transform: (source) =>
+      f = js.new window.Function, source
+      f!
+  }
 
 json_encode = (obj) ->
   switch type obj
