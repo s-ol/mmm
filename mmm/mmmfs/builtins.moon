@@ -87,7 +87,7 @@ converts = {
       (html, fileder) =>
         html = html\yieldable_gsub '<mmm%-link%s+(.-)>(.-)</mmm%-link>', (attrs, text) ->
           text = nil if #text == 0
-          path = ''
+          path, facet = '', ''
           while attrs and attrs != ''
             key, val, _attrs = attrs\match '^(%w+)="([^"]-)"%s*(.*)'
             if not key
@@ -98,6 +98,7 @@ converts = {
 
             switch key
               when 'path' then path = val
+              when 'facet' then facet = val
               else warn "unkown attribute '#{key}=\"#{val}\"' in <mmm-link>"
 
           link_to path, text, fileder
