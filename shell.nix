@@ -11,6 +11,7 @@ let
       url    = "mirror://luarocks//lua-cjson-2.1.0-1.src.rock";
       sha256 = "23r4ScVV0aR09yn+Sla1Uw6b57JHSet6fEdKfHIHuXI=";
     };
+    postUnpack = "sourceRoot=$sourceRoot/lua-cjson-2.1.0";
     propagatedBuildInputs = [ pkgs.lua5_3 ];
 
     meta = with pkgs.stdenv.lib; {
@@ -48,7 +49,7 @@ in pkgs.mkShell {
   name = "mmm-env";
   buildInputs = with pkgs; [
     sassc entr
-    (lua5_3.withPackages (p: with p; [ moonscript http cjson discount busted luaposix ]))
+    (lua5_3.withPackages (p: with p; [ argparse moonscript http cjson discount busted luaposix ]))
   ];
   shellHook = ''
     runServer () {
