@@ -25,7 +25,7 @@ element = (element) -> (...) ->
   -- if there is only one argument,
   -- children can be in attributes table too
   if #children == 0
-    children = attributes
+    children, attributes = attributes, {}
 
   for i,v in ipairs children
     if 'string' != type v
@@ -33,14 +33,16 @@ element = (element) -> (...) ->
       error "wrong type: #{type v}"
     children[i] = '' unless v
 
-  if void_tags[element]
+  if not element
+    assert not (next attributes), "_frag cannot take attributes"
+    table.concat children
+  else if void_tags[element]
     assert #children == 0, "void tag #{element} cannot have children!"
     b .. ">"
   else
     b ..= ">" ..  table.concat children, ''
-    b ..= "</#{element}>"
-    b
+    b .. "</#{element}>"
 
-setmetatable {}, __index: (name) =>
+setmetatable { _frag: element! }, __index: (name) =>
   with val = element name
     @[name] = val

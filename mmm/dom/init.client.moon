@@ -8,26 +8,32 @@ element = (element) -> (...) ->
   else
     attributes = {}
 
-  with e = document\createElement element
-    for k,v in pairs attributes
-      k = 'className' if k == 'class'
-      if k == 'style' and 'table' == type v
-        for kk,vv in pairs v
-          e.style[kk] = vv
-      elseif 'string' == type k
-        e[k] = v
+  e = if element then document\createElement element else document\createDocumentFragment!
 
-    -- if there is only one argument,
-    -- children can be in attributes table too
-    if #children == 0
-      children = attributes
+  for k,v in pairs attributes
+    k = 'className' if k == 'class'
+    if k == 'style' and 'table' == type v
+      for kk,vv in pairs v
+        e.style[kk] = vv
+    elseif 'string' == type k
+      e[k] = v
 
-    for child in *children
-      if 'string' == type child
-        child = document\createTextNode child
+  -- if there is only one argument,
+  -- children can be in attributes table too
+  if #children == 0
+    children, attributes = attributes, {}
 
-      e\appendChild child
+  if not element
+    assert not (next attributes), "_frag cannot take attributes"
 
-setmetatable {}, __index: (name) =>
+  for child in *children
+    if 'string' == type child
+      child = document\createTextNode child
+
+    e\appendChild child
+
+  e
+
+setmetatable { _frag: element! }, __index: (name) =>
   with val = element name
     @[name] = val
