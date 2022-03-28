@@ -44,7 +44,7 @@ string.yieldable_gsub = (str, pat, f) ->
   str = str\gsub '%%|', '%%'
   str, cnt
 
--- list of converts, editors, scripts
+-- list of converts
 -- converts each have
 -- * inp - input type. can capture subtypes using `(.+)`
 -- * out - output type. can substitute subtypes from inp with %1, %2 etc.

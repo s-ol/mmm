@@ -29,7 +29,7 @@ casts = {
     transform: (href) => span a (code href), :href
   }
 }
-get_casts = -> combine casts, converts --, PLUGINS.editors
+get_casts = -> combine casts, converts
 
 export BROWSER
 class Browser
@@ -211,7 +211,6 @@ class Browser
       key
 
     @inspect_err = ReactiveVar!
-    @editor = ReactiveVar!
 
     with div class: 'view inspector'
       -- nav
@@ -223,12 +222,6 @@ class Browser
 
       \append div {
         class: 'subnav'
-
-        ondrop: ->
-          print "dropped"
-
-        onpaste: ->
-          print "pasted"
 
         @inspect_prop\map (current) ->
           current = current and current\tostring!
@@ -245,23 +238,7 @@ class Browser
               for value in pairs fileder.facet_keys
                 \append option value, :value, selected: value == current
 
-        button 'rm', class: 'tight', onclick: (_, e) ->
-          if window\confirm "continuing will permanently remove the facet '#{@inspect_prop\get!}'."
-            fileder = @fileder\get!
-            fileder\set @inspect_prop\get!, nil
-            @refresh true
-
-        button 'add', class: 'tight', onclick: (_, e) ->
-          facet = window\prompt "please enter the facet string ('name: type' or 'type'):", 'text/markdown'
-          return if not facet or facet == '' or facet == js.null
-          fileder = @fileder\get!
-          fileder\set facet, ''
-          @inspect_prop\set Key facet
-          @refresh!
-
         div style: flex: '1'
-
-        @editor\map (e) -> e and e.saveBtn
       }
 
       -- error / content
@@ -270,14 +247,13 @@ class Browser
         \append @inspect_err
       \append with pre class: 'content'
         \append keep @inspect_prop\map (prop, old) ->
-          @get_content facet, @inspect_err, (fileder, facet) ->
+          @get_content prop, @inspect_err, (fileder, facet) ->
             value, key = fileder\get facet
             assert key, "couldn't @get #{facet}"
 
             conversions = get_conversions fileder, 'mmm/dom', key.type, get_casts!
             assert conversions, "cannot cast '#{key.type}'"
-            with res = apply_conversions fileder, conversions, value, facet
-              @editor\set if res.EDITOR then res
+            apply_conversions fileder, conversions, value, facet
 
       -- children
       \append nav {
@@ -301,19 +277,6 @@ class Browser
                 'justify-content': 'space-between'
 
               span '- ', (link_to child, code name), style: flex: 1
-
-              button '↑', disabled: i == 1, onclick: (_, e) ->
-                fileder\swap_children i, i - 1
-                @refresh true
-
-              button '↓', disabled: i == num, onclick: (_, e) ->
-                fileder\swap_children i, i + 1
-                @refresh true
-
-              button 'rm', onclick: (_, e) ->
-                if window\confirm "continuing will permanently remove all content in '#{child.path}'."
-                  fileder\remove_child i
-                  @refresh true
             }
 
 

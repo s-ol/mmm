@@ -34,14 +34,10 @@ class Server
 
     @flags = opts.flags
 
-    if @flags.rw == nil
-      @flags.rw = opts.host == 'localhost' or opts.host == '127.0.0.1'
-
     if @flags.unsafe == nil
-      @flags.unsafe = not @flags.rw or opts.host == 'localhost' or opts.host == '127.0.0.1'
+      @flags.unsafe = opts.host == 'localhost' or opts.host == '127.0.0.1'
 
     if @flags.cache
-      assert not @flags.rw, "--rw and --cache are incompatible"
       @root = Fileder @store
       init_cache!
 
@@ -93,88 +89,55 @@ class Server
     convert 'text/mermaid-graph', 'text/html', debugger\render!, fileder, facet.name
 
   handle: (method, path, facet, value) =>
-    if not @flags.rw and method != 'GET' and method != 'HEAD'
-      return 403, 'editing not allowed'
+    if method != 'GET' and method != 'HEAD'
+      return 501, "not implemented"
 
-    switch method
-      when 'GET', 'HEAD'
-        root = @root or Fileder @store
-        export BROWSER
-        BROWSER = :path
-        fileder = root\walk path
+    root = @root or Fileder @store
+    export BROWSER
+    BROWSER = :path
+    fileder = root\walk path
 
-        if not fileder
-          -- fileder not found
-          return 404, "fileder '#{path}' not found"
+    if not fileder
+      -- fileder not found
+      return 404, "fileder '#{path}' not found"
 
-        val = switch facet.name
-          when '?index', '?tree'
-            -- serve fileder index
-            -- '?index': one level deep
-            -- '?tree': recursively
-            depth = if facet.name == '?tree' then -1 else 1
-            index = @store\get_index path, depth
-            convert 'table', facet.type, index, fileder, facet.name
-          else
-            if facet.type == '?'
-              facet.type = 'text/html'
-              current = fileder
-              while current
-                if type = current\get '_web_view: type'
-                  facet.type = type\match '^%s*(.-)%s*$'
-                  break
-
-                if current.path == ''
-                  break
-
-                path, _ = dir_base current.path
-                current = root\walk path
-
-            if facet.type == 'text/html+interactive'
-              @handle_interactive fileder, facet
-            else if base = facet.type\match '^DEBUG %-> (.*)'
-              facet.type = base
-              @handle_debug fileder, facet
-            else if not fileder\has_facet facet.name
-              404, "facet '#{facet.name}' not found in fileder '#{path}'"
-            else
-              fileder\get facet
-
-        if val
-          200, val
-        else
-          406, "cant convert facet '#{facet.name}' to '#{facet.type}'"
-      when 'POST'
-        if facet
-          @store\create_facet path, facet.name, facet.type, value
-          200, 'ok'
-        else
-          200, @store\create_fileder dir_base path
-      when 'PUT'
-        if facet
-          @store\update_facet path, facet.name, facet.type, value
-          200, 'ok'
-        else
-          cmd, args = value\match '^([^\n]+)\n(.*)'
-          switch cmd
-            when 'swap'
-              child_a, child_b = args\match '^([^\n]+)\n([^\n]+)$'
-              assert child_a and child_b, "invalid arguments"
-
-              @store\swap_fileders path, child_a, child_b
-              200, 'ok'
-            when nil
-              400, "invalid request"
-            else
-              501, "unknown command #{cmd}"
-      when 'DELETE'
-        if facet
-          @store\remove_facet path, facet.name, facet.type
-        else
-          @store\remove_fileder path
-        200, 'ok'
+    val = switch facet.name
+      when '?index', '?tree'
+        -- serve fileder index
+        -- '?index': one level deep
+        -- '?tree': recursively
+        depth = if facet.name == '?tree' then -1 else 1
+        index = @store\get_index path, depth
+        convert 'table', facet.type, index, fileder, facet.name
       else
-        501, "not implemented"
+        if facet.type == '?'
+          facet.type = 'text/html'
+          current = fileder
+          while current
+            if type = current\get '_web_view: type'
+              facet.type = type\match '^%s*(.-)%s*$'
+              break
+
+            if current.path == ''
+              break
+
+            path, _ = dir_base current.path
+            current = root\walk path
+
+        if facet.type == 'text/html+interactive'
+          @handle_interactive fileder, facet
+        else if base = facet.type\match '^DEBUG %-> (.*)'
+          facet.type = base
+          @handle_debug fileder, facet
+        else if not fileder\has_facet facet.name
+          404, "facet '#{facet.name}' not found in fileder '#{path}'"
+        else
+          fileder\get facet
+
+    if val
+      200, val
+    else
+      406, "cant convert facet '#{facet.name}' to '#{facet.type}'"
 
   err_and_trace = (msg) -> debug.traceback msg, 2
   stream: (sv, stream) =>
@@ -220,8 +183,7 @@ class Server
 -- usage:
 -- moon server.moon [FLAGS] [STORE] [host] [port]
 -- * FLAGS - any of the following:
---   --[no-]rw     - enable/disable POST?PUT/DELETE operations                     (default: on if local)
---   --[no-]unsafe - enable/disable server-side code execution when writable is on (default: on if local or --no-rw)
+--   --[no-]unsafe - enable/disable server-side code execution when writable is on (default: on if local)
 --   --[no-]cache  - cache all fileder contents                                    (default: off)
 -- * STORE - see mmm/mmmfs/stores/init.moon:get_store
 -- * host  - interface to bind to (default localhost, set to 0.0.0.0 for public hosting)
