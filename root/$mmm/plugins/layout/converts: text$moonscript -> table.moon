@@ -36,41 +36,19 @@ gen_header = ->
       h1 {
         navigate_to '', logo
         span {
-          span 'mmm', class: 'bold'
+          span 'mmmfs', class: 'bold'
           '&#8203;'
           '.s&#8209;ol.nu'
         }
       }
-      -- span "fun stuff with code and wires"
-      table.concat {
-        pick 'fun', 'cool', 'weird', 'interesting', 'new', 'pleasant'
-        pick 'stuff', 'things', 'projects', 'experiments', 'visuals', 'ideas'
-        pick "with", 'and'
-        pick 'mostly code', 'code and wires', 'silicon', 'electronics', 'shaders',
-             'oscilloscopes', 'interfaces', 'hardware', 'FPGAs'
-      }, ' '
-    }
-    aside {
-      navigate_to '/about', 'about me'
-      navigate_to '/portfolio', 'portfolio'
-      navigate_to '/games', 'games'
-      navigate_to '/projects', 'other'
-      a {
-        href: 'mailto:s%20[removethis]%20[at]%20s-ol.nu'
-        'contact'
-        script "
-          var l = document.currentScript.parentElement;
-          l.href = l.href.replace('%20[at]%20', '@');
-          l.href = l.href.replace('%20[removethis]', '') + '?subject=Hey there :)';
-        "
-      }
+      "a hypermedia information system."
     }
   }
 
 footer = footer {
   span {
     'made with \xe2\x98\xbd by '
-    a 's-ol', href: 'https://twitter.com/S0lll0s'
+    a 's-ol', href: 'https://s-ol.nu'
     ", #{os.date '%Y'}"
   }
   div {
