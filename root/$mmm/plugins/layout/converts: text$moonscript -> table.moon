@@ -163,5 +163,18 @@ render = (content, fileder, opts={}) ->
   buf
 
 {
-  :render
+  {
+    -- inp: 'text/html%+frag',
+    -- @TODO: this doesn't feel right... maybe mmm/dom has to go?
+    inp: 'mmm/dom',
+    out: 'text/html',
+    cost: 3
+    transform: (html, fileder) => render html, fileder
+  },
+  {
+    inp: 'mmm/dom%+noview',
+    out: 'text/html',
+    cost: 3
+    transform: (html, fileder) => render html, fileder, noview: true
+  }
 }

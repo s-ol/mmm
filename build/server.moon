@@ -15,7 +15,6 @@ UNSAFE = true
 import dir_base, Key, Fileder from require 'mmm.mmmfs.fileder'
 import convert, MermaidDebugger from require 'mmm.mmmfs.conversion'
 import get_store from require 'mmm.mmmfs.stores'
-import render from require 'mmm.mmmfs.layout'
 import Browser from require 'mmm.mmmfs.browser'
 import init_cache from require 'mmm.mmmfs.cache'
 import decodeURI from require 'http.util'
@@ -63,7 +62,7 @@ class Server
     root = @root or Fileder @store
     browser = Browser root, fileder.path, facet.name
 
-    render browser\todom!, fileder, noview: true, scripts: "
+    scripts = "
     <script type=\"text/javascript\" src=\"//cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.6/svg.min.js\"></script>
     <script type=\"text/javascript\" src=\"/static/fengari-web/:text/javascript\"></script>
     <script type=\"text/lua\" src=\"/static/mmm/:text/lua\"></script>
@@ -85,6 +84,7 @@ class Server
         if not ok then error(browser) end
       end)
     </script>"
+    convert 'mmm/dom+noview', 'text/html', scripts .. browser\todom!, fileder, facet.name
 
   handle_debug: (fileder, facet) =>
     debugger = MermaidDebugger!

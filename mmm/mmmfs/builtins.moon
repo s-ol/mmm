@@ -1,6 +1,5 @@
 import div, pre, code, img, video, span, source  from require 'mmm.dom'
 import find_fileder, link_to, embed from (require 'mmm.mmmfs.util') require 'mmm.dom'
-import render from require 'mmm.mmmfs.layout'
 import tohtml from require 'mmm.component'
 
 -- fix JS null values
@@ -70,14 +69,6 @@ converts = {
     out: 'text/html+frag',
     cost: 3
     transform: (node) => if MODE == 'SERVER' then node else node.outerHTML
-  }
-  {
-    -- inp: 'text/html%+frag',
-    -- @TODO: this doesn't feel right... maybe mmm/dom has to go?
-    inp: 'mmm/dom',
-    out: 'text/html',
-    cost: 3
-    transform: (html, fileder) => render html, fileder
   }
   {
     inp: 'text/html%+frag',
