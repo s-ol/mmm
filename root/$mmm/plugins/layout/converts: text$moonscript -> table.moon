@@ -117,7 +117,6 @@ render = (content, fileder, opts={}) ->
 <html>
   <head>]]
   buf ..= if STATIC then STATIC.style else [[<link rel="stylesheet" type="text/css" href="/static/style/:text/css" />]]
-  buf ..= [[<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />]]
   buf ..= "
     #{opts.meta}
     #{get_scripts fileder}

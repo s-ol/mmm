@@ -156,7 +156,6 @@ render = function(content, fileder, opts)
       return [[<link rel="stylesheet" type="text/css" href="/static/style/:text/css" />]]
     end
   end)()
-  buf = buf .. [[<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,600" />]]
   buf = buf .. "\n    " .. tostring(opts.meta) .. "\n    " .. tostring(get_scripts(fileder)) .. "\n  </head>\n  <body>\n    " .. tostring(gen_header()) .. "\n\n    " .. tostring(content) .. "\n\n    " .. tostring(footer)
   buf = buf .. (function()
     if STATIC then
