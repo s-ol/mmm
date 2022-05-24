@@ -5,12 +5,12 @@ merge = (orig={}, extra={}) ->
     for k,v in pairs extra
       attr[k] = v
 
-tourl = (path, _view) ->
+tourl = (path, facet) ->
   path ..= '/'
   if STATIC and STATIC.root
     path = STATIC.root .. path
-  if _view
-    path ..= _view
+  if facet
+    path ..= facet
   path
 
 (elements) ->
@@ -43,7 +43,7 @@ tourl = (path, _view) ->
       BROWSER\navigate path
     a name, opts
 
-  link_to = (fileder, name, origin, attr, _view) ->
+  link_to = (fileder, name, origin, attr, facet) ->
     fileder = find_fileder fileder, origin
 
     name or= fileder\get 'title: mmm/dom'
@@ -53,7 +53,7 @@ tourl = (path, _view) ->
       a name, merge attr, :href, target: '_blank'
     else
       a name, merge attr, {
-        href: tourl fileder.path, _view
+        href: tourl fileder.path, facet
         onclick: if MODE == 'CLIENT' then (e) =>
           e\preventDefault!
           BROWSER\navigate fileder.path
@@ -65,7 +65,7 @@ tourl = (path, _view) ->
     path = table.concat path, '/' if 'table' == type BROWSER.path
     a text, href: tourl path, view
 
-  embed = (fileder, name='', origin, opts={}) ->
+  embed = (fileder, facet='', origin, opts={}) ->
     if opts.raw
       warn "deprecated option 'raw' set on embed"
       assert not opts.wrap, "raw and wrap cannot both be set on embed"
@@ -74,18 +74,18 @@ tourl = (path, _view) ->
 
     fileder = find_fileder fileder, origin
 
-    -- node = fileder\gett name, 'mmm/dom'
-    ok, node = pcall fileder.gett, fileder, name, 'mmm/dom'
+    -- node = fileder\gett facet, 'mmm/dom'
+    ok, node = pcall fileder.gett, fileder, facet, 'mmm/dom'
 
     if not ok
-      warn "couldn't embed #{fileder} #{name}: #{node}"
+      warn "couldn't embed #{fileder} #{facet}: #{node}"
       return span {
         class: 'embed'
         style:
           background: 'var(--gray-fail)'
           padding: '1em'
 
-        "couldn't embed #{fileder} #{name}"
+        "couldn't embed #{fileder} #{facet}"
         (pre node)
       }
 
@@ -109,7 +109,7 @@ tourl = (path, _view) ->
         if opts.nolink
           node
         else
-          link_to fileder, node, nil, opts.attr
+          link_to fileder, node, nil, opts.attr, facet
 
       when 'sidenote'
         key = tostring refs\get!
