@@ -1,4 +1,4 @@
-| notice | this project has moved to a new home: [`git.s-ol.nu/mmm`](//git.s-ol.nu/mmm). This github archive will however be kept up-to-date: If you want to browse it here, switch on over to the [`master`](//github.com/s-ol/mmm/tree/master/) branch. |
+| notice | this project has moved to a new home: [`git.s-ol.nu/mmm`](//git.s-ol.nu/mmm). This github archive will not be kept up-to-date. |
 | ------ | --- |
 
 ---
